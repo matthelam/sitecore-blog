@@ -1,0 +1,160 @@
+---
+title: "Pre-requisites for Azure Entra ID SSO"
+date: 2025-10-01
+draft: false
+tags: ["Sitecore XM Cloud", "Azure Entra ID", "SSO", "SAML", "preparation"]
+summary: "Checklist and quick workshop to collect everything you need before you configure SAML SSO for Sitecore Cloud Portal, Content Hub and Vercel."
+---
+
+## Introduction
+
+If you're about to wire up SSO for your Sitecore cloud platform and associated services, this short guide helps you stop, gather context, and collect everything you need before you touch configuration screens.
+
+Think of this as a 60–90 minute workshop plan + checklist: come away with the right Azure enterprise apps, a list of security groups, the metadata files and URLs, a set of test accounts, and clear owner responsibilities. This saves time and avoids the usual back-and-forth.
+
+> Note: This article is about setting up SSO, I will cover claim-to-role mapping specifics in a future article.
+
+---
+
+## Why this matters
+
+SSO is cross-team by nature: it touches Identity, Platform, Security, and App Owners. If you start with missing inputs (tenant IDs, group object IDs, metadata) you’ll bounce between portals and peoples' inboxes. The workshop below is designed to get you aligned quickly.
+
+---
+
+## Quick inventory — what successful SSO needs
+
+Fill in these placeholders during your workshop:
+
+- **Azure Tenant and Owner**
+  - Tenant name: `[Your Azure Tenant Name]`
+  - Tenant ID: `[Your Azure Tenant ID]`
+
+- **Enterprise Apps to create or update**
+  - Cloud Portal app name: `[Cloud Portal Enterprise App Name]`
+  - Content Hub app name: `[Content Hub Enterprise App Name]`
+  - Vercel app name: `[Vercel Enterprise App Name]`
+  - (Optional) Chromatic / other apps: `[Other Enterprise App Names]`
+
+- **Domains & Email**
+  - Primary company domain(s) to allow: `[yourcompany.com]`
+  - Allowed email domains for sign-on: `[yourcompany.com, partner.com]`
+
+- **Azure Security Groups (high-level)**
+  - Admin group: `[AG_<ENV>_Administrator]`
+  - Business admin group: `[AG_<ENV>_Business_Admin]`
+  - Content publisher group: `[AG_<ENV>_Content_Publisher]`
+  - Content editor group: `[AG_<ENV>_Content_Editor]`
+  - Technical docs contributor: `[AG_<ENV>_Technical_Docs]`
+
+- **Test accounts**
+  - Admin test user: `[admin-test@yourcompany.com]`
+  - Editor test user: `[editor-test@yourcompany.com]`
+  - External test user (if needed): `[contractor@partner.com]`
+
+- **Metadata files & URLs**
+  - Cloud Portal Entity ID (SP): `[Cloud Portal Entity ID]`
+  - Cloud Portal ACS (Reply URL): `[Cloud Portal ACS URL]`
+  - Content Hub Entity ID: `[Content Hub Entity ID]`
+  - Content Hub ACS URL: `[Content Hub ACS URL]`
+  - Vercel Entity ID & ACS: `[Vercel Entity ID]`, `[Vercel ACS URL]`
+  - Azure Federation Metadata XML: `[Downloaded metadata XML file(s)]`
+
+- **Operational stuff**
+  - Certificate owner and rotation contact: `[SSO Certificate Owner Email]`
+  - Monitoring/alerts owner: `[Alerts Owner Email]`
+  - Where to store metadata and configs (repo / docs): `[Config Repo URL or Docs Location]`
+
+---
+
+## Workshop script — 60 to 90 minutes
+
+This is a focused agenda you can run in a room (or Teams/Zoom).
+
+### 0. Invitees (attend or nominate)
+- Identity/Entra ID admin
+- Cloud Portal owner (Sitecore admin)
+- Content Hub owner
+- Vercel admin / DevOps
+- Security lead (for cert rotation / conditional access)
+- One developer for repo/config notes
+
+### 1. 0–10 mins — Quick context & scope
+- State the objective: “Create SAML connections for Cloud Portal, Content Hub and Vercel with Azure Entra ID as IdP.”
+- Confirm environments in scope (DEV / UAT / PROD): `[DEV, UAT, PROD]`
+
+### 2. 10–30 mins — Gather technical inputs
+Go down the inventory checklist and capture **actual** values:
+- Tenant ID & owner contact
+- Enterprise app names to create
+- Domain(s) to allow
+- Confirm test user emails
+- Confirm where metadata and configs will be stored
+
+Write these values into a shared doc (confluence, Notion, or repo README): `[Config Repo URL or Docs Location]`
+
+### 3. 30–50 mins — Identify security groups & naming convention
+For each role you need, agree the Azure group that will be used and name it clearly:
+- Example: `AG_Sitecore_XMC_Prod_Administrator` → `[Azure Group Object ID or Name]`
+- Capture the **Object ID** (GUID) for each group — not just display name. You will need the Object ID when configuring group claims.
+
+> Tip: Use a simple table: Group purpose | Display name | Object ID | Owner. Fill it while on the call.
+
+### 4. 50–70 mins — Metadata & certificate plan
+- Decide where metadata files will live (repo path + naming standard): e.g. `/infrastructure/sso/metadata/cloudportal-saml-prod.xml`
+- Confirm certificate owner and rotation cadence (e.g., notify 60 days before expiry).
+- Decide logging and alerting path (e.g., Sign-in logs to Log Analytics, email to `[Alerts Owner Email]`).
+
+### 5. 70–90 mins — Action owners & next steps
+Assign owners for:
+- Creating enterprise apps in Azure: `[Entra Admin]`
+- Uploading metadata to each SP: `[Cloud Portal Owner]`, `[Content Hub Owner]`, `[Vercel Owner]`
+- Creating test users and group assignments: `[Project Admin]`
+- Documenting the SSO config and storing metadata: `[DevOps/Repo Owner]`
+
+Schedule the implementation window and a short validation session with test users.
+
+---
+
+## Workshop artifact templates
+
+You can copy these tables into your meeting notes.
+
+**Group inventory**
+
+| Purpose | Group display name | Azure Object ID | Owner |
+|---|---:|---:|---|
+| Admins | `[AG_Prod_Admin]` | `[GUID]` | `[name@company]` |
+| Content Editors | `[AG_Content_Editor]` | `[GUID]` | `[name@company]` |
+| ... | ... | ... | ... |
+
+**Metadata inventory**
+
+| Service | SP Entity ID | SP ACS URL | Metadata file name | Owner |
+|---|---|---|---|---|
+| Cloud Portal | `[Cloud Portal Entity ID]` | `[Cloud Portal ACS URL]` | `/sso/sitecore-cloudportal-prod.xml` | `[owner]` |
+| Content Hub | `[Content Hub Entity ID]` | `[Content Hub ACS URL]` | `/sso/contenthub-prod.xml` | `[owner]` |
+| Vercel | `[Vercel Entity ID]` | `[Vercel ACS URL]` | `/sso/vercel-prod.xml` | `[owner]` |
+
+---
+
+## Pro tips
+
+- **Always use Object IDs** (GUIDs) when referencing groups in the SAML `groups` claim. Display names can change.
+- **Save metadata to your repo** and version it — metadata is evidence of configuration and certificate validity.
+- **Have test users pre-assigned to groups** before you attempt your first login test — it makes validation fast.
+- **Automate sign-in alerts** (e.g., if repeated failures appear for an SP) so the identity team is notified early.
+
+---
+
+## Where I pulled these tips from
+
+This article borrows structure and practical steps from standard SAML SSO playbooks for Sitecore and related services. See the uploaded SSO setup notes for deeper technical examples: :contentReference[oaicite:0]{index=0}, :contentReference[oaicite:1]{index=1}, :contentReference[oaicite:2]{index=2}.
+
+---
+
+## Next steps
+
+Now that you have a captured inventory and a set of owners, you’re ready to move to the Azure configuration step. In the next article — *Setting up Azure Entra ID* — we’ll create the enterprise applications, enable group claims, and export the federation metadata XML you’ll need for each service.
+
+> Coming soon: Part 2 — **Claim & Role Mapping (deep dive)** — a focused walkthrough on how to map Azure group claims into Sitecore/XMC & Content Hub roles, plus the config patch pattern for your code repo.

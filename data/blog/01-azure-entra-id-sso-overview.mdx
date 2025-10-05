@@ -1,0 +1,113 @@
+---
+title: "Azure Entra ID SSO – Developer Quick Start Inventory"
+date: 2025-10-05
+draft: false
+tags: ["azure", "identity", "sso", "sitecore"]
+summary: "A technical checklist for Sitecore Developers to collect the required Azure Entra ID and environment details before configuring SSO across Sitecore Cloud services."
+---
+
+## Introduction
+
+So you've been asked to set up Single Sign-On (SSO) on a new Sitecore Cloud Portal and now you're wondering what needs to be done. I’ve posted a series of articles outlining the process based on my own experience setting one up for Sitecore XM Cloud environments. This article serves as a **developer-focused starting point**, giving you the technical checklist and context you need to get started efficiently.
+
+As with any significant implementation task, the first thing you should do is gather the necessary information from the right people and systems. This article walks through exactly that — a practical, developer-ready **inventory** to help you prepare before you begin configuration.
+
+Each section below lists:
+- **Sample values** from a dummy org — *matthelam Enterprises - mat-the-lam.dev*.  
+- **Where to retrieve the actual value** - a bit of a kick start in the right direction.  
+- **Who to contact** — a lot of information will be out of reach for us Sitecore devs, so again, a point in the right direction.
+
+---
+
+## 1. Azure Tenant Information
+
+| Item | Description | Sample Value | Where to Retrieve | Who to Ask |
+|------|--------------|--------------------|------------------|------------|
+| **Tenant Name** | The display name of your Azure Entra ID directory. | `matthelam Enterprises` | Azure Portal → Entra ID → Overview | Cloud Administrator |
+| **Tenant ID (GUID)** | Unique ID of your Azure directory. Used by Sitecore and app configurations. | `1f72c680-81b3-4e25-b8db-cb451ab34c1b` | Azure Portal → Entra ID → Overview | Cloud Administrator |
+| **Primary Domain Name** | The verified company domain tied to user identities. | `mat-the-lam.dev` | Azure Portal → Entra ID → Custom domain names | Cloud Administrator |
+| **MFA / Conditional Access Policy** | Confirm if conditional access or MFA applies to SaaS logins. | `Enabled – enforced for all users` | Azure Portal → Entra ID → Security → Conditional Access | Security Engineer |
+| **Region Lock / IP-Based Access Policy** | Determine if access is restricted by IP range or geographic region. Typically implemented via a Conditional Access policy using *Named Locations* (trusted IPs or countries). | `Enabled – Restricted to Australia and New Zealand trusted IP ranges` | Azure Portal → Entra ID → Security → Conditional Access → Named Locations | Security Engineer or Cloud Administrator |
+
+---
+
+## 2. Enterprise Applications
+
+Each Sitecore SaaS product should be configured under a separate Entra ID Enterprise Application and for me, I configured everything with SAML. 
+
+> OpenID was the other option but it seems like more people are familiar with SAML when you speak to Cloud Administrators so I just went with that. 
+
+You can also bundle Sitecore Cloud Portal and Content Hub together since they will eventually be so tightly integrated that it probably won't matter. But at the time of my setup, the client and myself considered it to be separate due to the looser integration. This is also why I didn't name Search or XMC as separate applications.
+
+> I also didn't get a chance to fully setup Personalize, CDP or Stream. Hopefully I will in the future and have a chance to update this series, but as of now, you're on your own for those ones!
+
+| Application | Purpose | Sample App Name | Where to Retrieve / Create | Who to Ask |
+|--------------|----------|----------------|----------------------------|------------|
+| **Sitecore Cloud Portal** | Authentication hub for Sitecore XM Cloud & Search | `matthelam-CloudPortal-SAML` | Azure Portal → Entra ID → Enterprise applications | Security Engineer or Cloud Administrator |
+| **Content Hub** | Digital Asset Management (DAM) integration | `matthelam-ContentHub-SAML` | Azure Portal → Entra ID → Enterprise applications | Security Engineer or Cloud Administrator |
+| **Vercel** | Headless front-end hosting environment | `matthelam-Vercel-SAML` | Azure Portal → Entra ID → Enterprise applications | Security Engineer or Cloud Administrator |
+
+**Pro Tip:** Confirm your **Cloud Portal Connection ID** in Sitecore before creating the Azure side — this ensures your Entity ID and ACS URL align.
+
+---
+
+## 3. SAML Metadata & Identifiers
+
+Each Enterprise Application generates or consumes a **metadata file** that defines trust between Azure and the Sitecore service. Sitecore allows for you to paste this XML as a way of 'auto-setup'. Its amazing and I highly recommend that you go down this route. Its simply finding the right Cloud/Entra Engineer who will do that 1-click download for you once they have finished setting up the Enterprise Application. If not, you're going to have to manually enter each of the fields that Sitecore requires you to and test the connection yourself. Its not the end of the world, but I didn't have to so you're on your own here!
+
+| Item | Description | Sample Value (mat-the-lam.dev) | Where to Retrieve | Who to Ask |
+|------|--------------|--------------------|------------------|------------|
+| **Federation Metadata XML (IdP)** | Azure’s public metadata file exported for Sitecore | `https://login.microsoftonline.com/1f72c680-81b3-4e25-b8db-cb451ab34c1b/federationmetadata/2007-06/federationmetadata.xml` | Azure Portal → SAML SSO → SAML Signing Certificate → Download Federation Metadata XML | Cloud/Entra Engineer |
+| **Entity ID (SP)** | Identifier used by Sitecore to validate Azure as an IdP | `https://auth.sitecorecloud.io/samlp/metadata?connection=<GUID>` | Sitecore Cloud Portal → Admin → SSO → SAML | You |
+| **ACS (Assertion Consumer Service) URL** | The callback endpoint used for authentication responses | `https://auth.sitecorecloud.io/login/callback?connection=<GUID>` | Sitecore Cloud Portal → Admin → SSO → SAML | You |
+
+---
+
+## 4. Azure Security Groups (used for Role Claims)
+
+You will need to determine with your stakeholders what groups you want, this is really an age old requirement that you will have to figure out, then apply it as an Entra ID Security Group. I've just put up something akin to what I settled on but also trying to highlight that sometimes groups will be quite specific to a Module in Cloud Portal, and that is perfectly fine as well. Its just whatever you need it to be.
+You’ll map Entra ID security groups to Sitecore roles in later steps. Developers should note group **display names** and **Object IDs** — both are required. Also make sure the Cloud/Entra Engineer does associate these Security Groups to your Enterprise Application as well.
+
+| Role / Purpose | Sample Azure Group Display Name | Sample Object ID | Where to Retrieve | Who to Ask |
+|-----------------|--------------------------------|------------------|------------------|------------|
+| XM Cloud Admin | `MTL_XMC_Admin` | `a4f223cb-85b2-4d2b-935a-64d00b72f112` | Azure Portal → Entra ID → Groups | Cloud Administrator |
+| Content Editor | `MTL_XMC_ContentEditor` | `ee47bc43-3d32-4b8e-9b1f-bb6cba523201` | Azure Portal → Entra ID → Groups | Cloud Administrator |
+| Publisher | `MTL_XMC_Publisher` | `59a72b94-731e-40a5-8c34-8f0ee02a4229` | Azure Portal → Entra ID → Groups | Cloud Administrator |
+| DAM Contributor | `MTL_CH_Contributor` | `98d1741f-6620-48de-8439-fbc2a993cd4b` | Azure Portal → Entra ID → Groups | Cloud Administrator |
+
+> For developers: don’t create these yourself unless you own directory permissions — confirm naming conventions with your Entra or Identity admin first.
+
+---
+
+## 5. Test & Break-Glass Accounts
+
+Prepare at least one **test account per group** to validate login and claims flow. In real-world terms, you will need to work with your stakeholder to make sure you have people ready to test and that your Cloud/Entra Engineer is ready to put these accounts into the correct Security Groups. 
+
+> Keep one **break-glass admin account** not federated with SSO for emergency access.
+
+| Purpose | Example Account | Where to Create | Who to Ask |
+|----------|----------------|----------------|------------|
+| Cloud Portal / XM Cloud Test User | `sso-tester@mat-the-lam.dev` | Azure Portal → Entra ID → Users | Cloud Administrator |
+| Content Hub Test User | `dam-tester@mat-the-lam.dev` | Azure Portal → Entra ID → Users | Cloud Administrator |
+| Break-glass Admin | `breakglass-admin@mat-the-lam.onmicrosoft.com` | Azure Portal → Entra ID → Users | Security Administrator |
+
+
+---
+
+## Developer Notes
+
+- Sitecore Developers should **not create or modify Azure resources directly** unless delegated.  
+- Focus on validating identifiers, claims, and the successful redirect flow.  
+- Keep your values parameterized per environment (e.g., `DEV`, `UAT`, `PROD`) — this avoids cross-environment confusion later.
+
+---
+
+## Summary
+
+With these values confirmed, you should be prepared for the majority of the work:
+
+1. **Azure Entra ID** — create enterprise apps and enable SAML.  
+2. **Sitecore Cloud Portal** — upload metadata and validate connection.  
+3. **Content Hub & Vercel** — extend the SSO to connected SaaS services.
+
+This quick start inventory ensures you begin with all required identifiers, groups, and URLs at hand — letting you focus on configuration and testing rather than hunting down values.
