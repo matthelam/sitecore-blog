@@ -24,7 +24,7 @@ const siteMetadata = {
   //youtube: 'https://youtube.com',
   linkedin: 'https://www.linkedin.com/in/matthew-lam-47184416',
   //threads: 'https://www.threads.net',
-  instagram: 'https://www.instagram.com',
+  //instagram: 'https://www.instagram.com',
   //medium: 'https://medium.com',
   //bluesky: 'https://bsky.app/',
   locale: 'en-US',
