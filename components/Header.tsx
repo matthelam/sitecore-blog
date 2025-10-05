@@ -1,6 +1,6 @@
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
-import Logo from '@/data/logo.svg'
+import Image from './Image'
 import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
@@ -16,8 +16,33 @@ const Header = () => {
     <header className={headerClass}>
       <Link href="/" aria-label={siteMetadata.headerTitle}>
         <div className="flex items-center justify-between">
-          <div className="mr-3">
-            <Logo />
+          <div
+            className="flex items-center justify-center"
+            style={{
+              height: siteMetadata.siteLogoHeight + 'px',
+              width: siteMetadata.siteLogoWidth + 'px',
+            }}
+          >
+            {/* Use siteMetadata.siteLogo; strip basePath since Image component already prepends it */}
+            {(() => {
+              const basePath = process.env.BASE_PATH || ''
+              const rawLogo = siteMetadata.siteLogo
+              // Normalize to a path starting with /static/...
+              const relative = rawLogo.startsWith(basePath)
+                ? rawLogo.slice(basePath.length)
+                : rawLogo
+              // Optional: allow cache bust via ?v= in siteMetadata.siteLogo (user can append manually)
+              return (
+                <Image
+                  src={relative}
+                  alt={siteMetadata.headerTitle + ' logo'}
+                  width={siteMetadata.siteLogoWidth}
+                  height={siteMetadata.siteLogoHeight}
+                  priority
+                  sizes={`${siteMetadata.siteLogoWidth}px`}
+                />
+              )
+            })()}
           </div>
           {typeof siteMetadata.headerTitle === 'string' ? (
             <div className="hidden h-6 text-2xl font-semibold sm:block">

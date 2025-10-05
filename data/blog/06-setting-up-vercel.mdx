@@ -1,0 +1,92 @@
+---
+title: "Setting up Vercel SSO"
+date: 2025-10-05
+summary: "Configure Vercel Enterprise SAML SSO, upload Azure metadata, and enable Directory Sync to map Azure groups to Vercel roles."
+tags: ["Vercel", "SSO", "Directory Sync", "SAML"]
+draft: false
+---
+
+## Introduction
+
+Vercel supports SAML SSO and Directory Sync for enterprise accounts. In this short guide you’ll upload Azure metadata, configure SSO, enable directory sync, and map Azure groups (by object ID) to Vercel roles such as Owner, Developer, or Member.
+
+Prereqs:
+- Vercel Enterprise plan and owner access: `[Vercel Team Owner Account]`
+- Federation metadata XML for Vercel enterprise app in Azure: `[Vercel Metadata File]`
+- Azure Group Object IDs and mapping decisions: `[Group mapping table]`
+
+---
+
+## 1. Start SAML configuration in Vercel
+
+1. In Vercel, go to **Dashboard → Settings → Security & Privacy → SAML Single Sign-On**.
+2. Choose **Upload IdP metadata** or paste the SSO URL / certificate manually.
+3. Upload the Azure federation metadata you downloaded earlier: `[Vercel Metadata File]`.
+4. Verify the parsed values (SSO URL, X509 certificate, Issuer).
+
+---
+
+## 2. Configure domain restrictions (optional)
+
+- If you only allow specific email domains, add them here:
+   - Add domain: `[yourcompany.com]`
+
+This prevents sign-in from other domains if you want to lock it down.
+
+---
+
+## 3. Directory Sync (map Azure groups → Vercel roles)
+
+1. In the same SAML section, locate **Directory Sync**.
+2. Enable Directory Sync.
+3. Map Azure Group Object IDs to Vercel roles:
+   - `[Azure Group Object ID - Dev Admin]` → `Owner`
+   - `[Azure Group Object ID - Business Admin]` → `Member`
+   - `[Azure Group Object ID - Content Editor]` → `Developer`
+
+4. Optionally create **Access Groups** in Vercel for finer project scoping and link them to synced directory groups.
+
+**Note:** Use Object IDs to avoid ambiguity. Keep the mapping table in your config repo `[Config Repo URL]`.
+
+---
+
+## 4. Provisioning settings
+
+- Enable **automatic provisioning** for user creation.
+- Enable **automatic deprovisioning** to remove accounts when users leave groups.
+- Choose a reasonable sync frequency (e.g., every 4 hours) unless you need near real-time sync.
+
+---
+
+## 5. Test the flow
+
+1. Use Vercel’s built-in **Test SSO** button (if available).
+2. Attempt login with a user from each mapped group and verify:
+   - Successful authentication via Azure.
+   - Correct Vercel role applied (Owner / Developer / Member).
+   - Project access or lack thereof matches your expectations.
+
+If sync fails or roles do not apply:
+- Confirm the Azure enterprise app has the `groups` claim as Object IDs.
+- Ensure the Azure group is assigned to the enterprise app.
+- Re-upload metadata if certificates changed.
+
+---
+
+## 6. Final operational checks
+
+- Enable SAML enforcement only after you have tested and have a break-glass owner account that can still log in.
+- Document role mappings and Access Group linkages in a public config file for your platform team (e.g., `[Config Repo URL]`).
+- Make sure an admin receives certificate expiry notifications: `[SSO Certificate Owner Email]`.
+
+---
+
+## Reference
+
+Vercel’s SAML and directory sync approach is consistent with enterprise SSO best-practices; specific mapping and directory sync flows are detailed in the uploaded platform notes: , :contentReference[oaicite:10]{index=10}.
+
+---
+
+## Wrap up & what's next
+
+You're now set to sign in to your platform components using Azure Entra ID. The last, critical step is mapping those incoming `groups` claim values to application roles in XMC and Content Hub — that’s the subject of the follow-up article in this series: **Claim & Role Mapping — examples, config patches, and test plans**.

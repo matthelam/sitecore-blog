@@ -1,0 +1,116 @@
+---
+title: "Setting up Azure Entra ID"
+date: 2025-10-02
+summary: "Step-by-step: create enterprise applications in Azure AD for Cloud Portal, Content Hub and Vercel; configure SAML basics, group claims and export metadata."
+tags: ["Azure Entra ID", "SSO", "SAML", "Sitecore XM Cloud"]
+draft: false
+---
+
+## Introduction
+
+This article walks through the Azure side of SAML: create enterprise apps (non-gallery), configure the SAML basics, add a `groups` claim, and download the federation metadata XML files you’ll later upload to each service.
+
+If you completed the workshop in the previous article, you should already have the values and owners handy: tenant ID, enterprise app names, group Object IDs and test accounts.
+
+---
+
+## 1. Create a new Enterprise Application (non-gallery)
+
+1. Sign into the Azure portal as an admin: `[Your Azure Admin Account]`.
+2. Open **Azure Active Directory → Enterprise applications**.
+3. Click **+ New application → Create your own application**.
+4. Choose **Integrate any other application you don't find in the gallery (Non-gallery)**.
+5. Name it for the service (example placeholders):
+   - `CloudPortal-SAML-[ENV]` → `[Cloud Portal Enterprise App Name]`
+   - `ContentHub-SAML-[ENV]` → `[Content Hub Enterprise App Name]`
+   - `Vercel-SAML-[ENV]` → `[Vercel Enterprise App Name]`
+
+Record the **Application ID** and **Object ID** in your config doc.
+
+---
+
+## 2. Configure SAML single sign-on basics
+
+For each Enterprise Application:
+
+1. Go to **Single sign-on → SAML**.
+2. Under **Basic SAML Configuration** set:
+   - **Identifier (Entity ID)**: paste the SP entity ID for the target service: `[Service Entity ID]`
+   - **Reply URL (ACS URL)**: the service ACS: `[Service ACS URL]`
+   - **Sign-on URL (optional)**: `[Service Sign-on URL]` (if requested by the SP)
+
+3. Save.
+
+> Example placeholders you should replace:
+> - Cloud Portal Identifier: `[Cloud Portal Entity ID]`
+> - Cloud Portal ACS: `[Cloud Portal ACS URL]`
+> - Vercel Identifier: `[Vercel Entity ID]`
+> - Vercel ACS: `[Vercel ACS URL]`
+
+---
+
+## 3. Add the `groups` claim (Object ID)
+
+To send Azure group membership to the SP as a claim:
+
+1. In the Enterprise App, find **Attributes & Claims**.
+2. Click **Add a group claim**.
+3. Configure:
+   - **Which groups**: *Groups assigned to the application*
+   - **Source attribute**: *ObjectId*
+   - **Customize the name**: set the claim name to `groups`
+4. Save.
+
+This ensures Azure emits the group Object ID GUIDs (not display names) in the `groups` claim — the most robust approach for mapping.
+
+---
+
+## 4. Assign users & groups to the app
+
+1. In the Enterprise App, go to **Users and groups → Add user/group**.
+2. Add the Azure security groups you captured earlier:
+   - `[AG_<ENV>_Administrator]` → `[Azure Object ID]`
+   - `[AG_<ENV>_Content_Editor]` → `[Azure Object ID]`
+   - etc.
+3. Add test user accounts to those groups if not already present.
+
+---
+
+## 5. Configure SAML Signing Certificate & download metadata
+
+1. In **SAML Signing Certificate**, ensure the algorithm is **SHA-256**.
+2. Under **SAML Signing Certificate** click **Download → Federation Metadata XML**.
+3. Save the file with a clear name (e.g., `cloudportal-saml-prod-metadata.xml`) and commit it to your config repo path: `[Config Repo URL or Docs Location]`.
+
+**Keep the cert owner and rotation contact handy**: `[SSO Certificate Owner Email]`.
+
+---
+
+## 6. Monitoring & Alerts (optional but recommended)
+
+Set up basic detection for SSO issues:
+- Azure Monitor sign-in log alerts for repeated failures for the app.
+- Certificate expiration alerts (notify 60 days before expiry).
+
+Suggested alert owner: `[Alerts Owner Email]`.
+
+---
+
+## Validate
+
+- As a test, sign in via the SP (Cloud Portal / Content Hub / Vercel) and confirm the Azure login appears.
+- Use your test users from each group. If authentication succeeds but roles aren’t applied in the app, that’s expected — role mapping is next in the series.
+
+---
+
+## Where this comes from
+
+This setup follows established patterns in SAML integration notes: create non-gallery enterprise apps, use ObjectId group claims, and download federation metadata for the SP. See the detailed examples in the uploaded SSO notes: :contentReference[oaicite:3]{index=3}, :contentReference[oaicite:4]{index=4}.
+
+---
+
+## Next
+
+In the next article we will take the federation metadata XML you saved and upload it to **Sitecore Cloud Portal**. We’ll complete the Cloud Portal SAML connection and validate sign-ins there.
+
+> Teaser: the role & claim mapping deep-dive will show how to transform `groups` claim GUIDs into Sitecore/XMC roles and Content Hub groups — coming in Part 3 of the series.
