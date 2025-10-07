@@ -96,7 +96,7 @@ Prepare at least one **test account per group** to validate login and claims flo
 
 ## Developer Notes
 
-- Sitecore Developers should **not create or modify Azure resources directly** unless delegated.  
+- Identify who you will work with early. Get someone who is familiar with Azure Entra ID and also has enough access. This is going to be a HUGE time-saver.
 - Focus on validating identifiers, claims, and the successful redirect flow.  
 - Keep your values parameterized per environment (e.g., `DEV`, `UAT`, `PROD`) — this avoids cross-environment confusion later.
 
@@ -110,4 +110,4 @@ With these values confirmed, you should be prepared for the majority of the work
 2. **Sitecore Cloud Portal** — upload metadata and validate connection.  
 3. **Content Hub & Vercel** — extend the SSO to connected SaaS services.
 
-This quick start inventory ensures you begin with all required identifiers, groups, and URLs at hand — letting you focus on configuration and testing rather than hunting down values.
+We will now move onto setting up the SSO in Sitecore Cloud Portal.
