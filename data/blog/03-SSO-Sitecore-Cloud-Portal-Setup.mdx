@@ -1,83 +1,116 @@
 ---
 title: "Azure Entra ID SSO – Setting up Sitecore Cloud Portal"
 date: 2025-10-13
-summary: "Upload the federation metadata, configure the SAML connection and perform the first validation checks for Cloud Portal SSO."
-tags: ["sitecore cloud portal", "sso", "saml", "sitecore xmc", "sitecore search", "setup", "entra id", "azure", "identity"]
-draft: true
+draft: false
+tags: ["azure", "identity", "sso", "sitecore", "cloud portal", "saml", "xm cloud", "search"]
+summary: "Upload the federation metadata, configure the SAML connection, and perform initial validation for Sitecore Cloud Portal SSO."
 ---
 
 ## Introduction
 
-This article is the Cloud Portal side of the SSO flow: upload the IdP metadata, create the SAML connection, add the `groups` claim mapping (placeholder only), and run initial validations.
+Now that the Azure Entra ID side is complete, it’s time to bring Sitecore Cloud Portal into the loop.  
+This article focuses on the **Cloud Portal** side of the SAML setup — uploading the IdP metadata, creating the SSO connection, checking claims, and running the first authentication tests.
 
-Before you begin make sure you have:
-- Federation metadata XML from Azure: `/sso/cloudportal-saml-[ENV].xml` → `[Cloud Portal Metadata File]`
-- A list of Azure Group Object IDs and test users: `[Group table from Workshop]`
+Before you begin, make sure you’ve already collected:
+- The **Federation Metadata XML** exported from Azure: `/sso/cloudportal-saml-[ENV].xml`
+- A **list of Azure Group Object IDs** and **test users** from your preparation workshop
+
+These are the building blocks that tie Azure and Sitecore together.
 
 ---
 
-## 1. Add a new SSO connection in Cloud Portal
+## 1. Add a New SSO Connection in Cloud Portal
 
-1. Sign into **Cloud Portal** as an org/cloud admin: `[Cloud Portal Admin Account]`.
-2. Navigate to **Admin → SSO** (or similar in your Cloud Portal UI).
+1. Sign in to **Sitecore Cloud Portal** as an organisation or cloud administrator (`[Cloud Portal Admin Account]`).
+2. Navigate to **Admin → SSO** (the location may differ slightly depending on UI updates).
 3. Click **Add SSO Connection → SAML**.
-4. Enter a connection name: e.g., `Azure-SAML-[ENV]` → `[Cloud Portal SAML Connection Name]`.
-5. Add allowed email domains (if prompted): `[yourcompany.com]` — these limit sign-in to trusted domains.
+4. Give the connection a descriptive name such as:
+   - `Azure-SAML-DEV`
+   - `Azure-SAML-UAT`
+   - `Azure-SAML-PROD`
+5. If prompted, add your organisation’s allowed email domains (for example, `yourcompany.com`).  
+   This ensures that only trusted corporate accounts can use SSO.
+
+> **Pro Tip:** Keep your connection names consistent across environments — it makes it easier to maintain your configuration and certificate paths.
 
 ---
 
 ## 2. Upload Federation Metadata
 
-1. In the Cloud Portal SAML setup, choose **Upload IdP Metadata**.
-2. Upload the file you downloaded from Azure: `[Cloud Portal Metadata File]`.
-3. Save.
+1. In the SAML connection setup screen, choose **Upload IdP Metadata**.  
+2. Select the XML file you downloaded from Azure: `[Cloud Portal Metadata File]`.
+3. Save the configuration.
 
-The portal will display the parsed IdP values (Issuer, SSO URL, Certificate). Confirm these match the metadata and were created by the Azure team.
+Once uploaded, Cloud Portal will display the parsed IdP details — Issuer, SSO URL, and Certificate fingerprint.  
+Double-check that these values match your Azure export. If anything looks off, re-download the metadata directly from the Azure Enterprise Application to avoid stale data.
 
 ---
 
-## 3. Claims mapping UI (placeholder only)
+## 3. Claims Mapping (Placeholder Only)
 
-Cloud Portal exposes a **Claims Mapping** area where you can map incoming claims (e.g., `groups`) to portal roles or to a `xmc_role` claim that will flow to XM Cloud.
+Cloud Portal includes a **Claims Mapping** interface that lets you align incoming claims (like `groups`) with internal portal roles or an `xmc_role` claim for XM Cloud.
 
-- At this stage **do not** hard-code any mapping values into environments until you have a mapping plan.  
-- Collect mapping decisions in a config doc: for each Azure Object ID (`[Azure Group Object ID]`) map to the intended claim `xmc_role = [Sitecore Role]`. We'll produce a dedicated mapping file in the claim mapping deep-dive.
+At this stage:
+- **Do not** hard-code or apply claim mappings yet.  
+- Instead, document your intended mappings in a configuration table:
+  - `[Azure Group Object ID]` → `xmc_role = [Sitecore Role]`
 
-> We deliberately skip the step-by-step mapping mechanics here — they’ll be covered in the follow-up article that produces sample config patches and a test plan.
+You’ll finalise this mapping in the dedicated claim-mapping deep dive later in the series.
+
+> **Developer Note:** Each environment (DEV/UAT/PROD) often uses separate group Object IDs. Capture them clearly in your mapping spreadsheet to prevent mix-ups during deployment.
 
 ---
 
 ## 4. Test the Cloud Portal SSO
 
-1. Sign out of the portal.
-2. Attempt to sign in via the portal sign-in page (it should redirect to Azure).
-3. Login with a test user in each group:
+With the metadata uploaded, you’re ready for the first live test.
+
+1. Sign out of Cloud Portal completely.  
+2. Go to the portal sign-in page — it should now redirect to **Azure Entra ID**.  
+3. Log in using one of your prepared test users:
    - Admin test: `[admin-test@yourcompany.com]`
    - Editor test: `[editor-test@yourcompany.com]`
 4. Confirm:
-   - Successful authentication (you land in the portal).
-   - Your user profile shows the `groups` claim values (Object IDs) — this helps you validate the group list was emitted.
+   - The login flow successfully redirects through Azure and lands you back in Cloud Portal.
+   - The user profile (or token view) displays the `groups` claim with the correct **Object ID** values.
 
 If authentication fails:
-- Re-check the uploaded metadata and the Basic SAML config values (Entity ID, ACS).
-- Validate Azure's **Application Assignment** — ensure the user account is assigned to the enterprise app.
+- Re-check your **Basic SAML Configuration** (Entity ID and ACS URL) in both Azure and Sitecore.
+- Confirm the user is **assigned** to the Azure Enterprise Application.
+- Review the Azure sign-in logs for SAML assertion errors — they usually reveal what’s missing.
+
+> **Tip:** If you only see a generic error screen, check the browser network tab for the SAML response payload — it can tell you whether Azure actually issued the token.
 
 ---
 
-## 5. Operational notes
+## 5. Operational Notes
 
-- **Roles may not appear immediately in XMC:** Cloud Portal attaches claims to tokens; the downstream role mapping in your XMC solution (a config file + redeploy) completes the story. We'll cover that soon.
-- **Certificate rotation:** keep the signed metadata in your repo and set a calendar reminder to rotate before expiry: `[SSO Certificate Owner Email]`.
-- **Logging:** enable sign-in logs for the Cloud Portal enterprise app in Azure and ship them to your Log Analytics workspace for monitoring.
-
----
-
-## Reference
-
-This Cloud Portal procedure is drawn from SAML integration patterns and the provided setup notes (metadata upload, claims mapping UI, and preliminary testing): :contentReference[oaicite:5]{index=5}, :contentReference[oaicite:6]{index=6}.
+| Topic | Guidance |
+|--------|-----------|
+| **Role Propagation** | Roles won’t appear immediately in XM Cloud. Cloud Portal issues the claims, but the XM Cloud configuration (handled later) interprets them. |
+| **Certificate Rotation** | Keep a copy of your signed metadata in your repository and schedule a rotation reminder before expiry. Contact: `[SSO Certificate Owner Email]`. |
+| **Logging** | Enable sign-in log forwarding for the Cloud Portal enterprise app in Azure → **Log Analytics Workspace** for proactive monitoring. |
+| **Environment Sync** | Always replicate changes to all environments once tested in DEV — Cloud Portal settings aren’t automatically synced between orgs. |
 
 ---
 
-## Next
+## Validate
 
-Next article: **Setting up Content Hub** — editing the portal JSON configuration to accept the Azure SAML provider, include group mappings (placeholder), and test group-based provisioning.
+By this stage, you should have a functioning SSO handshake between **Azure Entra ID** and **Sitecore Cloud Portal**.  
+Successful login confirms that SAML assertions and certificates are valid, even if roles are not yet being applied.  
+
+If everything checks out, your environment is ready for claim mapping and XM Cloud integration.
+
+---
+
+## Summary
+
+To recap, you’ve:
+1. Created a new SAML connection in Cloud Portal  
+2. Uploaded Azure’s Federation Metadata  
+3. Validated sign-ins with test accounts  
+4. Confirmed `groups` claims are being emitted
+
+Next, we’ll move on to **Content Hub**, where we’ll extend SSO into Sitecore’s DAM platform and explore how to include group mappings for role-based provisioning.
+
+> Coming up next: **Setting up Content Hub** — editing the Cloud Portal JSON config to register Azure as a SAML provider and preparing claim mapping for role propagation.
