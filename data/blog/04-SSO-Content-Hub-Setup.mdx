@@ -1,34 +1,41 @@
 ---
 title: "Azure Entra ID SSO – Setting up Content Hub"
 date: 2025-10-14
-summary: "Configure Content Hub’s Portal Configuration to accept Azure SAML and map incoming group claims to Content Hub groups (with placeholders for your group IDs)."
-tags: ["sitecore cloud portal", "sso", "saml", "sitecore content hub", "setup", "entra id", "azure", "identity"]
-draft: true
+draft: false
+tags: ["azure", "identity", "sso", "sitecore", "content hub", "saml", "setup"]
+summary: "Configure Sitecore Content Hub’s Portal Configuration to accept Azure Entra ID SAML and map incoming group claims to Content Hub groups using placeholder Object IDs."
 ---
 
 ## Introduction
 
-Content Hub's SAML configuration is managed via the Portal Configuration JSON. This article shows where to add the IdP metadata, how to configure the `ExternalAuthenticationProviders` section, and how to capture group mappings in the JSON (using placeholders).
+With Cloud Portal now connected, the next step is to extend SSO to **Sitecore Content Hub**.  
+Unlike Cloud Portal, Content Hub manages its SAML configuration directly through the **Portal Configuration JSON** — this is where you define the identity provider metadata, enable the SAML module, and map incoming Azure `groups` claims to Content Hub roles.
 
-Before you start, you’ll need:
+This article walks through the sections of the JSON you’ll need to modify, along with example placeholders you can replace with your own Azure Group Object IDs and Content Hub groups.
 
-- Content Hub metadata XML: `[Content Hub Metadata File]`  
-- Group Object IDs and desired Content Hub groups: `[Group mapping table]`  
-- Owner for the JSON change and a small maintenance window: `[Content Hub Admin]`
+Before you start, make sure you have:
+- The **Content Hub Federation Metadata XML** exported from Azure → `[Content Hub Metadata File]`
+- Your **Azure Group Object IDs** and the **target Content Hub groups** they should map to → `[Group Mapping Table]`
+- The **Content Hub Admin** responsible for applying and validating the change → `[Content Hub Admin]`
 
 ---
 
 ## 1. Access Portal Configuration
 
-1. Sign into Content Hub as an administrator: `[Content Hub Admin Account]`.
+1. Sign in to **Content Hub** as an administrator (`[Content Hub Admin Account]`).
 2. Navigate to **Manage → Settings → Portal Configuration**.
-3. Toggle to **Text View** or **Code View** to edit JSON.
+3. Switch to **Text View** or **Code View** to access and edit the JSON directly.
+
+> **Tip:** Always take a backup of your existing Portal Configuration JSON before making any edits — it’s your safety net if something goes wrong.
 
 ---
 
-## 2. The JSON snippet you’ll update (placeholder values)
+## 2. Update the JSON (Using Placeholder Values)
 
-Locate the `ExternalAuthenticationProviders` section and add (or update) an entry under `saml`. Example (fill placeholders):
+Find the `ExternalAuthenticationProviders` section in the JSON.  
+You’ll either add or modify a `saml` entry to include your Azure Entra ID details.
+
+Here’s an example configuration block with placeholders for your environment:
 
 ```jsonc
 {
@@ -42,69 +49,3 @@ Locate the `ExternalAuthenticationProviders` section and add (or update) an entr
         "idp_entity_id": "[Azure IdP Entity ID]",
         "provider_name": "[AzureSAML]",
         "authentication_mode": "Passive",
-        "module_path": "AuthServices",
-        "is_enabled": true,
-        "auto_create_users": true,
-        "sync_claims_to_properties": true,
-        "group_claim_attribute": "http://schemas.microsoft.com/ws/2008/06/identity/claims/groups",
-        "default_user_groups": [
-          "M.Builtin.Readers",
-          "M.Builtin.SitecoreDAM.Everyone",
-          "M.Builtin.ContentOperations.Everyone"
-        ],
-        "group_mappings": {
-          "[Azure Group Object ID - Admins]": [
-            "M.Builtin.ContentAdministrators",
-            "M.Builtin.Approvers",
-            "M.Builtin.Editors"
-          ],
-          "[Azure Group Object ID - Editors]": [
-            "M.Builtin.Editors",
-            "M.Builtin.Creators"
-          ]
-        }
-      }
-    ]
-  }
-}
-```
-
----
-
-## 3. Save & wait
-
-- Save the **Portal Configuration**. It may take a couple of minutes to apply.  
-- If you are committed to a repo-driven change process, store the JSON change in your configuration repo and reference the path: `[Config Repo URL]`.
-
----
-
-## 4. Test authentication & group assignment
-
-1. Log out of Content Hub.  
-2. Access the Content Hub URL and initiate SSO.  
-3. Log in with a test user who is a member of each Azure group.  
-4. After login, verify:
-   - The user account was auto-created (if enabled).
-   - The user is a member of the expected Content Hub groups per your `group_mappings`.
-   - Access and UI permissions match expectations for that group.
-
-**If mappings do not appear:**
-
-- Confirm the incoming `groups` claim contains **Object IDs** (not names).  
-- Confirm the `group_mappings` JSON uses the **exact GUID values**.
-
----
-
-## 5. Operational considerations
-
-- **Auto-create users** is handy for early rollouts; be cautious in PROD.  
-- **Sync claims to properties** lets you surface Azure attributes in Content Hub user records.  
-- Keep a list of **default user groups** for baseline access so newly provisioned users have minimal access.  
-- Document your JSON snippet and link to the metadata file in your repo.
-
----
-
-## References
-
-- Internal SAML/SSO notes and standard Content Hub SAML configuration patterns.  
-- Your project’s identity and platform documentation (replace with your links): `[Config Repo URL]`, `[Identity Runbook URL]`.
