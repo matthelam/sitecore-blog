@@ -1,0 +1,123 @@
+---
+title: "Azure Entra ID SSO – Setting up Azure Entra ID"
+date: 2025-10-12
+draft: false
+tags: ["azure", "entra id", "identity", "sso", "sitecore", "setup"]
+summary: "A step-by-step guide to creating non-gallery Enterprise Applications in Azure Entra ID for Sitecore Cloud Portal, Content Hub and Vercel, configuring SAML, group claims, and downloading federation metadata."
+---
+
+## Introduction
+
+If you’ve completed the preparation checklist from the previous article, you should already have your tenant details, security groups, and test users ready. Now it’s time to jump into the Azure side and actually **create the Enterprise Applications** that Sitecore will authenticate against.
+
+[add link here]
+
+In this part of the series, I’ll walk through setting up Azure Entra ID for SAML-based Single Sign-On (SSO). This includes creating **Enterprise Applications**, configuring the **SAML basics**, adding the **`groups` claim**, and downloading the **federation metadata XML** which you’ll later upload to Sitecore Cloud Portal, Content Hub, and Vercel.
+
+---
+
+## 1. Create a New Enterprise Application (Non-Gallery)
+
+1. Go to **Azure Active Directory → Enterprise applications**.
+2. Click **+ New application → Create your own application**.
+3. Select **Integrate any other application you don’t find in the gallery (Non-gallery)**.
+4. Give the application a meaningful name per service, for example:
+   - `CloudPortal-SAML-[ENV]`
+   - `ContentHub-SAML-[ENV]`
+   - `Vercel-SAML-[ENV]`
+
+Once created, record the **Application ID** and **Object ID** somewhere safe — you’ll need them for reference later.
+
+> **Pro Tip:** Keep naming conventions consistent across environments (`DEV`, `UAT`, `PROD`) to make life easier when debugging or rotating certificates.
+
+---
+
+## 2. Configure SAML Single Sign-On Basics
+
+With your Enterprise Application created, it’s time to set up the SAML configuration.
+
+1. Open the Enterprise App → **Single sign-on → SAML**.
+2. Under **Basic SAML Configuration**, enter:
+   - **Identifier (Entity ID)** – the SP Entity ID for the target service: `[Service Entity ID]`
+   - **Reply URL (ACS URL)** – the ACS endpoint: `[Service ACS URL]`
+   - **Sign-on URL (optional)** – `[Service Sign-on URL]` (only if requested by the SP)
+3. Click **Save**.
+
+**Example placeholders:**
+
+| Service | Identifier (Entity ID) | Reply URL (ACS URL) |
+|----------|-----------------------|----------------------|
+| Cloud Portal | `[Cloud Portal Entity ID]` | `[Cloud Portal ACS URL]` |
+| Content Hub | `[Content Hub Entity ID]` | `[Content Hub ACS URL]` |
+| Vercel | `[Vercel Entity ID]` | `[Vercel ACS URL]` |
+
+> Don’t stress if you don’t yet have every value — you can always come back once Sitecore provides the exact metadata.
+
+---
+
+## 3. Add the `groups` Claim (Object ID)
+
+You’ll need to include group membership in the SAML token so Sitecore can map Entra groups to Sitecore roles later on.
+
+1. In your Enterprise App, go to **Attributes & Claims**.
+2. Click **Add a group claim**.
+3. Configure it as follows:
+   - **Which groups:** *Groups assigned to the application*  
+   - **Source attribute:** *ObjectId*  
+   - **Name:** `groups`
+4. Save the change.
+
+This ensures the claim sends the **group Object IDs**, not display names — a small detail that prevents mapping issues down the track.
+
+---
+
+## 4. Assign Users & Groups
+
+Now connect your Entra groups and test users to the application.
+
+1. In the Enterprise App, select **Users and groups → Add user/group**.
+2. Assign the Azure Security Groups you captured earlier:
+   - `[<ENV>_Administrator]`
+   - `[<ENV>_Content_Editor]`
+   - `[<ENV>_Publisher]`
+3. Confirm that each group contains its test account from your preparation checklist.
+
+> **Note:** Assigning groups (not individual users) is best practice — easier to manage and audit later.
+
+---
+
+## 5. Configure the SAML Signing Certificate & Download Metadata
+
+Before you wrap up the setup:
+
+1. Under **SAML Signing Certificate**, ensure the algorithm is **SHA-256**.
+2. Download the **Federation Metadata XML** file.
+3. Save it somewhere traceable — for example, `cloudportal-saml-prod-metadata.xml` — and commit it to your project’s configuration repo.
+
+| File | Description | Example Name | Owner / Contact |
+|------|--------------|---------------|----------------|
+| Federation Metadata XML | Azure IdP configuration file to import into Sitecore | `cloudportal-saml-prod-metadata.xml` | `[SSO Certificate Owner Email]` |
+
+> Keep your metadata and certificate expiry dates noted. These certificates rotate periodically, so schedule a reminder before expiry.
+
+---
+
+## 6. Monitoring & Alerts (Optional but Recommended)
+
+You can catch a lot of SSO problems early by setting up basic Azure alerts.
+
+| Alert Type | Description | Recommended Action | Owner |
+|-------------|-------------|--------------------|--------|
+| Sign-in Failure | Detect repeated failed sign-ins for this Enterprise App | Azure Monitor → Sign-in logs → Create alert rule | `[Alerts Owner Email]` |
+| Certificate Expiry | Warn 60 days before the SAML certificate expires | Azure Monitor → Activity log alert | `[SSO Certificate Owner Email]` |
+
+---
+
+## Summary
+
+At this point, Azure Entra ID is configured and ready for Sitecore.  
+You’ve now created enterprise applications, added SAML settings, issued group claims, and exported your metadata files.  
+
+In the next article, we’ll upload the federation metadata into **Sitecore Cloud Portal**, complete the connection, and validate live logins.
+
+> Coming up next: a deep dive into **claim transformation and role mapping** — turning your Entra group Object IDs into actual Sitecore roles.
