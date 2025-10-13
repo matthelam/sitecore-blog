@@ -165,18 +165,6 @@ Once mapping is saved:
 
 ---
 
-## 6. Operational Notes
-
-| Topic                    | Guidance                                                                                                           |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| **Role propagation**     | Cloud Portal issues target claims; XM Cloud later consumes the prefixed `xmc_role` claim to assign Sitecore roles. |
-| **Certificate rotation** | Track expiration dates and rotate before expiry.                                                                   |
-| **Logging**              | Forward Azure Enterprise App logs to Log Analytics for SSO insights.                                               |
-| **Environment sync**     | Repeat configuration for DEV, UAT, and PROD — Cloud Portal settings are not auto-synced.                           |
-| **Connection limits**    | Up to **5 SSO connections** and **50 domains** per tenant; domains cannot overlap.                                 |
-
----
-
 ## Validate
 
 By this stage, you should have:
@@ -197,6 +185,4 @@ You’ve:
 4. Tested SSO and verified the token
 5. Prepared for downstream XM Cloud role mapping
 
-Next up: **XM Cloud Role Mapping** — consuming the prefixed claim to assign Sitecore roles to authenticated users.
-
-```
+```  In the next article, we’ll walk through how to setup **Content Hub**, configure the SAML connection there, and conduct validation checks.  ```
