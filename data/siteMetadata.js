@@ -14,7 +14,7 @@ const siteMetadata = {
   // Adjust these to scale the logo proportionally (original was 40x40)
   siteLogoWidth: 85,
   siteLogoHeight: 85,
-  socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
+  socialBanner: `${process.env.BASE_PATH || ''}/static/images/matthelam_lighthouse_background.png`,
   //mastodon: 'https://mastodon.social/@mastodonuser',
   email: 'matthewlam@aceik.com.au',
   github: 'https://github.com/matthelam',
