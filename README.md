@@ -1,4 +1,4 @@
-![tailwind-nextjs-banner](/public/static/images/twitter-card.png)
+![sitecore-blog-banner](/public/static/images/matthelam_lighthouse_background.png)
 
 # Tailwind Nextjs Starter Blog
 
