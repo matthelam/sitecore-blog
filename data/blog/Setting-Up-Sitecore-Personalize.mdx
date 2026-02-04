@@ -1,0 +1,201 @@
+---
+title: "Sitecore Personalize – From Engage Scripts to SDK 1.2"
+date: 2025-11-03
+draft: true
+tags: ["sitecore", "personalize", "engage", "sdk", "xmc", "nextjs", "web personalization"]
+summary: "Evolve your Sitecore Personalize implementation from custom Engage scripts to the modern Cloud SDK. Learn setup steps for SDK 1.1, architecture patterns, and what’s changing in SDK 1.2."
+---
+
+## Introduction
+
+When we first integrated **Sitecore Personalize** into our **XM Cloud + Vercel** headless platform, the goal was simple:  
+Enable our marketers to test and deliver personalised experiences quickly, without compromising our composable architecture.
+
+We started small — using **Engage browser scripts** and custom event triggers to capture behaviour and run experiences.  
+Over time, this evolved into a more robust setup using the **Sitecore Cloud SDK v1.1**, and we’re now preparing for the upcoming **v1.2** changes that further tighten integration between XM Cloud, Personalize, and headless front-ends.
+
+This article documents that journey — from initial Engage setup, to SDK implementation, and what’s new in the latest release.
+
+---
+
+## 1. Initial Setup with Engage and Custom Scripts
+
+### Why Start with Engage
+
+Early in our migration, time-to-value was the priority. The **Engage browser script** let us embed a lightweight tracker, trigger experiences, and measure engagement without altering our component architecture.
+
+It was ideal for a Vercel-hosted Next.js site running on **XM Cloud**, especially while Personalize and Content Hub were still being configured.
+
+### Implementation Steps
+
+1. **Create Web Experience or Experiment**  
+   Define variants, audience criteria, and triggers in the **Personalize UI**.
+
+2. **Embed the Engage Script**  
+   Add the base snippet to your site layout (e.g., `_app.tsx` or `Layout.tsx`):
+   ```html
+   <script src="https://personalize.yourtenant.sitecorecloud.io/personalize.js"></script>
+   <script>
+     window.sitecorePersonalize = window.sitecorePersonalize || [];
+     sitecorePersonalize.push(['trackPageView']);
+   </script>
+   ```
+
+3. **Fire Custom Events**  
+   Send user actions and contextual data back to Personalize:
+   ```js
+   sitecorePersonalize.push(['trackEvent', { 
+     event: 'productSelected', 
+     productId: '1234', 
+     attributes: { category: 'widgets' } 
+   }]);
+   ```
+
+4. **Trigger Experiences on Route Change**  
+   For SPAs, manually re-trigger after client-side navigation:
+   ```js
+   sitecorePersonalize.push(['triggerExperiences']);
+   ```
+
+5. **Validate Experience Execution**  
+   Use the Sitecore Personalize preview and reporting tools to confirm triggers, audiences, and variant success metrics.
+
+### Lessons Learned
+
+- **SPA routing:** Experiences don’t auto-retrigger after route changes; explicitly call `triggerExperiences()` in `router.events.on('routeChangeComplete')`.  
+- **Load timing:** Ensure the Engage script is ready before firing custom events.  
+- **Visitor identity:** Configure cookies or identity stitching correctly across multiple microsites.  
+- **Async loading:** Defer script execution to prevent blocking the main thread.  
+- **Team alignment:** Marketers own experience setup; developers handle event triggers — document both clearly.
+
+---
+
+## 2. Transition to Sitecore Cloud SDK v1.1
+
+### Why Upgrade
+
+While Engage scripts worked, maintaining multiple microsites with scattered snippets became unsustainable.  
+The **Cloud SDK v1.1** introduced modular APIs for **events** and **personalization**, offering:
+
+- Typed control via ES Modules / TypeScript  
+- Better SPA and atomic component support  
+- Centralized configuration and reusable hooks  
+- Cleaner DevOps integration for XM Cloud projects  
+
+### Implementation Steps
+
+1. **Install Packages**
+   ```bash
+   npm install @sitecore-cloud/sdk @sitecore-cloud/sdk-personalize @sitecore-cloud/sdk-events
+   ```
+
+2. **Initialize the SDK**
+   ```ts
+   import { CloudSDK } from '@sitecore-cloud/sdk';
+   import { addEvents } from '@sitecore-cloud/sdk-events';
+   import { addPersonalize } from '@sitecore-cloud/sdk-personalize';
+
+   CloudSDK({
+     contextId: "your-context-id",
+     apiHost: "https://yourtenant.sitecorecloud.io",
+     siteName: "main-site",
+     visitorId: "uuid-or-cookie"
+   })
+     .addEvents()
+     .addPersonalize({
+       enablePersonalizeCookie: true,
+       webPersonalization: true
+     })
+     .initialize();
+   ```
+
+3. **Handle Route Changes**
+   ```ts
+   useEffect(() => {
+     const rerun = () => {
+       (window as any).scCloudSDK.personalize.triggerExperiences();
+     };
+     router.events.on('routeChangeComplete', rerun);
+     return () => router.events.off('routeChangeComplete', rerun);
+   }, []);
+   ```
+
+4. **Capture Component-Level Events**
+   ```ts
+   import { trackEvent } from '@sitecore-cloud/sdk-events';
+
+   trackEvent({
+     event: 'ctaClicked',
+     attributes: { buttonName: 'Subscribe' }
+   });
+   ```
+
+5. **Embed in Atomic Components**
+   Wrap personalization logic in a `usePersonalization()` hook for reuse across microsites.
+
+### Key Learnings
+
+- SDK v1.1 only runs client-side (`webPersonalization: true`), so guard against SSR contexts.  
+- Identity persistence is crucial across domains; coordinate visitorId and analytics.  
+- Integrate telemetry — track event latency, experience load time, and variant distribution.  
+- Include Personalize logic in your CI/CD testing (e.g., Chromatic or Playwright visual validation).  
+
+---
+
+## 3. Preparing for Sitecore Cloud SDK v1.2
+
+### What’s New in v1.2
+
+The **1.2 release** introduces several incremental but meaningful enhancements:
+
+| Area | Improvement |
+|------|--------------|
+| **Personalization API** | More robust rerun handling and async personalization loading |
+| **Performance** | Reduced bundle size and improved init timing |
+| **Open Source SDK** | Full transparency, faster iteration, community contributions |
+| **Server-side hooks** | Preliminary support for hybrid SSR + CSR personalization |
+
+### Migration Readiness
+
+Before upgrading, validate:
+
+- SDK initialization method changes (e.g., renamed options or new defaults).  
+- Cookie and visitor ID behaviour — confirm persistence across SSR → CSR transitions.  
+- Telemetry integration points — ensure logging remains consistent.  
+- Regression coverage — re-run personalization tests in UAT environments.  
+
+### Architectural Adjustments
+
+We’re adapting our internal setup to:
+
+- **Abstract SDK init** into a reusable shared module across all microsites.  
+- **Implement fallback rendering**, ensuring pages load normally if personalization fails.  
+- **Centralize event definitions** in our config repo for consistency.  
+- **Enhance logging**: when experiences trigger, variant IDs and response times are logged to Elastic for insight correlation.
+
+### Expected Benefits
+
+- Simpler personalization hooks across apps  
+- Better scalability for multi-site XM Cloud deployments  
+- Clearer visibility for marketing and analytics teams  
+- Improved CI/CD integration with future SDK releases  
+
+---
+
+## Conclusion
+
+Our journey with Sitecore Personalize reflects a natural evolution:
+
+| Phase | Approach | Benefit |
+|-------|-----------|----------|
+| **1. Engage Script** | Manual event & trigger scripting | Fast setup, good for pilots |
+| **2. SDK v1.1** | Modular, reusable SDK integration | Scalable, enterprise-ready |
+| **3. SDK v1.2** | Optimized, open-source framework | Sustainable long-term foundation |
+
+For teams running **XM Cloud + Vercel**, this progression means:  
+- Faster iteration cycles for personalization  
+- Consistent code patterns across microsites  
+- Better collaboration between developers and marketers  
+- And a cleaner upgrade path for future Sitecore SDK releases  
+
+> **Next:** I’ll publish a companion article covering SDK v1.2 migration checklists and code diffs for upgrading from v1.1 → v1.2 across multi-tenant environments.

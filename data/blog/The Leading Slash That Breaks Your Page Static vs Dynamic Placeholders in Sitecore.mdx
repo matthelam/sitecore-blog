@@ -1,0 +1,154 @@
+---
+title: "The Leading Slash That Breaks Your Page, Static vs Dynamic Placeholders in Sitecore"
+date: 2026-02-04
+draft: false
+tags: ["sitecore", "xm cloud", "sitecore ai", "renderings", "placeholders", "content migration", "development"]
+summary: "A critical Sitecore behavior uncovered during a bulk content migration — why dynamic placeholders often require a leading slash, how this impacts rendering resolution, and a practical tip for locating DynamicPlaceholderId values."
+---
+
+## Introduction
+
+During a recent content migration into Sitecore’s Cloud Platform, I was rebuilding presentation details programmatically as part of an automated migration workflow.
+
+The migration executed without errors, but after reviewing the pages, large blocks of components were missing.
+
+The renderings existed in the **Final Renderings** field, the XML was valid, and the hierarchy appeared correct. Yet nothing rendered on the page.
+
+The root cause turned out to be a subtle but important distinction in how Sitecore resolves **static versus dynamic placeholder paths**.
+
+---
+
+## The Core Behavior
+
+Sitecore interprets placeholder values differently depending on whether they are:
+
+- Root static placeholders  
+- Nested placeholders  
+- Dynamic placeholders  
+
+A reliable rule is:
+
+> Once a placeholder becomes part of a hierarchy, Sitecore expects an absolute path — typically indicated by a leading `/`.
+
+This is easy to overlook when working manually but got totally lost amongst my scripting when I was performing bulk updates.
+
+---
+
+## Static Placeholder Behavior
+
+Root-level static placeholders are generally tolerant.
+
+Example:
+
+    main
+
+This typically resolves correctly because Sitecore can infer the root context.
+
+Using:
+
+    /main
+
+also works but is not always required for a single root placeholder.
+
+This tolerance can create inconsistencies during migrations, where some components render correctly while others do not.
+
+---
+
+## Nested Placeholder Paths
+
+When referencing a placeholder inside another placeholder, Sitecore becomes much stricter.
+
+Preferred:
+
+    /main/container
+
+Avoid:
+
+    main/container
+
+Without the leading slash, Sitecore may interpret the placeholder as relative rather than absolute, preventing the rendering from resolving properly.
+
+In bulk operations, this can result in large numbers of renderings being inserted successfully but never appearing.
+
+---
+
+## Dynamic Placeholders — Where Issues Commonly Occur
+
+Dynamic placeholders behave as though they are always part of a hierarchical path, even when they appear to be at the root.
+
+For example:
+
+    main-1
+
+While this looks valid, the safer format is:
+
+    /main-1
+
+### Why This Matters
+
+Dynamic placeholders are generated at runtime, typically using a `DynamicPlaceholderId`. Because these identifiers are not static, Sitecore relies on explicit pathing to remove ambiguity during layout resolution.
+
+The leading slash effectively signals:
+
+> Resolve this placeholder from the root of the layout tree.
+
+If the path is ambiguous, the rendering may not load — often without producing an error.
+
+---
+
+## Migration Tip: Finding the Dynamic Placeholder ID
+
+One practical detail that proved useful during the migration was identifying where the dynamic portion of the placeholder originates.
+
+In most implementations, the identifier can be found directly within the rendering parameters:
+
+    s:par="DynamicPlaceholderId=3&GridParameters=..."
+
+This value is appended to the placeholder key at runtime, producing placeholders such as:
+
+    /main-3
+
+or:
+
+    /main/section-3/container-2
+
+### Why This Helps During Bulk Updates
+
+Knowing the `DynamicPlaceholderId` allows you to:
+
+- Predict the final placeholder key  
+- Maintain the correct hierarchy  
+- Generate deterministic scripts  
+- Avoid placeholder collisions  
+- Debug missing renderings more efficiently  
+
+When components are not appearing where expected, inspecting rendering parameters should be an early diagnostic step.
+
+---
+
+## Recommended Developer Guideline
+
+A simple rule can significantly reduce layout inconsistencies. Just add a / to all your placeholders at the start.
+
+---
+
+## References
+
+Sitecore Dynamic Placeholders Documentation  
+https://doc.sitecore.com/xp/en/developers/latest/sitecore-experience-manager/dynamic-placeholders.html  
+
+Sitecore Stack Exchange — Detect renderings with invalid placeholder path  
+https://sitecore.stackexchange.com/questions/14572/detect-renderings-with-invalid-placeholder-path  
+
+Troubleshooting Dynamic Placeholder Issues (Community)  
+https://gary.wenneker.org/troubleshooting-the-sitecore-sxa-and-dynamic-placeholder-glitch/
+
+---
+
+## Final Thoughts
+
+This is a small implementation detail, but one that can have a significant operational impact when working at scale.
+
+Sitecore is highly literal when resolving layout structure, and minor differences in placeholder strings can determine whether a rendering appears at all.
+
+When working with nested or dynamic placeholders in Sitecore’s Cloud Platform, leaning toward absolute paths improves predictability — which is exactly what you want during automated delivery workflows.
