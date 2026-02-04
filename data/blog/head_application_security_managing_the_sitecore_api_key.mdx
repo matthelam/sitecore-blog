@@ -1,0 +1,89 @@
+---
+title: "Head Application Security – Managing the Sitecore API Key"
+date: 2025-11-04
+draft: true
+tags: ["sitecore", "xm cloud", "experience edge", "api key", "security", "token", "head application security"]
+summary: "Best-practice approach to securing the Experience Edge API key within Sitecore XM Cloud projects while maintaining build stability and alignment with Sitecore’s modern SDKs."
+---
+
+## Overview
+
+Following Sitecore’s October 2025 Platform Review, the **Experience Edge Token** was identified as a major issue due to its potential exposure in client-side configurations and public web deployments. This document outlines the **recommended remediation steps**, their technical rationale, and the transition path toward **secure and stable token management** in XM Cloud and Vercel-hosted environments.
+
+---
+
+## Background
+
+In earlier XM Cloud implementations, the `sitecoreApiKey` variable was frequently injected into environment files or build configurations that were later bundled into client-side JavaScript. While convenient for connecting to the Experience Edge Delivery API, this approach can inadvertently **expose sensitive tokens** to the browser or public endpoints.
+
+Sitecore’s security guidance (see *Head Application Security*, developers.sitecore.com) recommends that all Delivery API keys:
+
+- Are kept **server-side only**
+- Are **rotated regularly** using the Token API
+- Are never committed to source control or exposed through static configuration
+
+---
+
+## Observed Challenge
+
+When implementing Sitecore’s recommendation to remove the `sitecoreApiKey` from configuration, the Ausgrid XM Cloud solution encountered build failures. Several dependencies in the legacy Sitecore JSS / Next.js base layer referenced the variable directly. Removing it without refactoring these references caused **downstream compilation and runtime issues**.
+
+This behaviour is not unique to Ausgrid’s implementation but is common in projects built on pre‑2025 JSS templates where the key was a shared variable used across server and client contexts.
+
+---
+
+## Recommended Resolution Path
+
+### Step 1 – Immediate Risk Reduction (No Architectural Change)
+- **Rotate existing tokens** via the [Experience Edge Token API](https://doc.sitecore.com/xmc/en/developers/xm-cloud/token-api.html).
+- **Remove public references** to `sitecoreApiKey` or any environment variable beginning with `NEXT_PUBLIC_` that might expose the key to the browser.
+- **Verify** that the Edge token is consumed **only within SSR, API routes, or server components**.
+- **Audit deployment outputs** to ensure the token string does not appear in compiled assets or logs.
+
+### Step 2 – Codebase Refactoring for Server‑Only Access
+- Introduce a **server‑only configuration layer** (e.g., `lib/edgeClient.ts`) responsible for authenticating to the GraphQL Delivery API.
+- Update any component‑level fetch logic to call this server module instead of directly using environment variables.
+- Remove obsolete variables (e.g., `SITECORE_API_KEY`, `SITECORE_API_HOST`) that are no longer required for JSS 21.6+.
+- Implement **build‑time validation** that fails if the token appears in public bundles.
+
+### Step 3 – Prepare for Content SDK Upgrade (Conditional)
+If Sitecore Support confirms (via Ticket CS0643177) that **Content SDK v1.2** simplifies or replaces legacy configuration:
+- Create a **feature branch** to upgrade `@sitecore-jss/sitecore-jss-nextjs` and `@sitecore-jss/sitecore-jss` packages.
+- Update your Next.js application to adopt **server‑first data fetching** under the App Router model.
+- Validate all GraphQL queries function correctly under the new SDK.
+- Perform regression, smoke, and security tests before merging.
+
+### Step 4 – Operational Security Controls
+- Establish a **token rotation schedule** (e.g., quarterly) and document rotation procedures.
+- Restrict token access in Vercel/EntraID using **role‑based secret management**.
+- Enable automated checks during CI/CD that prevent merges if sensitive values are committed.
+
+---
+
+## Why the Direct Removal Caused Failures
+The legacy XM Cloud starter template included static imports of `process.env.SITECORE_API_KEY` across both server and client contexts. Removing the variable without replacing those references disrupted JSS’s internal data‑fetching pipeline, leading to build failures.
+
+Refactoring to a central **server‑only client** restores compliance while preserving build stability.
+
+---
+
+## Summary of Key Principles
+1. **Never expose Edge tokens** in front‑end code.
+2. **Centralize token usage** within server‑only modules.
+3. **Upgrade incrementally**—test Content SDK 1.2 before production adoption.
+4. **Document and enforce rotation and CI/CD scanning policies.**
+
+---
+
+## References
+- [Sitecore XM Cloud – Head Application Security](https://developers.sitecore.com/learn/accelerate/xm-cloud/pre-development/security/head-application-security)
+- [Experience Edge Token API Documentation](https://doc.sitecore.com/xmc/en/developers/xm-cloud/token-api.html)
+- [Sitecore Content SDK 1.2 Release Notes](https://developers.sitecore.com/changelog/xm-cloud/30102025/content-sdk-v1.2-%E2%80%94-modernize-routing-architecture-with-app-router-support)
+- [Next.js Environment Variables Best Practices](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables)
+
+---
+
+**Author:** Matthew Lam  
+**Reviewed by:** Aceik MVP Team  
+**Version:** 1.0 – November 2025
+

@@ -57,7 +57,7 @@ Each Enterprise Application generates or consumes a **metadata file** that defin
 
 | Item | Description | Sample Value (mat-the-lam.dev) | Where to Retrieve | Who to Ask |
 |------|--------------|--------------------|------------------|------------|
-| **Federation Metadata XML (IdP)** | Azure’s public metadata file exported for Sitecore | `https://login.microsoftonline.com/1f72c680-81b3-4e25-b8db-cb451ab34c1b/federationmetadata/2007-06/federationmetadata.xml` | Azure Portal → SAML SSO → SAML Signing Certificate → Download Federation Metadata XML | Cloud/Entra Engineer |
+| **Federation Metadata XML (IdP)** | Azure’s public metadata file exported for Sitecore | `https://login.microsoftonline.com/<GUID>/federationmetadata/2007-06/federationmetadata.xml` | Azure Portal → SAML SSO → SAML Signing Certificate → Download Federation Metadata XML | Cloud/Entra Engineer |
 | **Entity ID (SP)** | Identifier used by Sitecore to validate Azure as an IdP | `https://auth.sitecorecloud.io/samlp/metadata?connection=<GUID>` | Sitecore Cloud Portal → Admin → SSO → SAML | You |
 | **ACS (Assertion Consumer Service) URL** | The callback endpoint used for authentication responses | `https://auth.sitecorecloud.io/login/callback?connection=<GUID>` | Sitecore Cloud Portal → Admin → SSO → SAML | You |
 
