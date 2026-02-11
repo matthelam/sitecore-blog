@@ -1,0 +1,60 @@
+---
+title: 'How to use Sitecore Documentation in AI to get better results and save you heaps of time'
+date: 2026-02-11
+draft: false
+tags: ['sitecore', 'ai', 'agents', 'context-engineering', 'mcp', 'documentation']
+summary: 'A practical guide for Sitecore Developers to set highly focused Agent context by connecting official documentation and Agent Context.'
+images: ['/static/images/sitecore/header-marked.png']
+---
+
+## Introduction
+
+So you've been asked to build for Sitecore in 2026, and you're wondering what needs to be done to stay ahead of the curve. We’ve entered the era of **Agent Context Engineering**, where our goal as developers is to design ecosystems where AI agents handle the technical heavy lifting. But as I’ve found out the hard way, an agent is only as good as the context you feed it.
+
+If you’ve ever had an LLM suggest a Sitecore pipeline that was deprecated three versions ago, you’ve hit the **Hallucination Gap**. This article serves as a **developer-focused starting point**, giving you the technical context you need to ground your agents in the "Source of Truth" — [doc.sitecore.com](https://doc.sitecore.com/). We’ll walk through the tools available to help you find information faster and, more importantly, how to stream that documentation directly into your local dev environment.
+
+---
+
+## 1. Quick-Access Tools: The "Pink Buttons"
+
+Sitecore has embedded AI directly into their official documentation portal to help you bypass the manual search slog. On the header, you’ll find two distinct entry points for the Sitecore-provided Agent (powered by **Kapa.ai**).
+
+> **Developer Note:** These buttons are bright pink — you can’t miss them. They are your first line of defense when you hit a bug and need a verified solution in seconds rather than waiting days for a support ticket.
+
+---
+
+## 2. Professional Setup: Deep MCP Integration
+
+Searching a website is a good start, but for serious developer work, you want to bring the documentation directly into your IDE. We do this via the **Model Context Protocol (MCP)**. This allows your local agents (like Claude Code or Cursor) to "consume" Sitecore’s documentation as a live data stream.
+
+### Connecting Your Tools
+
+Depending on your preference, there are two main ways to wire this up:
+
+- **Automatic (VS Code / Cursor):** If you have VS Code open, clicking the MCP link in the documentation site will shortcut you to the Connector installation. It’s essentially a 1-click setup.
+- **Manual (Claude Code):** You can manually configure a Connector in [Claude Code](https://docs.anthropic.com/en/docs/welcome) by pasting the MCP URL provided in the documentation portal.
+
+> **Pro Tip:** Any connection to this MCP requires your **Sitecore Login** credentials — the same ones you use for the Support Portal. Without this, your local agents won't be able to authenticate and pull the verified data.
+
+---
+
+## 3. The Creative Side-Step: Research with NotebookLM
+
+Sometimes you aren't ready to code yet; you’re in the research or learning phase. While MCP is great for "tightly coupled" execution, **NotebookLM** is a powerhouse for creative insight and preparation.
+
+The problem with NotebookLM is that it doesn't consume MCPs, and adding Sitecore documentation URLs one by one is impractical when you consider how large the library is.
+
+**The Firecrawl Approach:**
+
+1. Use a site scraper like [Firecrawl](https://www.firecrawl.dev) to generate a sitemap or list of all relevant documentation URLs (e.g., all pages under "Sitecore AI").
+2. Bulk-paste that list into your NotebookLM project sources as Web URLs.
+
+This creates a persistent, up-to-date Agent that is **guided** by Sitecore documentation but not strictly **governed** by them. This allows for more creativity and is perfect for generating mind-maps for clients or drafting slide decks for workshops where you need the details to come fast and reliably.
+
+---
+
+## Developer Notes
+
+- **Brief, Plan, Execute:** Once your MCP is connected in VS Code, follow this flow. Use the official docs to **Brief** the agent, let it **Plan** the architecture based on verified specs, and then **Execute** the code.
+- **Avoid Cross-Version Confusion:** Always ensure your Agent is pointed at the specific version documentation (e.g., XM Cloud vs. XP 10.4) to avoid "Hallucination Gaps."
+- **Focus on Validating Identifiers:** Much like validating SSO claims, knowing the specific API version or schema from the docs allows you to generate deterministic scripts and avoid common pitfalls.
