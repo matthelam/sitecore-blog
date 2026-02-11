@@ -1,0 +1,199 @@
+---
+title: 'The AI Project Lifecycle Hiding in Plain Sight Inside Sitecore Agentic Studio'
+date: 2026-02-11
+draft: false
+tags:
+  [
+    'sitecore',
+    'ai',
+    'agentic-studio',
+    'sitecoreai',
+    'agents',
+    'workflow',
+    'strategy',
+    'campaigns',
+    'context-engineering',
+  ]
+summary: 'Sitecore Agentic Studio follows a structured AI workflow that most people skip straight past. Here is what I found when I stopped treating it like a content generator and started looking at how the pieces actually connect.'
+images: ['/static/images/sitecore/agentic-lifecycle.png']
+---
+
+## Introduction
+
+Lately I've been working obsessively on developing with AI and I wanted to share with everyone, and also to help myself organise and frame my learnings, this **AI Project Lifecycle Framework**. It's pretty much the root of the collective learning I've done across articles, GitHub repos, conference talks, and a lot of late nights. The general idea is that there's a structured way to engage AI agents that goes well beyond just typing a prompt and hoping for the best. It looks something like this:
+
+| Phase | Name                | What It's About                                 |
+| ----- | ------------------- | ----------------------------------------------- |
+| 0     | Intent Definition   | Know what you actually want before you touch AI |
+| 1     | Agent Skill Framing | Tell the AI what role it's playing              |
+| 2     | Working Environment | Set the constraints: tech stack, brand, rules   |
+| 3     | Request Context     | Scope the task properly                         |
+| 4     | Discovery Loop      | Go back and forth until the ambiguity is gone   |
+| 5     | Assumption Logging  | Call out what's being assumed                   |
+| 6     | Risk Analysis       | Think about what could go wrong                 |
+| 7     | Brief Creation      | Lock it all into a single document              |
+| 8     | Planning            | Break it down before building it                |
+| 9     | Implementation      | Do the thing                                    |
+| 10    | Verification        | Check it against the original brief             |
+| 11    | Simplification      | Strip out what doesn't need to be there         |
+
+Now here's where it gets interesting. When I actually sat down with **SitecoreAI's Agentic Studio** and stopped just clicking through it superficially, I started noticing that a lot of these steps were already there. Not perfectly, and not as a 1:1 match, but the bones of a structured lifecycle were sitting right in front of me the whole time.
+
+Whether it needs all of those phases or whether some of them are overkill for a marketing workflow, honestly, I don't know yet. Time will tell. But it's worth walking through what I found, because at the very least it's good food for thought.
+
+One thing to flag before we go further: if you look at SitecoreAI and think "hang on, where are Phases 5 and 6? Where's the assumption logging and risk analysis?", there's a reason those don't have dedicated buttons. Sitecore leans heavily on what they call **human-in-the-loop** design. Their glossary literally defines it as a pattern where AI systems pause for human input, feedback, or approval at key stages. So the phases that seem missing aren't missing at all, **you're the missing phase**. The human is expected to bring the judgment, the domain knowledge, and the risk awareness that the AI can't. Sitecore has baked in the checkpoints, but what happens at those checkpoints is on you.
+
+---
+
+## Signals - The Bit Everyone Scrolls Past
+
+So the first phase in any structured AI workflow is **Intent Definition**. Basically: know what you want to do and why, before you start doing it. In most teams this happens in a meeting, or a Slack thread, or somebody's head at 11pm on a Sunday.
+
+In SitecoreAI, the closest thing to this is **Signals**.
+
+Signals are these AI-generated research insights that show up based on your configured preferences: industry, topic area, and a guiding prompt you set up. They scan trusted sources and surface trends, competitor shifts, and opportunities that are relevant to your world.
+
+Now most people will scroll straight past these. They look like a news feed and they get treated like one. But here's the thing I noticed, Signals aren't really about consuming information. They're about **triggering intent**. When a marketer sees a signal about a shift in their competitor's positioning or a new trend in their vertical, that's the "should we do something about this?" moment. That's the seed for a campaign.
+
+There's even an **Action Signal** button that takes a signal and runs a deeper AI analysis to pull out what's relevant and suggest next steps. It's basically a structured way to move from "I just read something interesting" to "let's actually act on this."
+
+> I almost skipped past this feature entirely. I think most people do. But once you see it as the conversation starter rather than a dashboard widget, it changes how you think about the whole flow.
+
+---
+
+## Actions - Where Quality Is Actually Defined
+
+This is the one I really want to dig into because I think it's the most misunderstood part of the whole Agentic Studio.
+
+**Actions** looks like a chat window. And because it looks like a chat window, people treat it like one, fire off a prompt, get something back, move on. But if you look at it through the lens of a structured AI workflow, Actions is doing a LOT more than chatting.
+
+In the lifecycle framework, Phases 1 through 6 are where the real work happens. That's where you frame the agent's role, set your constraints, scope the request, iterate through discovery, surface assumptions, and think about risk. Those phases are where **quality gets defined**. Not during implementation, during the conversation that comes before it.
+
+Actions is that conversation.
+
+The Actions interface also lets you toggle between Default, Fast, and Expert mode. Expert prioritises deeper reasoning. It's slower, but for anything that matters you probably want it on. It's essentially controlling how carefully the AI thinks about your request.
+
+When you sit down in Actions properly, you're actually:
+
+- **Picking which agent to use**, which is really you framing the AI's role and expertise
+- **Attaching Brand Knowledge** via the `@ Add context` feature, which grounds everything in your brand's tone, identity, and rules before a single word gets generated
+- **Writing your prompt**, but really you're scoping the request, setting boundaries, and defining what good looks like
+- **Going back and forth**, refining, asking follow-ups, letting the AI ask you clarifying questions. This is the discovery loop happening in real time
+- **Reading between the lines** of the AI's responses, what it assumed about your audience, your channels, your goals. That's assumption logging, just not in a spreadsheet
+- **Deciding what's risky**, the AI won't flag that your campaign might conflict with a regulatory constraint or that your audience data is stale. That's on you. And this is where the human-in-the-loop pattern really matters. The platform gives you the space to do this thinking, but it doesn't do it for you
+
+This is why I said earlier that the "missing" phases aren't really missing. Phases 5 and 6, assumption logging and risk analysis, don't have buttons because they're human activities. Actions gives you the environment to do them, but you have to actually do the work. If you skip through the conversation quickly, you skip those phases entirely, and the downstream quality suffers. The platform can't force you to think critically, it can only give you the room to do it.
+
+The other thing that caught me off guard: **Actions keeps everything**. Every conversation is saved. You can go back to any thread, continue where you left off, chain different agents into the same conversation, and carry context forward. It's not a throwaway chat, it's more like an evolving working document.
+
+You can even sequence agents within a single thread. So the output of a Researcher feeds into a Bulk Content Generator which feeds into a Persona Content Auditor, all within one persistent conversation. That's multiple lifecycle phases happening in one window without losing context.
+
+> If you take one thing from this article: spend more time in Actions. The quality of everything downstream, your brief, your campaign, your content, is determined here. Not later.
+
+---
+
+## Brand Knowledge - Set It Once, Use It Everywhere
+
+Phase 2 in the lifecycle is about defining your working environment. In a dev context that's your tech stack, your deployment targets, your regulatory constraints. For a marketing workflow, it's your brand.
+
+SitecoreAI handles this through **Brand Knowledge** and **Brand Kits**.
+
+You upload your brand documents, brand books, tone of voice guides, visual identity manuals, whatever you've got, and the platform ingests them into structured, retrievable chunks. These get organised into sections like Brand Context, Tone of Voice, Do's and Don'ts, Grammar Guidelines, and so on.
+
+Once that's done, every agent, every flow, every brief generation automatically picks up those constraints. The Brand Assistant uses your Brand Context. The Content Optimisation copilot gets your Tone of Voice and Do's and Don'ts injected with every request. You don't have to re-explain your brand every time you start a new task.
+
+That's actually a pretty big deal. In the lifecycle framework, the environment definition is the "Constraint Layer", and the whole point is that you set it once and it governs everything that follows. Sitecore has essentially done that at the platform level. The constraints are persistent and ambient, every agent picks them up automatically, you never re-explain your brand. For me, that's one of the most practical things about the whole setup and exactly what you'd want for anything beyond a one-off experiment.
+
+---
+
+## Briefs - Where Ideas Become Commitments
+
+Phase 7 is about consolidating everything you've learned through discovery, assumptions, and risk analysis into a single document that everyone can agree on. The lifecycle framework calls it the "Execution Contract."
+
+In SitecoreAI, this is **Briefs**.
+
+The Brand Assistant can generate a brief directly from a conversation. You describe what you're after, and the Brief agent organises it into sections: Objectives, Target Audience, Key Messages, Channels, Metrics for Success, Timeline. You can also create Smart Briefs manually, with AI helping to generate content for individual fields and suggest timelines based on milestones.
+
+What I found interesting is that Sitecore treats briefs as proper entities with their own lifecycle. They have statuses: Draft, In Review, Approved. You can link them to campaigns, assign reviewers, and annotate them with tasks. It's not a Google Doc you forget about. It has its own workflow.
+
+And notice the statuses again: Draft, **In Review**, Approved. That "In Review" step is another human-in-the-loop checkpoint. The AI generates the brief, but a person has to review it and sign off before it moves forward. If you think back to the lifecycle framework, this is where assumption logging and risk analysis are supposed to happen, when a human reads the brief and asks "have we actually validated these assumptions? What could go wrong here?" The platform gives you the structure to pause and think. Whether you actually do that thinking is up to you.
+
+And then there's this: **Convert Brief to Campaign**. One click and the brief becomes a structured campaign. That transition from "here's what we agreed" to "here's how we're going to do it" is just a button press. I found that surprisingly clean.
+
+---
+
+## Campaigns - Plan It Before You Build It
+
+Phase 8 in the lifecycle is about planning: break the work into steps, identify dependencies, confirm feasibility. Don't start building until you've got a plan.
+
+When a brief gets converted into a campaign in SitecoreAI, the platform structures it into **Deliverables** and **Tasks**. Deliverables are the tangible outcomes grouped by campaign objective. Tasks are the individual work items, assigned to people, with priorities, durations, and statuses.
+
+The AI can suggest deliverables and tasks for you, and there are multiple views, list, board, timeline, for tracking what's happening and where things are stuck.
+
+The thing I appreciate about this is that the campaign exists as a structured plan before any content gets produced. Each deliverable maps to a defined outcome. Each task maps to a specific action. It's planning before execution, which sounds obvious but in practice most teams skip it and go straight to "let's just make the thing."
+
+> Whether this is the exact right structure for every campaign is debatable. But the discipline of stopping to plan before generating content is something I've seen make a real difference in agent workflows generally.
+
+---
+
+## Agents and Flows - The Doing Part
+
+Phase 9. Implementation. This is where Agentic Studio's agents and flows come in.
+
+Agents are the specialised workers: Blog Writer, Email Writer, Bulk Content Generator, Researcher, Competitor Analyzer, and others. Each one is configurable with its own context parameters, schemas, HTML templates, and workflows. You can tailor them to your needs.
+
+Flows chain multiple agents together into sequenced, multi-step workflows. The ABM Campaign flow, for example, runs an Account Data Enricher, then a Brief Generator, then a Bulk Content Generator, each one receiving the output of the previous agent.
+
+The detail that stood out to me: **flows pause between agents**. They don't just auto-execute end to end. They present the output, ask you to review and confirm, and then move to the next step. This is human-in-the-loop at its most practical. The AI does a chunk of work, stops, and says "here's what I've got, does this look right?" before moving on.
+
+Sitecore's own documentation describes flows as "a coordinated sequence of AI-driven and human-assisted steps." That wording is deliberate. It's not AI-driven with optional human involvement. It's AI-driven **and** human-assisted. The human checkpoints aren't a safety net you can remove, they're part of the design. And this is where verification (Phase 10) actually happens in practice. You don't verify at the end when everything is done. You verify at each handoff between agents, while there's still time to course-correct.
+
+You can also build custom agents through a no-code workflow editor, dragging and connecting actions to define the execution sequence. The action palette even includes a dedicated **Approval** action that you can place anywhere in a workflow to force a human review before proceeding. So if your organisation has specific checkpoints or compliance steps, you can encode them directly into the agent's behaviour. That's pretty powerful for anyone who's been burned by agents doing things their own way.
+
+---
+
+## Spaces - Your Audit Trail
+
+Phase 10 is about verification, checking the output against what was originally asked for.
+
+Every time an agent runs or a flow is launched, SitecoreAI creates a **Space**. It captures the steps that were executed, the generated artifacts, and the current status. You can filter by agent, search by name, and open any space to review what was produced.
+
+It's your audit trail. When someone asks "what did the AI actually generate for that campaign?" you've got the answer in Spaces. You can also edit outputs inline, redo generations, and compare what came out against what went in.
+
+But here's the honest bit: Spaces gives you the tools to verify, but it doesn't verify for you. It won't tell you "this doesn't match your brief" or "you missed a requirement." That's the human-in-the-loop pattern again. The platform provides the structure and the data. The judgment call is yours.
+
+---
+
+## Refinement - Ongoing, Not a Phase
+
+The last step in the lifecycle framework is simplification, removing unnecessary complexity while keeping what matters. The question being: what's the simplest version that still does the job?
+
+SitecoreAI doesn't have a separate "simplification phase" and honestly I think that might be the right call. Instead, the ability to refine and reduce is available everywhere:
+
+- Artifacts can be edited inline and regenerated
+- The Snackable Content Generator takes long-form content and condenses it
+- The Persona Content Auditor checks whether content actually matches the target persona
+- You can keep refining through continued conversation in the same Actions thread
+
+Simplification as something you do continuously rather than something you arrive at feels right to me. But again, this is food for thought territory, not a definitive answer.
+
+---
+
+This stuff is changing alarmingly fast. These are pretty much the learnings I've made so far, and honestly they probably won't age well in even three months time. But hopefully it'll be handy to anyone who sees this until then. I've attached a downloadable version of the AI Project Lifecycle Framework brief below for anyone who wants to take it, try different things with it, and see what works for them.
+
+**Download:** [AI Project Lifecycle Framework (APLF)](/static/files/AI_Project_Lifecycle_Framework_APLF.md)
+
+---
+
+## References
+
+- [SitecoreAI - Working with Agentic Studio](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio.html)
+- [Understanding Signals](https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-signals.html)
+- [Understanding Actions](https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-actions.html)
+- [Brand Knowledge](https://doc.sitecore.com/sai/en/users/sitecoreai/brand-knowledge.html)
+- [Managing Briefs](https://doc.sitecore.com/sai/en/users/sitecoreai/managing-briefs.html)
+- [Plan Campaign Strategy](https://doc.sitecore.com/sai/en/users/sitecoreai/plan-campaign-strategy.html)
+- [Understanding Agents](https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-agents.html)
+- [Understanding Flows](https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-flows.html)
+- [Understanding Spaces](https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-spaces.html)
+- [SitecoreAI Navigation](https://developers.sitecore.com/sitecoreai/navigation)
