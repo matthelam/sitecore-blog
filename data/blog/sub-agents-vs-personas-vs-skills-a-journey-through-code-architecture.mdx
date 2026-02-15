@@ -1,0 +1,389 @@
+---
+title: 'Sub-Agents vs Personas vs Skills - A Journey Through Code Architecture'
+date: 2026-02-15
+draft: false
+tags: ['ai', 'agents', 'architecture', 'multi-agent', 'skills', 'context-engineering']
+summary: 'A developer-friendly breakdown of multi-agent patterns by mapping them to OOP concepts you already know - from console apps to enterprise helper classes.'
+images: ['/static/images/sitecore/header-marked.png']
+---
+
+## Introduction
+
+This is not quite a Sitecore post, but recently in order to get across SitecoreAI, I have been deep diving into Agentic Development. My latest pondering has been around trying to understand why there are so many different 'context' settings and how they are supposed to be different and when to use them. As such, this topic is going to be my realisation on what the 3 key areas that you setup Agent context.
+
+Remember your first console app at university? Everything lived in `main()`. One giant function. When you needed different behavior, you added `if` statements. More features meant more `if` statements. By the end, main looked like a tangled mess of conditionals:
+
+```python
+def main():
+    if mode == 'database':
+        # 50 lines of database logic
+    elif mode == 'frontend':
+        # 50 lines of frontend logic
+    elif mode == 'backend':
+        # 50 lines of backend logic
+    elif mode == 'testing':
+        # 50 lines of testing logic
+```
+
+Unmaintainable. Confusing. Hard to test. You'd never write code like that today.
+
+Then you learned **object-oriented design**. You realized you could create separate _classes_, each with its own responsibility. No more tangled main function. Now you had `FrontendClass`, `BackendClass`, `DatabaseClass` - each managing its own logic, its own state, its own methods.
+
+That was huge. Suddenly code was maintainable.
+
+Now you're in an enterprise development job. And you notice something else: every class is writing the same utility logic over and over. Formatting code. Validating schemas. Building common patterns. So you extract those into **helper classes** that everyone uses.
+
+That's the story of **sub-agents, personas, and skills**. And it maps directly to your journey as a programmer.
+
+---
+
+## 1. The Three Patterns: A Developer's Journey
+
+### Persona = Your University Console App (Everything in Main)
+
+This is what you were doing at university. One agent. One conversation. But lots of branching logic based on what mode you're in.
+
+```python
+class MainAgent:
+    def process(self, request, mode):
+        if mode == 'database_expert':
+            # Handle database questions
+            return self.database_logic(request)
+        elif mode == 'frontend_expert':
+            # Handle frontend questions
+            return self.frontend_logic(request)
+        elif mode == 'api_expert':
+            # Handle API questions
+            return self.api_logic(request)
+```
+
+It's all one main application running. Same Claude instance. Same conversation history. You just branch the logic based on which persona you want to activate. The "expert" is a frame you apply to the same underlying agent.
+
+**Sound familiar?** This is exactly like your first console app. One `main()` function with a bunch of `if` statements. It works, but it gets messy fast. You're mixing concerns. One agent is trying to be good at databases AND frontends AND APIs. Something has to give.
+
+This pattern works fine for simple cases. But it doesn't scale.
+
+### Sub-Agent = OOP Breakthrough (Separate Classes)
+
+This is the moment you learned OOP. Instead of one big agent with branching logic, you create **separate, independent classes** for different concerns. Each one is its own instance with its own state and methods.
+
+```python
+class FrontendAgent:
+    def generate(self, requirements):
+        # This class only knows about frontend
+        return self.build_component(requirements)
+
+class BackendAgent:
+    def generate(self, requirements):
+        # This class only knows about backend
+        return self.build_api(requirements)
+
+class DatabaseAgent:
+    def design(self, requirements):
+        # This class only knows about databases
+        return self.design_schema(requirements)
+
+# Usage
+frontend = FrontendAgent()
+backend = BackendAgent()
+database = DatabaseAgent()
+
+react_code = frontend.generate(requirements)
+api_code = backend.generate(requirements)
+db_schema = database.design(requirements)
+```
+
+Each class is focused on what it does best. No branching. No mixed concerns. Each one is a separate instance that you instantiate independently.
+
+**This is what changed everything for you as a programmer.** Instead of one function trying to handle everything, you have multiple classes each handling their own domain. Suddenly code is testable, maintainable, and understandable.
+
+This is sub-agents. Each one is a class instance with specialized logic.
+
+### Skill = Helper Classes (Enterprise Reusability)
+
+Now you're in enterprise development. Your codebase has grown. You have dozens of classes. And you notice something: they're all writing the same helper logic over and over.
+
+Formatting code. Validating schemas. Parsing configs. Building common patterns.
+
+So you extract those into **helper classes** that multiple classes can use and reuse.
+
+```python
+class CodeFormatterSkill:
+    def format(self, code, language):
+        # Reusable formatting logic
+        return formatted_code
+
+class SchemaValidatorSkill:
+    def validate(self, schema):
+        # Reusable validation logic
+        return is_valid
+
+class FrontendAgent:
+    def __init__(self):
+        self.formatter = CodeFormatterSkill()
+
+    def generate(self, requirements):
+        component = self.build_component(requirements)
+        return self.formatter.format(component, 'javascript')
+
+class BackendAgent:
+    def __init__(self):
+        self.formatter = CodeFormatterSkill()
+        self.validator = SchemaValidatorSkill()
+
+    def generate(self, requirements):
+        api_code = self.build_api(requirements)
+        formatted = self.formatter.format(api_code, 'typescript')
+        return formatted
+
+class DatabaseAgent:
+    def __init__(self):
+        self.formatter = CodeFormatterSkill()
+        self.validator = SchemaValidatorSkill()
+
+    def design(self, requirements):
+        schema = self.design_schema(requirements)
+        is_valid = self.validator.validate(schema)
+        formatted = self.formatter.format(schema, 'sql')
+        return formatted
+```
+
+Skills are **helper classes** that multiple sub-agents can instantiate and use. They're not locked to one agent. They're reusable utilities that make each sub-agent cleaner and less repetitive.
+
+**This is what mature enterprise code looks like.** You're not duplicating logic. You're composing existing, tested utilities. Each sub-agent is focused on its domain. The helper classes handle the cross-cutting concerns.
+
+---
+
+## 2. The Web Development Example: From Console App to Enterprise
+
+Let's trace the evolution. You get this request:
+
+> "Build me a React component for a user dashboard with authentication, a REST API endpoint, and a PostgreSQL database schema. Also write tests."
+
+### The Persona Approach (Your University Days)
+
+You write one agent with branching logic:
+
+```python
+class DashboardBuilder:
+    def build(self, requirements, mode):
+        if mode == 'frontend':
+            return self.build_frontend(requirements)
+        elif mode == 'backend':
+            return self.build_backend(requirements)
+        elif mode == 'database':
+            return self.build_database(requirements)
+        elif mode == 'testing':
+            return self.build_tests(requirements)
+```
+
+It works. You get the dashboard built. But the code is tangled. The agent is trying to be good at everything. The tests are weak because the testing part of the code is competing with 4 other modes for attention.
+
+**This is fine for a quick script. But it doesn't scale.**
+
+### The Sub-Agent Approach (Your First Real Job)
+
+You refactor. Separate classes. Each one focused:
+
+```python
+class FrontendAgent:
+    def build(self, requirements):
+        # 100% focused on React
+        # Knows hooks, performance, accessibility
+        return self.generate_component(requirements)
+
+class BackendAgent:
+    def build(self, requirements):
+        # 100% focused on Express APIs
+        # Knows authentication, validation, HTTP semantics
+        return self.generate_api(requirements)
+
+class DatabaseAgent:
+    def design(self, requirements):
+        # 100% focused on PostgreSQL
+        # Knows normalization, indexing, constraints
+        return self.generate_schema(requirements)
+
+class TestingAgent:
+    def write(self, code_artifacts):
+        # 100% focused on tests
+        # Knows Jest, mocking, coverage
+        return self.generate_tests(code_artifacts)
+
+# Now you orchestrate
+frontend = FrontendAgent()
+backend = BackendAgent()
+database = DatabaseAgent()
+testing = TestingAgent()
+
+react_code = frontend.build(requirements)
+api_code = backend.build(requirements)
+db_schema = database.design(requirements)
+tests = testing.write([react_code, api_code, db_schema])
+```
+
+Better. Each agent is specialized. The code is cleaner. Each one can be tested independently.
+
+**But you notice something after a few projects: each agent is writing the same utility logic.**
+
+### The Skill Approach (Enterprise Development)
+
+You extract helper classes:
+
+```python
+class CodeFormatterSkill:
+    def format(self, code, language):
+        # Handles prettier config, linting, formatting
+        return formatted_code
+
+class SchemaValidatorSkill:
+    def validate(self, schema, type):
+        # Validates database schemas, API schemas, etc.
+        return validation_result
+
+class ComponentBuilderSkill:
+    def build_with_design_tokens(self, component_spec, design_tokens):
+        # Reusable component building logic
+        return component_code
+
+class FrontendAgent:
+    def __init__(self):
+        self.formatter = CodeFormatterSkill()
+        self.component_builder = ComponentBuilderSkill()
+
+    def build(self, requirements):
+        design_tokens = load_design_system()
+        component = self.component_builder.build_with_design_tokens(
+            requirements,
+            design_tokens
+        )
+        return self.formatter.format(component, 'javascript')
+
+class BackendAgent:
+    def __init__(self):
+        self.formatter = CodeFormatterSkill()
+        self.validator = SchemaValidatorSkill()
+
+    def build(self, requirements):
+        api_code = self.generate_routes(requirements)
+        self.validator.validate(requirements.schema, 'openapi')
+        return self.formatter.format(api_code, 'typescript')
+
+class DatabaseAgent:
+    def __init__(self):
+        self.formatter = CodeFormatterSkill()
+        self.validator = SchemaValidatorSkill()
+
+    def design(self, requirements):
+        schema = self.generate_migration(requirements)
+        is_valid = self.validator.validate(schema, 'postgresql')
+        return self.formatter.format(schema, 'sql')
+
+class TestingAgent:
+    def __init__(self):
+        self.formatter = CodeFormatterSkill()
+
+    def write(self, code_artifacts):
+        tests = self.generate_test_suites(code_artifacts)
+        return self.formatter.format(tests, 'javascript')
+```
+
+Now you have:
+
+- **Sub-agents** that are specialized and focused
+- **Helper classes (skills)** that are reused across agents
+- **No duplication** of formatting, validation, or common patterns
+
+Each agent can be maintained independently. New agents can reuse the helper classes. Skills can be updated once and benefit all agents.
+
+**This is scalable. This is maintainable. This is enterprise code.**
+
+---
+
+## 3. Why This Matters: The Evolution is Real
+
+### Why Not Just Stick with Personas?
+
+Because you already learned this lesson at university.
+
+Remember when everything was in `main()` with a bunch of `if` statements? It worked for your first assignment. But as the codebase grew, it became unmaintainable. You had to constantly refactor to add new features. Testing was a nightmare. Debugging meant wading through someone else's conditional logic.
+
+You moved away from that pattern for good reason. **Personas are the same problem in a different context.** One agent trying to be good at everything. More features mean more branching logic. It works for simple cases, but it doesn't scale.
+
+### Why Not Just Use Sub-Agents Without Skills?
+
+Because you also learned this lesson at your first real job.
+
+You built 10 different classes. Each one works great in isolation. But then you notice: they're all writing code formatters. They're all validating schemas. They're all building components from specs.
+
+You could copy-paste the logic into each class. But that's the opposite of maintainability. When you find a bug in the formatter, you have to fix it in 10 places.
+
+So you extract helper classes. One `CodeFormatterSkill`. One `SchemaValidatorSkill`. Now all 10 classes use the same, tested utilities. A bug fix happens once.
+
+**This is what mature codebases look like.** Shared utilities. Reusable components. No duplication.
+
+### When Do You Use Personas?
+
+Honestly? Rarely in a multi-agent system. Personas are fine for:
+
+- Single-agent systems where you want flexible behavior
+- Simple branching logic (one agent, different perspectives on the same task)
+- Prototypes and MVPs where you're just trying something out
+
+```python
+# Example: One agent reviewing code from different angles
+reviewer = CodeReviewAgent()
+
+reviewer.perspective = 'security'
+security_feedback = reviewer.review(code)
+
+reviewer.perspective = 'performance'
+perf_feedback = reviewer.review(code)
+```
+
+But the moment you're building something that needs to be maintained, scaled, or shared across teams? Move to sub-agents + skills. You'll thank yourself later.
+
+---
+
+## 4. The Architecture: How It All Fits Together
+
+```
++-------------------------------------+
+|   Main Orchestrator                  |
+|   (decides workflow sequence)        |
++----------------+--------------------+
+                 |
+       +---------+---------+----------+
+       |         |         |          |
+       v         v         v          v
+   +------+  +------+  +------+  +--------+
+   | FE   |  | BE   |  | DB   |  |Testing |
+   |Agent |  |Agent |  |Agent |  |Agent   |
+   +--+---+  +--+---+  +--+---+  +---+----+
+      |         |         |          |
+      +---------+---------+----------+
+                |         |
+        +-------+----+----+----------+
+        |            |               |
+   +---------+  +----------+  +----------+
+   | Code    |  | Schema   |  |Component |
+   | Format  |  | Validate |  |Builder   |
+   | (skill) |  | (skill)  |  |(skill)   |
+   +---------+  +----------+  +----------+
+       Helper Classes / Skills
+       (Reused across agents)
+```
+
+This is the architecture that scales. The main orchestrator is dumb - it just knows the sequence. Each agent is smart - it's focused on one domain. The helper classes are reusable - they're used by multiple agents.
+
+This is what you built in your first job. This is what you're building now. The pattern is timeless.
+
+---
+
+## Developer Notes
+
+- **Personas** are your university console app days. Everything in one function with branching logic. It works for simple cases. It doesn't scale. Start here to prototype fast.
+- **Sub-agents** are the OOP breakthrough. Separate classes, each with its own responsibility. This is what made code suddenly maintainable. Move here when you need to scale.
+- **Skills** are what you learned at your first enterprise job. Helper classes that multiple agents use. This is what eliminates duplication and scales across your codebase. Add these when you spot repeated logic.
+
+> **Pro Tip:** If you're building something worth maintaining, you're building it with sub-agents + skills. Each agent is focused. Each helper is reused. No duplication. No tangled logic. You didn't invent these patterns. You discovered them yourself because they're the only way to build maintainable code. Now you're just applying them to multi-agent systems.
