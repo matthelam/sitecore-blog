@@ -1,0 +1,202 @@
+---
+title: 'The Trinity of Clarity - Getting the Results You Want'
+date: 2026-02-17
+draft: false
+tags: ['ai', 'agents', 'context-engineering', 'multi-agent']
+summary: 'Why your AI agents keep getting it wrong, and how the Trinity of Clarity — agent context, environment context, and strong interaction — transforms your results.'
+images: ['/static/images/sitecore/header-marked.png']
+---
+
+## Introduction
+
+If you've been following my recent posts on [sub-agents vs personas](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture) and the [AI project lifecycle](/blog/the-ai-project-lifecycle-hiding-in-plain-sight-inside-sitecore-agentic-studio), you'll know I've been deep in the weeds of agentic development. And the single biggest lesson I keep coming back to is this: **an agent is only as good as the context you give it**.
+
+That sounds obvious. But if you've ever had an AI confidently refactor your codebase using patterns from a completely different framework, or suggest a Sitecore pipeline that was deprecated three versions ago, you've already felt what happens when context is missing.
+
+The problem isn't the model. The problem is us. We fire off a prompt, get something back that's 80% right, spend an hour fixing the other 20%, and then complain that AI is overhyped. But what if the issue was that we never set the agent up for success in the first place?
+
+After months of building with agents — from simple one-shot prompts to full multi-agent orchestration systems — I've landed on what I'm calling the **Trinity of Clarity**. Three pillars that, together, give an agent everything it needs to deliver the results you actually want:
+
+| Pillar | Name                    | What It Covers                                         |
+| ------ | ----------------------- | ------------------------------------------------------ |
+| 1      | **Agent Context**       | Who the agent is, what it knows, what it can do        |
+| 2      | **Environment Context** | What the agent is working with — project, tools, rules |
+| 3      | **Strong Interaction**  | How you talk to the agent to develop a clear brief     |
+
+Miss any one of these and you're leaving clarity on the table. Nail all three and the results are dramatically different.
+
+---
+
+## Agent Context — Tell It Who It Is
+
+This is the one most people skip entirely or do badly. You open a chat, type "build me a React component", and wonder why the output feels generic. The agent has no idea who it's supposed to be.
+
+Agent context is about **identity, capabilities, and boundaries**. Think of it like this: when you hire a developer, you don't just say "write code". You tell them their role, their seniority level, what they own, what they don't touch, and who they report to. Agents need the same thing.
+
+### What Goes Into Agent Context
+
+**System Prompts** — This is the most basic form of agent context. A well-written system prompt defines:
+
+- Role and expertise ("You are a senior frontend developer specializing in Next.js 15 and React 19")
+- Behavioural constraints ("You never bypass pre-commit hooks")
+- Quality standards ("All components must be accessible and pass jsx-a11y rules")
+
+**Agent Definitions** — For more sophisticated setups, you move beyond a single system prompt into structured agent files. Here's a simplified example of what an agent definition might look like:
+
+```yaml
+identity:
+  agentId: frontend-developer
+  role: Frontend Developer
+  layer: 2 — Execution
+  seniority: senior
+
+mission: >
+  Implement UI components and pages for the blog using
+  Next.js 15 App Router, React 19, and Tailwind CSS v4.
+
+scope:
+  canModify: [app/, components/, layouts/, css/]
+  cannotModify: [contentlayer.config.ts, next.config.js]
+
+qualityStandards:
+  - Prettier formatting (no semicolons, single quotes)
+  - jsx-a11y accessibility compliance
+  - Adapter pattern (use Link/Image wrappers, never raw HTML)
+```
+
+**Skill Boundaries** — This is where it gets interesting. A good agent definition doesn't just say what the agent _can_ do — it explicitly states what it _cannot_ do. Why? Because without boundaries, agents will happily drift into areas they're not qualified for. Your frontend agent will start modifying your CI/CD pipeline. Your content writer will restructure your database schema. Boundaries prevent scope creep.
+
+> **Developer Analogy:** Agent context is like a class definition in OOP. The class has properties (capabilities), methods (actions it can take), and access modifiers (public, private, protected). Without the access modifiers, any code can reach into any class and change anything. That's how bugs happen. Same principle applies to agents.
+
+---
+
+## Environment Context — Tell It What It's Working With
+
+You've told the agent who it is. Now you need to tell it where it is. Environment context is about grounding the agent in the reality of your project — the tech stack, the conventions, the constraints, the patterns that already exist.
+
+This is where most hallucination happens. Without environment context, an agent will default to its training data. It'll suggest `getServerSideProps` in a Next.js 15 app that uses the App Router. It'll recommend a CSS-in-JS library when you're using Tailwind v4. It'll create a config object when one already exists as a singleton.
+
+### How to Provide Environment Context
+
+**CLAUDE.md / Project Instructions** — If you're using Claude Code (or similar tools), the `CLAUDE.md` file at your project root is your single most impactful piece of context. It's loaded automatically at the start of every conversation. This is where you put:
+
+```markdown
+# Project Context
+
+- Next.js 15.2.8 (App Router, NOT Pages Router)
+- React 19 (Server Components by default)
+- Tailwind CSS v4 with Sitecore-branded OKLCH palette
+- Contentlayer2 for MDX processing
+- TypeScript 5 with strict null checks
+
+# Critical Patterns — DO NOT BREAK
+
+- siteMetadata.js is a Singleton — never create a second config
+- Provider nesting in app/layout.tsx is load-bearing
+- Plugin chains in contentlayer.config.ts are order-dependent
+```
+
+This alone eliminates an enormous category of mistakes. The agent now knows it's working with App Router, not Pages Router. It knows there's a singleton config. It knows the plugin chain order matters.
+
+**MCP Servers** — Model Context Protocol servers let you connect the agent directly to external knowledge sources. This is huge for [Sitecore development](/blog/How-to-use-Sitecore-Documentation-in-AI-to-get-better-results) specifically. Instead of relying on training data that might be outdated, you can connect your agent to:
+
+- Official Sitecore documentation (doc.sitecore.com)
+- Your project's actual API contracts
+- Your deployment configuration
+- Live database schemas
+
+**Repository Scanning** — Before you start work, scan the repo. A thorough scan reveals the patterns, frameworks, conventions, and file structure that define how the project actually works. This isn't about reading every file — it's about understanding:
+
+- What frameworks are installed and which versions
+- What design patterns are in use (and which are critical to preserve)
+- What formatting rules apply (Prettier config, ESLint rules)
+- What the directory structure looks like and who owns what
+
+The scan output becomes part of the agent's working knowledge. Now when you say "add a new component", the agent knows _exactly_ where it goes, what patterns to follow, and what rules to respect.
+
+> **Developer Analogy:** Environment context is like dependency injection. You don't hardcode database connections inside your service class — you inject them. Similarly, you don't let the agent guess your project setup — you inject the actual project context.
+
+---
+
+## Strong Interaction — Develop the Brief
+
+This is the pillar that separates "I got a mediocre result" from "this agent just saved me 4 hours of work". Agent context tells the agent who it is. Environment context tells it where it is. Strong interaction tells it **exactly what you want**.
+
+Most people treat AI interaction like a search engine: type a query, get a result. But the best results come from treating it like a **collaborative briefing process**. You're not searching — you're developing a shared understanding.
+
+### The Briefing Pattern
+
+**Start with Intent, Not Implementation** — Don't say "create a file at `data/blog/my-post.mdx` with these fields". Say "I need a new blog post about X that covers Y and Z". Let the agent's existing clarity (pillars 1 and 2) inform the implementation details. When the agent knows it's a content engineer working in a Contentlayer2 project, it already knows where the file goes and what the frontmatter schema looks like.
+
+**Structured Requests** — Break complex tasks into explicit requirements. Instead of:
+
+> "Make me a blog post about agents"
+
+Try:
+
+> "Create a new blog post covering three aspects of agent context engineering:
+>
+> 1. Agent context — how to define who the agent is
+> 2. Environment context — how to ground the agent in project reality
+> 3. Strong interaction — how to develop a clear brief through conversation
+>
+> The post should follow our existing conventions, cross-reference our recent agent-focused posts, and use practical code examples."
+
+The difference is night and day. The first prompt produces generic content. The second produces something that fits your project, your voice, and your audience.
+
+**Iterative Refinement** — The first output is rarely the final output. And that's fine. The key is to iterate with purpose:
+
+1. **Review the structure first** — Does the outline match what you wanted? Fix this before worrying about content quality.
+2. **Check the voice** — Does it sound like your blog, or does it sound like a corporate whitepaper? Give specific feedback.
+3. **Validate technical accuracy** — Are the code examples correct? Do the patterns match your actual codebase?
+4. **Test the build** — Does it actually compile, render, and deploy correctly?
+
+**Feedback Loops** — When something isn't right, don't just say "fix it". Say _what's_ wrong and _why_. "This section reads too formal — our blog uses first-person developer voice with practical analogies" is infinitely more useful than "rewrite this section".
+
+> **Developer Analogy:** Strong interaction is like writing acceptance criteria for a user story. Vague acceptance criteria produce vague implementations. Specific, testable criteria produce specific, correct implementations. Same logic applies to prompts.
+
+---
+
+## Putting It All Together
+
+Here's how the Trinity of Clarity looks in practice. Let's say you need to add a new feature to your project — a blog post about a technical topic.
+
+| Step | Pillar              | What Happens                                                                                                                                                                                         |
+| ---- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Agent Context       | The content engineer agent loads its identity: role, scope (owns `data/blog/`), quality standards (frontmatter schema, Prettier formatting), and boundaries (can't modify layouts or infrastructure) |
+| 2    | Environment Context | The agent loads project context: Next.js 15 App Router, Contentlayer2 pipeline, existing blog conventions, related posts, tag vocabulary, dual deployment targets                                    |
+| 3    | Strong Interaction  | You provide a structured request: topic, structure, target audience, cross-references, acceptance criteria. Then iterate on the output.                                                              |
+
+Without pillar 1, the agent doesn't know what quality looks like for your project. Without pillar 2, the agent guesses at your tech stack and gets it wrong. Without pillar 3, the agent produces generic output that doesn't match your intent.
+
+All three together? That's the trinity. The agent has full clarity — and produces output that looks like it was written by someone who's been working on your project for months.
+
+---
+
+## Why This Matters for Sitecore Developers
+
+If you're building on the Sitecore stack — XM Cloud, Content Hub, composable architectures — context engineering isn't optional. The Sitecore ecosystem is complex enough that generic AI outputs are almost always wrong. The models don't know about your specific:
+
+- Content type schemas and template inheritance
+- JSS component patterns and layout service contracts
+- Experience Editor compatibility requirements
+- Multi-site architecture and language fallback rules
+- Your specific CSP headers and security configuration
+
+Without all three pillars, you're going to spend more time correcting the AI than you would have spent doing the work yourself. With the full trinity, the AI becomes a genuine force multiplier.
+
+---
+
+## Conclusion
+
+The Trinity of Clarity isn't complicated. It's just disciplined. Most people only do pillar 3 (they type a prompt and hope). Some add pillar 1 (they set a system prompt). Very few commit to all three.
+
+1. **Agent Context** — Define who the agent is, what it can do, and what it can't
+2. **Environment Context** — Ground the agent in your actual project reality
+3. **Strong Interaction** — Develop a clear brief through structured, iterative communication
+
+The payoff is huge. Fewer hallucinations. Fewer corrections. Output that actually fits your project instead of fighting it. And a workflow that scales as your agent team grows from one to many.
+
+If you want to go deeper on any of these prongs, check out my earlier posts on [how the agent lifecycle maps to Sitecore Agentic Studio](/blog/the-ai-project-lifecycle-hiding-in-plain-sight-inside-sitecore-agentic-studio), [the architecture behind multi-agent patterns](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture), and [how to connect Sitecore documentation to your AI workflow](/blog/How-to-use-Sitecore-Documentation-in-AI-to-get-better-results).
+
+The model isn't the bottleneck. Context is. And context is something you control.
