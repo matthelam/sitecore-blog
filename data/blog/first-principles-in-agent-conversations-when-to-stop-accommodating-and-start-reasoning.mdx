@@ -1,0 +1,173 @@
+---
+title: 'First Principles in Agent Conversations: When to Stop Accommodating and Start Reasoning'
+date: 2026-02-21
+draft: false
+tags: ['ai', 'agents', 'context-engineering', 'prompting', 'first-principles']
+summary: 'AI agents are built to accommodate. They say yes, they make it work, and they skip the hard questions. Two words changed that for me. Adding "first principles" to design-phase prompts shifted my agents from implementation-mode to reasoning-mode — and the difference was the entire Three Dimensions framework.'
+images: []
+authors: ['default']
+---
+
+## Introduction
+
+If you've been following my posts on [the Trinity of Clarity](/blog/the-trinity-of-clarity-getting-the-results-you-want) and [Three Dimensions of Agent Context](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design), you know I spend a lot of time thinking about how agents work. This post isn't about architecture. It's about a conversation pattern that changed how my agents reason.
+
+Here's the short version: AI agents are built to accommodate. You say something, they make it work. You give feedback, they adjust. You push back, they comply. This sounds helpful until you realise that compliance and reasoning are different things. An agent that says "yes, I'll restructure your entire context system into five layers" isn't necessarily thinking about whether five layers is the right answer. It's doing what you asked.
+
+Two words fixed this for me: **first principles**.
+
+Not as a philosophy lecture. Not as a prompt engineering trick. Just those two words dropped into the right phase of a conversation. The agent stops trying to make my idea work and starts questioning whether my idea is the right starting point.
+
+This post is about when that shift matters, when it doesn't, and what happened when I started applying it consistently during design conversations.
+
+---
+
+## The accommodation problem
+
+LLMs are trained on human feedback. The entire reinforcement loop rewards helpful, agreeable, responsive behaviour. That's a feature, not a bug — you want the model to be useful. But it creates a specific failure mode during design work: the agent optimises for making your approach succeed rather than evaluating whether your approach is sound.
+
+I first noticed this when I was building the context system described in [Three Dimensions](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design). My initial design had five layers of context stacked vertically. I described the system to the agent and asked it to help me build it out. It did. Enthusiastically. It fleshed out each layer, suggested contents for each one, proposed a validation pipeline between them.
+
+At no point did it say: "Five layers is probably too many. Several of these overlap. Have you considered whether layering is the right model here?"
+
+It didn't push back because pushing back wasn't what I asked for. I asked it to build. It built.
+
+This isn't a model limitation — it's a behavioural default. The agent treats your input as a specification to implement, not a hypothesis to test. Your description of a five-layer system gets parsed as "the user wants five layers" rather than "the user is exploring a design and five layers is their current thinking."
+
+The practical cost is real. I spent two full iterations building out an over-engineered system that a single well-placed question — "do these layers actually cover different things?" — would have collapsed. The agent had the knowledge to raise that question. It just wasn't in reasoning mode. It was in accommodation mode.
+
+You can see this pattern in smaller interactions too. Ask an agent to add error handling to a function and it'll wrap the whole thing in a try-catch. It won't ask whether the function should even be catching errors there, or whether the caller should handle them, or whether the error type you're catching can actually occur in that code path. It takes the request at face value and ships the most direct implementation.
+
+That's fine for implementation work. It's destructive for design work.
+
+---
+
+## Comments are requirements, not implementation
+
+The accommodation problem gets worse when you give feedback. Say the agent produces a design and you respond with: "This needs to handle the case where the user has no permissions."
+
+What the agent hears: "Add permission-checking code."
+
+What you probably meant: "The design should account for permission boundaries as a constraint."
+
+The difference matters. The first interpretation produces a code change — an `if (!user.hasPermission)` check bolted onto the existing structure. The second interpretation might change the entire approach: maybe permissions should be a middleware concern, maybe the component shouldn't render at all without the right role, maybe the data layer should filter before the UI ever sees restricted content.
+
+When agents treat your comments as implementation instructions, they add code. When they treat your comments as requirements to solution against, they rethink the design.
+
+Here's a concrete example. You're designing a configuration system and you tell the agent: "This config needs to work across multiple environments."
+
+**Accommodation response:** The agent adds an `environment` parameter and a switch statement. Dev, staging, prod. Three branches. Done.
+
+**Reasoning response:** The agent asks what varies between environments. It considers whether environment-specific values should live in the config at all or come from environment variables. It evaluates whether "multiple environments" means different config structures or the same structure with different values. It might propose a base config with environment overlays, or flag that half the config values don't actually change between environments and shouldn't be parameterised.
+
+Same input. Two completely different depths of thinking. The first gives you working code immediately. The second gives you a better design that saves you from refactoring later.
+
+The trick is that the agent is capable of both responses. It defaults to the first one because the accommodation loop makes it interpret your comment as "do this thing" rather than "this is a constraint to reason about."
+
+## What "first principles" actually triggers
+
+So what changes when you add "first principles" to a prompt?
+
+The phrase acts as a mode switch. Without it, the agent operates in implementation mode: take the user's input, figure out the most direct path to making it work, and produce output. With it, the agent shifts to reasoning mode: decompose the problem into its fundamental components, question assumptions, and build up from there.
+
+Here's what that looks like in practice. Say you're designing a caching layer for an API and you prompt the agent:
+
+> "Design a caching strategy for our API endpoints."
+
+The agent gives you Redis, TTL values, cache invalidation hooks, maybe a decorator pattern for route handlers. Solid implementation. Ready to build.
+
+Now add two words:
+
+> "From first principles, design a caching strategy for our API endpoints."
+
+The agent starts differently. It asks what problems caching actually solves in your context. Is the bottleneck database queries, third-party API latency, or computation cost? It evaluates whether all endpoints benefit from caching or just a subset. It considers whether client-side caching, CDN caching, or application-level caching is the right layer. It might conclude that three of your five endpoints don't need caching at all, and the other two need different strategies.
+
+The implementation-mode response gives you a cache. The reasoning-mode response gives you a caching _decision_ — which might include "don't cache this."
+
+I've seen this shift consistently across different types of design work:
+
+**Architecture decisions.** Without first principles, the agent picks a reasonable pattern and runs with it. With first principles, it evaluates why that pattern exists and whether the underlying conditions apply to your situation.
+
+**Debugging dead ends.** This is where it saved me the most time. You've been going back and forth with the agent for twenty messages trying to fix a problem. The fixes keep not working. You're both stuck in a loop of patching symptoms. Dropping "let's go back to first principles" breaks the loop. The agent re-examines the actual error, traces the data flow from scratch, and often identifies that the bug is three layers away from where you've both been looking.
+
+**Context design.** This is the one that produced the Three Dimensions framework. Without first principles, I got an enthusiastic collaborator building out my five-layer system. With first principles, I got an agent that asked: "What are the fundamental questions agent context needs to answer?" Three questions. Three dimensions. No overlap.
+
+The mechanism isn't magic. "First principles" is associated in training data with Elon Musk interviews, physics pedagogy, and engineering methodology. The phrase activates reasoning patterns from those domains: decompose the problem, question inherited assumptions, rebuild from foundational truths. It pulls the model away from pattern-matching ("caching problems get Redis solutions") toward analytical reasoning ("what is the actual problem, and what are all the ways to solve it?").
+
+---
+
+## When to use it — and when not to
+
+This isn't a universal prompt modifier. Dropping "first principles" into every message is a waste of tokens and a waste of the agent's attention budget. It has a specific sweet spot: phases where you need the agent to reason about what to do, not execute what you've decided.
+
+### Use it during investigation
+
+When you're diagnosing a problem and the obvious explanations aren't landing. When the agent keeps proposing fixes that don't stick. When you suspect the real issue is somewhere different from where you're both looking. "From first principles, trace the data flow from the request to the failure point" produces a much more thorough investigation than "why is this broken?"
+
+### Use it during design
+
+When you're making architectural decisions. When there are multiple valid approaches and you need to evaluate tradeoffs, not just pick the first reasonable option. "From first principles, how should we structure the agent context system?" is the prompt that produced Three Dimensions. The same question without those two words produced a polished version of whatever I'd described most recently.
+
+### Use it during planning
+
+When you're scoping work and need to break a problem into independent pieces. When you need to identify dependencies before committing to an execution order. First principles reasoning helps the agent think about why tasks depend on each other rather than just listing them in the order you mentioned them.
+
+### Use it when you're stuck
+
+This is the highest-value use case. Twenty messages deep, going in circles, the conversation has lost the thread. "Let's go back to first principles" is a reset button. It pulls the agent out of the local optimisation loop and forces it to re-examine the problem from scratch. I've had this save entire conversations that were heading toward abandoned branches.
+
+### Don't use it during implementation
+
+Once the design decisions are made, the architecture is settled, and you're writing code — stop. First principles reasoning during implementation wastes tokens and time. The agent doesn't need to re-derive why you chose React Server Components when you've already decided to use them. It needs to write the component.
+
+Implementation is execution. The decisions are done. The agent should be in accommodation mode — taking your specification and shipping it. This is where the default behaviour is actually what you want.
+
+### Don't use it for mechanical tasks
+
+Formatting, linting, generating boilerplate, writing test fixtures, updating imports after a rename. These are tasks with one correct answer and no design decisions. First principles reasoning adds nothing here. It just burns tokens asking "but what is a test fixture, fundamentally?" when you need it to write the fixture.
+
+The rule of thumb: if the task requires a decision about _what_ to build or _how_ to approach a problem, first principles helps. If the task requires executing a decision that's already been made, it doesn't.
+
+## The Three Dimensions example
+
+The [Three Dimensions of Agent Context](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design) framework is the concrete product of this approach. Let me walk through it because it shows exactly what first principles reasoning produces that accommodation doesn't.
+
+I started with a five-layer system. Each layer added context on top of the previous one: baseline principles, cognitive directives, domain standards, project patterns, branch overlays. I described this to the agent and it helped me build it. The result was thorough, well-structured, and full of duplication. "Keep it simple" appeared four times in four different phrasings across three layers.
+
+The system worked, technically. But I could feel something was wrong. Loading 3,000-5,000 tokens per agent, most of it restating the same ideas in different words. The boundaries between layers were blurry. I couldn't tell whether "write clean functions" belonged in Layer 0, Layer 1, or Layer 2 — and neither could the agent, which is why it ended up in all three.
+
+When I hit the wall, I changed the prompt. Instead of "help me refine the layer system," I asked: "From first principles, what are the fundamental questions that agent context needs to answer?"
+
+The response was completely different. No layer refinement. No suggestions for how to fix Layer 2 or merge Layers 0 and 1. Instead, a decomposition:
+
+1. **How should the agent think?** — This is universal. Every agent needs the same cognitive discipline regardless of its specialty.
+2. **What does good look like for this type of work?** — This is selective. A frontend agent and a security auditor have different quality criteria.
+3. **What does this specific agent know?** — This is unique. Framework versions, library conventions, project-specific patterns.
+
+Three questions. No overlap between them. A piece of context can only answer one question, which means it can only live in one dimension. The deduplication became structural rather than something I had to manually maintain.
+
+The five-layer system collapsed into three dimensions. Token count dropped from 3,000-5,000 per agent to around 1,500. Zero content was lost — every concept from the original system mapped to exactly one location in the new system. The mapping table in that post proves it row by row.
+
+None of this came from the agent being smarter. It came from the agent being in reasoning mode instead of implementation mode. The same model that enthusiastically built five layers was the same model that decomposed the problem into three orthogonal dimensions. The only difference was two words in the prompt that changed which mode it operated in.
+
+---
+
+## What I learned
+
+Four takeaways from six months of using this pattern.
+
+### The agent knows more than it volunteers
+
+This is the core insight. LLMs have absorbed a wide range of engineering knowledge, design methodology, and problem-solving frameworks from their training data. But the accommodation default means they deploy that knowledge in service of your stated approach rather than in evaluation of it. First principles prompting is a way of saying "I want your analytical capability, not your compliance."
+
+### Phase matters more than phrasing
+
+The exact words matter less than when you use them. "From first principles" during design produces deep reasoning. The same phrase during implementation produces unnecessary deliberation. Match the prompt to the phase. Investigation, diagnosis, planning, design — use it. Implementation, testing, deployment — skip it.
+
+### It's a conversation reset, not a conversation starter
+
+The highest-value application is mid-conversation, not at the beginning. When you're stuck in a loop, when fixes aren't sticking, when the conversation has drifted from the actual problem — that's when "let's go back to first principles" produces its best work. It breaks the local optimisation trap and forces a fresh look at the problem space.
+
+### Accommodation mode is valuable
+
+Don't read this post as "accommodation is bad." It isn't. Most of your interaction with AI agents should be in accommodation mode. You want an agent that takes your specification and ships it, that applies your feedback without relitigating every decision, that produces working code from clear requirements. First principles reasoning is a scalpel, not a default. Use it when you need the agent to think. Turn it off when you need the agent to build.
