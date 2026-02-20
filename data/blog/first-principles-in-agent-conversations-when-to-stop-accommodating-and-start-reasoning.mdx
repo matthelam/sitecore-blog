@@ -1,0 +1,33 @@
+---
+title: 'First Principles in Agent Conversations: When to Stop Accommodating and Start Reasoning'
+date: 2026-02-21
+draft: false
+tags: ['ai', 'agents', 'context-engineering', 'prompting', 'first-principles']
+summary: 'AI agents are built to accommodate. They say yes, they make it work, and they skip the hard questions. Two words changed that for me — "first principles" shifted my agents from implementation-mode to reasoning-mode during design work.'
+images: []
+authors: ['default']
+---
+
+AI agents are built to accommodate. You describe an approach, they build it. You give feedback, they apply it. That's the reinforcement loop working as intended — helpful, agreeable, responsive.
+
+The problem shows up during design work. When I described a [five-layer context architecture](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design) to my agent, it fleshed out each layer, suggested contents, proposed validation pipelines. It never said: "Several of these overlap. Is layering the right model?" I asked it to build. It built. My description was treated as a specification to implement, not a hypothesis to test.
+
+The same thing happens with feedback. Tell an agent "this needs to handle permissions" and it adds an `if` statement. What you meant was "permission boundaries are a design constraint" — which might mean middleware, role-based rendering, or data-layer filtering. The agent hears implementation instructions. You meant requirements to reason against.
+
+Two words changed this for me: **first principles**.
+
+> "Design a caching strategy for our API endpoints."
+
+You get Redis, TTL values, invalidation hooks. Solid implementation.
+
+> "From first principles, design a caching strategy for our API endpoints."
+
+Now the agent asks what caching actually solves here. Is the bottleneck queries, latency, or computation? Do all endpoints benefit? Should caching live at the CDN, application, or client layer? It might conclude half your endpoints don't need caching at all. The first response gives you a cache. The second gives you a caching _decision_.
+
+The same shift produced the [Three Dimensions](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design) framework. Instead of "help me refine the layers," I asked "from first principles, what questions does agent context need to answer?" Five layers collapsed into three orthogonal dimensions. Token count dropped from 5,000 to 1,500. Nothing lost.
+
+**Use it during investigation, design, planning, and dead ends** — any phase where you need the agent to reason about _what_ to do. Especially twenty messages deep when the conversation has lost the thread. "Let's go back to first principles" is a reset button.
+
+**Skip it during implementation and mechanical tasks.** Once decisions are made, the agent should take the spec and ship it. Don't waste tokens re-deriving choices you've already committed to.
+
+The core insight is simple: the agent knows more than it volunteers. The accommodation default deploys its knowledge in service of your approach rather than in evaluation of it. First principles prompting says "I want your analytical capability, not your compliance." It's a scalpel, not a default. Use it when you need the agent to think. Turn it off when you need it to build.
