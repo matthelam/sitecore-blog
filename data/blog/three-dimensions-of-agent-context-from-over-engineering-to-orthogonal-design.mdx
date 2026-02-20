@@ -1,0 +1,399 @@
+---
+title: 'Three Dimensions of Agent Context: From Over-Engineering to Orthogonal Design'
+date: 2026-02-20
+draft: false
+tags: ['ai', 'agents', 'context-engineering', 'multi-agent', 'architecture']
+summary: 'I rewrote my agent context system three times. The first was too shallow. The second was thorough and almost completely wasteful. The third works — because I stopped thinking about what agents should know and started thinking about what they should load.'
+images: []
+authors: ['default']
+---
+
+## Introduction
+
+If you've been following my posts on [sub-agents vs personas](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture) and the [Trinity of Clarity](/blog/the-trinity-of-clarity-getting-the-results-you-want), you know I've been deep in the mechanics of agentic development. This post is about one specific piece of that puzzle: the context you give your agents, and why the economics of it aren't what you think.
+
+I've rewritten my agent context system three times. The first version was embarrassingly shallow. The second was thorough, rigorous, and full of waste. The third finally works, and it works because I stopped thinking about what agents should _know_ and started thinking about what they should _load_.
+
+This is the story of those three iterations, what broke in each one, and the mental model that made everything click.
+
+---
+
+## The naive approach — "just list some skills"
+
+The starting point is obvious. You want AI agents to help with your codebase, so you define skills:
+
+```yaml
+agents:
+  frontend-dev:
+    description: 'Knows React, writes components, handles UI logic'
+  backend-dev:
+    description: 'Knows Node.js, writes APIs, manages data layer'
+  code-review:
+    description: 'Reviews pull requests, checks for issues'
+```
+
+Around 20 tokens of context per agent. A label, a sentence, done.
+
+This works for about fifteen minutes. Then you ask the frontend-dev to add a new component, and it generates a class component with `this.setState` because it doesn't know you're running React 19. It creates local component state for data that every other component in your project pulls from Zustand. It drops in CSS modules when the entire codebase has been on Tailwind for six months.
+
+Technically correct. Practically useless.
+
+These aren't agent definitions. They're job titles. Telling an LLM "you are a frontend developer" is like telling a new hire "you do frontend" and then walking away. They know JavaScript. They don't know _your_ JavaScript.
+
+The agent doesn't know your project's framework version, your team's state management conventions, your file naming patterns, your import alias structure, or the migration you're halfway through from REST to tRPC. It can't know any of that from a one-line description.
+
+So I did what any engineer would do. I overcorrected.
+
+---
+
+## The over-engineered approach — "document everything"
+
+The pendulum swung hard. I built a five-layer knowledge framework, and I was genuinely proud of it.
+
+**Layer 0: Baseline Engineering Principles.** Ten foundational concepts every agent should internalise — KISS, DRY, YAGNI, Composition over Inheritance, Shift-Left testing, Clean Code practices, Testability, Secure by Design, Single Source of Truth, Explicit over Implicit.
+
+**Layer 1: Core Cognitive Principles.** Four directives inspired by Andrej Karpathy's writing on working with LLMs — think before you code, prefer simplicity, make surgical changes, stay goal-driven throughout execution.
+
+**Layer 2: Domain Standards.** SOLID principles in detail, Clean Code conventions elaborated, OWASP Top 10 security guidelines, WCAG 2.1 accessibility requirements.
+
+**Layer 3: Project-Tailored Patterns.** Conventions detected from scanning the actual codebase — state management library, component structure, testing patterns.
+
+**Layer 4: Branch and Context Overlays.** Different behaviour depending on whether you're on a feature branch, a hotfix, or working against a release candidate.
+
+Each agent got all five layers stacked on top of each other. The system scanned the codebase, detected patterns, mapped them to skills, generated role definitions, and produced full agent personas. Each persona had eleven sections. The pipeline had seven stages with JSON schema validation at each step.
+
+A single agent persona clocked in at 3,000 to 5,000 tokens of context.
+
+Thorough. Rigorous. Full of waste.
+
+### Where the waste lives
+
+The concept of "don't overcomplicate things" appeared in four different places:
+
+- **Layer 1** — The cognitive principle said "no features beyond what was explicitly asked for."
+- **Layer 0** — YAGNI said "build only what's currently needed, not what you speculate might be needed later."
+- **Layer 0** — KISS said "choose the simplest solution that satisfies the requirement."
+- **Layer 2** — The Clean Code standard said "functions should do one thing and do it well."
+
+Four sources. Four phrasings. One actual instruction: _don't overcomplicate things_.
+
+Now imagine you're the LLM reading this context. You encounter what looks like four distinct rules. Are they the same rule? Are there subtle differences you should respect? Does "no features beyond what was asked" mean something different from "build only what's currently needed"? The LLM has to spend attention figuring this out. The answer is almost always: no, they're the same thing, said four times.
+
+Every duplicated token does three things, all bad:
+
+**It dilutes signal.** The LLM spends processing capacity reconciling overlapping guidance instead of following clear instructions. Attention is finite. Spending it on deduplication is pure loss.
+
+**It eats context window.** Every token spent restating something already said is a token that could carry project-specific knowledge the agent genuinely can't infer. Your framework version. Your file conventions. Your in-progress migrations.
+
+**It creates contradiction risk.** When the same concept is phrased differently across layers, subtle wording differences can be interpreted as distinct rules. "Simplest solution" and "no speculative features" sound similar to us, but token-level processing doesn't read for gist — it reads for instruction.
+
+And here's the compounding problem: in the over-engineered version, _every_ agent loaded _all_ standards. The frontend layout agent received Secure by Design principles. The security auditor received accessibility guidelines. The API specialist got WCAG compliance rules. Tokens spent on knowledge the agent would never use.
+
+### The critical realisation
+
+I had been thinking about agent files as documentation. Something a human engineer might read to understand the team's standards. But that's not what they are.
+
+Agent context files are live system prompts loaded on every single LLM invocation. They aren't read once and internalised. They're transmitted, processed, and billed every time the agent does anything.
+
+The economics are completely different from documentation. Documentation is a one-time write cost. Agent context is _rent_. Every token is paid on every call. A 100-token redundancy across 1,000 invocations isn't a minor inefficiency — it's 100,000 wasted tokens, plus the attention dilution on each of those 1,000 calls.
+
+I needed to stop asking "what should an agent know?" and start asking "what is the minimum context that changes the agent's behaviour in the right direction?"
+
+---
+
+## The three dimensions — "orthogonal, not stacked"
+
+The breakthrough came when I stopped thinking in layers and started thinking in dimensions.
+
+Layers stack vertically. Each layer adds to the one below it, and the boundaries between them are always blurry. Is "write clean functions" a baseline principle (Layer 0), a cognitive directive (Layer 1), or a domain standard (Layer 2)? In a layered model, the answer is "kind of all three," which is exactly why everything was duplicated.
+
+Dimensions are orthogonal. They answer fundamentally different questions. If you design them correctly, a piece of context can only belong to one dimension, because the dimensions don't overlap.
+
+Three questions. Three dimensions:
+
+1. **How do I think?** — Posture (universal)
+2. **What does good look like?** — Standards (selective)
+3. **What do I know?** — Specialist Knowledge (unique per agent)
+
+### Dimension 1: Posture
+
+**~150 tokens. Loaded by every agent.**
+
+Posture governs how an agent approaches any task. It says nothing about code structure, security, accessibility, or testing. It only governs the thinking process.
+
+Four directives:
+
+```markdown
+THINK — State assumptions. Surface tradeoffs. Ask when uncertain.
+MINIMIZE — Least code that solves the problem. Nothing speculative.
+CUT — Change only what the task requires. Match existing style.
+VERIFY — Define success criteria before starting. Loop until met.
+```
+
+That's it. Around 150 tokens including brief elaboration on each.
+
+Here's what those four directives absorbed from the old system:
+
+**THINK** merged "Think Before Coding" (the Karpathy-inspired cognitive principle about reasoning before writing) with "Explicit over Implicit" (the baseline principle about being transparent). Both said "be transparent about your reasoning." Now it's said once.
+
+**MINIMIZE** merged "Simplicity First" (Karpathy's directive to avoid unnecessary complexity), KISS (simplest solution that works), and YAGNI (build only what's needed now). Three formulations of "don't overcomplicate things." Now said once.
+
+**CUT** captured "Surgical Changes" — modify only what the task demands and leave everything else untouched. Already unique in the old system. Just needed a shorter name.
+
+**VERIFY** captured "Goal-Driven Execution" — define what done looks like before you start, iterate until you get there. Also already unique.
+
+Four original cognitive principles. Three baseline engineering principles. All collapsed into four words with supporting sentences. Zero loss of meaning.
+
+And critically: posture contains _nothing_ about code quality, structure, security, or accessibility. Those aren't thinking postures. They're quality standards, and they belong in a different dimension.
+
+### Dimension 2: Standards
+
+**~100-200 tokens each. Loaded selectively.**
+
+Standards define what "good" looks like for specific aspects of the work. The key design choice: each standard file is loaded _only_ by agents whose output should be evaluated against that standard.
+
+**`engineering.md`** — Loaded by agents that write code: frontend-dev, backend-dev, full-stack. Contains structural quality: Single Responsibility, Dependency Inversion, DRY, Shift-Left, code clarity conventions. _Not_ loaded by security-audit (which reads code but doesn't write it).
+
+**`security.md`** — Loaded by security-audit and backend-dev. Contains threat-aware design patterns, input validation principles, authentication and authorisation patterns. _Not_ loaded by a frontend layout specialist building a dashboard grid.
+
+**`accessibility.md`** — Loaded by frontend-dev. Contains semantic markup requirements, keyboard navigation patterns, screen reader compatibility. _Not_ loaded by backend-dev or devops agents.
+
+**`testing.md`** — Loaded by any agent that writes tests. Contains testing strategy, coverage expectations, test structure conventions. _Not_ loaded by review-only agents.
+
+This is where the over-engineered version lost the most tokens. Loading all standards for all agents meant a security auditor processed accessibility guidelines on every invocation, and a frontend layout agent processed OWASP guidance it would never apply.
+
+Here's what `engineering.md` actually looks like after compression:
+
+```markdown
+## STRUCTURE
+
+- SRP: each module/function owns one reason to change
+- DIP: depend on abstractions, inject implementations
+- Compose behaviour from small units; avoid deep inheritance
+
+## INTEGRITY
+
+- DRY: single authoritative source for every piece of knowledge
+- Shift-Left: validate early (types, lint, unit tests before integration)
+
+## CLARITY
+
+- Name things for what they do, not how they work
+- Functions: single task, obvious inputs and outputs
+- Comments explain WHY, code explains WHAT
+```
+
+Notice what happened to SOLID. The original five principles got condensed to two: SRP and DIP. In practice, those are the two SOLID principles that actually change an LLM's code generation decisions. Open/Closed is a design philosophy that rarely translates to a concrete "do this differently" instruction for an AI writing a single function. Liskov and Interface Segregation matter at architecture scale, but agent tasks are typically scoped to individual files or small feature slices. SRP and DIP directly change whether the agent creates one module or three, and whether it hardcodes a dependency or accepts it as a parameter.
+
+Composition over Inheritance from the old baseline layer? Folded into the STRUCTURE section. Clean Code conventions? Folded into CLARITY. Not lost. Relocated and compressed.
+
+### Dimension 3: Specialist knowledge
+
+**~300-500 tokens. Unique per agent.**
+
+This is where the real value lives. Specialist knowledge contains version-specific, framework-specific, project-specific information that makes _this_ agent different from _every_ other agent. None of it can be inferred from general training data. All of it changes the agent's output.
+
+A frontend-dev specialist pack:
+
+```markdown
+## Framework: React {detected_version}
+
+### Version-conditional rules
+
+#### React 19+
+
+- Server Components are stable; default to server rendering
+- Add 'use client' directive ONLY when component uses hooks, browser APIs, or event handlers
+- React Compiler handles memoisation automatically; remove manual useMemo/useCallback
+  unless profiling demonstrates a specific bottleneck
+- Use the `use()` hook for reading promises and context in render
+
+#### React 18.x
+
+- Use concurrent features: useTransition for non-urgent state updates,
+  useDeferredValue for expensive derived values
+- Wrap lazy-loaded routes in Suspense with meaningful fallback UI
+- Manual memoisation still required for expensive computations
+
+#### React < 18
+
+- Class components acceptable where codebase conventions use them
+- Use componentDidCatch and error boundary pattern for resilience
+- Hooks available in function components but concurrent features are not
+
+### State management: {detected_state_library}
+
+- All cross-component state goes through {detected_state_library}
+- Local component state ONLY for ephemeral UI concerns (open/closed, hover, input focus)
+- Never duplicate server state in client stores; use {detected_data_fetching} for server cache
+```
+
+The `{detected_version}` and `{detected_state_library}` placeholders are filled by a project scanner: React 19.1, Zustand, TanStack Query, Tailwind, `src/components`. The template captures the decision logic. The instance is project-specific.
+
+Now contrast that with a security-audit specialist pack:
+
+```markdown
+## Audit methodology
+
+- Trace data flow from entry points (API routes, form handlers, WebSocket connections)
+  to persistence and external calls
+- Flag: unsanitised user input in SQL/NoSQL queries, HTML rendering, OS commands,
+  file system paths
+- Flag: secrets in source (API keys, tokens, connection strings not sourced from env)
+- Flag: overly permissive CORS, missing rate limiting, disabled CSRF protection
+
+## Dependency analysis
+
+- Check lock file age; flag dependencies >6 months behind latest
+- Cross-reference known vulnerability databases for direct dependencies
+- Evaluate transitive dependency depth for supply chain risk
+```
+
+These two agents share posture. They both THINK, MINIMIZE, CUT, and VERIFY. Same cognitive discipline. But they have _zero_ overlap in specialist knowledge, because they do fundamentally different work.
+
+### Plus: Project context
+
+**~300-600 tokens. Loaded by all agents on the project.**
+
+Two files generated by scanning the actual codebase:
+
+**`patterns.md`** organises detected conventions into significance tiers:
+
+```markdown
+## Critical (violating these breaks the build)
+
+- Import aliases: `@/` maps to `src/`, always use aliased imports
+- State management: Zustand for global state, no Redux, no Context for state
+- API client: all HTTP through `src/lib/api-client.ts`, never raw fetch
+
+## Established (strong conventions, follow unless asked to change)
+
+- Components: function components, one per file, named export
+- Error handling: Result<T, E> pattern, no naked try/catch in business logic
+- Naming: camelCase functions, PascalCase components, kebab-case files
+
+## Emerging (in transition, prefer new pattern)
+
+- Migration: REST endpoints being replaced by tRPC; new features use tRPC
+- Migration: CSS Modules being replaced by Tailwind; new components use Tailwind
+- Migration: Jest being replaced by Vitest; new test files use Vitest
+```
+
+**`approaches.md`** captures workflow conventions:
+
+```markdown
+## Branching
+
+- feature/\* branches from main, squash-merged via PR
+- hotfix/\* branches from main, merged immediately, backported if needed
+
+## Commits
+
+- Conventional Commits format: type(scope): description
+- Types: feat, fix, refactor, test, docs, chore
+```
+
+Every agent on the project loads both files, because every agent needs to follow the project's conventions regardless of its specialty.
+
+---
+
+## The comparison
+
+Here's what a frontend-dev agent receives in each approach:
+
+**Naive approach:**
+
+```
+"You are a frontend developer. You know React."
+```
+
+~20 tokens. The agent knows nothing about your project. It will produce generic code that technically works and practically doesn't fit.
+
+**Over-engineered approach:**
+
+10 baseline principles + 4 cognitive principles + full SOLID breakdown + full Clean Code conventions + full OWASP Top 10 + full WCAG 2.1 guidelines + project patterns + branch overlays. ~3,000-5,000 tokens. The agent processes security guidelines it will never apply and reconciles four different phrasings of "keep it simple."
+
+**Three dimensions:**
+
+| Component               | Tokens     | Source       |
+| ----------------------- | ---------- | ------------ |
+| Posture                 | ~150       | Universal    |
+| Engineering standards   | ~200       | Selective    |
+| Accessibility standards | ~120       | Selective    |
+| Testing standards       | ~100       | Selective    |
+| Specialist pack         | ~400       | Unique       |
+| Project patterns        | ~400       | Project-wide |
+| Project approaches      | ~200       | Project-wide |
+| **Total**               | **~1,570** |              |
+
+Zero duplication. Every token earns its place. The agent doesn't load security standards because it's not doing security work. It doesn't see four versions of "keep it simple" because posture says MINIMIZE once. It _does_ get React 19-specific rules, Zustand conventions, and the active migration from CSS Modules to Tailwind — the information that actually changes its output.
+
+---
+
+## The deduplication proof
+
+Every concept from the original system has exactly one home. Nothing was lost.
+
+| Original concept             | Original source      | New home          | Merged with            |
+| ---------------------------- | -------------------- | ----------------- | ---------------------- |
+| Think Before Coding          | Cognitive Principles | Posture: THINK    | Explicit over Implicit |
+| Simplicity First             | Cognitive Principles | Posture: MINIMIZE | KISS, YAGNI            |
+| Surgical Changes             | Cognitive Principles | Posture: CUT      | (unique)               |
+| Goal-Driven Execution        | Cognitive Principles | Posture: VERIFY   | (unique)               |
+| KISS                         | Baseline             | Posture: MINIMIZE | Simplicity First       |
+| DRY                          | Baseline             | engineering.md    | (unique)               |
+| YAGNI                        | Baseline             | Posture: MINIMIZE | Simplicity First       |
+| Composition over Inheritance | Baseline             | engineering.md    | SOLID partial          |
+| Shift-Left                   | Baseline             | engineering.md    | (unique)               |
+| Clean Code                   | Baseline             | engineering.md    | (unique)               |
+| Testability                  | Baseline             | testing.md        | (moved to selective)   |
+| Secure by Design             | Baseline             | security.md       | OWASP merged           |
+| Single Source of Truth       | Baseline             | engineering.md    | (unique)               |
+| Explicit over Implicit       | Baseline             | Posture: THINK    | Think Before Coding    |
+| SOLID (five principles)      | Domain Standards     | engineering.md    | Condensed to SRP + DIP |
+| OWASP Top 10                 | Domain Standards     | security.md       | Secure by Design       |
+| WCAG 2.1                     | Domain Standards     | accessibility.md  | (unique)               |
+
+Every row has one home. No concept appears in two dimensions. The original system had these concepts scattered across multiple layers with overlapping phrasings. The new system has each concept stated once, in the dimension where it belongs.
+
+---
+
+## What I learned
+
+Six principles I'd carry forward if you're building agent context systems.
+
+### 1. Every token is rent, not a one-time purchase
+
+Agent context isn't documentation. It's loaded, transmitted, and processed on every LLM invocation. A 100-token saving across 1,000 invocations is 100,000 tokens you didn't pay for and 1,000 invocations where the LLM's attention wasn't diluted by redundant information.
+
+Design your context like you're paying per-word rent, because you are.
+
+### 2. Deduplication is about signal clarity, not just token savings
+
+When an LLM encounters the same instruction phrased three different ways, it doesn't recognise them as the same instruction and move on. It processes each one, attempts to reconcile differences, and may treat subtle wording variations as distinct directives. Saying "keep it simple" once, clearly, is strictly better than saying it three times with nuance.
+
+### 3. Selective loading beats universal loading
+
+Not every agent needs every standard. A frontend agent that never touches authentication code gains nothing from loading security principles. A security auditor reviewing code for vulnerabilities gains nothing from loading accessibility guidelines. Selective loading isn't just a token optimisation — it's a relevance optimisation. The context the agent receives should be the context that will change its output.
+
+### 4. Dimensions, not layers
+
+Layers stack vertically and create ambiguity at their boundaries. Is "write small functions" a baseline principle, a clean code standard, or a cognitive directive? In a layered system, the answer is murky, and the concept ends up restated in multiple layers.
+
+Dimensions are orthogonal. They answer different questions: how to think, what quality to hit, what to know. A piece of context can only belong to one dimension because the dimensions don't overlap. This makes deduplication structural rather than something you have to manually maintain.
+
+### 5. Templates with version placeholders beat static definitions
+
+A specialist pack that says `React {detected_version}` with conditional rules per version range beats fifty generic React tips. The template captures the decision logic. The project scanner fills in the specifics. When the project upgrades from React 18 to 19, the specialist pack updates automatically — the agent starts recommending Server Components and stops recommending manual memoisation because the version condition changed, not because someone rewrote the prompt.
+
+### 6. Apply a simple test to every piece of context
+
+Ask: "Does this tell the agent something it wouldn't already do from the context it already has?"
+
+If the agent already has MINIMIZE ("least code that solves the problem, nothing speculative"), does it also need YAGNI ("build only what's currently needed")? No. Same instruction. One survives. The other gets deleted.
+
+If the agent has engineering.md with SRP and DIP, does it also need the full five SOLID principles? Only if the other three would change its code generation decisions. In practice, for the scoped tasks agents handle, they don't. So they don't earn their tokens.
+
+---
+
+This isn't a framework you need to adopt wholesale. The specific dimensions, the specific standards files, the specific posture directives — those reflect my project and my priorities. What I'd encourage you to take away is the mental model: agent context should be orthogonal, selective, and version-aware. Every token should change the agent's behaviour. Everything else is rent you're paying for an empty room.
