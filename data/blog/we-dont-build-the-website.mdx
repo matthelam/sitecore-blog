@@ -1,0 +1,117 @@
+---
+title: "We Don't Build the Website — What CMS Development Taught Me About Designing Agent Teams"
+date: 2026-02-24
+draft: false
+tags: ['sitecore', 'ai', 'agents', 'skills', 'context-engineering']
+summary: "I've spent years telling people that CMS developers don't build the website. Tonight, three iterations into my own agent engine, I realised I'd been ignoring my own advice."
+images: []
+authors: ['default']
+---
+
+## The Penny Drop
+
+I've been a CMS developer for most of my career. Sitecore, specifically. And if you've spent any time in that world, you've heard the line — probably from me — that we don't build the website. We build the components. We build the configuration. We build the experience that lets the content author build the website.
+
+I've said this in workshops. I've said it in client meetings. I've said it to junior developers on their first week. It's one of those truths that sounds obvious once you hear it, and then shapes how you think about everything.
+
+Tonight, three iterations into building my own [Agent Management Studio](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture), that same truth hit me from a direction I wasn't expecting.
+
+Here's the irony. I literally just wrote a post about [Sub-Agents vs Personas vs Skills](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture) — mapping agent patterns to OOP concepts, explaining how skills are like enterprise helper classes, how sub-agents are like separate classes with single responsibilities. I understood the technology. I could diagram it, explain it, write code examples for it.
+
+But understanding the technology and understanding what it means for **design** are two completely different things. The penny didn't drop until I was staring at my third engine rewrite, wondering why my agents kept drifting, why token costs were climbing, and why something felt architecturally wrong despite following the patterns I'd just written about.
+
+The answer was sitting in my own career experience the whole time.
+
+## What CMS Developers Actually Build
+
+If you're not from the CMS world, here's the quick version.
+
+In Sitecore, when a client says "build me a homepage," I don't open a blank page and start typing headlines. Instead, I build a **Hero Banner component**. I define the fields: heading text, background image, CTA button label, CTA link URL. I write the rendering logic — the React component that takes those fields and turns them into HTML. I configure the rules in Sitecore that control where this component can be placed, what content types it accepts, and how it previews in the editor.
+
+Then a content author — someone on the marketing team who's never touched code — opens the page editor, drags the Hero Banner onto the homepage, types "Spring Sale — 40% Off Everything," picks a lifestyle image from the media library, sets the CTA to `/shop/sale`, and hits publish.
+
+They built the homepage. I built the **capability** for them to build the homepage.
+
+This distinction runs deeper than it sounds. I never write "Spring Sale — 40% Off Everything." That's not my job. My job is to make sure that when someone does write it, the text renders at the right size, the image loads at the right resolution, the button navigates correctly, and the whole thing meets brand standards and performs well on mobile. I design the constraints, the configuration points, and the rendering logic. The content author assembles the actual output.
+
+You could have twenty different homepages built from the same components. Different headlines, different images, different layouts. The components don't change. The configuration doesn't change. Only the content does. That's the whole point.
+
+## The Same Pattern, Different Domain
+
+The Agent Management Studio I've been building doesn't build applications. It builds **agent profiles** — specialist knowledge, cognitive posture, quality standards, skill definitions. It builds the configuration points: which standards each agent loads, which specialist template it reads, which patterns and approaches it follows. It builds the workflow that constrains how agents operate: human gates, resolver chains, verification phases.
+
+Then the agents go and build the application.
+
+Read that again. The studio is to the agents what Sitecore is to the content author. One layer builds the builder. The next layer builds the thing.
+
+| CMS World                                         | Agent World                                                         |
+| ------------------------------------------------- | ------------------------------------------------------------------- |
+| Component templates (Hero Banner, Card, CTA)      | Specialist templates (frontend-dev, content-writer, security-audit) |
+| Field definitions (heading, image, CTA link)      | Posture + Standards (how to think, what good looks like)            |
+| Rendering logic (React component)                 | Agent assembly (context = posture + standards + specialist)         |
+| Page Editor experience (drag, configure, preview) | Delivery workflow (brief → plan → execute → verify)                 |
+| Content author builds the page                    | Agent builds the application                                        |
+| **Developer builds the components**               | **You design the agent team**                                       |
+
+When a content author drags a Hero Banner onto a page, they don't think about the React component behind it. They think about headlines and images. When an agent picks up a work item, it doesn't think about how its context was assembled. It thinks about the brief, the acceptance criteria, and the code.
+
+The developer's job — my job — was never to build the page. It was to make sure the components were so well-designed that the content author couldn't build a bad page. The agent designer's job is the same: make sure the agent profiles, skills, and workflow are so well-designed that the agents can't produce a bad build.
+
+## Where I Went Wrong: Skills Baked Into Agents
+
+This is the part where I have to be honest about what I built.
+
+My sub-agents are powerful. They're full of context. I built them that way on purpose. Each one can research a codebase, verify against acceptance criteria, commit code to a repository, and work items off a Jira board. They are capable agents.
+
+But those capabilities are **baked in**. Each agent carries its skills in its own specialist context, permanently loaded, always present.
+
+Think of it like building a Sitecore component where the Hero Banner also contains the image optimisation logic, the analytics tracking script, the A/B testing engine, and the caching strategy. All embedded in one rendering. It works. It's powerful. But the moment you need image optimisation in the Card component too, you duplicate the logic. When the caching strategy needs to change, you change it in every component that embedded it. And every component is now heavier than it needs to be, even when it's not using half of what it carries.
+
+That's exactly what my agents looked like. `frontend-dev` knew how to commit code. `content-writer` also knew how to commit code. Both carried that knowledge in their specialist context, permanently loaded whether they needed it or not. The same logic, duplicated across agents. Different phrasings of the same instructions, slowly drifting apart as each agent's context evolved independently.
+
+Duplication. Drift risk. Token cost. The same problems I'd solve in a Sitecore project without thinking twice.
+
+## The Right Way: Composable Skills
+
+In a mature Sitecore build, you don't embed image optimisation in every component. You extract it into a shared rendering extension — a pipeline processor that runs on every image request regardless of which component produced it. You extract caching into its own processor. You extract analytics into a page-level wrapper. Components stay focused on **what they render**. Shared concerns live in shared infrastructure.
+
+The agent equivalent is composable skills.
+
+Extract "commit code" into a skill file. Extract "search Jira backlog" into a skill. Extract "run verification against acceptance criteria" into a skill. Each skill is defined once, tested once, maintained in one place.
+
+The agent keeps its **ability** — domain expertise, specialist knowledge, quality standards. That's what makes a `frontend-dev` different from a `security-audit`. But skills are loaded on demand, like Neo downloading kung fu in The Matrix. The agent doesn't permanently carry every capability it might ever need. It picks up the skill when the current task requires it, and it drops it when the task is done.
+
+```
+BEFORE: Agent = Specialist Knowledge + Embedded Skills (bloated, duplicated)
+AFTER:  Agent = Specialist Knowledge + Ability to invoke Skills (lean, composable)
+```
+
+The impact is significant across three dimensions:
+
+**Less drift.** A skill is defined once and used by every agent that needs it. When you update the "commit code" skill, every agent gets the update. No more divergence between how `frontend-dev` commits and how `content-writer` commits.
+
+**Fewer hallucinations.** Agents carry less permanent context, so there's less noise competing for attention during any given task. A `frontend-dev` working on a React component doesn't need Jira integration instructions cluttering its context window. It loads the Jira skill only when the workflow reaches the point where it needs to interact with the board.
+
+**Lower token costs.** Skills load only when needed, not on every invocation. If a work item doesn't touch the backlog, no agent pays the token cost of carrying backlog instructions. Context stays lean and relevant to the task at hand.
+
+## Hooks: The Workflow Gates
+
+Skills define what agents can do. But there's a second design surface that's just as important: where the workflow **pauses and checks**.
+
+In Sitecore, this is workflow approval states. A content author writes a page, but it doesn't go live immediately. It moves through Draft → Awaiting Approval → Published. An editor reviews it. A compliance check runs. The workflow gates exist because even well-designed components can be assembled incorrectly — wrong tone, outdated pricing, broken links. The gates catch what the components can't prevent.
+
+Agent workflows need the same thing. In my delivery engine, these are **hooks** — human gates and verification phases that pause execution at critical transitions. After the brief is written, a human reviews it before planning begins. After the plan is approved, execution proceeds. After execution completes, a verification phase checks the output against acceptance criteria before anything is marked done.
+
+Skills are **what** agents can do. Hooks are **when the workflow stops and asks whether they should**. And the design insight is the same: you're not designing what the agent produces. You're designing the transitions between phases. Where does the workflow pause? What gets checked? Who has authority to approve? These questions matter more than any individual agent's capability, because a brilliant agent with no workflow gates is just a faster way to ship mistakes.
+
+## The Real Lesson
+
+I literally wrote a [post last week](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture) mapping agent patterns to OOP concepts. I could diagram skills, explain sub-agents, describe composable architectures. I understood the technology.
+
+But understanding a technology and understanding what it means for how you **design** — those are different skills entirely. The first is knowledge. The second is recognition. Knowledge says "composable skills exist and here's how they work." Recognition says "wait — that's the same problem I solved in Sitecore ten years ago, and I've been ignoring my own solution."
+
+The gap isn't technical. It's the distance between knowing a pattern exists and seeing where it applies in your own work. I had all the pieces. I'd written about them. I just hadn't connected them to the thing I was actually building.
+
+That's the real lesson of CMS development, and it transfers directly to agent design: you're never building the thing. You're building the system that builds the thing. And the quality of what gets built depends entirely on how well you designed the system — the components, the configuration points, the constraints, the workflow gates.
+
+Years of Sitecore taught me that. Three rewrites of an agent engine made me finally hear it.
