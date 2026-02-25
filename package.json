@@ -67,7 +67,7 @@
     "prettier-plugin-tailwindcss": "0.6.11",
     "typescript": "^5.1.3"
   },
-  "overrides": {
+  "resolutions": {
     "@tailwindcss/oxide": "4.0.5",
     "@tailwindcss/node": "4.0.5",
     "lightningcss": "1.29.1"
