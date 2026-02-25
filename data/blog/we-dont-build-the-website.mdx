@@ -3,22 +3,22 @@ title: "We Don't Build the Website — What CMS Development Taught Me About Desi
 date: 2026-02-24
 draft: false
 tags: ['sitecore', 'ai', 'agents', 'skills', 'context-engineering']
-summary: "I've spent years telling people that CMS developers don't build the website. Tonight, three iterations into my own agent engine, I realised I'd been ignoring my own advice."
+summary: "I've spent years telling people that CMS developers don't build the website. Tonight, deep into planning the third rebuild of my own agent engine, I realised I'd been ignoring my own advice."
 images: []
 authors: ['default']
 ---
 
 ## The Penny Drop
 
-I've been a CMS developer for most of my career. Sitecore, specifically. And if you've spent any time in that world, you've heard the line — probably from me — that we don't build the website. We build the components. We build the configuration. We build the experience that lets the content author build the website.
+I've been a CMS developer for the majority of my career. Sitecore, specifically. And if you've spent any time in that world, you've heard the line — probably from me — that we don't build the website. We build the components. We build the configuration. We build the experience that lets the content author build the website.
 
-I've said this in workshops. I've said it in client meetings. I've said it to junior developers on their first week. It's one of those truths that sounds obvious once you hear it, and then shapes how you think about everything.
+If you've worked around me, it's something you have probably heard my say before. It's one of those truths that sounds obvious once you hear it, and then shapes how you think about everything.
 
-Tonight, three iterations into building my own [Agent Management Studio](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture), that same truth hit me from a direction I wasn't expecting.
+Tonight, deep into planning the third rebuild of my own [Agent Management Studio](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture), that same truth hit me from a direction I wasn't expecting.
 
 Here's the irony. I literally just wrote a post about [Sub-Agents vs Personas vs Skills](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture) — mapping agent patterns to OOP concepts, explaining how skills are like enterprise helper classes, how sub-agents are like separate classes with single responsibilities. I understood the technology. I could diagram it, explain it, write code examples for it.
 
-But understanding the technology and understanding what it means for **design** are two completely different things. The penny didn't drop until I was staring at my third engine rewrite, wondering why my agents kept drifting, why token costs were climbing, and why something felt architecturally wrong despite following the patterns I'd just written about.
+But understanding the technology and understanding what it means for **design** are two completely different things. The penny didn't drop until I was deep in the planning for my third engine rebuild, wondering why my agents kept drifting, why token costs were climbing, and why something felt architecturally wrong despite following the patterns I'd just written about.
 
 The answer was sitting in my own career experience the whole time.
 
@@ -26,36 +26,36 @@ The answer was sitting in my own career experience the whole time.
 
 If you're not from the CMS world, here's the quick version.
 
-In Sitecore, when a client says "build me a homepage," I don't open a blank page and start typing headlines. Instead, I build a **Hero Banner component**. I define the fields: heading text, background image, CTA button label, CTA link URL. I write the rendering logic — the React component that takes those fields and turns them into HTML. I configure the rules in Sitecore that control where this component can be placed, what content types it accepts, and how it previews in the editor.
+In Sitecore, when a client says "build me a homepage," I don't open a blank page and start typing headlines. Instead, I think about the content author. What do they need to see in the page editor? What fields make sense to them — heading text, background image, CTA button label, CTA link URL? How should the component preview so they can trust what they're building? Where should the guardrails sit so they can move fast without breaking brand standards?
 
-Then a content author — someone on the marketing team who's never touched code — opens the page editor, drags the Hero Banner onto the homepage, types "Spring Sale — 40% Off Everything," picks a lifestyle image from the media library, sets the CTA to `/shop/sale`, and hits publish.
+I build a **Hero Banner component**, but the component isn't the point. The point is the experience the content author has when they use it. A marketer who's never touched code opens the page editor, drags the Hero Banner onto the homepage, types "Spring Sale — 40% Off Everything," picks a lifestyle image from the media library, sets the CTA to `/shop/sale`, and hits publish. That workflow should feel effortless. That's what I'm actually designing.
 
-They built the homepage. I built the **capability** for them to build the homepage.
+They built the homepage. I **tailored the experience** that made it possible.
 
-This distinction runs deeper than it sounds. I never write "Spring Sale — 40% Off Everything." That's not my job. My job is to make sure that when someone does write it, the text renders at the right size, the image loads at the right resolution, the button navigates correctly, and the whole thing meets brand standards and performs well on mobile. I design the constraints, the configuration points, and the rendering logic. The content author assembles the actual output.
+This distinction runs deeper than it sounds. The end user — the person who visits the website — matters, of course. The text needs to render at the right size, the image needs to load at the right resolution, the button needs to navigate correctly. But the end user is a step removed from me. I build in capabilities and gates to ensure their requirements are met, but my primary design surface is the content author's workflow. How efficient is their process? How intuitive are the configuration points? How hard is it for them to make a mistake?
 
-You could have twenty different homepages built from the same components. Different headlines, different images, different layouts. The components don't change. The configuration doesn't change. Only the content does. That's the whole point.
+You could have twenty different homepages built from the same components. Different headlines, different images, different layouts. The components don't change. The authoring experience doesn't change. Only the content does. That's the whole point.
 
 ## The Same Pattern, Different Domain
 
-The Agent Management Studio I've been building doesn't build applications. It builds **agent profiles** — specialist knowledge, cognitive posture, quality standards, skill definitions. It builds the configuration points: which standards each agent loads, which specialist template it reads, which patterns and approaches it follows. It builds the workflow that constrains how agents operate: human gates, resolver chains, verification phases.
+The Agent Management Studio I've been planning doesn't build applications. It shapes the **working experience of the agents** — the specialist knowledge they carry, the cognitive posture they adopt, the quality standards they're held to, and the skills they can pick up on demand. It designs the workflow they move through: human gates, resolver chains, verification phases. Everything is oriented around one question: what does the orchestrator need to work effectively?
 
 Then the agents go and build the application.
 
-Read that again. The studio is to the agents what Sitecore is to the content author. One layer builds the builder. The next layer builds the thing.
+Read that again. The studio is to the agents what Sitecore is to the content author. One layer tailors the experience. The next layer does the work.
 
-| CMS World                                         | Agent World                                                         |
-| ------------------------------------------------- | ------------------------------------------------------------------- |
-| Component templates (Hero Banner, Card, CTA)      | Specialist templates (frontend-dev, content-writer, security-audit) |
-| Field definitions (heading, image, CTA link)      | Posture + Standards (how to think, what good looks like)            |
-| Rendering logic (React component)                 | Agent assembly (context = posture + standards + specialist)         |
-| Page Editor experience (drag, configure, preview) | Delivery workflow (brief → plan → execute → verify)                 |
-| Content author builds the page                    | Agent builds the application                                        |
-| **Developer builds the components**               | **You design the agent team**                                       |
+| CMS World                                                  | Agent World                                                         |
+| ---------------------------------------------------------- | ------------------------------------------------------------------- |
+| Component templates (Hero Banner, Card, CTA)               | Specialist templates (frontend-dev, content-writer, security-audit) |
+| Author-facing fields (heading, image, CTA link)            | Posture + Standards (how to think, what good looks like)            |
+| Page Editor experience (drag, configure, preview)          | Delivery workflow (brief → plan → execute → verify)                 |
+| Guardrails (validation, placement rules, preview accuracy) | Workflow gates (human review, verification, acceptance criteria)    |
+| Content author builds the page                             | Agent builds the application                                        |
+| **Developer tailors the authoring experience**             | **You design the capability surface**                               |
 
 When a content author drags a Hero Banner onto a page, they don't think about the React component behind it. They think about headlines and images. When an agent picks up a work item, it doesn't think about how its context was assembled. It thinks about the brief, the acceptance criteria, and the code.
 
-The developer's job — my job — was never to build the page. It was to make sure the components were so well-designed that the content author couldn't build a bad page. The agent designer's job is the same: make sure the agent profiles, skills, and workflow are so well-designed that the agents can't produce a bad build.
+The developer's job — my job — was never to build the page. It was to make the content author's working experience so well-designed that they could build confidently and efficiently. The agent designer's job is the same: make the capability surface — skills, workflows, constraints — so well-designed that the orchestrator can deploy agents effectively without micromanaging every interaction.
 
 ## Where I Went Wrong: Skills Baked Into Agents
 
@@ -94,6 +94,8 @@ The impact is significant across three dimensions:
 
 **Lower token costs.** Skills load only when needed, not on every invocation. If a work item doesn't touch the backlog, no agent pays the token cost of carrying backlog instructions. Context stays lean and relevant to the task at hand.
 
+Thinking about skills this way also changes how you see parallelism. When skills are independent, well-separated units — proper OO boundaries rather than tangled embedded logic — the orchestrator can swarm. Multiple agents can pick up different skills and run concurrently without stepping on each other. That's not a feature you build. It's a property that emerges from designing the capability surface correctly.
+
 ## Hooks: The Workflow Gates
 
 Skills define what agents can do. But there's a second design surface that's just as important: where the workflow **pauses and checks**.
@@ -110,8 +112,8 @@ I literally wrote a [post last week](/blog/sub-agents-vs-personas-vs-skills-a-jo
 
 But understanding a technology and understanding what it means for how you **design** — those are different skills entirely. The first is knowledge. The second is recognition. Knowledge says "composable skills exist and here's how they work." Recognition says "wait — that's the same problem I solved in Sitecore ten years ago, and I've been ignoring my own solution."
 
-The gap isn't technical. It's the distance between knowing a pattern exists and seeing where it applies in your own work. I had all the pieces. I'd written about them. I just hadn't connected them to the thing I was actually building.
+The gap isn't technical. It's the distance between knowing a pattern exists and seeing where it applies in your own work. I had all the pieces. I'd written about them. I just hadn't connected them to the thing I was actually planning.
 
-That's the real lesson of CMS development, and it transfers directly to agent design: you're never building the thing. You're building the system that builds the thing. And the quality of what gets built depends entirely on how well you designed the system — the components, the configuration points, the constraints, the workflow gates.
+That's the real lesson of CMS development, and it transfers directly to agent design: you're never building the thing. You're designing the experience for the thing that builds the thing. In Sitecore, I think from the content author's perspective — what do they need, how do they work, what makes them efficient? For agents, the question is the same: what does the orchestrator need? What capabilities should be available? What workflow makes it effective? The moment I stopped thinking about assembling a team and started thinking about designing the capability surface, everything clicked.
 
-Years of Sitecore taught me that. Three rewrites of an agent engine made me finally hear it.
+Years of Sitecore taught me that. Three planned rebuilds of an agent engine made me finally hear it.
