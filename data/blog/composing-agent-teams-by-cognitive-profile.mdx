@@ -1,0 +1,76 @@
+---
+title: 'Composing Agent Teams by Cognitive Profile, Not Function'
+date: '2026-03-04'
+tags: ['ai', 'agents', 'context-engineering', 'team-composition', 'claude-code']
+draft: false
+summary: "Most agent teams are org charts with extra steps. The useful distinction isn't what agents do, it's how they think."
+authors: ['default']
+layout: PostLayout
+---
+
+Most agent teams are org charts. A coder, a reviewer, a planner, maybe a security specialist. Assign a function, give it a prompt, wire them together. It's the same structure as a human dev team, just faster and cheaper.
+
+I built my first agent team this way. It worked the way org charts always work — everyone did their job, nobody did the thinking that falls between jobs. The frontend agent wrote components. The review agent checked them. Neither one stopped to ask whether the component should exist at all.
+
+The problem isn't the agents. It's the composition model. Functional decomposition tells you _what_ each agent does. It says nothing about _how_ each agent thinks. And the "how" is what determines whether the team produces mechanical output or considered work.
+
+## Cognitive profile is the useful axis
+
+When I started treating agents as cognitive profiles rather than functional roles, the team changed.
+
+A functional label says "frontend-dev writes React components." A cognitive profile says "frontend-dev defaults to implementation-mode thinking, with a low weighting toward first-principles reasoning." That second description tells you something about the agent's decision boundaries — when it should act, when it should escalate, and what kind of problem it's suited to handle.
+
+I wrote about [three dimensions of agent context](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design) previously — posture, standards, and specialist knowledge. Cognitive profile sits in that first dimension. It's not what the agent knows. It's the shape of the agent's thinking, and it determines how the agent _uses_ what it knows.
+
+## Borrowed from Deloitte, applied to agents
+
+This isn't a new idea. Deloitte's [Business Chemistry](https://www2.deloitte.com/us/en/pages/operations/articles/business-chemistry.html) framework classifies people into four working styles: Pioneer (possibility-oriented, big-picture), Guardian (stability-oriented, detail-driven), Driver (challenge-oriented, results-focused), and Integrator (connection-oriented, consensus-building).
+
+Everyone is a blend. Everyone has a primary and a secondary. The model doesn't box people into types — it describes their default cognitive stance and the traits they fall back on under pressure.
+
+Agent teams work the same way:
+
+- My **architect agent** leads with first-principles reasoning. Questions assumptions, decomposes problems, challenges the brief before anything gets built. Pioneer-Driver blend.
+- My **frontend-dev** leads with implementation. Builds what's specified, follows established patterns, ships code. Guardian-Driver blend.
+- My **code reviewer** leads with evaluation. Checks consistency against project conventions, catches drift from agreed patterns. Guardian-Integrator blend.
+- My **security auditor** leads with adversarial thinking. Traces data flows, looks for what could break. Driver with a Guardian secondary.
+
+Different cognitive shapes, not different levels of capability. The reviewer isn't a lesser architect. The developer isn't a lesser reviewer. They're weighted differently because the work demands different default modes.
+
+The distinction matters when the work demands a thinking mode the current agent isn't weighted toward.
+
+## Traits are weighted, not binary
+
+Every agent has every trait. The weighting determines the default, not the boundary.
+
+My architect agent has first-principles reasoning weighted at around 85%. That's its primary mode — when uncertain, it reasons from fundamentals. My frontend-dev has the same trait weighted at around 20%. It _can_ reason from first principles. It shouldn't default to it, because most of its work is implementation where [first-principles thinking](/blog/first-principles-in-agent-conversations-when-to-stop-accommodating-and-start-reasoning) would be expensive overhead.
+
+But that 20% is doing real work. It gives the frontend-dev the capacity to recognise when implementation-mode thinking isn't enough. When the component structure doesn't fit the data shape. When the state management pattern is fighting the feature requirements. When what was asked for doesn't match what the codebase actually needs. The developer doesn't resolve these — it recognises them. That recognition is the trait doing its job at 20%.
+
+## Escalation is a reasoning-mode hierarchy
+
+This is where composition by cognitive profile pays off. When the frontend-dev hits a problem that exceeds its first-principles weighting, the work flows to the agent with a higher weighting of that trait. Not because the developer failed. Because it correctly identified that the moment requires a different cognitive mode.
+
+The escalation pattern maps to the trait hierarchy:
+
+- **Implementation uncertainty** — peer consult. Another agent with similar weighting, different domain knowledge.
+- **Design uncertainty** — architect. Higher first-principles weighting.
+- **Requirement uncertainty** — human gate. No agent has sufficient context.
+
+Each tier matches the kind of thinking the problem demands. Peer consultation solves "how do I build this?" Design escalation solves "should I build this?" Human gates solve "what are we actually trying to do?"
+
+The 20% first-principles weighting in the developer is what makes the chain work. Without it, the developer would implement its way through design problems — producing code that technically runs and architecturally misses. The trait weighting doesn't give the developer the answer. It gives it the self-awareness to stop.
+
+## The orchestrator problem
+
+The hardest agent to define is the one that decides which cognitive profile the moment needs. Not a router mapping task types to agents. A genuine orchestrator that reads the shape of the current problem and recognises whether it needs implementation thinking, analytical thinking, or a human decision.
+
+I don't have this solved. What I have is the recognition that the orchestrator isn't another functional role — it's the agent with the widest trait distribution and the lowest confidence threshold. It's the Integrator in Deloitte's model. The one that sees across profiles and knows when to bring in the Pioneer, when to let the Guardian run, and when to get out of the way.
+
+The orchestrator doesn't need to be the smartest agent. It needs to be the most situationally aware. It reads whether the current moment needs someone to build, someone to question, or someone to decide — and it routes accordingly. Every other agent is optimised for a mode. The orchestrator is optimised for transitions between modes.
+
+## The pattern
+
+Compose agent teams by how they think, not what they do. Give every agent every trait at different weightings. Let the weightings determine defaults and escalation boundaries. Build the hierarchy around reasoning modes, not reporting lines.
+
+Your agents, your weightings, your boundaries. The idea is that cognitive profile is the useful composition axis. How you apply it is yours.
