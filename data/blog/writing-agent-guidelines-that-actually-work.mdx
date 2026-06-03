@@ -1,0 +1,148 @@
+---
+title: 'Writing Agent Guidelines That Actually Work'
+date: '2026-03-02'
+draft: false
+tags: ['ai', 'agents', 'context-engineering', 'claude-code']
+summary: 'Most agent instructions read like mission statements - aspirational, comprehensive, and ignored in practice. After three iterations of building agent teams, I found what actually changes agent behaviour: directives that are specific enough to violate.'
+images: []
+authors: ['default']
+layout: PostLayout
+---
+
+## The Problem With Most Agent Instructions
+
+Open any CLAUDE.md file, any system prompt, any agent configuration, and you'll find the same patterns. "Write clean, maintainable code." "Follow best practices." "Be thorough but concise."
+
+These aren't guidelines. They're decoration.
+
+I know because I wrote them. Early versions of my [Agent Management Studio](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture) had exactly this problem. Pages of instructions that sounded authoritative and changed nothing. The agents produced the same output whether the instructions were loaded or not.
+
+The fix wasn't writing more. It was understanding what makes an instruction land.
+
+---
+
+## The Guideline Test
+
+Here's the filter I apply to every instruction now: **if you removed it and nothing changed, it wasn't a guideline.** It was filler.
+
+"Write clean code" fails this test. No agent reads that and thinks, "Oh, I was going to write messy code, but now I won't." The instruction is so broad that it matches whatever the agent was already going to do.
+
+Compare that with:
+
+```markdown
+**CUT** — Remove what does not serve the goal. Dead code, unused imports,
+redundant abstractions, stale comments — cut them. Less code is less
+surface area for bugs.
+```
+
+That instruction changes behaviour. An agent following it will actively delete things. An agent without it will leave dead imports alone because removing them isn't in the brief. The instruction creates a difference between "loaded" and "not loaded." That's the test.
+
+---
+
+## Directive, Not Procedural
+
+The instinct when writing agent instructions is to be procedural. Step 1, Step 2, Step 3. It feels thorough. It's also fragile.
+
+Procedural instructions work when the task is mechanical and predictable — "run the linter, then run the tests, then format the output." They break the moment the agent encounters a situation the procedure didn't anticipate, which is most situations.
+
+Directives work differently. They state a principle the agent applies across contexts:
+
+```markdown
+**MINIMIZE** — Smallest change that achieves the goal. No speculative
+additions. No premature abstractions. No "while I'm here" scope creep.
+If it is not in the brief, it is not in scope.
+```
+
+I don't need to enumerate every scenario where MINIMIZE applies. The agent applies it everywhere because it's a thinking constraint, not a step in a process. When the agent is about to refactor a function that works fine because "it could be cleaner" — MINIMIZE catches it.
+
+This is the same insight behind [first principles prompting](/blog/first-principles-in-agent-conversations-when-to-stop-accommodating-and-start-reasoning). You're giving the agent a reasoning tool, not a checklist.
+
+---
+
+## Show the Boundary
+
+Scope inclusion is intuitive. You write down what the agent should do. Scope exclusion is more valuable.
+
+Every agent in the studio has a "You must NEVER" section. The content writer's looks like this:
+
+```markdown
+You must NEVER:
+
+- Modify React components, layouts, or application code
+- Change Contentlayer configuration or build scripts
+- Write promotional or marketing copy disguised as technical content
+- Use stock phrases, filler, or AI-pattern language
+- Fabricate code samples
+```
+
+These boundaries do more work than the positive instructions. Without them, an agent asked to "improve the blog post" might decide the layout component needs updating too. It might add a promotional call-to-action because that's what "improve" means in marketing contexts. The boundary prevents drift before it starts.
+
+The pattern works because agents are trained to be helpful, and helpfulness without boundaries means expanding scope. Explicit exclusions turn "how can I help?" into "how can I help within these walls?"
+
+---
+
+## Concrete Over Abstract
+
+"Write clearly" is abstract. This is concrete:
+
+```markdown
+Cut these on sight:
+
+- "In order to" → "To"
+- "Due to the fact that" → "Because"
+- "It is worth noting that" → just state the thing
+- "As we can see" → (delete)
+- "Let's dive into" → (delete)
+```
+
+Abstract instructions require the agent to interpret your definition of "clear." Concrete instructions require the agent to match a pattern and apply a transformation. The second is falsifiable — I can check whether the phrase "in order to" appears in the output. The first is a judgement call that varies by context.
+
+This doesn't mean every instruction needs a lookup table. But the ratio matters. If your agent guidelines are 80% principles and 20% specifics, flip it. Principles set direction. Specifics change output.
+
+---
+
+## Three Layers, Not One Big File
+
+The mistake I kept making was putting everything in one document. Posture, technical standards, domain knowledge, project conventions — all in a single system prompt. Every agent got the same wall of text.
+
+The architecture that works has [three orthogonal dimensions](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design):
+
+**Posture** — How the agent thinks. Universal directives loaded for every agent. THINK before acting. MINIMIZE scope. CUT waste. VERIFY results. Four directives, loaded every time, regardless of specialty.
+
+**Standards** — What good looks like. Loaded selectively based on output type. Agents that write code get the Craft standard. Agents with UI output get Craft plus Usability. Agents that write prose get the Prose standard. Not every agent needs every standard.
+
+**Specialist Knowledge** — What the agent knows about its domain. One per agent. The frontend developer gets React patterns, component conventions, and the project's Tailwind setup. The content writer gets MDX formatting rules, the no-AI-filler checklist, and frontmatter requirements.
+
+The key insight is that these dimensions never overlap. Posture doesn't contain coding standards. Standards don't contain specialist knowledge. This means you can update one dimension without cascading changes through the others. When you upgrade from Tailwind 3 to 4, only the frontend specialist template changes. Posture and standards stay untouched.
+
+---
+
+## The Anti-Patterns
+
+After building agent teams across multiple projects, these are the patterns I've learned to avoid:
+
+**The Constitution** — A 3,000-token preamble about the agent's purpose, values, and philosophy. Agents don't have philosophical crises. They need to know what to do and what not to do.
+
+**The Mirror** — Instructions that restate what the model already does. "Be helpful and accurate." "Consider edge cases." You're paying tokens for the default behaviour.
+
+**The Encyclopedia** — Loading every possible piece of context because "it might be relevant." Token economics matter. An agent drowning in context performs worse than one with focused context, because attention is finite. Load what's needed for this task, not everything the agent might ever need.
+
+**The Wishlist** — Aspirational instructions that describe an ideal rather than a constraint. "Strive for excellence in all outputs." What does the agent do differently after reading that? Nothing. Replace it with something falsifiable.
+
+---
+
+## What Actually Changes Behaviour
+
+After three iterations of the studio, the instructions that consistently change agent output share these properties:
+
+1. **Falsifiable** — You can check whether the agent followed the instruction or not. "Use active voice" is checkable. "Write well" is not.
+
+2. **Differential** — The instruction creates a measurable difference between "loaded" and "not loaded." If the output is the same either way, the instruction is inert.
+
+3. **Bounded** — The instruction constrains rather than expands. Telling an agent what to cut is more effective than telling it what to add, because agents default to adding.
+
+4. **Scoped** — The instruction applies to a specific context, not all contexts. Loading security audit rules for an agent writing blog posts wastes tokens and attention.
+
+5. **Actionable at decision time** — The instruction helps when the agent is choosing between options. "Prefer composition over inheritance" is useful when the agent is about to define a class hierarchy. "Write good code" is useful never.
+
+The goal isn't comprehensive instructions. It's instructions that create the right constraints at the right moments. Everything else is noise.

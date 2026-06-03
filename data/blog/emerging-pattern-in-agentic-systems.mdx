@@ -1,0 +1,61 @@
+---
+title: 'An Emerging Pattern in Agentic Systems'
+date: '2026-03-19'
+tags: ['ai', 'agents', 'context-engineering', 'design-patterns', 'skills', 'claude-code']
+draft: false
+summary: 'The agent space is in the same moment the web was before patterns existed to stabilise it. I think the principle that settles it already has a name.'
+authors: ['default']
+layout: PostLayout
+---
+
+## The Same Pre-Pattern Moment
+
+I was deep into the third restructure of the [skills engine](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture) when it clicked: the agent space is in the same moment the web was before MVC. One developer's controller was another's helper was another's just-a-file-I-put-code-in. Strongly typed roles, eventual enforcement, and the ambiguity collapsed.
+
+I think the principle that settles the agent space already has a name.
+
+## AI Is a New Medium, Not a New Epistemology
+
+The problems agents solve — coordination, decomposition, knowledge management, quality gates — existed before LLMs. Accumulated software wisdom still applies. The question is whether we recognise it, or reinvent it poorly.
+
+SOLID didn't describe OO code specifically — it described how to make any composable system maintainable. Mapped to Agent profile, Skills + CLI, and MCP, the principles land with uncomfortable precision.
+
+## The SOLID Mapping
+
+| Principle                     | Agent equivalent                                                                                                                                                                       |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **S — Single Responsibility** | One reason to change per axis. Posture shapes how the agent thinks. Skills and CLI shape how it acts. MCP shapes what it knows. The separation is the principle made structural.       |
+| **O — Open/Closed**           | Extend capability by composing new skills or connecting new knowledge sources. Never modify the cognitive profile to add capability.                                                   |
+| **L — Liskov Substitution**   | Any skill fulfilling the same contract is substitutable without breaking the agent that uses it. Requires typed contracts — the missing enforcement layer in most agent systems today. |
+| **I — Interface Segregation** | An agent loads only the skills and knowledge relevant to its task. Fat skill files violate this. Atomic, single-purpose skills don't.                                                  |
+| **D — Dependency Inversion**  | The agent profile depends on skill abstractions, not specific implementations. Cognitive architecture depends on contracts, not concretions.                                           |
+
+These aren't analogies. Same problems, different medium.
+
+## Three Axes, One Execution Point
+
+The diagram is not a flow diagram. These axes don't run in sequence — they arrive simultaneously. Posture shapes interpretation. Skills and CLI define available actions. MCP defines what can be retrieved. All three are present the moment the agent picks up a task.
+
+<img
+  src="/static/images/emerging-pattern-in-agentic-systems/axes-diagram.svg"
+  alt="Three axes composing at the point of execution"
+  className="my-6 w-full"
+/>
+
+| Axis        | Technology    | Natural grain  | Optimised for |
+| ----------- | ------------- | -------------- | ------------- |
+| Condition   | Agent profile | Interpretation | HOW to think  |
+| Interaction | Skills + CLI  | Execution      | HOW to act    |
+| Knowledge   | MCP           | Retrieval      | WHAT is known |
+
+CLI and MCP both move information but have different natural grains. CLI is an action interface: precise, composable, backed by decades of accumulated tooling — package managers, version control, linters, CI/CD — that completed the full enforcement cycle. MCP is a query interface with real strengths, but it hasn't been through that cycle. CLI won this race before the agent space began.
+
+## A Draft Thesis — Come Argue With Me
+
+I want to be clear: this is a draft thesis, not a settled pattern.
+
+If Agent, Skills + CLI, and MCP are treated as typed contracts — not informal conventions — agentic systems become composable by design, not by accident. The enforcement that made SOLID actionable was linters, type systems, and code review norms. The agent equivalent doesn't exist yet, and hopefully through continued discussion we can establish one, the same way SOLID did.
+
+If you've built multi-agent systems and think I'm wrong, I want to hear it. That's how patterns settle.
+
+For related threads: [The Trinity of Clarity](/blog/the-trinity-of-clarity-getting-the-results-you-want) and [Composing Agent Teams by Cognitive Profile](/blog/composing-agent-teams-by-cognitive-profile).
