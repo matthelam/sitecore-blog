@@ -1,0 +1,270 @@
+---
+title: 'The Agent as Customer: A Practical Build Guide'
+date: '2026-06-03'
+tags: ['ai', 'agents', 'agent-as-customer', 'saas', 'api-design', 'commerce', 'mandates']
+draft: false
+summary: 'All my agent posts so far have been about building with agents - prompts, profiles, skills, harnesses. This one flips: what do you build for them, when the next customer arriving at your service is an Agent and not a person? A practical components guide, worked end-to-end on a single purchase.'
+images: []
+authors: ['default']
+layout: PostLayout
+---
+
+## Where this is coming from
+
+My focus has been shifting. The posts I have written so far - [composing teams by cognitive profile](/blog/composing-agent-teams-by-cognitive-profile), [writing instructions that actually land](/blog/writing-agent-guidelines-that-actually-work), [the SOLID mapping for agent design](/blog/emerging-pattern-in-agentic-systems) - were all from inside the developer harness. Local builds, local sandboxes, an advanced user wiring their own coding workflow. Where I am heading next is taking what I have prototyped there and turning it into real SaaS and retail products.
+
+Every time I work through one of those products, I land on the same realisation. If I put myself in the customer's shoes, the customer is no longer a person browsing a UI. It is an Agent, with a mandate and a memory, trying to get a job done on its owner's behalf. AI has dropped the cost of solving a problem far enough that a long list of human problems that were never worth the investment before are suddenly buildable. [This video](https://youtu.be/MlptIfpoLlw) crystallised it for me: the most defensible SaaS to build right now is not yet another agent. It is a service an agent can actually transact with.
+
+This is the late-90s web all over again. Two or three sites took payment. Almost none had a shopping cart. The pattern of "the web as a place a normal person transacts" had to be built. We are in the equivalent room with agents now - except this customer does not care about your colour palette or your hero banner. It cares whether it can find out what you offer, plan a purchase, prove its authority to spend, recover from a failure, and leave a clean audit trail behind. That is the work.
+
+What follows is my best current attempt to name what that work is, threaded end to end against one example: an agent buying a sealed Pokemon booster box on its owner's behalf, with a A$300 ceiling.
+
+## The shape of the work
+
+<svg
+  viewBox="0 0 880 340"
+  xmlns="http://www.w3.org/2000/svg"
+  className="acj-diagram w-full my-6"
+  role="img"
+  aria-label="The agent customer journey: eight components grouped into five phases - Discover, Authorise, Try, Commit, Recover - each marked ENFORCED, ADVISORY, or MIXED, with a recovery loop from Recover back to Try."
+>
+  <defs>
+    <marker id="acj-arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af" />
+    </marker>
+  </defs>
+  <style>{`
+    .acj-diagram text { font-family: ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .acj-diagram .label    { font-size: 13px; font-weight: 600; }
+    .acj-diagram .role     { font-size: 10px; font-weight: 500; opacity: 0.7; letter-spacing: 0.08em; }
+    .acj-diagram .phase    { font-size: 11px; font-weight: 700; opacity: 0.7; letter-spacing: 0.14em; }
+    .acj-diagram .caption  { font-size: 11px; font-style: italic; opacity: 0.75; }
+    .acj-diagram .legend   { font-size: 11px; font-weight: 500; opacity: 0.9; }
+    .acj-diagram .enforced { fill: none; stroke: #dc2626; stroke-width: 2; }
+    .acj-diagram .advisory { fill: none; stroke: #6b7280; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .acj-diagram .mixed    { fill: none; stroke: #d97706; stroke-width: 2; }
+    .acj-diagram .flow     { stroke: #9ca3af; stroke-width: 1.5; fill: none; }
+    .acj-diagram .loop     { stroke: #9ca3af; stroke-width: 1.5; fill: none; stroke-dasharray: 4 4; }
+  `}</style>
+
+{' '}
+<text className="phase" x="75" y="20" textAnchor="middle">
+  DISCOVER
+</text>
+<text className="phase" x="245" y="20" textAnchor="middle">
+  AUTHORISE
+</text>
+<text className="phase" x="405" y="20" textAnchor="middle">
+  TRY
+</text>
+<text className="phase" x="565" y="20" textAnchor="middle">
+  COMMIT
+</text>
+<text className="phase" x="765" y="20" textAnchor="middle">
+  RECOVER
+</text>
+
+{' '}
+<rect className="advisory" x="10" y="40" width="130" height="55" rx="6" />
+<text className="label" x="75" y="64" textAnchor="middle">
+  1. Capabilities
+</text>
+<text className="role" x="75" y="82" textAnchor="middle">
+  ADVISORY
+</text>
+
+{' '}
+<rect className="advisory" x="10" y="115" width="130" height="55" rx="6" />
+<text className="label" x="75" y="139" textAnchor="middle">
+  2. Catalog
+</text>
+<text className="role" x="75" y="157" textAnchor="middle">
+  ADVISORY
+</text>
+
+{' '}
+<rect className="enforced" x="180" y="40" width="130" height="55" rx="6" />
+<text className="label" x="245" y="60" textAnchor="middle">
+  3. Identity
+</text>
+<text className="label" x="245" y="75" textAnchor="middle">
+  + Mandate
+</text>
+<text className="role" x="245" y="90" textAnchor="middle">
+  ENFORCED
+</text>
+
+{' '}
+<rect className="mixed" x="340" y="40" width="130" height="55" rx="6" />
+<text className="label" x="405" y="60" textAnchor="middle">
+  4. Reserve
+</text>
+<text className="label" x="405" y="75" textAnchor="middle">
+  + Dry-Run
+</text>
+<text className="role" x="405" y="90" textAnchor="middle">
+  MIXED
+</text>
+
+{' '}
+<rect className="enforced" x="500" y="40" width="130" height="55" rx="6" />
+<text className="label" x="565" y="64" textAnchor="middle">
+  5. Checkout
+</text>
+<text className="role" x="565" y="82" textAnchor="middle">
+  ENFORCED
+</text>
+
+{' '}
+<rect className="enforced" x="500" y="115" width="130" height="55" rx="6" />
+<text className="label" x="565" y="139" textAnchor="middle">
+  6. Settlement
+</text>
+<text className="role" x="565" y="157" textAnchor="middle">
+  ENFORCED
+</text>
+
+{' '}
+<rect className="mixed" x="670" y="40" width="190" height="55" rx="6" />
+<text className="label" x="765" y="60" textAnchor="middle">
+  7. Errors
+</text>
+<text className="label" x="765" y="75" textAnchor="middle">
+  + Self-Diagnosis
+</text>
+<text className="role" x="765" y="90" textAnchor="middle">
+  MIXED
+</text>
+
+{' '}
+<rect className="enforced" x="670" y="115" width="190" height="55" rx="6" />
+<text className="label" x="765" y="139" textAnchor="middle">
+  8. Human Window
+</text>
+<text className="role" x="765" y="157" textAnchor="middle">
+  ENFORCED LOGGING
+</text>
+
+{' '}
+<path className="flow" d="M 140 67 L 180 67" markerEnd="url(#acj-arr)" />
+<path className="flow" d="M 310 67 L 340 67" markerEnd="url(#acj-arr)" />
+<path className="flow" d="M 470 67 L 500 67" markerEnd="url(#acj-arr)" />
+<path className="flow" d="M 630 67 L 670 67" markerEnd="url(#acj-arr)" />
+
+{' '}
+<path className="loop" d="M 765 170 L 765 225 L 405 225 L 405 100" markerEnd="url(#acj-arr)" />
+<text className="caption" x="585" y="248" textAnchor="middle">
+  recover within the same mandate
+</text>
+
+  <g transform="translate(0, 285)">
+    <rect className="enforced" x="40" y="0"  width="22" height="14" rx="3" />
+    <text className="legend"   x="70" y="11">ENFORCED - agent physically cannot get around it</text>
+
+    <rect className="advisory" x="40" y="22" width="22" height="14" rx="3" />
+    <text className="legend"   x="70" y="33">ADVISORY - help the agent can safely ignore</text>
+
+    <rect className="mixed"    x="490" y="0"  width="22" height="14" rx="3" />
+    <text className="legend"   x="520" y="11">MIXED - advisory preview backed by enforced truth</text>
+
+  </g>
+</svg>
+
+The one rule that decides every component: **help generously, reject hard - at different layers.** Advisory help and hard enforcement are not in tension; a good web form already does both. Build both. Never confuse them.
+
+## The eight components
+
+**1. Capability Profile - advisory.** One read-only endpoint listing every operation, its inputs, its preconditions, and whether it costs money. The agent's first call. Lets it plan the whole purchase before acting, instead of probing blindly and failing.
+
+**2. Catalog as a Read-Only Resource - advisory.** Search and product-detail endpoints returning structured data. Stock, price, how long the price holds - facts, not sales pressure. Serve both `?view=summary` and `?view=full` so detail-hungry and coarse-planner agents both succeed. This is the legitimate version of "Only 3 left!" - disclosure, not coercion.
+
+**3. Identity + Mandate - enforced.** Verify the principal (the human) and the agent separately, by attested credential. Never trust a self-declared `agent-id`. Require a **mandate**: a signed budget envelope from the principal saying what the agent may spend, on what, until when.
+
+```json
+{
+  "mandate_id": "mnd_8821",
+  "principal": "user_matt",
+  "agent": "agent_shopper_v3",
+  "max_spend_aud": 300.0,
+  "categories": ["sealed-trading-cards"],
+  "expires": "2026-06-04T00:00:00Z",
+  "signature": "..."
+}
+```
+
+No purchase happens without a valid, in-scope, unexpired mandate. Google's AP2 (Agent Payments Protocol) signed mandates do exactly this and the industry direction is already converging there - more on which standards and services to reach for below.
+
+**4. Reserve + Dry-Run - mixed.** A `reserve` call that places a brief stock hold; a `dry-run` checkout that shows the agent what _would_ happen without charging. The agent's "Review your order" screen. The dry-run is advisory; the hold itself is enforced.
+
+**5. Checkout Bound to the Mandate - enforced.** The buy step that _cannot_ exceed authority. The gateway validates every cart against the mandate. In-budget proceeds. Over-budget is refused - with a code, the ceiling, and what the agent _can_ do instead:
+
+```json
+{
+  "result": "REJECTED",
+  "error_code": "over_mandate",
+  "cart_total_aud": 560.0,
+  "mandate_ceiling_aud": 300.0,
+  "permitted_actions": ["remove_item", "request_mandate_increase"]
+}
+```
+
+The whole enforcement model in one sentence: **you do not tell the agent "please do not overspend"; you make overspending impossible.** The forbidden action simply is not available, the way a greyed-out button cannot be clicked.
+
+**6. Settlement - enforced.** Payment binds to the mandate. The transaction records the agent's identity, so a dispute can tell agent purchases from human ones. Hide the payment rail behind your own interface so you can swap card / stablecoin / streamed-session later without touching anything above.
+
+**7. Structured Errors + Self-Diagnosis - mixed.** Every rejection returns an error code, what is missing, and what the agent is _allowed to do next_. Classify failures into "agent can fix this itself" (missing field, out of stock with alternatives) versus "human is genuinely needed" (escalate). This turns the single biggest cause of agent abandonment - opaque failure - into a next step.
+
+**8. The Human Window - enforced logging.** A live dashboard reading from the authoritative store, showing agent activity in real time, with any mandate breach sitting in a clear "needs a human" queue. Oversight without slowing down the routine 95%.
+
+## The worked example, end to end
+
+The agent reads `/capabilities`, sees `checkout` needs a `valid_mandate`, and presents `mnd_8821`. It searches the catalog, finds the box at A$280 with 4 in stock and a price good for two days. A$280 is under A$300, within mandate. It dry-runs the checkout, gets `within_mandate: true, would_charge: A$280`, and commits. A$280 clears against the mandate. The transaction records `agent_shopper_v3` acting for `user_matt`.
+
+Now the failure paths. If the agent tries to add a second box (A$560 total), checkout refuses with `over_mandate` and hands back two permitted actions: drop a box, or request a budget raise. It never silently overspends and never gets stuck. If the box sells out mid-flow, the agent gets a waitlist option and two in-stock alternatives, and can take one within the same mandate - a recovered sale instead of a lost one. The blocked second-box attempt lands in the human queue as "agent requested A$560 against a A$300 mandate". Your call.
+
+## What to integrate, not build
+
+You should not be writing a payment gateway, a mandate spec, or a capability registry from scratch in 2026. The pieces are arriving in production form and converging on a handful of standards. Below is what I would reach for first per component, with the disclaimer that this stack is moving fast and the shortlist will look different in six months. Pick the standard that is converging, abstract it behind your own interface so you can swap when something better lands, and only build the parts nobody else is shipping - your domain, your mandate scopes, your business rules.
+
+| #   | Component                 | What to look at first                                                                                                                                                                                                                            |
+| --- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Capability Profile        | **MCP** (Model Context Protocol) for tool discovery; `/.well-known/` endpoints with OpenAPI 3.1; agents.json for HTTP-style capability publishing                                                                                                |
+| 2   | Catalog                   | **Algolia** or **Typesense** for AI-friendly search; **Shopify Storefront API** if you are e-commerce; Schema.org / JSON-LD so general-purpose agents can index you                                                                              |
+| 3   | Identity + Mandate        | **Google's AP2** for signed Intent / Cart / Payment mandates; **Auth0** / **Clerk** / **WorkOS** for principal auth; **Stytch** and **Descope** for agent-aware flows; W3C Verifiable Credentials for attested agent identity                    |
+| 4   | Reserve + Dry-Run         | **Stripe PaymentIntents** with `confirm: false` for previews; **Temporal** or **Inngest** for reservation workflows with TTLs                                                                                                                    |
+| 5   | Checkout bound to mandate | **AP2 Cart Mandate** as the spec; **Skyfire** and **Nekuda** for agent-native commerce; **Lithic** or **Marqeta** for virtual cards with hard spend caps the agent physically cannot exceed                                                      |
+| 6   | Settlement                | **AP2 + Google Pay** for the verifiable-credential rail; **Stripe** and **Adyen** for cards; **x402** (Coinbase's HTTP 402 stablecoin protocol) for streamed micropayments; **PayPal Agentic Commerce SDK**                                      |
+| 7   | Structured errors         | **RFC 9457** (Problem Details for HTTP APIs); MCP's structured error schema                                                                                                                                                                      |
+| 8   | Human Window              | **HumanLayer** (purpose-built human-in-the-loop); **Temporal** / **Inngest** consoles for workflow visibility; **LangGraph** + **LangSmith** for AI workflows; **Datadog** / **Honeycomb** for observability; **Retool** for the breach queue UI |
+
+Two of these deserve special mention because they cross multiple components. **Google's AP2** is currently the most complete published shape for the Identity + Mandate + Settlement triangle (components 3, 5, 6) - if I were starting today I would design my mandate envelope against AP2 first and treat anything else as a fallback. **MCP** has effectively become the default for capability publishing and is showing up in structured error patterns too, so it touches components 1 and 7.
+
+## What NOT to build
+
+- **Conversion nudges** (`recommended_next_action: "buy now"`). Capable agents ignore them; weak ones get manipulated and their operator blocks your service. You gain nothing and risk your reputation with the agent platforms.
+- **Rules that live only in instructions** ("the agent should stay under budget"). The agent's operator owns those instructions and can rewrite them. If it matters, enforce it at the gateway.
+- **Human approval on every action.** That kills the autonomy that makes agent customers valuable. Approve by _budget envelope_ up front; involve a human only on breach.
+
+## The first sprint
+
+Build in this order. Each stage is independently useful.
+
+1. **Catalog + Capabilities + Structured errors.** An agent can discover your store and fail gracefully.
+2. **Identity + Mandate + Checkout.** It can _buy_, safely, within authority. This is the minimum viable agent customer.
+3. **Reserve / dry-run + Human window.** Cautious agents are served and you have oversight.
+
+Put the payment rail behind your own interface from day one.
+
+## How you will know it is working
+
+Treat the agent like any other shopper and watch the funnel. **Task completion rate** is your conversion rate for non-human buyers. **Retry-on-error rate** points at one confusing affordance per spike. **Escalation rate** climbing means your mandates are too tight and you are adding friction to good sales. **Abandon-after-N-steps** maps where the flow breaks down.
+
+## The whole guide in one line
+
+_Tell the agent what it can do, let it act freely inside the budget its owner set, make the dangerous things impossible rather than discouraged, and when something fails, hand it a way forward instead of a wall._
+
+## This is a work in progress
+
+I am not running a SaaS that has shipped all eight components. I have been building inside Claude Code, watching how my own agents behave when they hit external services, and noticing the same failure modes again and again. The components above are my best current attempt to name what is missing on the other side. If you are building a service and thinking about how an agent would buy from it, I want to hear what is working and what is not. If you think I have the framing wrong, I want that even more - the earlier we argue about these shapes, the sooner the pattern settles.
+
+For related threads: [Composing Agent Teams by Cognitive Profile](/blog/composing-agent-teams-by-cognitive-profile), [An Emerging Pattern in Agentic Systems](/blog/emerging-pattern-in-agentic-systems), and [Writing Agent Guidelines That Actually Work](/blog/writing-agent-guidelines-that-actually-work).
