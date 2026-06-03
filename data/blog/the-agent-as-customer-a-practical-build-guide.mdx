@@ -21,152 +21,55 @@ What follows is my best current attempt to name what that work is, threaded end 
 
 ## The shape of the work
 
-<svg
-  viewBox="0 0 880 340"
-  xmlns="http://www.w3.org/2000/svg"
-  className="acj-diagram w-full my-6"
-  role="img"
-  aria-label="The agent customer journey: eight components grouped into five phases - Discover, Authorise, Try, Commit, Recover - each marked ENFORCED, ADVISORY, or MIXED, with a recovery loop from Recover back to Try."
->
-  <defs>
-    <marker id="acj-arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af" />
-    </marker>
-  </defs>
-  <style>{`
-    .acj-diagram text { font-family: ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
-    .acj-diagram .label    { font-size: 13px; font-weight: 600; }
-    .acj-diagram .role     { font-size: 10px; font-weight: 500; opacity: 0.7; letter-spacing: 0.08em; }
-    .acj-diagram .phase    { font-size: 11px; font-weight: 700; opacity: 0.7; letter-spacing: 0.14em; }
-    .acj-diagram .caption  { font-size: 11px; font-style: italic; opacity: 0.75; }
-    .acj-diagram .legend   { font-size: 11px; font-weight: 500; opacity: 0.9; }
-    .acj-diagram .enforced { fill: none; stroke: #dc2626; stroke-width: 2; }
-    .acj-diagram .advisory { fill: none; stroke: #6b7280; stroke-width: 1.5; stroke-dasharray: 5 3; }
-    .acj-diagram .mixed    { fill: none; stroke: #d97706; stroke-width: 2; }
-    .acj-diagram .flow     { stroke: #9ca3af; stroke-width: 1.5; fill: none; }
-    .acj-diagram .loop     { stroke: #9ca3af; stroke-width: 1.5; fill: none; stroke-dasharray: 4 4; }
-  `}</style>
-
-{' '}
-<text className="phase" x="75" y="20" textAnchor="middle">
-  DISCOVER
-</text>
-<text className="phase" x="245" y="20" textAnchor="middle">
-  AUTHORISE
-</text>
-<text className="phase" x="405" y="20" textAnchor="middle">
-  TRY
-</text>
-<text className="phase" x="565" y="20" textAnchor="middle">
-  COMMIT
-</text>
-<text className="phase" x="765" y="20" textAnchor="middle">
-  RECOVER
-</text>
-
-{' '}
-<rect className="advisory" x="10" y="40" width="130" height="55" rx="6" />
-<text className="label" x="75" y="64" textAnchor="middle">
-  1. Capabilities
-</text>
-<text className="role" x="75" y="82" textAnchor="middle">
-  ADVISORY
-</text>
-
-{' '}
-<rect className="advisory" x="10" y="115" width="130" height="55" rx="6" />
-<text className="label" x="75" y="139" textAnchor="middle">
-  2. Catalog
-</text>
-<text className="role" x="75" y="157" textAnchor="middle">
-  ADVISORY
-</text>
-
-{' '}
-<rect className="enforced" x="180" y="40" width="130" height="55" rx="6" />
-<text className="label" x="245" y="60" textAnchor="middle">
-  3. Identity
-</text>
-<text className="label" x="245" y="75" textAnchor="middle">
-  + Mandate
-</text>
-<text className="role" x="245" y="90" textAnchor="middle">
-  ENFORCED
-</text>
-
-{' '}
-<rect className="mixed" x="340" y="40" width="130" height="55" rx="6" />
-<text className="label" x="405" y="60" textAnchor="middle">
-  4. Reserve
-</text>
-<text className="label" x="405" y="75" textAnchor="middle">
-  + Dry-Run
-</text>
-<text className="role" x="405" y="90" textAnchor="middle">
-  MIXED
-</text>
-
-{' '}
-<rect className="enforced" x="500" y="40" width="130" height="55" rx="6" />
-<text className="label" x="565" y="64" textAnchor="middle">
-  5. Checkout
-</text>
-<text className="role" x="565" y="82" textAnchor="middle">
-  ENFORCED
-</text>
-
-{' '}
-<rect className="enforced" x="500" y="115" width="130" height="55" rx="6" />
-<text className="label" x="565" y="139" textAnchor="middle">
-  6. Settlement
-</text>
-<text className="role" x="565" y="157" textAnchor="middle">
-  ENFORCED
-</text>
-
-{' '}
-<rect className="mixed" x="670" y="40" width="190" height="55" rx="6" />
-<text className="label" x="765" y="60" textAnchor="middle">
-  7. Errors
-</text>
-<text className="label" x="765" y="75" textAnchor="middle">
-  + Self-Diagnosis
-</text>
-<text className="role" x="765" y="90" textAnchor="middle">
-  MIXED
-</text>
-
-{' '}
-<rect className="enforced" x="670" y="115" width="190" height="55" rx="6" />
-<text className="label" x="765" y="139" textAnchor="middle">
-  8. Human Window
-</text>
-<text className="role" x="765" y="157" textAnchor="middle">
-  ENFORCED LOGGING
-</text>
-
-{' '}
-<path className="flow" d="M 140 67 L 180 67" markerEnd="url(#acj-arr)" />
-<path className="flow" d="M 310 67 L 340 67" markerEnd="url(#acj-arr)" />
-<path className="flow" d="M 470 67 L 500 67" markerEnd="url(#acj-arr)" />
-<path className="flow" d="M 630 67 L 670 67" markerEnd="url(#acj-arr)" />
-
-{' '}
-<path className="loop" d="M 765 170 L 765 225 L 405 225 L 405 100" markerEnd="url(#acj-arr)" />
-<text className="caption" x="585" y="248" textAnchor="middle">
-  recover within the same mandate
-</text>
-
+{/* prettier-ignore */}
+<svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" className="acj-diagram w-full my-6" role="img" aria-label="The agent customer journey: eight components grouped into five phases - Discover, Authorise, Try, Commit, Recover - each marked ENFORCED, ADVISORY, or MIXED, with a recovery loop from Recover back to Try.">
+  <defs><marker id="acj-arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af" /></marker></defs>
+  <style>{`.acj-diagram text { font-family: ui-sans-serif, system-ui, sans-serif; fill: currentColor; } .acj-diagram .label { font-size: 13px; font-weight: 600; } .acj-diagram .role { font-size: 10px; font-weight: 500; opacity: 0.7; letter-spacing: 0.08em; } .acj-diagram .phase { font-size: 11px; font-weight: 700; opacity: 0.7; letter-spacing: 0.14em; } .acj-diagram .caption { font-size: 11px; font-style: italic; opacity: 0.75; } .acj-diagram .legend { font-size: 11px; font-weight: 500; opacity: 0.9; } .acj-diagram .enforced { fill: none; stroke: #dc2626; stroke-width: 2; } .acj-diagram .advisory { fill: none; stroke: #6b7280; stroke-width: 1.5; stroke-dasharray: 5 3; } .acj-diagram .mixed { fill: none; stroke: #d97706; stroke-width: 2; } .acj-diagram .flow { stroke: #9ca3af; stroke-width: 1.5; fill: none; } .acj-diagram .loop { stroke: #9ca3af; stroke-width: 1.5; fill: none; stroke-dasharray: 4 4; }`}</style>
+  <text className="phase" x="75" y="20" textAnchor="middle">DISCOVER</text>
+  <text className="phase" x="245" y="20" textAnchor="middle">AUTHORISE</text>
+  <text className="phase" x="405" y="20" textAnchor="middle">TRY</text>
+  <text className="phase" x="565" y="20" textAnchor="middle">COMMIT</text>
+  <text className="phase" x="765" y="20" textAnchor="middle">RECOVER</text>
+  <rect className="advisory" x="10" y="40" width="130" height="55" rx="6" />
+  <text className="label" x="75" y="64" textAnchor="middle">1. Capabilities</text>
+  <text className="role" x="75" y="82" textAnchor="middle">ADVISORY</text>
+  <rect className="advisory" x="10" y="115" width="130" height="55" rx="6" />
+  <text className="label" x="75" y="139" textAnchor="middle">2. Catalog</text>
+  <text className="role" x="75" y="157" textAnchor="middle">ADVISORY</text>
+  <rect className="enforced" x="180" y="40" width="130" height="55" rx="6" />
+  <text className="label" x="245" y="60" textAnchor="middle">3. Identity</text>
+  <text className="label" x="245" y="75" textAnchor="middle">+ Mandate</text>
+  <text className="role" x="245" y="90" textAnchor="middle">ENFORCED</text>
+  <rect className="mixed" x="340" y="40" width="130" height="55" rx="6" />
+  <text className="label" x="405" y="60" textAnchor="middle">4. Reserve</text>
+  <text className="label" x="405" y="75" textAnchor="middle">+ Dry-Run</text>
+  <text className="role" x="405" y="90" textAnchor="middle">MIXED</text>
+  <rect className="enforced" x="500" y="40" width="130" height="55" rx="6" />
+  <text className="label" x="565" y="64" textAnchor="middle">5. Checkout</text>
+  <text className="role" x="565" y="82" textAnchor="middle">ENFORCED</text>
+  <rect className="enforced" x="500" y="115" width="130" height="55" rx="6" />
+  <text className="label" x="565" y="139" textAnchor="middle">6. Settlement</text>
+  <text className="role" x="565" y="157" textAnchor="middle">ENFORCED</text>
+  <rect className="mixed" x="670" y="40" width="190" height="55" rx="6" />
+  <text className="label" x="765" y="60" textAnchor="middle">7. Errors</text>
+  <text className="label" x="765" y="75" textAnchor="middle">+ Self-Diagnosis</text>
+  <text className="role" x="765" y="90" textAnchor="middle">MIXED</text>
+  <rect className="enforced" x="670" y="115" width="190" height="55" rx="6" />
+  <text className="label" x="765" y="139" textAnchor="middle">8. Human Window</text>
+  <text className="role" x="765" y="157" textAnchor="middle">ENFORCED LOGGING</text>
+  <path className="flow" d="M 140 67 L 180 67" markerEnd="url(#acj-arr)" />
+  <path className="flow" d="M 310 67 L 340 67" markerEnd="url(#acj-arr)" />
+  <path className="flow" d="M 470 67 L 500 67" markerEnd="url(#acj-arr)" />
+  <path className="flow" d="M 630 67 L 670 67" markerEnd="url(#acj-arr)" />
+  <path className="loop" d="M 765 170 L 765 225 L 405 225 L 405 100" markerEnd="url(#acj-arr)" />
+  <text className="caption" x="585" y="248" textAnchor="middle">recover within the same mandate</text>
   <g transform="translate(0, 285)">
-    <rect className="enforced" x="40" y="0"  width="22" height="14" rx="3" />
-    <text className="legend"   x="70" y="11">ENFORCED - agent physically cannot get around it</text>
-
+    <rect className="enforced" x="40" y="0" width="22" height="14" rx="3" />
+    <text className="legend" x="70" y="11">ENFORCED - agent physically cannot get around it</text>
     <rect className="advisory" x="40" y="22" width="22" height="14" rx="3" />
-    <text className="legend"   x="70" y="33">ADVISORY - help the agent can safely ignore</text>
-
-    <rect className="mixed"    x="490" y="0"  width="22" height="14" rx="3" />
-    <text className="legend"   x="520" y="11">MIXED - advisory preview backed by enforced truth</text>
-
+    <text className="legend" x="70" y="33">ADVISORY - help the agent can safely ignore</text>
+    <rect className="mixed" x="490" y="0" width="22" height="14" rx="3" />
+    <text className="legend" x="520" y="11">MIXED - advisory preview backed by enforced truth</text>
   </g>
 </svg>
 
