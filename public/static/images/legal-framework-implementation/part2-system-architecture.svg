@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100%" viewBox="0 0 880 350" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="System layout: the Constitution at the repository root and Legislation through the tree, with the Common Law in a separate Obsidian vault (MCP query surface) connected by a JSON schema contract.">
+<title>Part II system layout: repository and the Obsidian-backed Common Law vault</title>
+<style>
+text{font-family:"Anthropic Sans",-apple-system,system-ui,sans-serif}
+.t{font-size:14px;fill:#3d3d3a}.ts{font-size:11.5px;fill:#73726c}.th{font-size:13.5px;font-weight:500}.hd{font-size:13px;font-weight:600;fill:#3d3d3a}
+.amb{fill:#FAEEDA;stroke:#854F0B}.amb-t{fill:#633806}.amb-s{fill:#854F0B}
+.pur{fill:#EEEDFE;stroke:#534AB7}.pur-t{fill:#3C3489}.pur-s{fill:#534AB7}
+.gry{fill:#F1EFE8;stroke:#5F5E5A}.gry-t{fill:#2C2C2A}.gry-s{fill:#444441}
+.nt{fill:#FFFFFF;stroke:#2C2C2A}.nt-t{fill:#2C2C2A}.nt-s{fill:#5F5E5A}
+.cont{fill:none;stroke:#cfcdc4;stroke-dasharray:4 3}
+.arr{stroke:#73726c;stroke-width:1.5;fill:none}
+.arrd{stroke:#73726c;stroke-width:1.5;fill:none;stroke-dasharray:5 3}
+@media (prefers-color-scheme:dark){
+.t{fill:#c2c0b6}.ts{fill:#9c9a92}.hd{fill:#c2c0b6}
+.amb{fill:#633806;stroke:#FAC775}.amb-t{fill:#FAEEDA}.amb-s{fill:#FAC775}
+.pur{fill:#3C3489;stroke:#CECBF6}.pur-t{fill:#EEEDFE}.pur-s{fill:#CECBF6}
+.gry{fill:#2C2C2A;stroke:#B4B2A9}.gry-t{fill:#F1EFE8}.gry-s{fill:#cfcdc4}
+.nt{fill:#1a1a18;stroke:#cfcdc4}.nt-t{fill:#F1EFE8}.nt-s{fill:#cfcdc4}
+.cont{stroke:#6f6e69}.arr{stroke:#9c9a92}.arrd{stroke:#9c9a92}
+}
+</style>
+<defs>
+<marker id="sysarr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#73726c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<rect class="cont" x="24" y="50" width="294" height="262" rx="10"/>
+<text class="hd" x="36" y="42" text-anchor="start">Code Repository</text>
+
+<rect class="gry" x="36" y="58" width="270" height="58" rx="8" stroke-width="0.5"/>
+<text class="th gry-t" x="171" y="80" text-anchor="middle" dominant-baseline="central">CLAUDE.md</text>
+<text class="ts gry-s" x="171" y="98" text-anchor="middle" dominant-baseline="central">Constitution &#183; root values</text>
+
+<rect class="gry" x="36" y="130" width="270" height="58" rx="8" stroke-width="0.5"/>
+<text class="th gry-t" x="171" y="152" text-anchor="middle" dominant-baseline="central">/context/*</text>
+<text class="ts gry-s" x="171" y="170" text-anchor="middle" dominant-baseline="central">Legislation &#183; repo-wide patterns</text>
+
+<rect class="gry" x="36" y="202" width="270" height="58" rx="8" stroke-width="0.5"/>
+<text class="th gry-t" x="171" y="224" text-anchor="middle" dominant-baseline="central">/&lt;sub-dir&gt;/CLAUDE.md</text>
+<text class="ts gry-s" x="171" y="242" text-anchor="middle" dominant-baseline="central">Legislation &#183; targeted guidance</text>
+
+<text class="ts" x="171" y="288" text-anchor="middle">+ more sub-directories &#8594; more Legislation</text>
+
+<rect class="nt" x="380" y="126" width="120" height="72" rx="8" stroke-width="1"/>
+<text class="th nt-t" x="440" y="155" text-anchor="middle" dominant-baseline="central">Agent / Harness</text>
+<text class="ts nt-s" x="440" y="173" text-anchor="middle" dominant-baseline="central">the session</text>
+
+<rect class="cont" x="588" y="50" width="284" height="180" rx="10"/>
+<text class="hd" x="600" y="42" text-anchor="start">Separate vault</text>
+
+<rect class="pur" x="600" y="58" width="260" height="64" rx="8" stroke-width="0.5"/>
+<text class="th pur-t" x="730" y="82" text-anchor="middle" dominant-baseline="central">Obsidian vault</text>
+<text class="ts pur-s" x="730" y="100" text-anchor="middle" dominant-baseline="central">MCP query surface</text>
+
+<rect class="amb" x="600" y="146" width="260" height="70" rx="8" stroke-width="0.5"/>
+<text class="th amb-t" x="730" y="172" text-anchor="middle" dominant-baseline="central">Common Law</text>
+<text class="ts amb-s" x="730" y="190" text-anchor="middle" dominant-baseline="central">issue, resolution, reasoning</text>
+
+<line x1="318" y1="162" x2="376" y2="162" class="arr" marker-end="url(#sysarr)"/>
+<text class="ts" x="347" y="152" text-anchor="middle">loads</text>
+
+<line x1="500" y1="150" x2="596" y2="100" class="arr" marker-start="url(#sysarr)" marker-end="url(#sysarr)"/>
+<text class="ts" x="544" y="90" text-anchor="middle">Legal Check</text>
+<text class="ts" x="544" y="104" text-anchor="middle">(schema contract)</text>
+
+<line x1="700" y1="122" x2="700" y2="142" class="arr" marker-end="url(#sysarr)"/>
+<text class="ts" x="784" y="135" text-anchor="middle">indexes</text>
+
+<rect class="gry" x="206" y="324" width="12" height="12" rx="3"/>
+<text class="ts" x="224" y="334" text-anchor="start">Constitution / Legislation</text>
+<rect class="amb" x="430" y="324" width="12" height="12" rx="3"/>
+<text class="ts" x="448" y="334" text-anchor="start">Common Law</text>
+<rect class="pur" x="590" y="324" width="12" height="12" rx="3"/>
+<text class="ts" x="608" y="334" text-anchor="start">Obsidian / MCP retrieval</text>
+</svg>

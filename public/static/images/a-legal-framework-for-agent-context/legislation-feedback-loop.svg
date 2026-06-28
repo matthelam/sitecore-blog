@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100%" viewBox="0 0 660 500" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Activity diagram: the most frequently consulted rulings are surfaced from the Common Law; they are linted for alignment against the Constitution and Legislation; a human then tunes wording, alignment and tag words guided by that insight, yielding sharper outcomes — significant changes to the Constitution or Legislation are allowed but not expected.">
+<title>Legislation Review: a one-directional linting and tuning activity</title>
+<style>
+text{font-family:"Anthropic Sans",-apple-system,system-ui,sans-serif}
+.t{font-size:14px;fill:#3d3d3a}.ts{font-size:11.5px;fill:#73726c}.th{font-size:13.5px;font-weight:500}
+.amb{fill:#FAEEDA;stroke:#854F0B}.amb-t{fill:#633806}.amb-s{fill:#854F0B}
+.pur{fill:#EEEDFE;stroke:#534AB7}.pur-t{fill:#3C3489}.pur-s{fill:#534AB7}
+.gry{fill:#F1EFE8;stroke:#5F5E5A}.gry-t{fill:#2C2C2A}.gry-s{fill:#444441}
+.nt{fill:#FFFFFF;stroke:#2C2C2A}.nt-t{fill:#2C2C2A}.nt-s{fill:#5F5E5A}
+.node{fill:#2C2C2A}.nodel{stroke:#2C2C2A;fill:none;stroke-width:2}
+.arr{stroke:#73726c;stroke-width:1.5;fill:none}
+.arrd{stroke:#73726c;stroke-width:1.5;fill:none;stroke-dasharray:5 3}
+@media (prefers-color-scheme:dark){
+.t{fill:#c2c0b6}.ts{fill:#9c9a92}
+.amb{fill:#633806;stroke:#FAC775}.amb-t{fill:#FAEEDA}.amb-s{fill:#FAC775}
+.pur{fill:#3C3489;stroke:#CECBF6}.pur-t{fill:#EEEDFE}.pur-s{fill:#CECBF6}
+.gry{fill:#2C2C2A;stroke:#B4B2A9}.gry-t{fill:#F1EFE8}.gry-s{fill:#cfcdc4}
+.nt{fill:#1a1a18;stroke:#cfcdc4}.nt-t{fill:#F1EFE8}.nt-s{fill:#cfcdc4}
+.node{fill:#cfcdc4}.nodel{stroke:#cfcdc4}
+.arr{stroke:#9c9a92}.arrd{stroke:#9c9a92}
+}
+</style>
+<defs>
+<marker id="lrarrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#73726c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<circle class="node" cx="185" cy="36" r="9"/>
+<line x1="185" y1="45" x2="185" y2="64" class="arr" marker-end="url(#lrarrow)"/>
+
+<rect class="nt" x="60" y="66" width="250" height="54" rx="8" stroke-width="1"/>
+<text class="th nt-t" x="185" y="85" text-anchor="middle" dominant-baseline="central">Surface recurring rulings</text>
+<text class="ts nt-s" x="185" y="103" text-anchor="middle" dominant-baseline="central">the most frequently consulted</text>
+
+<rect class="amb" x="400" y="68" width="220" height="50" rx="8" stroke-width="0.5"/>
+<text class="th amb-t" x="510" y="86" text-anchor="middle" dominant-baseline="central">Common Law</text>
+<text class="ts amb-s" x="510" y="104" text-anchor="middle" dominant-baseline="central">the case-law corpus</text>
+<line x1="400" y1="93" x2="313" y2="93" class="arr" marker-end="url(#lrarrow)"/>
+<text class="ts" x="356" y="84" text-anchor="middle">source</text>
+
+<line x1="185" y1="120" x2="185" y2="150" class="arr" marker-end="url(#lrarrow)"/>
+
+<rect class="nt" x="60" y="152" width="250" height="54" rx="8" stroke-width="1"/>
+<text class="th nt-t" x="185" y="171" text-anchor="middle" dominant-baseline="central">Lint for alignment</text>
+<text class="ts nt-s" x="185" y="189" text-anchor="middle" dominant-baseline="central">AI tests insights against the law</text>
+
+<rect class="gry" x="400" y="150" width="220" height="38" rx="8" stroke-width="0.5"/>
+<text class="th gry-t" x="510" y="169" text-anchor="middle" dominant-baseline="central">Constitution</text>
+<rect class="gry" x="400" y="194" width="220" height="38" rx="8" stroke-width="0.5"/>
+<text class="th gry-t" x="510" y="213" text-anchor="middle" dominant-baseline="central">Legislation</text>
+<line x1="400" y1="169" x2="313" y2="174" class="arr" marker-end="url(#lrarrow)"/>
+<line x1="400" y1="213" x2="313" y2="192" class="arr" marker-end="url(#lrarrow)"/>
+<text class="ts" x="395" y="143" text-anchor="end">checked against</text>
+
+<line x1="185" y1="206" x2="185" y2="236" class="arr" marker-end="url(#lrarrow)"/>
+
+<rect class="nt" x="60" y="238" width="250" height="62" rx="8" stroke-width="1"/>
+<text class="th nt-t" x="185" y="261" text-anchor="middle" dominant-baseline="central">Human-driven tuning</text>
+<text class="ts nt-s" x="185" y="279" text-anchor="middle" dominant-baseline="central">human aligns, guided by AI insight</text>
+
+<rect class="nt" x="400" y="238" width="220" height="62" rx="8" stroke-width="1" stroke-dasharray="5 3"/>
+<text class="th nt-t" x="510" y="255" text-anchor="middle" dominant-baseline="central">Tuning, not rewriting</text>
+<text class="ts nt-s" x="510" y="272" text-anchor="middle" dominant-baseline="central">wording, alignment &amp; tag words</text>
+<text class="ts nt-s" x="510" y="288" text-anchor="middle" dominant-baseline="central">major change allowed, not expected</text>
+<line x1="310" y1="269" x2="400" y2="269" class="arrd"/>
+
+<line x1="185" y1="300" x2="185" y2="330" class="arr" marker-end="url(#lrarrow)"/>
+
+<rect class="nt" x="60" y="332" width="250" height="54" rx="8" stroke-width="1"/>
+<text class="th nt-t" x="185" y="351" text-anchor="middle" dominant-baseline="central">Sharper desired outcomes</text>
+<text class="ts nt-s" x="185" y="369" text-anchor="middle" dominant-baseline="central">better delivery, law largely unchanged</text>
+
+<line x1="185" y1="386" x2="185" y2="407" class="arr" marker-end="url(#lrarrow)"/>
+<circle class="nodel" cx="185" cy="420" r="11"/>
+<circle class="node" cx="185" cy="420" r="5"/>
+
+<rect class="nt" x="40" y="466" width="12" height="12" rx="3"/>
+<text class="ts" x="58" y="476" text-anchor="start">activity</text>
+<rect class="amb" x="330" y="466" width="12" height="12" rx="3"/>
+<text class="ts" x="348" y="476" text-anchor="start">Common Law</text>
+<rect class="gry" x="470" y="466" width="12" height="12" rx="3"/>
+<text class="ts" x="488" y="476" text-anchor="start">Constitution / Legislation</text>
+</svg>
