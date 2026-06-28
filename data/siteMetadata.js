@@ -4,7 +4,7 @@ const siteMetadata = {
   author: 'Matthew Lam',
   headerTitle: 'matthelam',
   description:
-    'A blog documenting my trials and tribulations during my circumnavigation of the Sitecore-sphere.',
+    'Once a circumnavigation of the Sitecore-sphere, now a voyage into agentic systems: harnesses, knowledge, and the long work of persistent memory.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://matthelam-sitecore-blog.vercel.app',
