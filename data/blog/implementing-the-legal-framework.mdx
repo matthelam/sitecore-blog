@@ -1,0 +1,106 @@
+---
+title: 'Agent Harness: Implementing the Legal Framework'
+date: '2026-08-19'
+tags: ['ai', 'agents', 'context-engineering', 'memory', 'claude-code', 'skills']
+draft: false
+summary: 'Post two in the series. How the Legal Framework is actually built in Claude Code: three tiers, three Python scripts, a reflective hook, and the operating loop. Includes the skill as a download, plus the parts that are not right yet.'
+authors: ['default']
+layout: PostLayout
+---
+
+[The first post](/blog/a-legal-framework-for-agent-context) ended with a promise that the next one would describe how the prototype is actually set up in Claude. This is that post.
+
+If you would rather read the code than read me, take the skill and go:
+
+**[Download the Legal Framework skill (v1.2.0, 47 KB)](/static/downloads/legal-framework-skill-v1.2.0.zip)**
+
+Unzip it into `.claude/skills/` and ask Claude to set up the legal framework in a repo. It will interview you for the supreme laws, scaffold the three tiers, install the scripts, and wire the hooks.
+
+## The three tiers, as files
+
+The framing in post one was conceptual. The implementation is boringly concrete, and that is the point — each tier is a place on disk with its own loading behaviour.
+
+| Tier         | Lives in                                     | When it loads                                                                                 |
+| ------------ | -------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Constitution | root `CLAUDE.md`                             | Every session. Values and supreme laws. The final fallback when everything else is ambiguous. |
+| Legislation  | per-directory `CLAUDE.md`                    | Just-in-time, when the agent works in that directory. Architecture and patterns for one unit. |
+| Common Law   | `memory/` plus a generated `MEMORY.md` index | On demand, at ambiguity. Accumulated experience as atomic facts.                              |
+
+Common Law follows what I have been calling OKF — One Key Fact. One atomic fact per file, a single sentence under 240 characters, present tense, specific, with schema'd frontmatter carrying an id, tags from a fixed taxonomy, keywords, scope, status and dates. An optional short Context block holds the how-to-apply detail.
+
+The reason for the file-per-fact obsession is retrieval. A fact you can search, supersede and scope individually is a fact you can trust. A wall of accumulated notes is not.
+
+## Three scripts
+
+**`memory.py`, 372 lines.** The gate. Every memory change goes through it: `create`, `update`, `read`, `delete`, `supersede`, `search`, `lint`, `reindex`, `list`. It validates the OKF schema before any write lands, and regenerates `MEMORY.md` atomically afterwards, so the index and the standard cannot drift apart. Nothing hand-edits `memory/`. That single rule is doing most of the work.
+
+**`memory_exchange.py`, 702 lines.** The knowledge-exchange layer, added in v1.2.0. Export selects a dimension of one repository's Common Law, reasons each fact into a transferable form, and seals it as a zip. Import reconciles every incoming fact against the destination's Constitution and Legislation before anything is written.
+
+Two invariants hold it together. Exports are generalised, never copied verbatim — a client anecdote is not knowledge. And a fact that conflicts with the destination's law is never imported, with the human as the only one who can clear a conflict.
+
+It imports `memory.py` rather than reimplementing it, so local capture, export staging and import all share one OKF gate. I got that wrong the first time and had two validators drifting apart within a fortnight.
+
+**`memory_hook.py`, 115 lines.** The smallest file and the one I would defend hardest.
+
+## The hook asks a question, it does not inject an answer
+
+This is the design decision I am most pleased with, and it is the opposite of what I first built.
+
+The obvious move is to have the hook detect relevance and inject the matching memories into context. I tried that. It is wrong, for a reason that took me a while to see: a keyword matcher deciding what the model needs is a dumb component overruling a smart one.
+
+So the hook asserts nothing. It fires on `SessionStart` and `UserPromptSubmit` and inserts a self-question — should I consult memory here, is this a moment worth capturing — and lets the model decide. Crude keyword detection is completely fine for that, because being roughly right is enough when you are raising a question rather than reaching a conclusion.
+
+It also never blocks. Any failure exits zero, silently, and trivial prompts get nothing at all. A memory system that breaks your prompt is worse than no memory system.
+
+The wiring is four lines of settings:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "{{PYTHON}} scripts/memory_hook.py" }] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command", "command": "{{PYTHON}} scripts/memory_hook.py" }] }
+    ]
+  }
+}
+```
+
+## The operating loop
+
+Around the scripts sit six skills. Three run the loop — `memory-consult` before acting, `memory-capture` after learning, `task-sense-check` before saying "done". Consult, work, capture, sense-check. Three more run the exchange layer: `knowledge-export`, `knowledge-import`, and `framework-lint`, which sweeps for contradictions across Common Law, Legislation and the Constitution rather than just checking the schema.
+
+## What is not right yet
+
+I have been running this daily for a couple of months. Three things are unresolved, and I would rather write them down than pretend otherwise.
+
+**The tags are not settled.** I have a fixed six-tag taxonomy and I am still not convinced it is the right six, or that tags are even the right axis. The related question is worse: I do not have a clear rule for what deserves to become a memory at all. Too permissive and the fact base becomes noise, too strict and you lose the nudges that made the whole thing worth building.
+
+**There is no consolidation or clean-up process.** Facts accumulate. Some go stale, some get superseded by facts I never linked to them, some duplicate each other with different wording. I have `supersede` and I have `lint`, but I do not have a periodic pass that reads the whole fact base and reasons about what should be merged, retired or rewritten. Right now the answer is me, occasionally, by hand.
+
+**I have not locked out Claude's own memory.** This is the honest technical flaw. The framework assumes it owns the memory layer, and it does not — Claude Code has its own memory running alongside mine, and I have not managed to cleanly stop it.
+
+That leads somewhere uncomfortable. Claude Code's out-of-the-box memory already runs very close to what I need. I could probably argue that adding a few more hooks, and simply instructing it to write in OKF format into its own store, would get me most of the way there without any of my scripts. I am still a fan of OKF as a format. I am much less confident that I needed to build the storage layer underneath it. What I do not like is the out-of-the-box index, which is the piece I would still want to replace.
+
+## Hindsight
+
+Then I found [Hindsight](https://hindsight.vectorize.io/), which is several years ahead of me on virtually the same problem.
+
+It is built by Vectorize, MIT licensed, available as a managed service or self-hosted. It has a Retain API for writing memories, a Recall API for retrieving them, and a Reflect API for reasoning over them. Every memory is tagged at ingest, and its MCP recall tool exposes tag groups so an agent can scope a search to a category or a period.
+
+The part that stopped me is the scoping. Hindsight lets you scope learning per user, per project, per team or per channel, so each context learns independently, with hybrid layouts where some knowledge is shared and some stays local. For coding agents the bank is usually scoped per repository. And because the store sits outside any one tool, context you build in one editor is there in the next.
+
+That is precisely the feature I am now hunting for and do not have: one memory system covering everything, scoped by whichever space I am working in.
+
+I should be honest that finding it was a mixed feeling. But treading in the same space as a product like that at all is a huge deal for me, and I would rather know it exists than keep building in a vacuum.
+
+The same goes for [what Anthropic have been posting](https://x.com/i/status/2087207428278395114) on this subject. Read it against post one and judge for yourself, but to my eye it lands remarkably close to where I got to independently. Convergence is not proof that an idea is right. It is decent evidence you are pointed at a real problem.
+
+## What is next
+
+Two threads. I will keep tuning the tags, and I want to build out a global memory repository that gives me the scoping I described above rather than a fact base trapped in each repo.
+
+I am also very keen to actually use Hindsight rather than just read about it. If it does what it says, the interesting question stops being "how do I store this" and becomes "what is worth remembering", which was always the harder half.
+
+Post three will cover whichever of those survives contact with reality. Come and tell me if you have solved the consolidation problem, because I have not.
