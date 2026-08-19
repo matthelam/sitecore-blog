@@ -1,0 +1,34 @@
+---
+title: 'Agentic Studio: Agent Export Drops These Fields'
+date: '2026-08-19'
+tags: ['agentic-studio', 'sitecoreai', 'agents', 'sitecore']
+draft: false
+summary: 'Agent Type and Tags do not survive an export and import in Agentic Studio. Set them, export, import, and they come back empty. Support ticket logged.'
+---
+
+This is a short post about a small quirk I found whilst working on Agents in Agentic Studio. When [exporting an agent](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/export-or-import-an-agent.html) there are 2 fields that get dropped or cannot be exported, even when you add them manually:
+
+1. **Agent Type**
+2. **Tags**
+
+Set them in the editor, export the agent, import it again, and both come back empty. You re-apply them by hand every time.
+
+We tested this deliberately back in July. Set both fields, re-exported, and the file gained no keys at all — nothing resembling a type or a tag anywhere in it.
+
+Then it got murkier. An export I took this month has tags sitting in it at the top level:
+
+```json
+"tags": ["SEO", "AEO", "Metadata"]
+```
+
+So either the platform changed between July and August, or our original test was narrower than we thought. I have not managed to separate those two yet.
+
+What hasn't changed is the practical bit: after an import, check Agent Type and Tags and re-apply them.
+
+I have logged a support ticket with Sitecore about this and will update this post once I hear back on the outcome.
+
+Nothing too alarming right now as I see it, but it's more just something to be aware of as you test out and migrate your agents around instances.
+
+## References
+
+- [Export or import an agent](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/export-or-import-an-agent.html) — Sitecore documentation

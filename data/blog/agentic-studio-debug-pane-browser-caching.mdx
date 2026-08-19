@@ -1,0 +1,28 @@
+---
+title: 'Agentic Studio: Debugging Agents'
+date: '2026-08-19'
+tags: ['agentic-studio', 'sitecoreai', 'agents', 'sitecore']
+draft: false
+summary: 'Agentic Studio has a debug console you open by adding debug=true to the conversations URL. The setting is cached in the browser, so if the panel does not appear, hit ctrl+f5.'
+---
+
+Some might find this super useful when building Agents in Agentic Studio. There is a hidden debug console!
+
+You open it by adding `debug=true` to the end of the conversations URL, as described in [Troubleshoot chats](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-chat/troubleshoot-chats.html):
+
+```js
+https://app-sitecore.cloud/agentic/conversations?tenantName=<TENANT_NAME>&organization=<ORG_NAME>&debug=true
+```
+
+A quirk I noticed to be aware of when using it though is that the setting is actually cached on the browser and so if the right panel doesn't appear hit the ctrl+f5 so that it picks up the setting in the querystring.
+
+> The visible pane is the only proof the flag took effect. Not the URL, not the fact that you pressed enter.
+
+**One more trap while you're here.** [Troubleshoot agents](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/troubleshoot-agents.html) says, flatly, "You cannot debug standard agents." That's true of the workflow editor's Run facility. It is not true of this pane, which lists standard agent runs quite happily — mine is showing ten of them right now. Two debug surfaces, two documentation pages, and a restriction that only applies to one of them. I nearly gave up on the strength of that one sentence.
+
+Check the pane is there. Then start debugging.
+
+## References
+
+- [Troubleshoot chats](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-chat/troubleshoot-chats.html) — Sitecore documentation
+- [Troubleshoot agents](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/troubleshoot-agents.html) — Sitecore documentation
