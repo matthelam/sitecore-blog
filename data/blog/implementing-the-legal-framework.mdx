@@ -3,12 +3,12 @@ title: 'Agent Harness: Implementing the Legal Framework'
 date: '2026-08-19'
 tags: ['ai', 'agents', 'context-engineering', 'memory', 'claude-code', 'skills']
 draft: false
-summary: 'Post two in the series. How the Legal Framework is actually built in Claude Code: three tiers, three Python scripts, a reflective hook, and the operating loop. Includes the skill as a download, plus the parts that are not right yet.'
+summary: 'How the Legal Framework is actually built in Claude Code: three tiers of agent context, three Python scripts, a reflective hook, and the operating loop. Includes the skill as a download, plus the parts that are not right yet.'
 authors: ['default']
 layout: PostLayout
 ---
 
-[The first post](/blog/a-legal-framework-for-agent-context) ended with a promise that the next one would describe how the prototype is actually set up in Claude. This is that post.
+I have been building an agent context system I call the Legal Framework: a Constitution for values, Legislation for the rules of each area, and a Common Law of accumulated experience recalled at the moment the rules run out. This post is how it is actually set up in Claude Code.
 
 If you would rather read the code than read me, take the skill and go:
 
@@ -18,7 +18,7 @@ Unzip it into `.claude/skills/` and ask Claude to set up the legal framework in 
 
 ## The three tiers, as files
 
-The framing in post one was conceptual. The implementation is boringly concrete, and that is the point — each tier is a place on disk with its own loading behaviour.
+The idea is conceptual. The implementation is boringly concrete, and that is the point — each tier is a place on disk with its own loading behaviour.
 
 | Tier         | Lives in                                     | When it loads                                                                                 |
 | ------------ | -------------------------------------------- | --------------------------------------------------------------------------------------------- |
@@ -95,7 +95,7 @@ That is precisely the feature I am now hunting for and do not have: one memory s
 
 I should be honest that finding it was a mixed feeling. But treading in the same space as a product like that at all is a huge deal for me, and I would rather know it exists than keep building in a vacuum.
 
-The same goes for [what Anthropic have been posting](https://x.com/i/status/2087207428278395114) on this subject. Read it against post one and judge for yourself, but to my eye it lands remarkably close to where I got to independently. Convergence is not proof that an idea is right. It is decent evidence you are pointed at a real problem.
+The same goes for [what Anthropic have been posting](https://x.com/i/status/2087207428278395114) on this subject. Read it against the three tiers above and judge for yourself, but to my eye it lands remarkably close to where I got to independently. Convergence is not proof that an idea is right. It is decent evidence you are pointed at a real problem.
 
 ## What is next
 
