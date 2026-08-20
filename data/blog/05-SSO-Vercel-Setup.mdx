@@ -1,15 +1,15 @@
 ---
-title: "Azure Entra ID SSO – Setting up Vercel SSO"
+title: 'Azure Entra ID SSO – Setting up Vercel SSO'
 date: 2025-10-15
 draft: true
-tags: ["azure", "identity", "sso", "vercel", "saml", "setup", "xmc", "search"]
-summary: "Configure Vercel Enterprise SAML SSO, upload Azure metadata, and enable Directory Sync to map Azure groups to Vercel roles."
+tags: ['azure', 'identity', 'sso', 'vercel', 'saml', 'setup', 'xm-cloud', 'search']
+summary: 'Configure Vercel Enterprise SAML SSO, upload Azure metadata, and enable Directory Sync to map Azure groups to Vercel roles.'
 ---
 
 ## Introduction
 
 By this stage, you’ve integrated Azure Entra ID with both **Sitecore Cloud Portal** and **Content Hub**.  
-The final piece in this SSO chain is **Vercel** — the hosting environment for your headless front-end.  
+The final piece in this SSO chain is **Vercel** — the hosting environment for your headless front-end.
 
 Vercel Enterprise supports **SAML Single Sign-On** and **Directory Sync**, which means we can authenticate through Azure Entra ID and automatically assign users to roles based on their Azure group membership.
 
@@ -17,18 +17,18 @@ This guide walks through how to upload your Azure metadata, configure SAML, enab
 
 Before you start, make sure you have:
 
-- A **Vercel Enterprise plan** with **owner access** → `[Vercel Team Owner Account]`  
-- The **Azure Federation Metadata XML** for your Vercel enterprise app → `[Vercel Metadata File]`  
+- A **Vercel Enterprise plan** with **owner access** → `[Vercel Team Owner Account]`
+- The **Azure Federation Metadata XML** for your Vercel enterprise app → `[Vercel Metadata File]`
 - Your **Azure Group Object IDs** and mapping plan → `[Group Mapping Table]`
 
 ---
 
 ## 1. Start SAML Configuration in Vercel
 
-1. Log in to **Vercel Dashboard** as the team owner.  
-2. Navigate to **Settings → Security & Privacy → SAML Single Sign-On**.  
-3. Choose **Upload IdP Metadata** (or paste the SSO URL and X.509 certificate manually).  
-4. Upload your Azure Federation Metadata file: `[Vercel Metadata File]`.  
+1. Log in to **Vercel Dashboard** as the team owner.
+2. Navigate to **Settings → Security & Privacy → SAML Single Sign-On**.
+3. Choose **Upload IdP Metadata** (or paste the SSO URL and X.509 certificate manually).
+4. Upload your Azure Federation Metadata file: `[Vercel Metadata File]`.
 5. Review the parsed values — Issuer, SSO URL, and Certificate — and confirm they match the Azure configuration.
 
 > **Tip:** If you’ve previously tested SSO with another IdP, remove any stale metadata before uploading the new Azure file.
@@ -39,8 +39,8 @@ Before you start, make sure you have:
 
 If you want to restrict SSO to specific corporate email domains:
 
-- Add your allowed domain(s):  
-  - `[yourcompany.com]`  
+- Add your allowed domain(s):
+  - `[yourcompany.com]`
 
 This ensures users signing in must belong to your organisation’s domain, preventing external logins through other IdPs.
 
@@ -50,13 +50,13 @@ This ensures users signing in must belong to your organisation’s domain, preve
 
 Now it’s time to synchronise Azure group membership with Vercel roles.
 
-1. In the same **SAML Single Sign-On** area, find and enable **Directory Sync**.  
-2. Map your Azure Group Object IDs to Vercel roles:  
+1. In the same **SAML Single Sign-On** area, find and enable **Directory Sync**.
+2. Map your Azure Group Object IDs to Vercel roles:
 
-| Azure Group | Object ID | Vercel Role |
-|--------------|------------|-------------|
-| Dev Admins | `[Azure Group Object ID - Dev Admin]` | `Owner` |
-| Business Admins | `[Azure Group Object ID - Business Admin]` | `Member` |
+| Azure Group     | Object ID                                  | Vercel Role |
+| --------------- | ------------------------------------------ | ----------- |
+| Dev Admins      | `[Azure Group Object ID - Dev Admin]`      | `Owner`     |
+| Business Admins | `[Azure Group Object ID - Business Admin]` | `Member`    |
 | Content Editors | `[Azure Group Object ID - Content Editor]` | `Developer` |
 
 3. (Optional) Create **Access Groups** in Vercel for specific project scoping and link them to your synced Azure groups.
