@@ -8,7 +8,9 @@ images: []
 authors: ['default']
 ---
 
-## The Penny Drop
+**In short: CMS developers do not build the website; they build the components and the authoring experience that let the content author build it. Designing agent teams is the same: you design the capability surface, with composable skills loaded on demand and hooks as workflow gates, instead of skills baked into each agent.**
+
+## The Penny Drop: From Sitecore Development to Agent Design
 
 I've been a CMS developer for the majority of my career. Sitecore, specifically. And if you've spent any time in that world, you've heard the line — probably from me — that we don't build the website. We build the components. We build the configuration. We build the experience that lets the content author build the website.
 
@@ -71,7 +73,7 @@ That's exactly what my agents looked like. `frontend-dev` knew how to commit cod
 
 Duplication. Drift risk. Token cost. The same problems I'd solve in a Sitecore project without thinking twice.
 
-## The Right Way: Composable Skills
+## The Right Way: Composable Agent Skills
 
 In a mature Sitecore build, you don't embed image optimisation in every component. You extract it into a shared rendering extension — a pipeline processor that runs on every image request regardless of which component produced it. You extract caching into its own processor. You extract analytics into a page-level wrapper. Components stay focused on **what they render**. Shared concerns live in shared infrastructure.
 
@@ -96,7 +98,7 @@ The impact is significant across three dimensions:
 
 Thinking about skills this way also changes how you see parallelism. When skills are independent, well-separated units — proper OO boundaries rather than tangled embedded logic — the orchestrator can swarm. Multiple agents can pick up different skills and run concurrently without stepping on each other. That's not a feature you build. It's a property that emerges from designing the capability surface correctly.
 
-## Hooks: The Workflow Gates
+## Agent Hooks: The Workflow Gates
 
 Skills define what agents can do. But there's a second design surface that's just as important: where the workflow **pauses and checks**.
 
@@ -117,3 +119,9 @@ The gap isn't technical. It's the distance between knowing a pattern exists and 
 That's the real lesson of CMS development, and it transfers directly to agent design: you're never building the thing. You're designing the experience for the thing that builds the thing. In Sitecore, I think from the content author's perspective — what do they need, how do they work, what makes them efficient? For agents, the question is the same: what does the orchestrator need? What capabilities should be available? What workflow makes it effective? The moment I stopped thinking about assembling a team and started thinking about designing the capability surface, everything clicked.
 
 Years of Sitecore taught me that. Three planned rebuilds of an agent engine made me finally hear it.
+
+## Related
+
+- [What Is the AI Project Lifecycle in Sitecore Agentic Studio?](/blog/the-ai-project-lifecycle-hiding-in-plain-sight-inside-sitecore-agentic-studio): the lifecycle from Signals through Actions, Brand Knowledge, Briefs and Campaigns to Agents, Flows and Spaces.
+- [Use Sitecore Documentation in AI for Better Results](/blog/How-to-use-Sitecore-Documentation-in-AI-to-get-better-results): three ways to point AI agents at the official Sitecore documentation.
+- [Agentic Studio: Keep a Persistent Memory as It Changes](/blog/agentic-studio-scoped-memory-space): scoping one Cowork space to Sitecore Agentic Studio and wiring in the documentation MCP.
