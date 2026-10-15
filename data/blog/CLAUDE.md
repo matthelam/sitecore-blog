@@ -32,3 +32,8 @@ full here. Creative work starts in `blog-inception`; the write-up uses `blog-rew
    Renaming the file breaks inbound links and makes feed readers show the post again as new.
 6. **Image paths must exist.** Never reference a file under `/static/` that is not in
    `public/static/` (see that directory's Legislation).
+7. **No em dashes (`—`, U+2014) in content.** Not in post bodies, titles, summaries, alt text or
+   any other text a reader sees. Matt reads the em dash as a key indicator of AI-written text.
+   Rewrite the sentence instead: a comma, colon, full stop or brackets, or Matt's own spaced
+   hyphen (` - `). The en dash (`–`) stays for number ranges and the existing "Azure Entra ID
+   SSO – " series prefix. Existing posts are brought into line only when Matt asks (law 1).

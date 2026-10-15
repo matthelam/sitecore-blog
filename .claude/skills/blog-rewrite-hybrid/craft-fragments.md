@@ -31,8 +31,8 @@ Use these **only** through the override in `SKILL.md`: when a fragment here conf
 
 ## Kept from conversion copywriting — one rule only
 
-- **No AI tells.** Never use the "no X, no Y, no Z" list, or sentences that trail into extra
-  comma-clauses to sound profound. These read as machine-written.
+- **No AI tells.** Never use the "no X, no Y, no Z" list, sentences that trail into extra
+  comma-clauses to sound profound, or the em dash (`—`). These read as machine-written.
 - **Contrast pairs: narrowed for this author.** Ban the hook-style reveal where X is a straw man
   nobody holds ("It's not about the tools. It's about the people."). Keep a contrast when both
   sides are concrete and the contrast *is* the argument. This is one of the author's signature

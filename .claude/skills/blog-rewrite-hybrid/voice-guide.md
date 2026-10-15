@@ -38,8 +38,11 @@ has failed, even if every sentence is individually cleaner.
 - **Long setup, then a short hammer.** "Nothing hand-edits `memory/`. That single rule is doing
   most of the work." / "A memory system that breaks your prompt is worse than no memory system."
   Preserve or create this cadence; don't level every sentence to the same length.
-- **Em dash as the connective of choice.** "facts, not sales pressure" / "a client anecdote is not
-  knowledge." He uses ` - ` and `—` to pivot. Keep them; do not convert every dash into a comma.
+- **Spaced hyphen as the pivot, never the em dash.** "facts, not sales pressure" / "a client
+  anecdote is not knowledge." He pivots with ` - `; keep those, and do not convert every one into
+  a comma. Never write an em dash (`—`): Matt reads it as a key indicator of AI-written text
+  (`data/blog/CLAUDE.md` law 7). Where older text has one, rewrite with ` - `, a comma, colon,
+  full stop or brackets.
 - **One bold distilled thesis sentence per major section.** He bolds the single line that carries
   the idea: **"help generously, reject hard - at different layers."** /
   **"you do not tell the agent 'please do not overspend'; you make overspending impossible."**
