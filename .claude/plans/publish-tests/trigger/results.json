@@ -23,9 +23,9 @@
   {
     "query": "is the legal framework post three live yet?",
     "should_trigger": true,
-    "hits": 0,
+    "hits": 3,
     "other_skills": [],
-    "pass": false
+    "pass": true
   },
   {
     "query": "unpublish the time machine post, it doesn't fit the blog anymore",
@@ -70,7 +70,9 @@
     "query": "rewrite the first principles post in the casual profile",
     "should_trigger": false,
     "hits": 0,
-    "other_skills": [],
+    "other_skills": [
+      "blog-rewrite-hybrid"
+    ],
     "pass": true
   },
   {
