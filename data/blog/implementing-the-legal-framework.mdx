@@ -32,15 +32,15 @@ The reason for the file-per-fact obsession is retrieval. A fact you can search, 
 
 ## Three scripts
 
-**`memory.py`, 372 lines.** The gate. Every memory change goes through it: `create`, `update`, `read`, `delete`, `supersede`, `search`, `lint`, `reindex`, `list`. It validates the OKF schema before any write lands, and regenerates `MEMORY.md` atomically afterwards, so the index and the standard cannot drift apart. Nothing hand-edits `memory/`. That single rule is doing most of the work.
+**`memory.py`, 1490 lines.** The gate. Every memory change goes through it: `create`, `update`, `read`, `delete`, `supersede`, `search`, `lint`, `reindex`, `list`. It validates the OKF schema before any write lands, and regenerates `MEMORY.md` atomically afterwards, so the index and the standard cannot drift apart. Nothing hand-edits `memory/`. That single rule is doing most of the work.
 
-**`memory_exchange.py`, 702 lines.** The knowledge-exchange layer. Export selects a dimension of one repository's Common Law, reasons each fact into a transferable form, and seals it as a zip. Import reconciles every incoming fact against the destination's Constitution and Legislation before anything is written.
+**`memory_exchange.py`, 745 lines.** The knowledge-exchange layer. Export selects a dimension of one repository's Common Law, reasons each fact into a transferable form, and seals it as a zip. Import reconciles every incoming fact against the destination's Constitution and Legislation before anything is written.
 
 Two invariants hold it together. Exports are generalised, never copied verbatim — a client anecdote is not knowledge. And a fact that conflicts with the destination's law is never imported, with the human as the only one who can clear a conflict.
 
 It imports `memory.py` rather than reimplementing it, so local capture, export staging and import all share one OKF gate. I got that wrong the first time and had two validators drifting apart within a fortnight.
 
-**`memory_hook.py`, 115 lines.** The smallest file and the one I would defend hardest.
+**`memory_hook.py`, 231 lines.** The smallest file and the one I would defend hardest.
 
 ## The hook asks a question, it does not inject an answer
 
