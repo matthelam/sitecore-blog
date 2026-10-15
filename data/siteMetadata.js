@@ -7,7 +7,7 @@ const siteMetadata = {
     'Once a circumnavigation of the Sitecore-sphere, now a voyage into agentic systems: harnesses, knowledge, and the long work of persistent memory.',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://matthelam-sitecore-blog.vercel.app',
+  siteUrl: 'https://blog.matthelam.com',
   siteRepo: 'https://github.com/matthelam/sitecore-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   // Optional explicit logo dimensions used by the Header component
