@@ -21,11 +21,16 @@ approach.
    throughout, over 500 is crisp. In a crisp-based post, switch a passage to **casual** only where
    that file allows it, within its limits, and only if it passes the drift check. If the post is part
    of a series, also apply the series conventions in `voice-guide.md`.
-5. Preserve substance exactly (every claim, number, code block, table, link). Fix only genuine
+5. **Visual pass.** For each section, ask whether a cold reader would otherwise have to assemble a
+   mechanism from prose. If so, hand the section to the `blog-visuals` skill, which picks the kind
+   (static diagram, chart, step-through, explorable), reuses a component where one fits, and
+   builds it from facts already in the post. Keep every existing visual unless the author approves
+   replacing it; a new interactive version sits beside the original until then.
+6. Preserve substance exactly (every claim, number, code block, table, link). Fix only genuine
    errors. Keep all `<aside>`, `<svg>`, `<img>`, and code components in place.
-6. Output valid MDX, then list: prose word count before and after; the correctness fixes; each passage written in casual, with the
-   reason; and any place where a craft fragment was overridden by the voice guide, with the
-   one-line reason.
+7. Output valid MDX, then list: prose word count before and after; the correctness fixes; each
+   passage written in casual, with the reason; each visual added or changed, with the reason; and
+   any place where a craft fragment was overridden by the voice guide, with the one-line reason.
 
 ## The override table (where external craft and this author collide)
 

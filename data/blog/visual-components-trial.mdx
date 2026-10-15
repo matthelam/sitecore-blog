@@ -1,0 +1,79 @@
+---
+title: 'Trial: Built-in Visual Components'
+date: '2026-10-15'
+tags: ['agents']
+draft: true
+summary: 'Draft-only trial of the first two built-in visual components. Not for publishing.'
+authors: ['default']
+layout: PostLayout
+---
+
+Draft-only trial page for the built-in visual components (option A). It stays `draft: true`, so it shows under `yarn dev` and never in production. Each visual below uses facts from an existing post, passed in as props.
+
+## Explorable: the mandate checkout
+
+From [The Agent as Customer](/blog/the-agent-as-customer-a-practical-build-guide). Move the slider to add boxes and watch the gateway response change.
+
+<Figure caption="One box at A$280 clears the A$300 mandate. A second box takes the cart to A$560, and the gateway refuses it with over_mandate and the two actions the agent is permitted to take instead.">
+  <MandateCheckout
+    mandateId="mnd_8821"
+    ceilingAud={300}
+    unitPriceAud={280}
+    itemLabel="sealed booster box"
+    maxQuantity={3}
+  />
+</Figure>
+
+## Step-through: recall at the point of ambiguity
+
+From [the Legal Framework](/blog/a-legal-framework-for-agent-context). Step through the recall sequence; arrow keys work once a step is focused.
+
+<Figure caption="The recall sequence, one hop at a time: doubt is surfaced, raised as an Ambiguity Event, and answered with ranked precedent from the Common Law.">
+  <StepThrough
+    label="Recall sequence at the point of ambiguity"
+    steps={[
+      {
+        node: 'Clarity Assessment',
+        edge: 'surfaces doubt and raises',
+        detail:
+          'The model lints its intended action against the Legislation and raises a scored list of the assumptions it has made. The score lets a developer set the level of automation instead of flooding the context with every possible assumption.',
+      },
+      {
+        node: 'Ambiguity Event',
+        edge: 'redirects into',
+        detail:
+          'Common Law is applied only when the Legislation has not been clear enough. The Ambiguity Event marks that moment.',
+      },
+      {
+        node: 'Legal Check',
+        edge: 'queries',
+        detail:
+          'Each assumption becomes a strongly typed request: the model names what it is seeking (verification, issue, fix, preference or example) plus keywords.',
+      },
+      {
+        node: 'Obsidian MCP',
+        edge: 'graph-searches and ranks',
+        detail: 'The Common Law vault, connected as a queryable retrieval surface.',
+      },
+      {
+        node: 'Common Law',
+        edge: 'returns ranked precedent as a snippet into',
+        detail:
+          'A graphified or weighted collection is searched, and the top 3 weighted snippets most relevant to the tags come back.',
+      },
+      {
+        node: 'Prompt',
+        detail:
+          'The ranked precedent arrives just-in-time, at the point of ambiguity, not loaded up front.',
+      },
+    ]}
+  />
+</Figure>
+
+For comparison, the original static diagram from the post:
+
+<img
+  src="/static/images/legal-framework-implementation/part2-recall-sequence.svg"
+  alt="Recall sequence: the Clarity Assessment surfaces doubt, raises an Ambiguity Event, and redirects into the Legal Check, which queries the Obsidian MCP; the MCP graph-searches and ranks the Common Law, and the ranked precedent returns as a snippet into the prompt."
+  className="my-6 w-full"
+/>
