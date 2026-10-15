@@ -1,9 +1,9 @@
 # Live check
 
 Production is whatever is on `main`, deployed by Vercel. The site is served at
-`https://blog.matthelam.com` (custom domain) and at `siteMetadata.siteUrl`
-(`https://matthelam-sitecore-blog.vercel.app`). Check the custom domain first. If it can't be
-reached, check `siteUrl` and say which one you checked.
+`https://blog.matthelam.com` (custom domain, and `siteMetadata.siteUrl`) and also at
+`https://matthelam-sitecore-blog.vercel.app`. Check the custom domain first. If it can't be
+reached, check the vercel.app address and say which one you checked.
 
 ## Network access
 
@@ -28,7 +28,7 @@ done
 
 | Change | `<expected text>` and extra checks |
 |---|---|
-| Publish | The post title, on the post URL. The post also appears on `/blog` and in `/feed.xml` |
+| Publish | The post title, on the post URL. The post also appears on `/blog`, and `/feed.xml` contains `<guid>https://blog.matthelam.com/blog/<slug></guid>` (what Buttondown emails from) |
 | Update | A phrase that only exists in the new version |
 | Unpublish | The post URL returns 404 (`curl -s -o /dev/null -w '%{http_code}'`), and it's gone from `/blog` |
 | Site change | Whatever the change makes visible, or the changed asset's URL returns 200 |

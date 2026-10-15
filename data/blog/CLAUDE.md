@@ -28,5 +28,8 @@ full here. Creative work starts in `blog-inception`; the write-up uses `blog-rew
    "author to supply" and never filled with plausible detail.
 4. **Code, JSON and tables are load-bearing.** Rewrites keep them intact unless Matt asks
    otherwise.
-5. **Image paths must exist.** Never reference a file under `/static/` that is not in
+5. **A published post's slug is permanent.** The slug is the post's URL and its RSS `guid`.
+   Renaming the file breaks inbound links and makes Buttondown treat the post as new, which can
+   email it to subscribers again (Constitution law 3).
+6. **Image paths must exist.** Never reference a file under `/static/` that is not in
    `public/static/` (see that directory's Legislation).
