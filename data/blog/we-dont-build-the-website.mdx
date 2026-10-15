@@ -46,6 +46,18 @@ Then the agents go and build the application.
 
 Read that again. The studio is to the agents what Sitecore is to the content author. One layer tailors the experience. The next layer does the work.
 
+<Figure caption="One layer tailors the experience; the next layer does the work. In both worlds the designer's work is the middle layer, not the thing that gets built.">
+  <LayerParallel
+    label="Two parallel stacks. CMS world: CMS developer, then components and the authoring experience, then the content author builds the page, then the website. Agent world: you, the agent designer, then the capability surface of skills, workflows and constraints, then the agents build the application, then the application. The middle layer is marked as the design surface."
+    columns={[
+      { heading: 'CMS world', layers: ['CMS developer', 'Components and the authoring experience', 'Content author builds the page', 'The website'] },
+      { heading: 'Agent world', layers: ['You, the agent designer', 'Capability surface: skills, workflows, constraints', 'Agents build the application', 'The application'] },
+    ]}
+    highlight={1}
+    highlightLabel="What you actually design"
+  />
+</Figure>
+
 | CMS World                                                  | Agent World                                                         |
 | ---------------------------------------------------------- | ------------------------------------------------------------------- |
 | Component templates (Hero Banner, Card, CTA)               | Specialist templates (frontend-dev, content-writer, security-audit) |
@@ -88,6 +100,30 @@ BEFORE: Agent = Specialist Knowledge + Embedded Skills (bloated, duplicated)
 AFTER:  Agent = Specialist Knowledge + Ability to invoke Skills (lean, composable)
 ```
 
+<Figure caption="Baked in, every agent carries every capability, so the same instructions are duplicated and drift apart. Composable, each agent keeps its specialist knowledge and picks up a shared skill only when the task needs it.">
+  <SkillComposition
+    label="Left: frontend-dev and content-writer each carry specialist knowledge plus the same four capabilities, permanently loaded. Right: the same agents carry only specialist knowledge, and load commit code, search Jira backlog or run verification from a shared set of skills defined once."
+    before={{
+      title: 'Before: skills baked in',
+      note: 'Permanently loaded, whether needed or not. Duplication, drift risk, token cost.',
+      agents: [
+        { name: 'frontend-dev', core: 'Specialist knowledge', items: ['Research a codebase', 'Verify against acceptance criteria', 'Commit code', 'Work items off a Jira board'] },
+        { name: 'content-writer', core: 'Specialist knowledge', items: ['Research a codebase', 'Verify against acceptance criteria', 'Commit code', 'Work items off a Jira board'] },
+      ],
+    }}
+    after={{
+      title: 'After: composable skills',
+      note: 'Each skill is defined once, tested once, maintained in one place, and loaded only when the task requires it.',
+      agents: [
+        { name: 'frontend-dev', core: 'Specialist knowledge' },
+        { name: 'content-writer', core: 'Specialist knowledge' },
+      ],
+      library: { title: 'Skills, defined once', items: ['Commit code', 'Search Jira backlog', 'Run verification against acceptance criteria'], edge: 'loaded on demand' },
+    }}
+    duplicateLegend="the same logic, duplicated across agents"
+  />
+</Figure>
+
 The impact is significant across three dimensions:
 
 **Less drift.** A skill is defined once and used by every agent that needs it. When you update the "commit code" skill, every agent gets the update. No more divergence between how `frontend-dev` commits and how `content-writer` commits.
@@ -105,6 +141,28 @@ Skills define what agents can do. But there's a second design surface that's jus
 In Sitecore, this is workflow approval states. A content author writes a page, but it doesn't go live immediately. It moves through Draft → Awaiting Approval → Published. An editor reviews it. A compliance check runs. The workflow gates exist because even well-designed components can be assembled incorrectly — wrong tone, outdated pricing, broken links. The gates catch what the components can't prevent.
 
 Agent workflows need the same thing. In my delivery engine, these are **hooks** — human gates and verification phases that pause execution at critical transitions. After the brief is written, a human reviews it before planning begins. After the plan is approved, execution proceeds. After execution completes, a verification phase checks the output against acceptance criteria before anything is marked done.
+
+<Figure caption="The gates sit at the transitions, not inside the work. Sitecore's approval state and the delivery engine's hooks both pause the workflow and check before it moves on.">
+  <GatedFlow
+    label="Two workflows. Sitecore: Draft, then the Awaiting Approval gate where an editor reviews and a compliance check runs, then Published. Agent delivery engine: Brief, then a human review gate, then Plan, then a plan approval gate, then Execute, then a verification gate against acceptance criteria, then Done."
+    lanes={[
+      { label: 'Sitecore workflow', steps: [
+        { label: 'Draft' },
+        { label: 'Awaiting Approval', gate: true, detail: 'An editor reviews it. A compliance check runs.' },
+        { label: 'Published' },
+      ] },
+      { label: 'Agent delivery engine', steps: [
+        { label: 'Brief' },
+        { label: 'Human review', gate: true, detail: 'Before planning begins.' },
+        { label: 'Plan' },
+        { label: 'Plan approved', gate: true },
+        { label: 'Execute' },
+        { label: 'Verification', gate: true, detail: 'Output checked against acceptance criteria.' },
+        { label: 'Done' },
+      ] },
+    ]}
+  />
+</Figure>
 
 Skills are **what** agents can do. Hooks are **when the workflow stops and asks whether they should**. And the design insight is the same: you're not designing what the agent produces. You're designing the transitions between phases. Where does the workflow pause? What gets checked? Who has authority to approve? These questions matter more than any individual agent's capability, because a brilliant agent with no workflow gates is just a faster way to ship mistakes.
 

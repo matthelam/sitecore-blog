@@ -48,6 +48,9 @@ conventions are in `references/architecture.md`; read it before writing or chang
 | `Figure` | Wrapper | `caption`, children | Every visual |
 | `MandateCheckout` | Explorable | `mandateId`, `ceilingAud`, `unitPriceAud`, `itemLabel`, `maxQuantity` | `visual-components-trial` (draft), built for The Agent as Customer: cart total against an agent's spending mandate, showing the gateway's accepted or `over_mandate` response |
 | `StepThrough` | Step-through | `label`, `steps: { node, detail, edge? }[]` | `visual-components-trial` (draft), built for Legal Framework: the recall sequence at the point of ambiguity |
+| `LayerParallel` | Static diagram | `label`, `columns: { heading, layers[] }[]`, `highlight`, `highlightLabel` | `we-dont-build-the-website`: CMS world and agent world as parallel layer stacks, with the design surface marked |
+| `SkillComposition` | Static diagram | `label`, `before`, `after` (each `{ title, note, agents: { name, core, items? }[], library? }`), `duplicateLegend` | `we-dont-build-the-website`: skills baked into each agent against shared skills loaded on demand; duplication is derived from the props |
+| `GatedFlow` | Static diagram | `label`, `lanes: { label, steps: { label, gate?, detail? }[] }[]` | `we-dont-build-the-website`: Sitecore approval workflow beside the agent delivery engine's hooks; vertical on phones |
 
 Add a row whenever a component is added. A component with no row doesn't exist as far as future
 work is concerned.
