@@ -31,8 +31,13 @@ Use these **only** through the override in `SKILL.md`: when a fragment here conf
 
 ## Kept from conversion copywriting — one rule only
 
-- **No AI tells.** Never use the "it's not X, it's Y" reveal, the "no X, no Y, no Z" list, or
-  sentences that trail into extra comma-clauses to sound profound. These read as machine-written.
+- **No AI tells.** Never use the "no X, no Y, no Z" list, or sentences that trail into extra
+  comma-clauses to sound profound. These read as machine-written.
+- **Contrast pairs: narrowed for this author.** Ban the hook-style reveal where X is a straw man
+  nobody holds ("It's not about the tools. It's about the people."). Keep a contrast when both
+  sides are concrete and the contrast *is* the argument. This is one of the author's signature
+  moves: "It's a scalpel, not a default." / "a specification to implement, not a hypothesis to
+  test." / "The first response gives you a cache. The second gives you a caching _decision_."
 
 ## Explicitly DISCARDED (do not apply)
 

@@ -16,8 +16,10 @@ approach.
 2. Read the source post end to end.
 3. Rewrite section by section. Apply the craft fragments **only** where they do not conflict with the
    voice guide. On any conflict, apply the voice guide and move on.
-4. Write in the **crisp** tone profile throughout. Switch a passage to **casual** only where
-   `tone-profiles.md` allows it, within its limits, and only if it passes the drift check.
+4. Identify the post type (tip, short essay, long essay, step-by-step guide) and take its base tone
+   profile from `tone-profiles.md`. In a crisp-based post, switch a passage to **casual** only where
+   that file allows it, within its limits, and only if it passes the drift check. If the post is part
+   of a series, also apply the series conventions in `voice-guide.md`.
 5. Preserve substance exactly (every claim, number, code block, table, link). Fix only genuine
    errors. Keep all `<aside>`, `<svg>`, `<img>`, and code components in place.
 6. Output valid MDX, then list: the correctness fixes; each passage written in casual, with the

@@ -96,6 +96,24 @@ coined term, shorten an `<aside>`, or rephrase a claim into something stronger t
 
 ---
 
+## Series conventions
+
+From the author's two series (Azure Entra ID SSO, 01–05; Agent Harness / Legal Framework, posts 1–2)
+and the Agentic Studio cluster:
+
+- **Shared title prefix.** "Azure Entra ID SSO – …", "Agent Harness: …", "Agentic Studio: …".
+- **Openers point back.** "If you've completed the preparation checklist from the previous
+  article…" / "[The first post] ended with a promise… This is that post."
+- **Closers point forward.** "In the next article, we'll walk through…" / "Post three will cover
+  whichever of those survives contact with reality."
+- **Link the neighbours, always.** Gap found in the survey: the SSO posts say "previous article"
+  and "next article" without linking either, and the first Legal Framework post promises a next
+  post but doesn't link to it now that it exists. When writing or revising a series post, link the
+  previous and next posts by slug, and flag any older series post whose forward reference should
+  now become a link.
+- **Numbered filenames** (`01-…`, `02-…`) are used for the procedural series; the essay series uses
+  descriptive slugs.
+
 ## Platform validity (this repo)
 
 - Frontmatter is YAML between `---` fences. Schema (from `contentlayer.config.ts`):
