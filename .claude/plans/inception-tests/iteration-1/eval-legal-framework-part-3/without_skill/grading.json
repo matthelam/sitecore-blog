@@ -1,0 +1,65 @@
+{
+  "expectations": [
+    {
+      "text": "Offers two or three candidate one-liners for the point, rather than one",
+      "passed": true,
+      "evidence": "Recommended point plus 'Two other points': 'A. \"It doesn't matter. Let the store be messy...\"', 'B. \"It matters, and I've rebuilt it on top of Hindsight.\"'"
+    },
+    {
+      "text": "Names the reader: who they are, what they believe now, what should change",
+      "passed": false,
+      "evidence": "Reader gives who and situation ('someone who read posts one and two... weighing \"build my own\" against \"adopt a product\"') but no current belief or what should change"
+    },
+    {
+      "text": "States the tension explicitly",
+      "passed": true,
+      "evidence": "'Tension: \"I built a careful system. A product did the headline job better within a month. Was the care wasted?\"'"
+    },
+    {
+      "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+      "passed": false,
+      "evidence": "Single 8-beat arc only; options A/B are alternative points, not alternative arcs"
+    },
+    {
+      "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+      "passed": false,
+      "evidence": "Turning points are drafted conclusions ('Turning point 1: \"So the storage layer I was unsure about in post two, I didn't need it. The scripts can go.\"'); visual section is a build spec ('A two-column \"before and after\"... an arrow showing the \"admission discipline\" moving')"
+    },
+    {
+      "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+      "passed": true,
+      "evidence": "Beat 4 'What I lost'; beat 7 'Consolidation: ... If not, say so and repeat the call for help'; risk 'A post that says \"I was wrong about why OKF mattered\" is stronger'"
+    },
+    {
+      "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+      "passed": false,
+      "evidence": "Open questions list gaps, but turning points assert unsupplied conclusions as the author's: 'I didn't need it. The scripts can go.' and 'That was the wrong justification. It was really an admission policy wearing a file format.'"
+    },
+    {
+      "text": "Contains no drafted body paragraphs of the post",
+      "passed": true,
+      "evidence": "No drafted body paragraphs; beats are plans with word budgets, only one-line turning-point quotes"
+    },
+    {
+      "text": "Points back to posts one and two of the series by name or slug",
+      "passed": true,
+      "evidence": "'Series: follows a-legal-framework-for-agent-context (28 Jun) and implementing-the-legal-framework (19 Aug)'"
+    },
+    {
+      "text": "Plans an honesty beat around losing the OKF one-fact-per-file discipline",
+      "passed": true,
+      "evidence": "Beat 4 'What I lost. The store isn't one fact per file any more' and beat 5 'Did it matter?' verdict per job"
+    },
+    {
+      "text": "Asks what 'better recall' means and how it was measured",
+      "passed": false,
+      "evidence": "Asks for 'one or two concrete moments where recall clearly beat the old setup' but never asks what 'better recall' means or how it was measured"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 5,
+    "total": 11,
+    "pass_rate": 0.55
+  }
+}

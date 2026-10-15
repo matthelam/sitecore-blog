@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Offers two or three candidate one-liners for the point, rather than one",
+      "passed": false,
+      "evidence": "Only one point offered: 'CLAUDE.md is always loaded, so everything in it competes...' plus a 'Short version' restating the same idea; no alternative candidates"
+    },
+    {
+      "text": "Names the reader: who they are, what they believe now, what should change",
+      "passed": false,
+      "evidence": "Reader names who ('A developer... using Claude Code on a real client repo') but not what they believe or what should change: 'They know what CLAUDE.md is. They may have heard of skills but haven't moved anything into one.'"
+    },
+    {
+      "text": "States the tension explicitly",
+      "passed": true,
+      "evidence": "'Putting everything in CLAUDE.md feels safe... The bad surprise is that being seen isn't the same as being followed... You've swapped one failure mode for another'"
+    },
+    {
+      "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+      "passed": false,
+      "evidence": "Single arc only ('## 7. Arc (numbered beats)' 1-8); no alternative arc proposed or recommended"
+    },
+    {
+      "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+      "passed": false,
+      "evidence": "Turning points framed as author claims ('Turning point 1: being seen is not being followed'); the only visual moment is a build spec: 'a before/after bar (~900 lines vs ~120 lines plus 6 skills loaded on demand)'"
+    },
+    {
+      "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+      "passed": true,
+      "evidence": "Beat 6 'Turning point 2: the new failure mode' and beat 8 'Close: what I don't know yet. Trigger reliability is the open question.'"
+    },
+    {
+      "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+      "passed": false,
+      "evidence": "Uses [NEED] markers, but the draft summary line asserts an unsupported outcome: 'It works better, but I've traded one problem for another' - the notes never say it works better"
+    },
+    {
+      "text": "Contains no drafted body paragraphs of the post",
+      "passed": true,
+      "evidence": "No drafted post prose; draft summary line is a one-liner/summary, beats are plans with [NEED] markers"
+    },
+    {
+      "text": "Argues the one-post-vs-series decision from the evidence in the notes",
+      "passed": true,
+      "evidence": "'One post now... You have one complete arc... You don't have an ending yet. \"Not sure skills trigger reliably\" is an open question, not a finding.'"
+    },
+    {
+      "text": "Plans an honesty beat around skills not triggering reliably",
+      "passed": true,
+      "evidence": "Beat 6: 'A skill only helps if it gets loaded... You're not yet sure that choice happens reliably. [NEED: any case where a skill didn't fire...]'"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 5,
+    "total": 10,
+    "pass_rate": 0.5
+  }
+}

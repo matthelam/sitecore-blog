@@ -17,6 +17,10 @@ The author brings the topic, the substance, the evidence, the experience and the
 skill brings the questions that surface the point, the arc options, and the structure that makes
 the substance land. It never invents a claim, a result, a number or an anecdote. Where the story
 needs something the material doesn't contain, mark it **author to supply** and move on.
+Inferences count too. If the author says a flow "loses" a setting, "it fails silently" is your
+guess about the mechanism, not his claim. Keep the two apart: state only what he said as fact, and
+write anything you've inferred as a question or mark it **to confirm**. A brief that quietly
+upgrades a guess into a claim will carry it into the post.
 
 ## Process
 
@@ -34,8 +38,9 @@ needs something the material doesn't contain, mark it **author to supply** and m
    single-point tip, a short essay, a long essay, a step-by-step guide, or a series. Propose a
    series only when each part can stand on its own and answers one question.
 6. **Propose two or three arcs** from `references/arc-patterns.md`, each written out as numbered
-   beats. For every beat, state what it does for the reader and what evidence it needs. Recommend
-   one and say why. Offering alternatives matters: the first arc that comes to mind is usually the
+   beats. For every beat, state what it does for the reader and what evidence it needs. The
+   alternatives get beats too, even if only four or five short ones; an arc described in a sentence
+   can't be compared with one laid out. Recommend one and say why. Offering alternatives matters: the first arc that comes to mind is usually the
    most generic one.
 7. **Mark the turning points.** Name the beats where the reader's model should change: the
    realisation, the reveal, the moment the cost becomes real. These are the visual moments. Say
@@ -46,7 +51,9 @@ needs something the material doesn't contain, mark it **author to supply** and m
 9. **Plan the honesty beats.** What isn't solved, what the author got wrong first, prior art they
    found, what they'd do differently. This blog's credibility comes from these beats, so plan
    them in; don't leave them to chance.
-10. **List the open questions and the evidence still needed.**
+10. **List the open questions and the evidence still needed.** For every evaluative word in the
+    raw material ("better", "faster", "broke", "doesn't matter"), ask what it means and how the
+    author observed or measured it. Those words usually hold the post's central claim.
 11. **Write the brief** using `assets/brief-template.md`, show it, and iterate. Mark it **Locked**,
     with the date, only when the author says so. A locked brief is the hand-off to the write-up
     stage.

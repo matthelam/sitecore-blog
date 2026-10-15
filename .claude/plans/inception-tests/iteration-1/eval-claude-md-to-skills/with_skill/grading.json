@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Offers two or three candidate one-liners for the point, rather than one",
+      "passed": true,
+      "evidence": "brief.md lists A/B/C: 'A. Your root CLAUDE.md is the one file...', 'B. Moving workflows into skills swapped...', 'C. Past a certain length...'"
+    },
+    {
+      "text": "Names the reader: who they are, what they believe now, what should change",
+      "passed": true,
+      "evidence": "Reader section: Who 'A developer who uses Claude Code... on a real, long-running repo'; Believes now 'More rules there means more control'; Should leave with 'A rule for sorting what stays in CLAUDE.md and what moves'"
+    },
+    {
+      "text": "States the tension explicitly",
+      "passed": true,
+      "evidence": "Tension section: 'The fix everyone reaches for, adding one more rule to CLAUDE.md, is the thing that broke it... The reader is choosing between two failure modes'"
+    },
+    {
+      "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+      "passed": true,
+      "evidence": "Recommended Build log as 10 numbered beats; alternatives sketched as beat sequences: Three attempts '900-line CLAUDE.md -> [intermediate fix] -> skills', Single insight 'default -> problem -> small change -> before/after -> when to use or skip -> one line'. Reason: 'Build log is the pattern built for \"here's what I did, concretely, and here's what isn't right yet\"'"
+    },
+    {
+      "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+      "passed": true,
+      "evidence": "Turning points framed as reader perception: 'the reader should see a rule sitting deep in a very long file', 'see the failure move rather than vanish'; no build instructions"
+    },
+    {
+      "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+      "passed": true,
+      "evidence": "Honesty beats section: 'What isn't solved: skill triggering reliability', 'What went wrong first: the 900-line file itself', 'Sample size: one client repo. Say so.'"
+    },
+    {
+      "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+      "passed": true,
+      "evidence": "Gaps marked 'Author to supply' throughout the beat table (e.g. beat 2 'One specific rule that was ignored' -> 'Author to supply'); hook 2 guarded '(Only if \"follows it better\" is true)'. Cross-references (Karpathy ~60 lines, post two promising tags/global memory) verified in published posts"
+    },
+    {
+      "text": "Contains no drafted body paragraphs of the post",
+      "passed": true,
+      "evidence": "No post prose; only one-liners, emphasis line, titles and one-sentence hook options"
+    },
+    {
+      "text": "Argues the one-post-vs-series decision from the evidence in the notes",
+      "passed": true,
+      "evidence": "'Why not a series: ... Right now you can answer one question... The second question (\"do skills actually trigger reliably?\") is the open one, and you don't have the evidence for it yet.'"
+    },
+    {
+      "text": "Plans an honesty beat around skills not triggering reliably",
+      "passed": true,
+      "evidence": "Beat 7 'The trade' and beat 8 'What's not right yet. Triggering reliability'; 'This is the post's main honesty beat and should be planned as beat 7-8'"
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  }
+}
