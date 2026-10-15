@@ -13,6 +13,8 @@ import PostBanner from '@/layouts/PostBanner'
 import { Metadata } from 'next'
 import siteMetadata from '@/data/siteMetadata'
 import { notFound } from 'next/navigation'
+import JsonLd from '@/components/JsonLd'
+import { postBreadcrumb } from '@/data/schema'
 
 const defaultLayout = 'PostLayout'
 const layouts = {
@@ -96,22 +98,13 @@ export default async function Page(props: { params: Promise<{ slug: string[] }> 
     return coreContent(authorResults as Authors)
   })
   const mainContent = coreContent(post)
-  const jsonLd = post.structuredData
-  jsonLd['author'] = authorDetails.map((author) => {
-    return {
-      '@type': 'Person',
-      name: author.name,
-    }
-  })
+  const jsonLd = [post.structuredData, postBreadcrumb(post)]
 
   const Layout = layouts[post.layout || defaultLayout]
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
       <Layout content={mainContent} authorDetails={authorDetails} next={next} prev={prev}>
         <MDXLayoutRenderer code={post.body.code} components={components} toc={post.toc} />
       </Layout>

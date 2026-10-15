@@ -4,7 +4,12 @@ import { slug } from 'github-slugger'
 import tagData from 'app/tag-data.json'
 import { genPageMetadata } from 'app/seo'
 
-export const metadata = genPageMetadata({ title: 'Tags', description: 'Things I blog about' })
+export const metadata = genPageMetadata({
+  title: 'Topics: Agentic Sitecore, Agent Context and Sitecore SSO',
+  description:
+    "Browse Matt Lam's posts by topic: Sitecore Agentic Studio, SitecoreAI, agent context engineering, agent memory, Sitecore XM Cloud and SSO.",
+  absoluteTitle: true,
+})
 
 export default async function Page() {
   const tagCounts = tagData as Record<string, number>

@@ -1,10 +1,10 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'matthelam Sitecore Blog',
-  author: 'Matthew Lam',
+  title: 'Matt Lam | Agentic Sitecore Development',
+  author: 'Matt Lam',
   headerTitle: 'matthelam',
   description:
-    'Once a circumnavigation of the Sitecore-sphere, now a voyage into agentic systems: harnesses, knowledge, and the long work of persistent memory.',
+    'Field notes on agentic Sitecore development by Matt Lam: Sitecore Agentic Studio, SitecoreAI and agent context engineering. Technical Architect at Aceik.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://blog.matthelam.com',
@@ -18,8 +18,6 @@ const siteMetadata = {
   //mastodon: 'https://mastodon.social/@mastodonuser',
   email: 'matthewlam@aceik.com.au',
   github: 'https://github.com/matthelam',
-  x: 'https://twitter.com/x',
-  // twitter: 'https://twitter.com/Twitter',
   //facebook: 'https://facebook.com',
   //youtube: 'https://youtube.com',
   linkedin: 'https://www.linkedin.com/in/matthew-lam-47184416',

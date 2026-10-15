@@ -23,6 +23,7 @@ import rehypeCitation from 'rehype-citation'
 import rehypePrismPlus from 'rehype-prism-plus'
 import rehypePresetMinify from 'rehype-preset-minify'
 import siteMetadata from './data/siteMetadata'
+import { postSchema } from './data/schema'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
 import prettier from 'prettier'
 
@@ -114,16 +115,18 @@ export const Blog = defineDocumentType(() => ({
     ...computedFields,
     structuredData: {
       type: 'json',
-      resolve: (doc) => ({
-        '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: doc.title,
-        datePublished: doc.date,
-        dateModified: doc.lastmod || doc.date,
-        description: doc.summary,
-        image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
-        url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
-      }),
+      resolve: (doc) =>
+        postSchema({
+          title: doc.title,
+          date: doc.date,
+          lastmod: doc.lastmod,
+          summary: doc.summary,
+          // Computed fields get the tags list as a wrapper object, not a plain array.
+          tags: JSON.parse(JSON.stringify(doc.tags || [])),
+          images: doc.images,
+          slug: doc._raw.flattenedPath.replace(/^.+?(\/)/, ''),
+          path: doc._raw.flattenedPath,
+        }),
     },
   },
 }))
