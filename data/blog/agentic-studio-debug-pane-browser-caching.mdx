@@ -6,7 +6,11 @@ draft: false
 summary: 'Agentic Studio has a debug console you open by adding debug=true to the conversations URL. The setting is cached in the browser, so if the panel does not appear, hit ctrl+f5.'
 ---
 
+**In short:** add `debug=true` to the end of the Agentic Studio conversations URL and the debug console opens as a panel on the right. The setting is cached in the browser, so if the panel doesn't appear, hit ctrl+f5.
+
 Some might find this super useful when building Agents in Agentic Studio. There is a hidden debug console!
+
+## How to open it
 
 You open it by adding `debug=true` to the end of the conversations URL, as described in [Troubleshoot chats](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-chat/troubleshoot-chats.html):
 
@@ -14,13 +18,27 @@ You open it by adding `debug=true` to the end of the conversations URL, as descr
 https://app-sitecore.cloud/agentic/conversations?tenantName=<TENANT_NAME>&organization=<ORG_NAME>&debug=true
 ```
 
+1. Open the conversations URL with `debug=true` on the end.
+2. Look for the panel on the right.
+3. If it isn't there, hit ctrl+f5.
+
+## If the panel doesn't appear
+
 A quirk I noticed to be aware of when using it though is that the setting is actually cached on the browser and so if the right panel doesn't appear hit the ctrl+f5 so that it picks up the setting in the querystring.
 
 > The visible pane is the only proof the flag took effect. Not the URL, not the fact that you pressed enter.
 
+## Can you debug standard agents?
+
 **One more trap while you're here.** [Troubleshoot agents](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/troubleshoot-agents.html) says, flatly, "You cannot debug standard agents." That's true of the workflow editor's Run facility. It is not true of this pane, which lists standard agent runs quite happily — mine is showing ten of them right now. Two debug surfaces, two documentation pages, and a restriction that only applies to one of them. I nearly gave up on the strength of that one sentence.
 
 Check the pane is there. Then start debugging.
+
+## Related
+
+- [Agentic Studio: Agent Export Drops These Fields](/blog/agentic-studio-agent-export-is-lossy) - another quirk from working on agents
+- [Agentic Studio: Keep a Memory of What You Learn](/blog/agentic-studio-scoped-memory-space) - where findings like this get recorded
+- [The AI Project Lifecycle Hiding in Plain Sight Inside Sitecore Agentic Studio](/blog/the-ai-project-lifecycle-hiding-in-plain-sight-inside-sitecore-agentic-studio) - how the pieces of Agentic Studio connect
 
 ## References
 
