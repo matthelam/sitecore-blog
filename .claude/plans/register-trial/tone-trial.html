@@ -1,0 +1,103 @@
+<title>Tone Trial</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Layout: header, stats strip, verdict, then one row per paragraph with three aligned columns (stacks on phones). */
+  :root{
+    --paper:#f6f6f3; --surface:#ffffff; --ink:#1b1c1e; --muted:#5b5e65; --line:#e4e4df; --faint:#efefeb;
+    --v1:#6b7079; --v2:#2f7a55; --v3:#9a5a2a;
+    --serif:"IBM Plex Serif",Georgia,serif; --sans:"IBM Plex Sans",-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --paper:#141519; --surface:#1c1e23; --ink:#e9e9e5; --muted:#9a9ea7; --line:#2b2d34; --faint:#22242a;
+    --v1:#a3a8b1; --v2:#5fb487; --v3:#d29a64; color-scheme:dark;}}
+  :root[data-theme="dark"]{
+    --paper:#141519; --surface:#1c1e23; --ink:#e9e9e5; --muted:#9a9ea7; --line:#2b2d34; --faint:#22242a;
+    --v1:#a3a8b1; --v2:#5fb487; --v3:#d29a64; color-scheme:dark;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:30px 56px}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:clamp(1.55rem,4vw,2.15rem);line-height:1.12;margin:.35rem 0 .5rem;letter-spacing:-.01em;text-wrap:balance}
+  .lede{color:var(--muted);max-width:70ch;margin:0}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:18px}
+  .panel h2{font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .8rem;font-weight:500}
+  .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .stat{border-top:3px solid var(--line);padding-top:10px;min-width:0}
+  .stat.v1{border-color:var(--v1)}.stat.v2{border-color:var(--v2)}.stat.v3{border-color:var(--v3)}
+  .stat .name{font-weight:600;font-size:.95rem}
+  .stat .rule{color:var(--muted);font-size:.84rem;margin:.15rem 0 .55rem}
+  .nums{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:var(--mono);font-size:.8rem;font-variant-numeric:tabular-nums}
+  .nums b{font-weight:600}
+  .verdict{border-left:3px solid var(--v2);background:var(--faint);border-radius:0 8px 8px 0;padding:14px 16px;margin-top:18px}
+  .verdict p{margin:.45rem 0;color:var(--muted);max-width:90ch}
+  .verdict p:first-child{margin-top:0;color:var(--ink)}
+  .verdict ul{margin:.3rem 0 .2rem;padding-left:1.2rem;color:var(--muted)}
+  .row{margin-top:30px}
+  .row h3{font-family:var(--mono);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .cell{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--line);border-radius:8px;padding:12px 14px;min-width:0}
+  .cell.v1{border-top-color:var(--v1)}.cell.v2{border-top-color:var(--v2)}.cell.v3{border-top-color:var(--v3)}
+  .cell.aside p{font-style:italic;color:var(--muted)}
+  .clabel{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+  .v1 .clabel{color:var(--v1)}.v2 .clabel{color:var(--v2)}.v3 .clabel{color:var(--v3)}
+  .cell p{margin:0;font-family:var(--serif);font-size:1rem;line-height:1.68}
+  .cell strong{font-weight:600}
+  .drift{margin-top:30px}
+  .drift table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:520px}
+  .drift th,.drift td{text-align:left;padding:.5rem;border-bottom:1px solid var(--line);vertical-align:top}
+  .drift th{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .scroll{overflow-x:auto}
+  @media (max-width:760px){.grid,.stats{grid-template-columns:minmax(0,1fr)}}
+</style>
+<div class="wrap">
+  <div class="eyebrow">Tone trial · Legal Framework opening · substance frozen</div>
+  <h1>Same words, three registers</h1>
+  <p class="lede">V1 is the Hybrid output as it stands. V2 and V3 apply draft rules on top of it. Read each row across. The question is which one sounds like you on a good day.</p>
+
+  <section class="panel">
+    <h2>What changed, measured</h2>
+    <div class="stats">
+      <div class="stat v1"><div class="name">V1 · Now (Hybrid)</div><div class="rule">No tone change.</div>
+        <div class="nums"><span><b>0</b> contractions</span><span><b>18.7</b> words/sentence</span><span><b>449</b> words</span></div></div>
+      <div class="stat v2"><div class="name">V2 · Crisp AU</div><div class="rule">Contractions on, formal connectives cut, up to two light Australian words per section.</div>
+        <div class="nums"><span><b>17</b> contractions</span><span><b>16.5</b> words/sentence</span><span><b>413</b> words</span></div></div>
+      <div class="stat v3"><div class="name">V3 · Chat-direct</div><div class="rule">V2 plus shorter sentences, fragments for emphasis, plainer verbs.</div>
+        <div class="nums"><span><b>16</b> contractions</span><span><b>10.9</b> words/sentence</span><span><b>348</b> words</span></div></div>
+    </div>
+  </section>
+
+  <div class="verdict">
+    <p><strong>My read: V2 as the default, with one V3-style line per section at most.</strong></p>
+    <p>V1 is correct but reads like a paper. With no contractions at all, it's more formal than you are.</p>
+    <p>V2 keeps every idea and hedge, and sounds like you explaining it to a peer. The changes are mostly mechanical: contractions, "I reckon" for "I believe", and dropped stiff phrasing. That makes it easy to write down as a rule.</p>
+    <p>V3 is closest to how you write to me, and its best lines hit hard ("Wrong time, wrong shape."). It also costs the most:</p>
+    <ul>
+      <li>Strings of fragments start to read as a tic, and that pattern is a common sign of machine-written prose.</li>
+      <li>The aside loses some of its warmth.</li>
+      <li>Shortening moved the meaning slightly in a few places (table below).</li>
+    </ul>
+    <p>Your call. If you pick V2 or a V2/V3 blend, its rules go into the voice guide as written, after the next trial.</p>
+  </div>
+<section class="row"><h3>Opening, paragraph 1</h3><div class="grid"><div class="cell v1"><span class="clabel">V1 · Now</span><p>We have started to settle on how we hand context to an agent. Instruction files at the repository root, skills, layered system prompts, a handful of memory approaches. It is a real maturing of the craft, and it is good at one thing: documenting what I will call <strong>Prescriptive Context</strong> - the rules and standing guidance an agent is told to follow.</p></div><div class="cell v2"><span class="clabel">V2 · Crisp AU</span><p>We&#x27;ve started to settle on how we hand context to an agent. Instruction files at the repository root, skills, layered system prompts, a handful of memory approaches. It&#x27;s a real maturing of the craft, and it&#x27;s good at one thing: documenting what I&#x27;ll call <strong>Prescriptive Context</strong> - the rules and standing guidance an agent is told to follow.</p></div><div class="cell v3"><span class="clabel">V3 · Chat-direct</span><p>We&#x27;re settling on how to hand context to an agent. Root instruction files, skills, layered system prompts, a few memory approaches. That&#x27;s real progress, and it&#x27;s good at one thing: documenting <strong>Prescriptive Context</strong>. The rules and standing guidance an agent is told to follow.</p></div></div></section>
+<section class="row"><h3>Opening, paragraph 2</h3><div class="grid"><div class="cell v1"><span class="clabel">V1 · Now</span><p>Prescription only goes so far. In practice I keep stepping back into the loop - to ask the right question, to nudge the agent down a different path, to supply a hard-won insight or point it at the right tool at the right moment. That accumulated human experience is a different kind of context: less structured than the rules, more the <em>ah-ha</em> moment that saves the day. I call it <strong>Reflective Context</strong>, and right now it is neither here nor there. We have very sophisticated memory containers, but I believe there is a heap more clarity to surface in how we hook them up.</p></div><div class="cell v2"><span class="clabel">V2 · Crisp AU</span><p>Prescription only goes so far. In practice I keep stepping back into the loop - to ask the right question, to nudge the agent down a different path, to supply a hard-won insight or point it at the right tool at the right moment. That accumulated human experience is a different kind of context: less structured than the rules, more the <em>ah-ha</em> moment that saves the day. I call it <strong>Reflective Context</strong>, and right now it&#x27;s neither here nor there. The memory containers are very sophisticated, but I reckon there&#x27;s a heap more clarity to surface in how we hook them up.</p></div><div class="cell v3"><span class="clabel">V3 · Chat-direct</span><p>Prescription only goes so far. I keep stepping back into the loop. To ask the right question. To push the agent down a different path. To hand it a hard-won insight, or the right tool at the right moment. That&#x27;s experience, and it&#x27;s a different kind of context. Less structured than the rules. More the <em>ah-ha</em> moment that saves the day. I call it <strong>Reflective Context</strong>, and right now it doesn&#x27;t have a home. The memory containers are sophisticated, but I think there&#x27;s a heap more clarity needed in how we hook them up.</p></div></div></section>
+<section class="row"><h3>The “I have to admit” aside</h3><div class="grid"><div class="cell v1 aside"><span class="clabel">V1 · Now</span><p>I have to admit, I originally started compiling all of my research and testing into a single massive white paper, but I kept finding issues in my logic or testing, and kept finding actual implementations worth looking into. I have been stuck for the last two months on simply trying to articulate what I have prototyped, and I am now missing out on the latest updates in the field. This is my way of getting the framework articulated, and I will make progressive blogs as updates. I will also blog in a more structured way about each major platform and how it aligns with the Legal Framework. I have to be clear: there are a LOT of tools out there now, all edging closer and closer to my idea - some may even argue it has surpassed my framework. That is fine. I will keep documenting the actual implementation with different platforms at its core, and it will hopefully serve as a useful baseline for us in the future.</p></div><div class="cell v2 aside"><span class="clabel">V2 · Crisp AU</span><p>I&#x27;ll admit it: I originally started compiling all my research and testing into one massive white paper. I kept finding issues in my logic or my testing, and kept finding real implementations worth looking into. I&#x27;ve been stuck for two months just trying to articulate what I&#x27;ve prototyped, and I&#x27;m missing out on the latest updates in the field. So this is me getting the framework down, with progressive posts as updates. I&#x27;ll also write up each major platform, in a more structured way, and how it lines up with the Legal Framework. To be clear: there are a LOT of tools out there now, all edging closer to my idea - some may even argue it&#x27;s surpassed my framework. That&#x27;s fine. I&#x27;ll keep documenting the real implementation across different platforms, and hopefully it serves as a useful baseline for all of us.</p></div><div class="cell v3 aside"><span class="clabel">V3 · Chat-direct</span><p>I have to admit, I started out putting all my research and testing into one massive white paper. I kept finding holes in my logic and my testing, and kept finding real implementations I needed to look at. I&#x27;ve been stuck for two months trying to articulate what I&#x27;ve prototyped, and I&#x27;m missing the latest updates in the field. So this post gets the framework out. Updates will follow as more posts, plus a structured write-up per platform on how each lines up with the Legal Framework. To be clear, there are a LOT of tools now edging closer to this idea. Some may argue one has already surpassed it. That&#x27;s fine. I&#x27;ll keep documenting the real implementation across platforms, and hopefully it&#x27;s a useful baseline.</p></div></div></section>
+<section class="row"><h3>The problem, paragraph 1</h3><div class="grid"><div class="cell v1"><span class="clabel">V1 · Now</span><p>The ecosystem has stabilised on a well-described structure for <em>prescriptive</em> rules. We also worked out early that an agent needs memory - or something closer to fine-tuning through context. Those are the RAG and vector stores, the LLM wiki, the MCP data sources.</p></div><div class="cell v2"><span class="clabel">V2 · Crisp AU</span><p>The ecosystem has stabilised on a well-described structure for <em>prescriptive</em> rules. We also worked out early that an agent needs memory - or something closer to fine-tuning through context. Those are the RAG and vector stores, the LLM wiki, the MCP data sources.</p></div><div class="cell v3"><span class="clabel">V3 · Chat-direct</span><p>We&#x27;ve landed on a well-described structure for <em>prescriptive</em> rules. We also worked out early that an agent needs memory, or something closer to fine-tuning through context. RAG and vector stores, the LLM wiki, MCP data sources.</p></div></div></section>
+<section class="row"><h3>The problem, paragraph 2</h3><div class="grid"><div class="cell v1"><span class="clabel">V1 · Now</span><p>I am not challenging that we have those things. I am challenging <strong>the way we reach for them, and the moment at which we do</strong>. We load memory the way we load everything else - up front, indiscriminately, as part of the standing context. That is the wrong time and the wrong shape for experience. <strong>Experience is precedent. It only matters when the rules in front of you have run out.</strong></p></div><div class="cell v2"><span class="clabel">V2 · Crisp AU</span><p>I&#x27;m not challenging that we have those things. I&#x27;m challenging <strong>the way we reach for them, and the moment we do it</strong>. We load memory the way we load everything else - up front, indiscriminately, as part of the standing context. That&#x27;s the wrong time and the wrong shape for experience. <strong>Experience is precedent. It only matters once the rules in front of you have run out.</strong></p></div><div class="cell v3"><span class="clabel">V3 · Chat-direct</span><p>I&#x27;m not challenging that we have those. I&#x27;m challenging <strong>how we reach for them, and when</strong>. We load memory like everything else: up front, indiscriminately, as standing context. Wrong time, wrong shape. <strong>Experience is precedent. It only matters once the rules in front of you have run out.</strong></p></div></div></section>
+  <section class="drift panel">
+    <h2>Where shortening shifted the meaning (V3 unless noted)</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Original</th><th>Rewritten</th><th>Shift</th></tr></thead>
+      <tbody>
+        <tr><td>"It is a real maturing of the craft"</td><td>"That's real progress"</td><td>Loses the sense of a discipline growing up.</td></tr>
+        <tr><td>"right now it is neither here nor there"</td><td>"right now it doesn't have a home"</td><td>Sharper, and matches the summary's "give that experience a home", but it's a different idiom.</td></tr>
+        <tr><td>"some may even argue it has surpassed my framework"</td><td>"Some may argue one has already surpassed it"</td><td>"One" names a single tool where the original was vaguer.</td></tr>
+        <tr><td>"The ecosystem has stabilised on"</td><td>"We've landed on"</td><td>Moves the subject from the field to "we".</td></tr>
+        <tr><td>"This is my way of getting my framework articulated" (V2)</td><td>"So this is me getting the framework down"</td><td>Loses "my way", which framed it as personal method.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <p class="lede" style="margin-top:22px">Shared fix in all three: "when the rules in front of you ran out" became "have run out". It's a tense slip in the original that the Hybrid pass missed during the bake-off, so the proofreading rules need tightening too.</p>
+</div>
