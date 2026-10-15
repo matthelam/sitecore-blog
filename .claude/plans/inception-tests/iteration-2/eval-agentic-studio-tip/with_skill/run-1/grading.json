@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Offers two or three candidate one-liners for the point, rather than one",
+      "passed": true,
+      "evidence": "Three candidates: '1. \"Name the flow before you build it. Renaming one afterwards loses its brand kit context.\"', '2. \"In Agentic Studio a flow's name isn't just a label...\"', '3. \"After you rename a flow, check its brand kit before you trust what it produces.\"'"
+    },
+    {
+      "text": "Names the reader: who they are, what they believe now, what should change",
+      "passed": true,
+      "evidence": "Who 'A practitioner building or tidying up flows in Agentic Studio'; Believes now 'Renaming is cosmetic. The brand kit, once set, carries through to every agent and flow'; Should leave with 'Renaming a flow is not cosmetic. Either name it right up front, or check the brand kit context after a rename.'"
+    },
+    {
+      "text": "States the tension explicitly",
+      "passed": true,
+      "evidence": "Tension: 'A rename is the most harmless edit there is. If a harmless edit quietly removes the on-brand guarantee, the flow may keep running and producing output that looks fine but isn't constrained by the brand any more.'"
+    },
+    {
+      "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+      "passed": true,
+      "evidence": "Recommended Tip as a 7-row numbered beat table; 'Alternative A: Single insight (beats)' 1-6 ('1. Default behaviour... 4. Before and after, side by side...'); 'Alternative B: \"What doesn't survive\" roundup (beats)' 1-6. Reason: 'One thing a practitioner should know before they hit it. It fits the existing run of Agentic Studio tips.' and 'The evidence so far is one observation, so it is a tip'"
+    },
+    {
+      "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+      "passed": true,
+      "evidence": "'the reader should see the same flow twice... and realise nothing else changed... Building it is the write-up stage's call'; 'the reader should feel the brand drift'"
+    },
+    {
+      "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+      "passed": true,
+      "evidence": "Honesty beats: 'What isn't known yet: whether it's every flow or some, every rename or only some kinds, and whether it's been reported'; 'Whether re-attaching the brand kit fixes it'; beat 6 'Honesty beat: what isn't known yet'"
+    },
+    {
+      "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+      "passed": true,
+      "evidence": "Experience details not in the prompt are marked: beats 2, 3, 6 'author to supply', beat 4 'Only if confirmed (e.g. no warning, flow still runs)... to confirm'; tension hedged 'may keep running' and 'Whether it is quiet or visible is to confirm. Matt said the context is \"lost\", not how he found out'; response 'I haven't assumed it fails silently'. Cross-references verified: lifecycle post 'every agent, every flow... automatically picks up those constraints' (line 103), export drops Agent Type and Tags, 'I have not managed to separate those two yet', ABM Campaign flow, debug-pane pull quote, tip sizes (~200-230 words)"
+    },
+    {
+      "text": "Contains no drafted body paragraphs of the post",
+      "passed": true,
+      "evidence": "No post prose; only one-liners, titles, beat tables and two one-sentence hook options"
+    },
+    {
+      "text": "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay",
+      "passed": true,
+      "evidence": "'Type: tip'; 'Rough size: short... roughly 150 to 350 words... it is a tip unless repro detail turns up a second point'; roundup essay 'not recommended for now'"
+    },
+    {
+      "text": "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing",
+      "passed": true,
+      "evidence": "Open questions 'Reproducible? Seen once or repeatedly; one tenant or more?'; Evidence still needed 'A plain description of the repro: create flow with brand kit -> rename -> what you see' and 'Date/version context, given how fast Agentic Studio changes'"
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  }
+}

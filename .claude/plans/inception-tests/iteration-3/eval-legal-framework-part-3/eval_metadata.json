@@ -1,0 +1,20 @@
+{
+  "eval_id": 3,
+  "eval_name": "legal-framework-part-3",
+  "prompt": "Help me plan post three of the Legal Framework series. I've been using Hindsight for a month instead of my own memory scripts. Recall is better, but I lost the OKF one-fact-per-file discipline and I'm not sure that matters anymore.",
+  "assertions": [
+    "Offers two or three candidate one-liners for the point, rather than one",
+    "Names the reader: who they are, what they believe now, what should change",
+    "States the tension explicitly",
+    "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+    "Marks turning points as what the reader should see or do, not how to build a visual",
+    "Includes honesty beats (what isn't solved or what went wrong first)",
+    "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+    "Contains no drafted body paragraphs of the post",
+    "Points back to posts one and two of the series by name or slug",
+    "Plans an honesty beat around losing the OKF one-fact-per-file discipline",
+    "Asks what 'better recall' means and how it was measured",
+    "Shows what at least two candidate phrasings of the point would each include or leave out",
+    "Leaves the brief unlocked and runs (or explicitly defers until the wording is chosen) a check of every beat against the point's wording"
+  ]
+}

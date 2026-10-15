@@ -1,0 +1,44 @@
+---
+title: 'Agentic Studio: Widgets Do Not Export'
+date: '2026-08-19'
+tags: ['agentic-studio', 'sitecore-ai', 'agents', 'sitecore', 'strategy']
+draft: false
+summary: 'Sitecore encourages you to build widgets by prompting for them. Widgets are also the one thing in Agentic Studio with no export at all. Worth knowing before you plan a path to Production.'
+---
+
+Agentic Studio wants you to build widgets by talking to it. The [widget docs](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/agentic-studio-settings/create-or-edit-a-widget.html) put the Prompt pane first and tell you to "describe the widget you want to build", with predefined prompts if you'd rather start from one. The Settings page says the same in shorter form: use prompts, use AI to build and refine. And a standard agent's output options include Auto-generate widget, which builds one at runtime.
+
+Nice way to work. Also the fastest route to something you can't move.
+
+## Widgets have no export
+
+Agents have Export JSON and Import JSON, both on the actions menu, both documented.
+
+Widgets have create and edit. That's the list. You get Preview, JSON, Schema, Visual and Stream tabs, plus Save Widget and Update Widget, and nothing that produces a portable file or consumes one.
+
+So a widget lives in the tenant where it was made. Moving it means copying out the JSON tab and the schema separately, and rebuilding by hand. Then re-point the agent: its export carries a `widgetTemplateId` that refers to nothing in the target tenant.
+
+## Re-prompting gets you close, not exact
+
+Describe the same widget in the new tenant and you'll usually land something that does the same job. An exact copy is the hard part: ask twice and you get two widgets that look similar and differ in the details, and chasing parity through a chat window isn't a good use of an afternoon.
+
+> Pin the contract. Re-prompt the layout.
+
+So aim for the outcome: what data goes in, what the widget displays, and what the user can do with the result. Keep the input and output schemas, because those have to match for your agent to work with it.
+
+**One trap if you hand-copy.** Copying the JSON does work, but check the rendered widget, not the file. An element defined in the elements map and not referenced in any children array is unreachable from the root, so it never renders, and nothing warns you.
+
+## Plan the path to Production now
+
+None of this is a crisis. Agentic Studio is new, it's moving quickly, and gaps like these are expected this early.
+
+It does change how you plan, though. On a normal Sitecore build, the path from dev to Production is a solved problem, and you can leave it until later without much risk. That doesn't hold here yet. Some artefacts move cleanly, some [move partially](/blog/agentic-studio-agent-export-is-lossy) (agent exports quietly drop a field or two), and at least one doesn't move at all.
+
+So work out early how your agents and widgets will reach Production, and write down what you did as you go. Not polished documentation, just enough to rebuild it: the prompts, the input and output schemas, the IDs you re-pointed, and anything you fixed after an import.
+
+That costs very little. Discovering at cutover that your scorecard widget exists in exactly one tenant, and nobody wrote down what it was supposed to do, costs a lot more.
+
+## References
+
+- [Create or edit a widget](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/agentic-studio-settings/create-or-edit-a-widget.html) — Sitecore documentation
+- [Export or import an agent](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/export-or-import-an-agent.html) — Sitecore documentation

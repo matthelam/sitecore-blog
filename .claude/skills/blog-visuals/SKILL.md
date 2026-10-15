@@ -1,0 +1,61 @@
+---
+name: blog-visuals
+description: Decide, design and build diagrams, charts and interactive visuals for Matt Lam's blog as built-in MDX components. Use when a post needs a visual, when the blog-rewrite-hybrid visual pass calls for one, or when creating or changing anything in components/visuals/. Visuals carry only facts already in the post; the components hold no facts of their own.
+---
+
+# Blog Visuals — built-in components (option A)
+
+Visuals on this blog are React components in `components/visuals/`, registered in
+`components/MDXComponents.tsx`, and used from a post's MDX with the post's own facts passed in as
+props. The author chose this over embedded HTML widgets (option B) on 2026-10-15. The full
+conventions are in `references/architecture.md`; read it before writing or changing a component.
+
+## Process
+
+1. **Decide whether a visual earns its place.** A visual earns its place when it lets a cold
+   reader see a mechanism they would otherwise assemble from prose: where data flows, what changes
+   between two options, what state something moves through, how a number responds to a choice. If a
+   sentence says it faster, write the sentence. If a three-column table says it, use the table.
+2. **Pick the kind.**
+
+   | The reader needs to… | Kind | How |
+   |---|---|---|
+   | See a structure or flow at a glance | **Static diagram** | Inline `<svg>` in the MDX, or an `.svg` under `/static/images/<post-slug>/` |
+   | Compare quantities or see change over time | **Chart** | Load the `dataviz` skill and follow its procedure |
+   | Move through an ordered sequence one step at a time | **Step-through** | `StepThrough` component |
+   | Change an input and watch the outcome change | **Explorable** | Reuse a component, or propose a new one |
+
+   Interactive is the exception, not the default. Use it only when the reader learns something by
+   acting that they wouldn't learn by looking.
+3. **Load the craft skills when they're available.** `artifact-diagramming` for diagrams (when a
+   picture earns its place, labelled arrows, `currentColor`, one figure per claim). `dataviz` for
+   charts (form first, colour last, run its palette validator, hover by default). Both ship with
+   Claude Code. Where they say `prefers-color-scheme` or `data-theme`, apply the blog's `.dark`
+   class instead (architecture.md).
+4. **Reuse before you build.** Check the catalogue below. Write a new component only when the
+   pattern will repeat or no existing component fits, and tell the author before adding one.
+5. **Pass facts as props.** Every number, label and description comes from the post, written in the
+   MDX. A component never contains a fact, a default value that is a fact, or anything the post
+   doesn't say.
+6. **Wrap it in `<Figure caption="…">`.** The caption states what the visual shows, as a claim.
+7. **Verify** with the checklist in architecture.md: Prettier, ESLint, `yarn build`, then `yarn dev`
+   screenshots in light, dark and at 390px wide, before and after interacting, and look at them.
+
+## Component catalogue
+
+| Component | Kind | Props (all from the post) | First used |
+|---|---|---|---|
+| `Figure` | Wrapper | `caption`, children | Every visual |
+| `MandateCheckout` | Explorable | `mandateId`, `ceilingAud`, `unitPriceAud`, `itemLabel`, `maxQuantity` | `visual-components-trial` (draft), built for The Agent as Customer: cart total against an agent's spending mandate, showing the gateway's accepted or `over_mandate` response |
+| `StepThrough` | Step-through | `label`, `steps: { node, detail, edge? }[]` | `visual-components-trial` (draft), built for Legal Framework: the recall sequence at the point of ambiguity |
+
+Add a row whenever a component is added. A component with no row doesn't exist as far as future
+work is concerned.
+
+## What this skill must never do
+
+- Invent a number, label, result or behaviour the post doesn't state.
+- Load a script from a CDN or embed an iframe (the site's CSP blocks both; see architecture.md).
+- Use colour as the only signal of state.
+- Add motion that runs without the reader acting, or ignore reduced-motion preferences.
+- Replace an author's existing diagram in a published post without the author's approval.

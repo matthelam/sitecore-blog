@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Offers two or three candidate one-liners for the point, rather than one",
+      "passed": false,
+      "evidence": "No candidate one-liners for the point; only a title, two title alternatives and a pull quote 'A rename shouldn't change behaviour. Here, it does.'"
+    },
+    {
+      "text": "Names the reader: who they are, what they believe now, what should change",
+      "passed": false,
+      "evidence": "No reader section; reader never named or described"
+    },
+    {
+      "text": "States the tension explicitly",
+      "passed": true,
+      "evidence": "'Why it earns a post: Sitecore's docs say the opposite... If renaming quietly drops the brand kit... nothing tells you why. That gap is the point of the post.'"
+    },
+    {
+      "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+      "passed": false,
+      "evidence": "No arcs or beat lists; goes straight to an MDX draft"
+    },
+    {
+      "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+      "passed": false,
+      "evidence": "No turning points marked"
+    },
+    {
+      "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+      "passed": false,
+      "evidence": "No honesty beats planned (nothing on what isn't solved or what went wrong first); only a TODO for a support-ticket line"
+    },
+    {
+      "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+      "passed": false,
+      "evidence": "Asserts unsupplied experience in the draft and reply: 'The flow still runs, the agents still hand over to each other, and you still get output... tone, dos and don'ts and glossary terms quietly drift' and 'the output just quietly goes off-brand. Nothing errors.'"
+    },
+    {
+      "text": "Contains no drafted body paragraphs of the post",
+      "passed": false,
+      "evidence": "Contains a full MDX draft with body paragraphs: 'Another small one from working in Agentic Studio. If you rename a flow after you've created it, it loses the brand kit context...'"
+    },
+    {
+      "text": "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay",
+      "passed": true,
+      "evidence": "'Size: About 250-350 words. Same shape as the debug-pane post.'"
+    },
+    {
+      "text": "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing",
+      "passed": true,
+      "evidence": "'[TODO: one or two sentences on the exact steps...]', 'What exactly did you rename?', 'When: Roughly when you hit it (month), since Agentic Studio changes quickly.'"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 7,
+    "total": 10,
+    "pass_rate": 0.3
+  }
+}

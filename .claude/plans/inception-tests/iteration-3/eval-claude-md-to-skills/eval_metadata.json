@@ -1,0 +1,19 @@
+{
+  "eval_id": 1,
+  "eval_name": "claude-md-to-skills",
+  "prompt": "I want to write about how I stopped cramming everything into CLAUDE.md and started moving stuff into skills instead. Notes: root CLAUDE.md got to ~900 lines on one client repo, agent started ignoring rules near the bottom, moved workflows into 6 skills, CLAUDE.md now ~120 lines, still not sure skills trigger reliably. Not sure if this is one post or a series.",
+  "assertions": [
+    "Offers two or three candidate one-liners for the point, rather than one",
+    "Names the reader: who they are, what they believe now, what should change",
+    "States the tension explicitly",
+    "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+    "Marks turning points as what the reader should see or do, not how to build a visual",
+    "Includes honesty beats (what isn't solved or what went wrong first)",
+    "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+    "Contains no drafted body paragraphs of the post",
+    "Argues the one-post-vs-series decision from the evidence in the notes",
+    "Plans an honesty beat around skills not triggering reliably",
+    "Shows what at least two candidate phrasings of the point would each include or leave out",
+    "Leaves the brief unlocked and runs (or explicitly defers until the wording is chosen) a check of every beat against the point's wording"
+  ]
+}

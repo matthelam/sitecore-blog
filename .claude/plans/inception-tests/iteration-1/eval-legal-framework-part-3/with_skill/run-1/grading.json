@@ -1,0 +1,65 @@
+{
+  "expectations": [
+    {
+      "text": "Offers two or three candidate one-liners for the point, rather than one",
+      "passed": true,
+      "evidence": "Three candidates A/B/C: 'One fact per file was never really a retrieval trick...', 'Hindsight answered \"how do I store this\"...', 'I built OKF for retrieval, and better retrieval made it unnecessary...'"
+    },
+    {
+      "text": "Names the reader: who they are, what they believe now, what should change",
+      "passed": true,
+      "evidence": "Who 'practitioners building or choosing a memory layer for coding agents'; Believes now 'memory is a retrieval problem, so better recall means a better memory'; Should leave with 'a clear view of which jobs a memory format does beyond retrieval'"
+    },
+    {
+      "text": "States the tension explicitly",
+      "passed": true,
+      "evidence": "Tension: 'post two said one-fact-per-file was there for retrieval, retrieval is now better without it, and yet something feels lost. Either the author mis-stated why OKF mattered, or he's sentimental...'"
+    },
+    {
+      "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+      "passed": true,
+      "evidence": "Recommended Build log with Three-attempts turn as 9 numbered beats, with reason ('keeps the specifics-plus-shortfalls credibility of post two'); Single insight alternative sketched as a beat sequence: 'the default (loose capture), the problem it caused, the small change (keep a holding line per memory), and a before/after'"
+    },
+    {
+      "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+      "passed": true,
+      "evidence": "'the reader should see the same piece of experience captured both ways'; 'see OKF's jobs come apart into two piles'"
+    },
+    {
+      "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+      "passed": true,
+      "evidence": "Honesty beats: 'Post two gave the wrong reason, or an incomplete one'; 'One month, one person, one workload'; 'What's still unsolved'"
+    },
+    {
+      "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+      "passed": true,
+      "evidence": "Beats 2-9 marked 'author to supply' (beat 5 'author to supply (critical)'); quotes from post two ('The reason for the file-per-fact obsession is retrieval', 'much less confident that I needed to build the storage layer') and Hindsight/provenance details verified in published posts"
+    },
+    {
+      "text": "Contains no drafted body paragraphs of the post",
+      "passed": true,
+      "evidence": "No post prose; only candidate points, titles, beat table, short hook options"
+    },
+    {
+      "text": "Points back to posts one and two of the series by name or slug",
+      "passed": true,
+      "evidence": "'Post one (a-legal-framework-for-agent-context)', 'Post two (implementing-the-legal-framework)'"
+    },
+    {
+      "text": "Plans an honesty beat around losing the OKF one-fact-per-file discipline",
+      "passed": true,
+      "evidence": "Beat 4 'What quietly stopped happening: capture is no longer one sentence, present tense, tagged and scoped' and beat 5 'did the loss cost anything?'"
+    },
+    {
+      "text": "Asks what 'better recall' means and how it was measured",
+      "passed": false,
+      "evidence": "Requests evidence but never asks what 'better' means or how it was measured: 'One or two concrete recall examples, before/after against the old store. \"It's better\" alone won't carry it.'"
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 1,
+    "total": 11,
+    "pass_rate": 0.91
+  }
+}

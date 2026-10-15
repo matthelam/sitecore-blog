@@ -8,7 +8,7 @@ summary: "Upload the federation metadata, configure the SAML connection, set up 
 
 ## Introduction
 
-Now that the Azure Entra ID side is complete, it’s time to bring Sitecore Cloud Portal into the loop.  
+Now that the [Azure Entra ID side](/blog/02-SSO-Entra-ID-Setup) is complete, it’s time to bring Sitecore Cloud Portal into the loop.  
 This article focuses on the **Cloud Portal** side of the SAML setup — uploading the IdP metadata, creating the SSO connection, mapping incoming claims (like `groups`) into **target claims** Cloud Portal adds to tokens, and running the first authentication tests.
 
 Before you begin, make sure you’ve already collected:
@@ -185,4 +185,4 @@ You’ve:
 4. Tested SSO and verified the token
 5. Prepared for downstream XM Cloud role mapping
 
-In the next article, we’ll walk through how to setup **Content Hub**, configure the SAML connection there, and conduct validation checks.
+In the [next article](/blog/04-SSO-Content-Hub-Setup), we’ll walk through how to setup **Content Hub**, configure the SAML connection there, and conduct validation checks.

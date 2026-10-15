@@ -1,0 +1,346 @@
+<title>Rewrite Bake-Off</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Layout: a single reading column; sticky control rail up top; scorecard then the selected post. */
+  :root{
+    --paper:#f6f6f3; --surface:#ffffff; --ink:#1b1c1e; --muted:#5b5e65; --line:#e4e4df; --faint:#efefeb;
+    --a:#3f5f82; --b:#2f7a55; --c:#9a6a2a; --accent:#3f5f82;
+    --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+    --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --paper:#141519; --surface:#1c1e23; --ink:#e9e9e5; --muted:#9a9ea7; --line:#2b2d34; --faint:#20222800;
+    --a:#7aa0c7; --b:#5fb487; --c:#c89a5a; --accent:#7aa0c7; color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --paper:#141519; --surface:#1c1e23; --ink:#e9e9e5; --muted:#9a9ea7; --line:#2b2d34; --faint:#20222800;
+    --a:#7aa0c7; --b:#5fb487; --c:#c89a5a; --accent:#7aa0c7; color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));
+    padding-block:0}
+  /* Header */
+  header.page{padding-block:34px 18px}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  h1.page{font-family:var(--sans);font-weight:700;font-size:clamp(1.6rem,4.5vw,2.25rem);line-height:1.12;
+    margin:.35rem 0 .5rem;text-wrap:balance;letter-spacing:-.01em}
+  .lede{color:var(--muted);font-size:1rem;max-width:62ch}
+  .lede code{font-family:var(--mono);font-size:.85em;background:var(--faint);padding:.05em .35em;border-radius:4px}
+  /* Scorecard */
+  section.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 8px;margin-top:10px}
+  .card h2{font-size:.78rem;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:.1rem 0 .9rem}
+  .scroll{overflow-x:auto}
+  table.score{width:100%;border-collapse:collapse;font-size:.9rem;min-width:460px}
+  table.score th,table.score td{text-align:left;padding:.5rem .5rem;border-bottom:1px solid var(--line);vertical-align:top}
+  table.score thead th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  table.score td.dim{color:var(--ink);font-weight:500;white-space:nowrap}
+  .sc{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;gap:.4rem}
+  .dot{width:.55rem;height:.55rem;border-radius:50%;display:inline-block}
+  .da{background:var(--a)}.db{background:var(--b)}.dc{background:var(--c)}
+  tr.total td{border-bottom:none;padding-top:.7rem}
+  tr.total td.dim{font-weight:700}
+  .verdict{margin-top:14px;border-left:3px solid var(--b);background:var(--faint);padding:14px 16px;border-radius:0 8px 8px 0}
+  .verdict strong{color:var(--ink)}
+  .verdict p{margin:.4rem 0;font-size:.95rem;color:var(--muted)}
+  .verdict p:first-child{margin-top:0}
+  /* Controls */
+  .controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);
+    padding-block:12px;margin-top:22px;border-bottom:1px solid var(--line)}
+  .seg{display:flex;flex-wrap:wrap;gap:8px}
+  .seg button{font-family:var(--sans);font-size:.85rem;font-weight:500;color:var(--muted);
+    background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.45rem .85rem;cursor:pointer;
+    display:inline-flex;align-items:center;gap:.5rem;transition:border-color .15s,color .15s}
+  .seg button .dot{width:.5rem;height:.5rem}
+  .seg button[aria-pressed="true"]{color:var(--ink);border-color:var(--ink)}
+  .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .seg button.orig[aria-pressed="true"]{border-color:var(--muted)}
+  /* Article */
+  main{padding-block:8px 48px}
+  .armhead{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin:18px 0 2px}
+  .armhead .tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+  .armhead .tag.a{color:var(--a)}.armhead .tag.b{color:var(--b)}.armhead .tag.c{color:var(--c)}.armhead .tag.o{color:var(--muted)}
+  .whatdid{color:var(--muted);font-size:.88rem;border:1px dashed var(--line);border-radius:8px;padding:10px 12px;margin:6px 0 20px}
+  .whatdid b{color:var(--ink);font-weight:600}
+  article.post{font-family:var(--serif);font-size:1.06rem;line-height:1.72}
+  article.post h2{font-family:var(--sans);font-weight:600;font-size:1.32rem;line-height:1.2;margin:1.8rem 0 .4rem;letter-spacing:-.01em;text-wrap:balance}
+  article.post h3{font-family:var(--sans);font-weight:600;font-size:1.08rem;margin:1.3rem 0 .3rem}
+  article.post p{margin:.75rem 0;max-width:68ch}
+  article.post em{font-style:italic}
+  article.post strong{font-weight:600}
+  article.post a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:.06em}
+  article.post hr{border:none;border-top:1px solid var(--line);margin:1.6rem 0;max-width:68ch}
+  .meta{font-family:var(--mono);font-size:.74rem;color:var(--muted);letter-spacing:.03em;margin:.2rem 0 1rem;
+    display:flex;gap:.5rem;flex-wrap:wrap}
+  .meta span{background:var(--faint);padding:.15rem .5rem;border-radius:5px}
+  aside.note{border-left:3px solid var(--line);background:var(--faint);padding:12px 16px;margin:1.3rem 0;
+    border-radius:0 8px 8px 0;font-style:italic;color:var(--muted);font-size:.96rem;max-width:68ch}
+  aside.note a{color:var(--muted)}
+  aside.note .src{display:block;margin-top:.6rem;font-size:.82rem;font-style:italic}
+  figure.diagram{margin:1.3rem 0;max-width:68ch}
+  figure.diagram .ph{border:1px solid var(--line);background:repeating-linear-gradient(135deg,transparent,transparent 9px,var(--faint) 9px,var(--faint) 18px);
+    border-radius:8px;padding:20px 16px;text-align:center;font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted)}
+  figure.diagram figcaption{font-family:var(--sans);font-style:normal;font-size:.8rem;color:var(--muted);margin-top:.5rem;line-height:1.45}
+  .cut{text-decoration:line-through;text-decoration-color:var(--a);opacity:.6}
+  .removed{border-left:3px solid var(--a);background:color-mix(in srgb,var(--a) 10%,transparent);
+    padding:10px 14px;margin:1.2rem 0;border-radius:0 8px 8px 0;font-family:var(--sans);font-size:.82rem;color:var(--muted);font-style:normal}
+  .removed b{color:var(--a)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="page">
+    <div class="eyebrow">Skill bake-off · one post, three approaches</div>
+    <h1 class="page">Legal Framework, rewritten three ways</h1>
+    <p class="lede">The same post — <em>a-legal-framework-for-agent-context</em> — rewritten by three installed skills, each genuinely triggered. Substance was frozen: rewrites change wording and structure only, never a claim. Toggle the versions and read against the scorecard.</p>
+  </header>
+
+  <section class="card">
+    <h2>Scorecard — judged against the three source posts</h2>
+    <div class="scroll">
+      <table class="score">
+        <thead>
+          <tr><th>Dimension</th><th>A · External</th><th>B · Bespoke</th><th>C · Hybrid</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="dim">Voice fidelity</td>
+            <td><span class="sc"><span class="dot da"></span>2</span> &nbsp;hedging &amp; asides stripped</td>
+            <td><span class="sc"><span class="dot db"></span>5</span> &nbsp;untouched voice</td>
+            <td><span class="sc"><span class="dot dc"></span>4</span> &nbsp;crisper, still his</td></tr>
+          <tr><td class="dim">Correctness</td>
+            <td><span class="sc"><span class="dot da"></span>4</span></td>
+            <td><span class="sc"><span class="dot db"></span>5</span></td>
+            <td><span class="sc"><span class="dot dc"></span>5</span></td></tr>
+          <tr><td class="dim">Argument &amp; structure</td>
+            <td><span class="sc"><span class="dot da"></span>5</span> &nbsp;tightest</td>
+            <td><span class="sc"><span class="dot db"></span>3</span> &nbsp;≈ original</td>
+            <td><span class="sc"><span class="dot dc"></span>4</span></td></tr>
+          <tr><td class="dim">Platform validity</td>
+            <td><span class="sc"><span class="dot da"></span>3</span> &nbsp;dropped components</td>
+            <td><span class="sc"><span class="dot db"></span>5</span></td>
+            <td><span class="sc"><span class="dot dc"></span>5</span></td></tr>
+          <tr><td class="dim">Substance integrity</td>
+            <td><span class="sc"><span class="dot da"></span>2</span> &nbsp;cut 3 asides = lost claims</td>
+            <td><span class="sc"><span class="dot db"></span>5</span></td>
+            <td><span class="sc"><span class="dot dc"></span>5</span></td></tr>
+          <tr class="total"><td class="dim">Total / 25</td>
+            <td class="dim"><span class="sc"><span class="dot da"></span>16</span></td>
+            <td class="dim"><span class="sc"><span class="dot db"></span>23</span></td>
+            <td class="dim"><span class="sc"><span class="dot dc"></span>23</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict">
+      <p><strong>Verdict — recommend C (Hybrid) as the production base, governed by B's restraint.</strong></p>
+      <p>A (the full external skill) is genuinely the tightest-argued, but it reaches that by deleting your three personal <code>&lt;aside&gt;</code> reflections and flattening every "I believe". Its own rules order it to — "cut tangents, be ruthless; remove hedging" — so applied faithfully it <em>cannot</em> preserve this blog's substance or voice. That is the finding, not a tuning problem.</p>
+      <p>B and C tie on points. B changes almost nothing beyond fixing real errors — the safe choice. C keeps the asides, the hedges, the coined concepts and the "In Summary" close, and still tightens the prose and sharpens one bold thesis per section. It reads crisper and still sounds like you. The one rule for production: when a hybrid tightening would cost a shade of voice, fall back to B and leave it.</p>
+    </div>
+  </section>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Choose a version">
+      <button class="orig" data-view="original" aria-pressed="true"><span class="dot" style="background:var(--muted)"></span>Original</button>
+      <button data-view="a" aria-pressed="false"><span class="dot da"></span>A · External</button>
+      <button data-view="b" aria-pressed="false"><span class="dot db"></span>B · Bespoke</button>
+      <button data-view="c" aria-pressed="false"><span class="dot dc"></span>C · Hybrid</button>
+    </div>
+  </div>
+
+  <main>
+    <!-- ORIGINAL -->
+    <section id="view-original">
+      <div class="armhead"><span class="tag o">Original · as published</span></div>
+      <div class="whatdid"><b>Baseline.</b> Shown verbatim, typos included (<code>heirarchy</code>, <code>Consitution</code>, "the our Common Law", "can may identify") so you can see what B and C fixed. 3 asides, 3 diagrams, ~1,435 words.</div>
+      <article class="post">
+        <div class="meta"><span>title: Agent Harness: Memory as Context - The Legal Framework</span><span>date: 2026-06-28</span><span>tags: ai, agents, context-engineering, memory, claude-code</span></div>
+        <p>We have started to settle on how we hand context to an agent. Instruction files at the repository root, skills, layered system prompts, a handful of memory approaches. It is a real maturing of the craft, and it is good at one specific thing: documenting what I will call <strong>Prescriptive Context</strong> - the rules and standing guidance an agent is told to follow.</p>
+        <p>But prescription only goes so far. In practice I keep stepping back into the loop. To ask the right question. To nudge the agent down a different path. To supply a hard-won insight, or point it at the right tool at the right moment. That accumulated human experience is a different kind of context. It is less structured than the rules, and it is more the kind of <em>ah-ha</em> moment that saves the day. I call it <strong>Reflective Context</strong>, and right now I feel that it is neither here nor there. Very sophisticated memory containers, but I believe there is a heap more clarity that needs to be surfaced when hooking them up.</p>
+        <aside class="note"><p>I have to admit, I had originally started to compile all of my research and testing into a single massive white paper, but I kept on finding issues in my logic or testing, kept on finding actual implementations worth looking into. I have actually been stuck for the last two months on simply trying to articulate what I have prototyped, and am now desperately missing out on the latest updates in the field. This is my way of just getting my framework articulated, and I will be making progressive blogs as updates. I will also be blogging in a more structured manner about my findings on each major platform and how they align with the Legal Framework. I have to be clear: there are a LOT of tools out there now, all edging closer and closer to my idea - some may even argue it has surpassed my framework. That is fine. I will continue to document the actual implementation with different platforms at its core, and it will hopefully serve as a useful baseline for us in the future.</p></aside>
+        <hr>
+        <h2>The problem: context is smart but lacks experience</h2>
+        <p>The ecosystem has stabilised on a well-described structure for <em>prescriptive</em> rules. We also worked out early that an agent needs memory - or in some cases something closer to fine-tuning through context. Those are the RAG and vector stores, the LLM wiki, the MCP data sources.</p>
+        <p>I am not here to challenge that we have those things. What I want to challenge is <strong>the way we currently reach for them, and the moment at which we do</strong>. We tend to load memory the way we load everything else - up front, indiscriminately, as part of the standing context. That is the wrong time and the wrong shape for experience. Experience is precedent. It only matters when the rules in front of you ran out.</p>
+        <hr>
+        <h2>The Legal Framework</h2>
+        <p>The Legal Framework not only provides a heirarchy to structure the context, it more importantly describes the role for each layer at runtime. The three layers are: <strong>ideology</strong> (the Constitution), <strong>prescription</strong> (the Legislation), and <strong>reflection</strong> (the Common Law). The goal of this framework is to deliver the appropriate dimension of context just-in-time, which the flow-on effect is a more concise managed set of Legislation and Constitution.</p>
+        <figure class="diagram"><div class="ph">Diagram — system architecture</div><figcaption>The Constitution at the repository root and Legislation through the tree, with the Common Law in a separate vault connected as a queryable retrieval surface.</figcaption></figure>
+        <h3>The Constitution</h3>
+        <p>The Constitution is the root instruction file — CLAUDE.md, AGENTS.md, or your harness's equivalent — written as a concise set of points governing the values needed to work successfully on the repository. It is highly likely to be global, or at least easily transferable across projects, because constitutional values are about <em>how to behave as a developer</em>, not about any one codebase. <a href="#">Karpathy's published CLAUDE.md</a> is a strong exemplar: four behavioural pillars — think before coding, simplicity first, surgical changes, and goal-driven execution with verifiable success criteria — in about sixty lines.</p>
+        <p>The Framework treats the Consitution as the guiding north-star and it is always going to be our final fallback when handling ambiguity.</p>
+        <h3>Legislation</h3>
+        <p>Legislation is the prescriptive application of the Constitution, it is where we describe specific architecture, design patterns, workflows, tool references. At runtime we rely on the just-in-time loading of context, relevant to each sub-directory.</p>
+        <p>The Framework doesn't really differ from the majority, it is rightly the guardrails. It does though, present a scenario where it can be reduced to a more maintainable size and update frequency.</p>
+        <h3>Common Law</h3>
+        <p>Common Law is the accumulated experience of the developer, ideally chunked into useful facts: points of verification, the issues we have encountered, our fixes, our preferences and examples of what to do and what not to do — in short they are actual interpretations of the Legislation, providing the nuance that strengthens and positively narrows a legislative piece.</p>
+        <p>The Framework requires the Common Law to also meet the runtime requirement by hooking into a new concept - the Ambiguity Event. Guided by the legal system as precedent, Common Law is only applied when the Legislation has not been clear enough. As such, the Ambiguity Event is raised as the optimal time for Common Law to be referenced. How it is referenced is also heavily borrowed from our legal system, we want to invoke the Common Law as Memory, since we are seeking guidance from past work.</p>
+        <p>On a more technical level, I believe it is only a small adjustment required to enable such a feature given we already have the Memory.md file being accessed.</p>
+        <aside class="note"><p>I have actually observed, through speaking with many people who are using Copilot, that it's been a bit of a low-key win by Microsoft, who invested heavily in their harness framework much earlier and leaned heavily into their existing products. In Microsoft 365, Copilot actually hooks into a Graph database, and so now I'm starting to hear more and more people talk about 'training' their agents at an enterprise level. This is the biggest step towards my Common Law pattern to date.</p><span class="src">— <a href="https://github.com/MicrosoftDocs/microsoft-365-docs/blob/public/copilot/copilot-personalization-memory.md">Microsoft's Copilot personalization and memory documentation</a></span></aside>
+        <hr>
+        <h2>The Mechanism: Recall at the Point of Ambiguity</h2>
+        <p>The Framework also requires some tuning to the core harness. The goal is to build into its thinking a stronger sense of uncertainty but then providing the tools to help it work off our experience.</p>
+        <aside class="note"><p>This is where I have observed Claude having the strongest progress towards sense-checking via its Constitutional AI harness.</p></aside>
+        <p>In order to capture ambiguity even in the face of false confidence, we want to raise a new concept, the Clarity Assessment. The Clarity Assessment is a request for the Model to reason by linting its action against the legislation and raising a scored list of assumptions it has made. The reason for a scored list and not just a list is about being pragmatic, we want to allow a developer to determine the Model's level of automation and not automatically flood our tokens with every possible assumption.</p>
+        <p>Once we have the list of assumptions that need guidance, we can then make the request to the our Common Law. Ideally this context layer is wrapped by a strongly typed request structure to promote a format that minimises on reasoning. For each assumption, the Model will need to break down into tag values what it is seeking - verification, issue, fix, preference or example and key words. The combination will run a search across ideally a graphified or just simply weighted collection and return the top 3 weighted context snippets that are most relevant to the tags.</p>
+        <figure class="diagram"><div class="ph">Diagram — recall sequence</div><figcaption>The Clarity Assessment surfaces doubt, raises an Ambiguity Event, and redirects into the Legal Check, which queries the Obsidian MCP; the MCP graph-searches and ranks the Common Law, and the ranked precedent returns as a snippet into the prompt.</figcaption></figure>
+        <hr>
+        <h2>The Feedback Loop: Legislation Review</h2>
+        <p>As with most good developer systems, we want to acknowledge and cater for a Feedback Loop. In this case, we want to allow for this in order to tune our Legislation and Consitution to minimise the need for Common Law - for the sake of efficient reasoning. This doesn't mean we continuously bring in all of the context from the Common Law and make it Prescriptive, rather it gives us a channel to tune the wording already used so that it better matches our intent, the intent that led to an assumption being made in the first place. In more extreme cases can may identify a shift in pattern and then, we may be able to change Legislation materially.</p>
+        <figure class="diagram"><div class="ph">Diagram — legislation feedback loop</div><figcaption>The most frequently consulted rulings are surfaced from the Common Law, linted for alignment against the Constitution and Legislation, then a human tunes the wording and tags — sharpening outcomes while leaving the law largely unchanged.</figcaption></figure>
+        <hr>
+        <h2>In Summary</h2>
+        <p>In summary, the Legal Framework is first and foremost a way to frame context under different lights so that we can better see how and when to use each. I really lean into the Legal framing also quite on purpose because I have so far seen this as the PERFECT fit for what context really is doing and I think we, as humans have basically solved context in the Legal System. The follow up point or question is that we should adjust our current harnesses to more align with how we can hook in the different layers of context, and I actually think this is where we will see big wins in both being able to convey our message accurately to the Models but also in more efficient use of our tokens. I might have understated in the framework also but the timing of the context snippets also plays on the weighting of where the context exists within the context window too, so with fewer words - we should be able to garner better outcomes.</p>
+        <p>Moving forward in my next post, I will be describing how my current prototype is setup in Claude. I'm already brewing some key changes also based on my learnings using my prototype... but that will come in post 3.</p>
+      </article>
+    </section>
+
+    <!-- A — EXTERNAL -->
+    <section id="view-a" hidden>
+      <div class="armhead"><span class="tag a">A · Full external skill (verbatim)</span></div>
+      <div class="whatdid"><b>What the skill did, applied faithfully:</b> led with authority, removed every "I believe / I feel / seems", and — on its "cut tangents, be ruthless" rule — <b>deleted all three <code>&lt;aside&gt;</code> reflections</b>, replaced the "In Summary" with a forward line, tightened throughout. 0 asides, ~958 words. Tightest argument; lost the honesty and three real observations.</div>
+      <div class="removed"><b>Cut by this arm:</b> the "stuck for two months" admission · the Microsoft Copilot / Graph-database observation (with its citation) · the Claude Constitutional-AI observation. Each carried a real claim, so cutting them breaks substance-freeze — but the skill's rules mandate it.</div>
+      <article class="post">
+        <div class="meta"><span>summary rewritten — hedge-free, declarative</span></div>
+        <p>The craft of handing context to an agent has stabilised: instruction files at the repository root, skills, layered system prompts, a handful of memory stores. All of it documents one thing well - <strong>Prescriptive Context</strong>, the rules and standing guidance an agent is told to follow.</p>
+        <p>Prescription has a ceiling. The developer still steps back into the loop to ask the sharper question, redirect the agent, or supply the insight that resolves an ambiguous moment. That accumulated judgement is a second kind of context - <strong>Reflective Context</strong> - and current harnesses load it at the wrong time. We load memory the way we load everything else: up front, indiscriminately, as standing context. Experience is precedent. It matters only when the rules in front of you run out, so loading it in advance wastes tokens and buries the signal.</p>
+        <p>The Legal Framework fixes the timing. It separates context into three tiers by role, and delivers each tier when it is needed rather than all of it at once.</p>
+        <h2>The three tiers</h2>
+        <p>The framework maps context onto the structure of a legal system: <strong>ideology</strong> (the Constitution), <strong>prescription</strong> (the Legislation), and <strong>reflection</strong> (the Common Law). Separating the tiers by runtime role is what lets the Legislation and Constitution stay small.</p>
+        <figure class="diagram"><div class="ph">Diagram — system architecture</div><figcaption>The Constitution at the repository root and Legislation through the tree, with the Common Law in a separate vault connected as a queryable retrieval surface.</figcaption></figure>
+        <p><strong>The Constitution</strong> is the root instruction file - CLAUDE.md, AGENTS.md, or the harness equivalent - a concise set of values for working on the repository. These values transfer across projects, because they describe how to behave as a developer rather than how one codebase works. Karpathy's published CLAUDE.md sets the bar: four behavioural pillars - think before coding, simplicity first, surgical changes, and goal-driven execution with verifiable success criteria - in about sixty lines. The Constitution is the final fallback when every other tier runs out of guidance.</p>
+        <p><strong>The Legislation</strong> applies the Constitution to specifics: architecture, design patterns, workflows, tool references. It loads just-in-time, scoped to the sub-directory the agent is working in. It is the guardrail layer - the same role most teams already give their per-directory rules - but the framework keeps it to a maintainable size by moving nuance out of it and into the Common Law.</p>
+        <p><strong>The Common Law</strong> is the developer's accumulated experience, chunked into atomic facts: points of verification, encountered issues and their fixes, preferences, and worked examples of what to do and what not to do. Each fact interprets the Legislation and narrows it. The Common Law loads only when the Legislation is unclear, triggered by an <strong>Ambiguity Event</strong> - precedent consulted when the written rule falls short, and invoked as memory because it draws on past work. The mechanism reuses the Memory.md access path the harness already has, so the addition is small.</p>
+        <h2>Recall at the point of ambiguity</h2>
+        <p>The framework needs one change to the core harness: a stronger built-in sense of uncertainty, paired with the tools to resolve it from experience. Claude's Constitutional AI harness already shows the strongest progress toward this kind of self-checking.</p>
+        <p>A new step raises that uncertainty into a signal. The <strong>Clarity Assessment</strong> asks the model to lint its intended action against the Legislation and return a scored list of the assumptions it is making. The score, rather than a flat list, lets the developer set the automation threshold and stops every possible assumption from flooding the context.</p>
+        <p>Each scored assumption becomes a query to the Common Law. A strongly typed request structure keeps the query cheap to reason about: for each assumption, the model names what it needs - verification, issue, fix, preference, or example - plus keywords. That query runs against a graphed or weighted fact store and returns the top three snippets ranked against the tags.</p>
+        <figure class="diagram"><div class="ph">Diagram — recall sequence</div><figcaption>The Clarity Assessment surfaces doubt, raises an Ambiguity Event, and redirects into the Legal Check, which queries the Obsidian MCP; the MCP ranks the Common Law, and the ranked precedent returns as a snippet.</figcaption></figure>
+        <h2>The feedback loop: Legislation review</h2>
+        <p>The Common Law also tunes the tiers above it. The most frequently consulted rulings reveal where the Legislation and Constitution left room for a wrong assumption. Surfacing them lets a developer sharpen the wording that led to the ambiguity - not by promoting every fact into prescription, but by aligning the existing rules to the intent behind them. A sustained shift in the rulings signals a genuine change in pattern, which can justify a material change to the Legislation.</p>
+        <figure class="diagram"><div class="ph">Diagram — legislation feedback loop</div><figcaption>Frequently consulted rulings are surfaced, linted against the Constitution and Legislation, then a human tunes the wording — sharpening outcomes while leaving the law largely unchanged.</figcaption></figure>
+        <h2>Why the legal framing earns its place</h2>
+        <p>Framing context under three legal tiers shows when and how to use each one. The legal system is the mature model for exactly this problem - a Constitution for values, Legislation for rules, and Common Law for precedent applied only when the rules fall short - and agent context is doing the same work. Aligning the harness to those tiers delivers two wins at once: the message reaches the model more accurately, and it does so on fewer tokens, because snippet timing also controls where context lands in the window. Fewer, better-placed words produce better outcomes.</p>
+        <p>The next post puts the framework into Claude: how the prototype is wired, and the changes the prototype has already forced.</p>
+      </article>
+    </section>
+
+    <!-- B — BESPOKE -->
+    <section id="view-b" hidden>
+      <div class="armhead"><span class="tag b">B · Bespoke skill</span></div>
+      <div class="whatdid"><b>What the skill did:</b> fixed the real errors (<code>heirarchy→hierarchy</code>, <code>Consitution→Constitution ×2</code>, "the our Common Law"→"our Common Law", "can may identify"→"we may identify"), split a few run-ons, kept all 3 asides, every hedge, the coined concepts and the "In Summary" close. One self-flagged over-reach: trimmed a doubled hedge ("right now I feel that it is neither here nor there" → "…right now it is neither…"). ~1,386 words.</div>
+      <article class="post">
+        <div class="meta"><span>summary: unchanged from original</span></div>
+        <p>We have started to settle on how we hand context to an agent. Instruction files at the repository root, skills, layered system prompts, a handful of memory approaches. It is a real maturing of the craft, and it is good at one specific thing: documenting what I will call <strong>Prescriptive Context</strong> - the rules and standing guidance an agent is told to follow.</p>
+        <p>But prescription only goes so far. In practice I keep stepping back into the loop. To ask the right question. To nudge the agent down a different path. To supply a hard-won insight, or point it at the right tool at the right moment. That accumulated human experience is a different kind of context. It is less structured than the rules, and it is more the kind of <em>ah-ha</em> moment that saves the day. I call it <strong>Reflective Context</strong>, and right now it is neither here nor there. We have very sophisticated memory containers, but I believe there is a heap more clarity to surface in how we hook them up.</p>
+        <aside class="note"><p>I have to admit, I had originally started to compile all of my research and testing into a single massive white paper, but I kept on finding issues in my logic or testing, kept on finding actual implementations worth looking into. I have actually been stuck for the last two months on simply trying to articulate what I have prototyped, and am now desperately missing out on the latest updates in the field. This is my way of just getting my framework articulated, and I will be making progressive blogs as updates. I will also be blogging in a more structured manner about my findings on each major platform and how they align with the Legal Framework. I have to be clear: there are a LOT of tools out there now, all edging closer and closer to my idea - some may even argue it has surpassed my framework. That is fine. I will continue to document the actual implementation with different platforms at its core, and it will hopefully serve as a useful baseline for us in the future.</p></aside>
+        <hr>
+        <h2>The problem: context is smart but lacks experience</h2>
+        <p>The ecosystem has stabilised on a well-described structure for <em>prescriptive</em> rules. We also worked out early that an agent needs memory - or in some cases something closer to fine-tuning through context. Those are the RAG and vector stores, the LLM wiki, the MCP data sources.</p>
+        <p>I am not here to challenge that we have those things. What I want to challenge is <strong>the way we currently reach for them, and the moment at which we do</strong>. We tend to load memory the way we load everything else - up front, indiscriminately, as part of the standing context. That is the wrong time and the wrong shape for experience. Experience is precedent. It only matters when the rules in front of you ran out.</p>
+        <hr>
+        <h2>The Legal Framework</h2>
+        <p>The Legal Framework provides a hierarchy to structure the context, but more importantly it describes the role each layer plays at runtime. The three layers are: <strong>ideology</strong> (the Constitution), <strong>prescription</strong> (the Legislation), and <strong>reflection</strong> (the Common Law). The goal is to deliver the appropriate dimension of context just-in-time, and the flow-on effect is a more concise, more manageable set of Legislation and Constitution.</p>
+        <figure class="diagram"><div class="ph">Diagram — system architecture</div><figcaption>The Constitution at the repository root and Legislation through the tree, with the Common Law in a separate vault connected as a queryable retrieval surface.</figcaption></figure>
+        <h3>The Constitution</h3>
+        <p>The Constitution is the root instruction file — CLAUDE.md, AGENTS.md, or your harness's equivalent — written as a concise set of points governing the values needed to work successfully on the repository. It is highly likely to be global, or at least easily transferable across projects, because constitutional values are about <em>how to behave as a developer</em>, not about any one codebase. <a href="#">Karpathy's published CLAUDE.md</a> is a strong exemplar: four behavioural pillars — think before coding, simplicity first, surgical changes, and goal-driven execution with verifiable success criteria — in about sixty lines.</p>
+        <p>The Framework treats the Constitution as the guiding north-star, and it is always our final fallback when handling ambiguity.</p>
+        <h3>Legislation</h3>
+        <p>Legislation is the prescriptive application of the Constitution. It is where we describe specific architecture, design patterns, workflows, and tool references. At runtime we rely on the just-in-time loading of context relevant to each sub-directory.</p>
+        <p>The Framework doesn't really differ from the majority here - Legislation is rightly the guardrails. What it does present is a scenario where the guardrails can be reduced to a more maintainable size and update frequency.</p>
+        <h3>Common Law</h3>
+        <p>Common Law is the accumulated experience of the developer, ideally chunked into useful facts: points of verification, the issues we have encountered, our fixes, our preferences, and examples of what to do and what not to do. In short, they are actual interpretations of the Legislation, providing the nuance that strengthens and positively narrows a legislative piece.</p>
+        <p>The Framework requires the Common Law to meet the runtime requirement too, by hooking into a new concept - the Ambiguity Event. Guided by the legal system as precedent, Common Law is applied only when the Legislation has not been clear enough. The Ambiguity Event is raised as the optimal moment to reference it. How it is referenced is also heavily borrowed from our legal system: we invoke the Common Law as Memory, since we are seeking guidance from past work.</p>
+        <p>On a more technical level, I believe this is only a small adjustment, given we already have the Memory.md file being accessed.</p>
+        <aside class="note"><p>I have actually observed, through speaking with many people who are using Copilot, that it's been a bit of a low-key win by Microsoft, who invested heavily in their harness framework much earlier and leaned heavily into their existing products. In Microsoft 365, Copilot actually hooks into a Graph database, and so now I'm starting to hear more and more people talk about 'training' their agents at an enterprise level. This is the biggest step towards my Common Law pattern to date.</p><span class="src">— <a href="https://github.com/MicrosoftDocs/microsoft-365-docs/blob/public/copilot/copilot-personalization-memory.md">Microsoft's Copilot personalization and memory documentation</a></span></aside>
+        <hr>
+        <h2>The Mechanism: Recall at the Point of Ambiguity</h2>
+        <p>The Framework also requires some tuning to the core harness. The goal is to build a stronger sense of uncertainty into its thinking, and then give it the tools to work off our experience.</p>
+        <aside class="note"><p>This is where I have observed Claude having the strongest progress towards sense-checking via its Constitutional AI harness.</p></aside>
+        <p>To capture ambiguity even in the face of false confidence, we raise a new concept: the Clarity Assessment. The Clarity Assessment is a request for the model to reason by linting its action against the Legislation and raising a scored list of the assumptions it has made. The reason for a scored list, and not just a list, is pragmatism - we want to let a developer determine the model's level of automation, rather than automatically flooding our tokens with every possible assumption.</p>
+        <p>Once we have the list of assumptions that need guidance, we can make the request to our Common Law. Ideally this context layer is wrapped by a strongly typed request structure, to promote a format that minimises reasoning. For each assumption, the model breaks down into tag values what it is seeking - verification, issue, fix, preference or example - plus keywords. The combination runs a search across an ideally graphified, or simply weighted, collection and returns the top 3 weighted context snippets most relevant to the tags.</p>
+        <figure class="diagram"><div class="ph">Diagram — recall sequence</div><figcaption>The Clarity Assessment surfaces doubt, raises an Ambiguity Event, and redirects into the Legal Check, which queries the Obsidian MCP; the MCP graph-searches and ranks the Common Law, and the ranked precedent returns as a snippet into the prompt.</figcaption></figure>
+        <hr>
+        <h2>The Feedback Loop: Legislation Review</h2>
+        <p>As with most good developer systems, we want to acknowledge and cater for a feedback loop. Here, we want it so we can tune our Legislation and Constitution to minimise the need for Common Law - for the sake of efficient reasoning. This doesn't mean we continuously pull context in from the Common Law and make it prescriptive. Rather, it gives us a channel to tune the wording already in use, so it better matches our intent - the intent that led to an assumption being made in the first place. In more extreme cases we may identify a shift in pattern, and then we may be able to change Legislation materially.</p>
+        <figure class="diagram"><div class="ph">Diagram — legislation feedback loop</div><figcaption>The most frequently consulted rulings are surfaced from the Common Law, linted for alignment against the Constitution and Legislation, then a human tunes the wording and tags — sharpening outcomes while leaving the law largely unchanged.</figcaption></figure>
+        <hr>
+        <h2>In Summary</h2>
+        <p>In summary, the Legal Framework is first and foremost a way to frame context under different lights, so that we can better see how and when to use each. I lean into the legal framing quite deliberately, because so far I have seen it as the <em>perfect</em> fit for what context is really doing - and I think we, as humans, have basically solved context in the Legal System. The follow-up point is that we should adjust our current harnesses to align more with how we can hook in the different layers of context. This is where I think we will see big wins: both in conveying our message accurately to the models, and in more efficient use of our tokens. I may have understated it in the framework, but the timing of the context snippets also plays on the weighting of where the context sits within the context window - so with fewer words, we should be able to garner better outcomes.</p>
+        <p>In my next post, I will describe how my current prototype is set up in Claude. I am already brewing some key changes based on what I have learned using it... but that will come in post 3.</p>
+      </article>
+    </section>
+
+    <!-- C — HYBRID -->
+    <section id="view-c" hidden>
+      <div class="armhead"><span class="tag c">C · Hybrid skill</span></div>
+      <div class="whatdid"><b>What the skill did:</b> everything B fixed, plus craft tightening gated by the voice guide — cut filler ("actually / really / simply / a bit of"), sharpened one <strong>bold thesis</strong> per section, trimmed filler <em>inside</em> the asides while keeping them, improved parallelism. Kept hedges, coined concepts, "In Summary". ~1,255 words — crisper than the original, still unmistakably the author.</div>
+      <article class="post">
+        <div class="meta"><span>summary: unchanged from original</span></div>
+        <p>We have started to settle on how we hand context to an agent. Instruction files at the repository root, skills, layered system prompts, a handful of memory approaches. It is a real maturing of the craft, and it is good at one thing: documenting what I will call <strong>Prescriptive Context</strong> - the rules and standing guidance an agent is told to follow.</p>
+        <p>Prescription only goes so far. In practice I keep stepping back into the loop - to ask the right question, to nudge the agent down a different path, to supply a hard-won insight or point it at the right tool at the right moment. That accumulated human experience is a different kind of context: less structured than the rules, more the <em>ah-ha</em> moment that saves the day. I call it <strong>Reflective Context</strong>, and right now it is neither here nor there. We have very sophisticated memory containers, but I believe there is a heap more clarity to surface in how we hook them up.</p>
+        <aside class="note"><p>I have to admit, I originally started compiling all of my research and testing into a single massive white paper, but I kept finding issues in my logic or testing, and kept finding actual implementations worth looking into. I have been stuck for the last two months on simply trying to articulate what I have prototyped, and I am now missing out on the latest updates in the field. This is my way of getting the framework articulated, and I will make progressive blogs as updates. I will also blog in a more structured way about each major platform and how it aligns with the Legal Framework. I have to be clear: there are a LOT of tools out there now, all edging closer and closer to my idea - some may even argue it has surpassed my framework. That is fine. I will keep documenting the actual implementation with different platforms at its core, and it will hopefully serve as a useful baseline for us in the future.</p></aside>
+        <hr>
+        <h2>The problem: context is smart but lacks experience</h2>
+        <p>The ecosystem has stabilised on a well-described structure for <em>prescriptive</em> rules. We also worked out early that an agent needs memory - or something closer to fine-tuning through context. Those are the RAG and vector stores, the LLM wiki, the MCP data sources.</p>
+        <p>I am not challenging that we have those things. I am challenging <strong>the way we reach for them, and the moment at which we do</strong>. We load memory the way we load everything else - up front, indiscriminately, as part of the standing context. That is the wrong time and the wrong shape for experience. <strong>Experience is precedent. It only matters when the rules in front of you ran out.</strong></p>
+        <hr>
+        <h2>The Legal Framework</h2>
+        <p>The Legal Framework gives context a hierarchy, but more importantly it names the role each layer plays at runtime. Three layers: <strong>ideology</strong> (the Constitution), <strong>prescription</strong> (the Legislation), and <strong>reflection</strong> (the Common Law). Deliver the right dimension of context just-in-time, and the flow-on effect is a leaner, more manageable Legislation and Constitution.</p>
+        <figure class="diagram"><div class="ph">Diagram — system architecture</div><figcaption>The Constitution at the repository root and Legislation through the tree, with the Common Law in a separate vault connected as a queryable retrieval surface.</figcaption></figure>
+        <h3>The Constitution</h3>
+        <p>The Constitution is the root instruction file — CLAUDE.md, AGENTS.md, or your harness's equivalent — a concise set of values for working successfully on the repository. It is highly likely to be global, or at least easily transferable across projects, because constitutional values are about <em>how to behave as a developer</em>, not about any one codebase. <a href="#">Karpathy's published CLAUDE.md</a> is a strong exemplar: four behavioural pillars — think before coding, simplicity first, surgical changes, and goal-driven execution with verifiable success criteria — in about sixty lines.</p>
+        <p>The Framework treats the Constitution as the guiding north-star, and it is always our final fallback when handling ambiguity.</p>
+        <h3>Legislation</h3>
+        <p>Legislation is the prescriptive application of the Constitution: specific architecture, design patterns, workflows, and tool references. At runtime we rely on just-in-time loading, scoped to each sub-directory.</p>
+        <p>The Framework doesn't differ from the majority here - Legislation is rightly the guardrails. What it adds is a scenario where those guardrails can shrink to a more maintainable size and update frequency.</p>
+        <h3>Common Law</h3>
+        <p>Common Law is the accumulated experience of the developer, chunked into useful facts: points of verification, the issues we have hit, our fixes, our preferences, and examples of what to do and what not to do. They are actual interpretations of the Legislation - the nuance that strengthens and positively narrows a legislative piece.</p>
+        <p>The Framework holds the Common Law to the same runtime requirement, by hooking into a new concept - the Ambiguity Event. Guided by the legal system as precedent, <strong>Common Law is applied only when the Legislation has not been clear enough.</strong> The Ambiguity Event marks that moment. How we reference it is also borrowed from the legal system: we invoke the Common Law as Memory, because we are seeking guidance from past work.</p>
+        <p>Technically, I believe this is a small adjustment, given we already access the Memory.md file.</p>
+        <aside class="note"><p>I have observed, through speaking with many people using Copilot, that it has been a low-key win by Microsoft, who invested heavily in their harness framework much earlier and leaned into their existing products. In Microsoft 365, Copilot hooks into a Graph database, and I am now hearing more and more people talk about 'training' their agents at an enterprise level. This is the biggest step towards my Common Law pattern to date.</p><span class="src">— <a href="https://github.com/MicrosoftDocs/microsoft-365-docs/blob/public/copilot/copilot-personalization-memory.md">Microsoft's Copilot personalization and memory documentation</a></span></aside>
+        <hr>
+        <h2>The Mechanism: Recall at the Point of Ambiguity</h2>
+        <p>The Framework also needs some tuning to the core harness. The goal: build a stronger sense of uncertainty into its thinking, then give it the tools to work off our experience.</p>
+        <aside class="note"><p>This is where I have observed Claude making the strongest progress towards sense-checking, via its Constitutional AI harness.</p></aside>
+        <p>To capture ambiguity even in the face of false confidence, we raise a new concept: the Clarity Assessment. The Clarity Assessment asks the model to lint its action against the Legislation and raise a scored list of the assumptions it has made. The list is scored, not flat, for a pragmatic reason - we want the developer to set the model's level of automation, not flood our tokens with every possible assumption.</p>
+        <p>With the list of assumptions that need guidance, we query our Common Law. Ideally this layer is wrapped in a strongly typed request structure, to promote a format that minimises reasoning. For each assumption, the model names in tag values what it is seeking - verification, issue, fix, preference, or example - plus keywords. That combination searches an ideally graphified, or simply weighted, collection and returns the top 3 weighted snippets most relevant to the tags.</p>
+        <figure class="diagram"><div class="ph">Diagram — recall sequence</div><figcaption>The Clarity Assessment surfaces doubt, raises an Ambiguity Event, and redirects into the Legal Check, which queries the Obsidian MCP; the MCP graph-searches and ranks the Common Law, and the ranked precedent returns as a snippet into the prompt.</figcaption></figure>
+        <hr>
+        <h2>The Feedback Loop: Legislation Review</h2>
+        <p>Like most good developer systems, this one caters for a feedback loop. Here it exists to tune our Legislation and Constitution so we need the Common Law less, for the sake of efficient reasoning. This doesn't mean continuously pulling context out of the Common Law and making it prescriptive. It gives us a channel to tune the wording already in use, so it better matches our intent - the intent that led to the assumption in the first place. In more extreme cases we may identify a shift in pattern, and then change Legislation materially.</p>
+        <figure class="diagram"><div class="ph">Diagram — legislation feedback loop</div><figcaption>The most frequently consulted rulings are surfaced from the Common Law, linted for alignment against the Constitution and Legislation, then a human tunes the wording and tags — sharpening outcomes while leaving the law largely unchanged.</figcaption></figure>
+        <hr>
+        <h2>In Summary</h2>
+        <p>The Legal Framework is first and foremost a way to frame context under different lights, so we can see how and when to use each. I lean into the legal framing deliberately, because so far I have seen it as the <em>perfect</em> fit for what context is really doing - and I think we, as humans, have basically solved context in the Legal System. The follow-on: we should adjust our current harnesses to align with how we hook in the different layers of context. That is where I expect the big wins - both in conveying our message accurately to the models, and in more efficient use of our tokens. I may have understated this in the framework, but the timing of a snippet also shifts its weight within the context window - so with fewer words, we should garner better outcomes.</p>
+        <p>In my next post, I will describe how my current prototype is set up in Claude. I am already brewing some key changes based on what I have learned using it... but that will come in post 3.</p>
+      </article>
+    </section>
+  </main>
+</div>
+
+<script>
+  (function(){
+    var views = {original:'view-original', a:'view-a', b:'view-b', c:'view-c'};
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.seg button'));
+    function show(key){
+      Object.keys(views).forEach(function(k){
+        var el = document.getElementById(views[k]);
+        if(el) el.hidden = (k !== key);
+      });
+      btns.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.view === key)); });
+      try{ history.replaceState(null,'', '#'+key); }catch(e){}
+      window.scrollTo({top:0,behavior:'instant' in document.documentElement.style ? 'instant':'auto'});
+    }
+    btns.forEach(function(b){ b.addEventListener('click', function(){ show(b.dataset.view); }); });
+    var h = (location.hash||'').replace('#','');
+    show(views[h] ? h : 'original');
+  })();
+</script>

@@ -1,0 +1,22 @@
+[
+  {"query": "I've got an idea for a new post about why XM Cloud teams should stop hand-writing component datasources and let agents scaffold them. Not sure what the angle is yet.", "should_trigger": true},
+  {"query": "thinking of starting a new series on agent memory - hindsight, my OKF stuff, claude's own memory. where would I even start", "should_trigger": true},
+  {"query": "new blog idea: the cost of context isn't tokens, it's attention. can you help me figure out what the story is", "should_trigger": true},
+  {"query": "What should post three of the Legal Framework series be? I promised it at the end of post two.", "should_trigger": true},
+  {"query": "I keep telling clients the same thing about Content Hub SSO security groups. Is there a blog in this?", "should_trigger": true},
+  {"query": "got a concept I want to get down before I lose it - agents as junior devs who never get promoted to senior. help me shape it", "should_trigger": true},
+  {"query": "I want to write up the Agentic Studio builder seats thing from a team-lead angle - a totally new post, not an edit of the old one", "should_trigger": true},
+  {"query": "here's a dump of my notes from today's personalisation workshop, I think there's a post in it somewhere: CDP events firing twice, engage SDK 1.2 migration pain, marketers want preview before publish", "should_trigger": true},
+  {"query": "Could Trinity of Clarity and Three Dimensions become a proper series with a third part? What would tie them together?", "should_trigger": true},
+  {"query": "new post: we don't build the website, part 2. what's the arc?", "should_trigger": true},
+  {"query": "Rewrite my three-dimensions post in the crisp profile and tighten it up, it's too long", "should_trigger": false},
+  {"query": "Proofread the agentic-studio-widgets post, I'm pretty sure there are typos in the second half", "should_trigger": false},
+  {"query": "Add the mandate checkout slider to the agent as customer post under the worked example", "should_trigger": false},
+  {"query": "publish the builder license post to prod, it's been sitting in draft", "should_trigger": false},
+  {"query": "new idea for the site itself: put a dark mode toggle in the mobile nav", "should_trigger": false},
+  {"query": "fix the series links in the SSO posts so previous and next actually link to each other", "should_trigger": false},
+  {"query": "Write the post up from my locked brief in .claude/briefs/agent-memory.md", "should_trigger": false},
+  {"query": "new idea for an app: a TCG booster box price tracker that alerts me when Amazon drops below RRP", "should_trigger": false},
+  {"query": "turn my legal framework post into a LinkedIn summary I can share tomorrow", "should_trigger": false},
+  {"query": "what's a better title for the draft rewrite of the agent as customer post?", "should_trigger": false}
+]
