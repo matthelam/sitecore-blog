@@ -5,6 +5,10 @@ Derived from the source MDX of three posts the author named as the quality bar:
 `the-agent-as-customer-a-practical-build-guide`. Every rule below is anchored to a real
 sentence he wrote. Apply these literally when authoring or rewriting.
 
+Tone (contractions, sentence length, casual moments) is governed by `tone-profiles.md`. The
+anchor quotes below come from posts written before the tone trial, so they show uncontracted forms;
+copy their stance and rhythm, not their formality.
+
 The organising principle: **this blog is a practitioner reasoning in public and being honest
 about it.** That honesty — including admitted doubt and admitted failure — is the product, not a
 flaw to edit out. A rewrite that makes him sound more confident, more polished, or more "marketing"
@@ -85,6 +89,8 @@ The live posts ship real errors — fix these kinds, and only these kinds, listi
 - Grammar slips: "the our Common Law" → "our Common Law"; "In more extreme cases can may identify"
   → "In more extreme cases we may identify".
 - Obvious doubled words / broken agreement.
+- Tense slips: "It only matters when the rules in front of you ran out" → "have run out". (The
+  Hybrid pass missed this one in the bake-off; check every verb's tense against its sentence.)
 Do **not**, under the banner of "correctness", remove hedging, cut an admission, de-capitalise a
 coined term, shorten an `<aside>`, or rephrase a claim into something stronger than he wrote.
 

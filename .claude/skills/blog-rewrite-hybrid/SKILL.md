@@ -11,14 +11,18 @@ approach.
 
 ## Process
 
-1. **Read `voice-guide.md` and `craft-fragments.md` in this directory, both in full.**
+1. **Read `voice-guide.md`, `craft-fragments.md` and `tone-profiles.md` in this directory, all in
+   full.**
 2. Read the source post end to end.
 3. Rewrite section by section. Apply the craft fragments **only** where they do not conflict with the
    voice guide. On any conflict, apply the voice guide and move on.
-4. Preserve substance exactly (every claim, number, code block, table, link). Fix only genuine
+4. Write in the **crisp** tone profile throughout. Switch a passage to **casual** only where
+   `tone-profiles.md` allows it, within its limits, and only if it passes the drift check.
+5. Preserve substance exactly (every claim, number, code block, table, link). Fix only genuine
    errors. Keep all `<aside>`, `<svg>`, `<img>`, and code components in place.
-5. Output valid MDX, then list the correctness fixes and note any place where a craft fragment was
-   overridden by the voice guide, with the one-line reason.
+6. Output valid MDX, then list: the correctness fixes; each passage written in casual, with the
+   reason; and any place where a craft fragment was overridden by the voice guide, with the
+   one-line reason.
 
 ## The override table (where external craft and this author collide)
 
