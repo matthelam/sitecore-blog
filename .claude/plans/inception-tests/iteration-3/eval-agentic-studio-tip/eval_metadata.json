@@ -1,0 +1,19 @@
+{
+  "eval_id": 2,
+  "eval_name": "agentic-studio-tip",
+  "prompt": "quick one - found that Agentic Studio flows lose the brand kit context if you rename the flow after creating it. worth a post?",
+  "assertions": [
+    "Offers two or three candidate one-liners for the point, rather than one",
+    "Names the reader: who they are, what they believe now, what should change",
+    "States the tension explicitly",
+    "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+    "Marks turning points as what the reader should see or do, not how to build a visual",
+    "Includes honesty beats (what isn't solved or what went wrong first)",
+    "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+    "Contains no drafted body paragraphs of the post",
+    "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay",
+    "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing",
+    "Shows what at least two candidate phrasings of the point would each include or leave out",
+    "Leaves the brief unlocked and runs (or explicitly defers until the wording is chosen) a check of every beat against the point's wording"
+  ]
+}
