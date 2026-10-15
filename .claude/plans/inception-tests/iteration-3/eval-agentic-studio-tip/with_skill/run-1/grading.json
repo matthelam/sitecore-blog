@@ -1,0 +1,70 @@
+{
+  "expectations": [
+    {
+      "text": "Offers two or three candidate one-liners for the point, rather than one",
+      "passed": true,
+      "evidence": "Candidates table: 'A \"Rename a flow after creating it and it can lose its brand kit, so check it after every rename.\"', 'B \"Name the flow before you create it, because renaming afterwards loses the brand kit.\"', 'C \"Brand kits are meant to be set once and used everywhere, but a flow rename quietly breaks that.\"'"
+    },
+    {
+      "text": "Names the reader: who they are, what they believe now, what should change",
+      "passed": true,
+      "evidence": "Who 'A practitioner building or maintaining flows in Agentic Studio'; Believes now 'The brand kit is ambient. Once it's set, every flow gets it, and a rename is a harmless cosmetic edit'; Should leave with 'A rename isn't cosmetic. After renaming a flow, they check the brand kit (or name the flow right the first time).'"
+    },
+    {
+      "text": "States the tension explicitly",
+      "passed": true,
+      "evidence": "Tension: 'A rename is about the most harmless edit there is, so nobody re-checks anything afterwards. The whole value of a brand kit is that you don't have to think about it. Put those together and the flow can run without brand context and nobody notices.'"
+    },
+    {
+      "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+      "passed": true,
+      "evidence": "Recommended Tip as a 7-row numbered beat table; 'Single insight (pattern 5)' beats 1-5 ('3. Before and after: settings or output, side by side'); 'Tip with a callback' beats 1-5. Reason: 'Recommended: plain Tip, because the evidence is one observation.'"
+    },
+    {
+      "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+      "passed": true,
+      "evidence": "'Beat 2/3: the reader should *see* the brand kit present before the rename and missing after. Two states of the same flow... If you don't, it's text only.' No build instructions"
+    },
+    {
+      "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+      "passed": true,
+      "evidence": "Honesty beats: 'What isn't known: the mechanism. Don't claim it fails silently, unlinks, or anything else'; 'Prior claim: the Feb lifecycle post says brand kits apply automatically to every flow. This finding is a caveat to that'; beat 6 'What's not known yet: the cause, whether other edits do it, support ticket status'"
+    },
+    {
+      "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+      "passed": true,
+      "evidence": "Beats 2, 3, 4, 6 'author to supply'; tension 'To confirm: whether it's actually unnoticeable'; candidate C '\"Quietly\" is my guess, not yours'; scope 'To confirm'; response 'I haven't assumed it fails silently'. Cross-references verified: lifecycle post dated 2026-02-11 with 'every agent, every flow, every brief generation automatically picks up those constraints' (l.103), ABM Campaign flow (l.145), Brand Knowledge/Brand Kits (l.95-99), workflow editor (l.151), export post 'logged a support ticket... will update' (l.28) and References to doc.sitecore.com, debug-pane '>' pull quote (l.19). Minor: the optional beat 5 callback line ('Mostly true. Not after a rename.') is a suggested line in Matt's voice, gated on 'Your OK to correct it'"
+    },
+    {
+      "text": "Contains no drafted body paragraphs of the post",
+      "passed": true,
+      "evidence": "No post prose; only one-liners, titles, beat tables and short quoted hook options (same form as iteration-2, which passed)"
+    },
+    {
+      "text": "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay",
+      "passed": true,
+      "evidence": "'Type: tip'; 'Rough size: about 250\u2013400 words... It grows only if you have more'; 'Recommended: plain Tip, because the evidence is one observation'"
+    },
+    {
+      "text": "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing",
+      "passed": true,
+      "evidence": "Open questions 'Reproducible? How many times, and on which flows? Is it the same in a second tenant?' and 'Rename: where?'; Evidence still needed 'Exact repro steps (create, attach brand kit, rename, observe)' and 'How many times reproduced, and on which flow(s)'"
+    },
+    {
+      "text": "Shows what at least two candidate phrasings of the point would each include or leave out",
+      "passed": true,
+      "evidence": "Candidates table has 'What it covers' and 'What it leaves out' for every row: A covers 'One trigger (rename), one setting (brand kit), one check', leaves out 'The question of why. Any other edits'; B covers 'Prevention', leaves out 'Flows that already exist'; C covers 'The broken promise', leaves out/costs 'Turns the tip into a correction of an earlier claim. Bigger post'"
+    },
+    {
+      "text": "Leaves the brief unlocked and runs (or explicitly defers until the wording is chosen) a check of every beat against the point's wording",
+      "passed": true,
+      "evidence": "'Status: **Draft**. The wording of the point isn't chosen yet, so this can't lock.'; 'Beat check: not run yet. It runs once you pick the wording. As drafted, beat 5 (the Feb post callback) belongs to C'; response 'Once you've answered and picked the wording, I'll run the beat check and we can lock it.'"
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 0,
+    "total": 12,
+    "pass_rate": 1.0
+  }
+}

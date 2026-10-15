@@ -1,0 +1,75 @@
+{
+  "expectations": [
+    {
+      "text": "Offers two or three candidate one-liners for the point, rather than one",
+      "passed": true,
+      "evidence": "Four candidates (A-D), more than one: 'A \"One fact per file was a retrieval workaround...\"', 'B \"Better recall didn't remove the need for discipline. It moved it...\"', 'C \"Atomic facts were never really for the retriever...\"', 'D \"A month on Hindsight: recall got better, and I still can't tell what I gave up...\"'. (Four rather than 'two or three'; consistent with the assertion's intent of offering more than one)"
+    },
+    {
+      "text": "Names the reader: who they are, what they believe now, what should change",
+      "passed": true,
+      "evidence": "Who 'Someone who read parts one and two, or anyone running agent memory'; Believes now 'Post two told them atomic, schema-checked facts make retrieval trustworthy, and that the scripts enforce it'; Should leave with 'A clear view, tested over a month of use, of which part of that discipline a good memory service makes unnecessary and which part (if any) is still on them'"
+    },
+    {
+      "text": "States the tension explicitly",
+      "passed": true,
+      "evidence": "Tension: 'So the question is whether you kept a ritual whose reason has gone, or whether it was doing work you only notice now that it's missing.'"
+    },
+    {
+      "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+      "passed": true,
+      "evidence": "Recommended Build log as a 9-row numbered beat table; 'Alternative: Governing analogy, extended' beats 1-6; 'Alternative: Single insight' beats 1-6. Reason: 'It's the pattern part two used, it fits a series follow-up, and its \"what's not right yet\" beat covers the threads post two left open.'"
+    },
+    {
+      "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+      "passed": true,
+      "evidence": "'Beat 4: the reader should see the stated reason for OKF stop applying'; 'Beat 6: the reader should see \"OKF\" break apart into separate jobs, then watch each one get sorted'; 'Beat 7: the verdict should read as the result of the sort'"
+    },
+    {
+      "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+      "passed": true,
+      "evidence": "Honesty beats: 'Post two's prediction... was only half right, or wrong. Say which, plainly'; 'You built about 1,200 lines of scripts (372 + 702 + 115) and a month on a product replaced at least some of them'; 'If the honest answer is \"I can't tell yet\", say that'"
+    },
+    {
+      "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+      "passed": true,
+      "evidence": "Beats 2, 3, 5, 7, 8, 9 'author to supply', beats 4 and 6 'partly... author to supply'; candidate B '\"moved\" is my framing, not something you've said'; analogy beats 2-3 'to confirm... This is an inference, not a fact you've given me'; beat 8 'To confirm whether you used them'. Quoted material verified in implementing-the-legal-framework.mdx: 'I am still a fan of OKF as a format. I am much less confident...' (l.84), 'The reason for the file-per-fact obsession is retrieval' (l.31), 'actually use Hindsight', 'what is worth remembering', 'always the harder half' (l.104), 'whichever of those survives contact with reality' (l.106), 'mixed feeling' (l.96), 'precisely the feature I am now hunting for' (l.94), 372/702/115 lines, six skills, Reflect API. Post one's Ambiguity Event/Clarity Assessment (l.68, l.107). Minor: the quoted 'series point' in the emphasis plan is a paraphrase, not verbatim from either post, but it is not a claim about Matt's experience"
+    },
+    {
+      "text": "Contains no drafted body paragraphs of the post",
+      "passed": true,
+      "evidence": "No post prose; only candidate points, titles, beat tables and short quoted hook options (same form as iteration-2, which passed)"
+    },
+    {
+      "text": "Points back to posts one and two of the series by name or slug",
+      "passed": false,
+      "evidence": "Post two is named by slug: 'Post two (implementing-the-legal-framework)'. Post one is never given by title ('Agent Harness: Memory as Context - The Legal Framework') or slug ('a-legal-framework-for-agent-context'); it appears only as 'post one', 'The first post', 'parts one and two'. Iteration-2 passed by naming both slugs"
+    },
+    {
+      "text": "Plans an honesty beat around losing the OKF one-fact-per-file discipline",
+      "passed": true,
+      "evidence": "Beat 5 'What I lost: the concrete symptoms of dropping one fact per file'; beat 6 'Turn 2: the audit... ask whether Hindsight covers it, whether it still matters, or whether it quietly stopped'; open question 3 '\"Lost the OKF one-fact-per-file discipline.\" What does losing it look like?'"
+    },
+    {
+      "text": "Asks what 'better recall' means and how it was measured",
+      "passed": true,
+      "evidence": "Open question 2: '\"Recall is better.\" Better how, and how did you observe it? More relevant hits, fewer misses... Did you ever run the same question against both systems, or is this an impression from the month?'; response item 2 repeats it"
+    },
+    {
+      "text": "Shows what at least two candidate phrasings of the point would each include or leave out",
+      "passed": true,
+      "evidence": "Candidates table has 'Includes' and 'Leaves out' for all four, e.g. A includes 'The switch, the recall gain, retiring OKF', leaves out 'Supersede, lint, export/import and promotion'; D includes 'An honest open-question post', leaves out 'Any verdict'"
+    },
+    {
+      "text": "Leaves the brief unlocked and runs (or explicitly defers until the wording is chosen) a check of every beat against the point's wording",
+      "passed": true,
+      "evidence": "'Status: **Draft**'; 'Leading candidate (not chosen yet)'; 'Beat check: not run. It has to wait until the wording is chosen (see step 12). Notes so far: beat 8... only fits candidates B and D, and beat 6... gets thin under A.'"
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 1,
+    "total": 13,
+    "pass_rate": 0.9231
+  }
+}
