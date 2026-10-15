@@ -130,7 +130,7 @@ percent. So cut structure first.
 repeat it kept on purpose, so the author can see the emphasis choices. Rewrites preserve
 substance, so a cut that removes a claim is a failure, not a saving.
 
-**Worked cases from the first full rewrites (2026-10-15):**
+**Worked cases from the first full rewrites (2026-10-15; test drafts, since removed):**
 - Cut, re-explanation: in *Three Dimensions*, principle 1 re-ran the 100 × 1,000 arithmetic already
   shown in "The critical realisation".
 - Kept, emphasis: principle 1's one-liner, "Design your context like you're paying per-word rent,
@@ -148,11 +148,11 @@ and the Agentic Studio cluster:
   article…" / "[The first post] ended with a promise… This is that post."
 - **Closers point forward.** "In the next article, we'll walk through…" / "Post three will cover
   whichever of those survives contact with reality."
-- **Link the neighbours, always.** Gap found in the survey: the SSO posts say "previous article"
-  and "next article" without linking either, and the first Legal Framework post promises a next
-  post but doesn't link to it now that it exists. When writing or revising a series post, link the
-  previous and next posts by slug, and flag any older series post whose forward reference should
-  now become a link.
+- **Link the neighbours, always.** When writing or revising a series post, link the previous and
+  next posts by slug (`/blog/<filename-without-.mdx>`), and turn any older post's "next post"
+  promise into a link once that post is published. Never link to a `draft: true` post: it 404s in
+  production. (Fixed 2026-10-15: SSO 01–04 and Legal Framework part 1 now link their neighbours.
+  SSO 04's "next article" stays unlinked until 05 is published.)
 - **Numbered filenames** (`01-…`, `02-…`) are used for the procedural series; the essay series uses
   descriptive slugs.
 

@@ -8,7 +8,7 @@ summary: "A user-guide for setting up Entra ID - Enterprise Applications for Sit
 
 ## Introduction
 
-If you’ve completed the preparation checklist from the previous article, you should already have your tenant details, security groups, and test users ready. Now it’s time to jump into the Azure side and actually **create the Enterprise Applications** that Sitecore will authenticate against.
+If you’ve completed the [preparation checklist](/blog/01-SSO-Preparation) from the previous article, you should already have your tenant details, security groups, and test users ready. Now it’s time to jump into the Azure side and actually **create the Enterprise Applications** that Sitecore will authenticate against.
 
 When configuring Single Sign-On (SSO) in Azure Entra ID, you don’t bind Azure directly to your application — you bind it to an **Enterprise Application** (the service principal that represents your app). The SAML assertions (claims) that Azure issues are scoped *for* that Enterprise Application. In other words, when a user signs in, Azure issues a token in the context of that specific application.
 
@@ -116,4 +116,4 @@ Before closing out, finish the trust setup:
 At this point, your Azure Entra ID setup is ready for the next steps.  
 You have created enterprise applications, enabled SAML, configured group claims, and obtained the federation metadata files.
 
-In the next article, we’ll walk through how to upload that metadata into **Sitecore Cloud Portal**, configure the SAML connection there, and conduct validation checks.  
+In the [next article](/blog/03-SSO-Sitecore-Cloud-Portal-Setup), we’ll walk through how to upload that metadata into **Sitecore Cloud Portal**, configure the SAML connection there, and conduct validation checks.  
