@@ -13,8 +13,12 @@ export default function Home({ posts }) {
           <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
             Latest
           </h1>
-          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            {siteMetadata.description}
+          <p className="max-w-3xl text-lg leading-7 text-gray-500 dark:text-gray-400">
+            I&apos;m Matt Lam (Matthew Lam, or Matthelam on GitHub), a Technical Architect at Aceik
+            in Adelaide, South Australia. This blog is my field notes on agentic Sitecore
+            development: Sitecore Agentic Studio, SitecoreAI and AI-assisted Sitecore work. I also
+            write about the agent context engineering and memory that work depends on, documenting
+            what I learn as I build it out for real.
           </p>
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
