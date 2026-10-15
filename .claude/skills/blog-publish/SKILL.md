@@ -56,9 +56,9 @@ else is yours to resolve.
    live, push, and open a PR whose title says the same.
 
 6. **Preview.** Wait for the Vercel status on the PR head to be `success` (the GitHub status on
-   the PR, context "Vercel"). Then fetch the preview URL from the Vercel bot comment and check
-   the page returns 200 and contains the post's title. A red preview is fixed and pushed before
-   anything merges.
+   the PR, context "Vercel"). That status is the preview check: previews sit behind Vercel's
+   deployment protection, so fetching one returns a 302 to Vercel's login and its content can't
+   be read from the session. A red preview is fixed and pushed before anything merges.
 
 7. **Merge and confirm live.** Merge the PR (merge commit), then poll the live site until the
    change shows. See `references/live-check.md` for the exact checks and the time limit. Report
