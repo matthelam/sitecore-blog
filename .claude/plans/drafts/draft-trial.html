@@ -1,0 +1,341 @@
+<title>Draft Trial</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Layout: two post tabs; each shows stats, a change log, then the post with an Original/Draft toggle. */
+  :root{
+    --paper:#f6f6f3; --surface:#ffffff; --ink:#1b1c1e; --muted:#5b5e65; --line:#e4e4df; --faint:#efefeb;
+    --casual:#9a5a2a; --crisp:#2f7a55; --cut:#a8433a; --accent:#3f5f82;
+    --serif:"IBM Plex Serif",Georgia,serif; --sans:"IBM Plex Sans",-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --paper:#141519; --surface:#1c1e23; --ink:#e9e9e5; --muted:#9a9ea7; --line:#2b2d34; --faint:#22242a;
+    --casual:#d29a64; --crisp:#5fb487; --cut:#e07a70; --accent:#7aa0c7; color-scheme:dark;}}
+  :root[data-theme="dark"]{
+    --paper:#141519; --surface:#1c1e23; --ink:#e9e9e5; --muted:#9a9ea7; --line:#2b2d34; --faint:#22242a;
+    --casual:#d29a64; --crisp:#5fb487; --cut:#e07a70; --accent:#7aa0c7; color-scheme:dark;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:30px 60px}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:clamp(1.55rem,4vw,2.1rem);line-height:1.12;margin:.35rem 0 .5rem;letter-spacing:-.01em;text-wrap:balance}
+  .lede{color:var(--muted);max-width:68ch;margin:0}
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .tabs button,.seg button{font-family:var(--sans);font-size:.88rem;font-weight:500;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.5rem .95rem;cursor:pointer}
+  .tabs button[aria-pressed="true"],.seg button[aria-pressed="true"]{color:var(--ink);border-color:var(--ink)}
+  .tabs button:focus-visible,.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;margin-right:.45rem}
+  .t-casual{color:var(--casual)}.t-crisp{color:var(--crisp)}
+  .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:20px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+  .stat .k{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .stat .v{font-size:1.25rem;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px}
+  .stat .v small{font-size:.8rem;font-weight:500;color:var(--muted)}
+  .log{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:14px}
+  .log h2{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 .6rem;font-weight:500}
+  .log h3{font-size:.95rem;margin:1rem 0 .3rem}
+  .log h3:first-of-type{margin-top:.2rem}
+  .log ul{margin:.2rem 0;padding-left:1.15rem}
+  .log li{margin:.25rem 0;color:var(--muted)}
+  .log li b{color:var(--ink);font-weight:600}
+  .log .flag{color:var(--cut);font-weight:600}
+  .seg{display:flex;gap:8px;margin-top:26px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);padding-block:10px;z-index:3;border-bottom:1px solid var(--line)}
+  article{font-family:var(--serif);font-size:1.04rem;line-height:1.72;margin-top:10px}
+  article h2{font-family:var(--sans);font-size:1.25rem;font-weight:600;margin:1.7rem 0 .4rem;text-wrap:balance}
+  article p,article ul{max-width:68ch}
+  article p{margin:.75rem 0}
+  article blockquote{margin:1.1rem 0;padding:10px 16px;border-left:3px solid var(--line);background:var(--faint);border-radius:0 8px 8px 0;color:var(--muted);font-style:italic;max-width:68ch}
+  article a{color:var(--accent)}
+  article code{font-family:var(--mono);font-size:.86em;background:var(--faint);padding:.05em .35em;border-radius:4px}
+  article pre{background:var(--faint);padding:12px 14px;border-radius:8px;overflow-x:auto}
+  article pre code{background:none;padding:0}
+  article hr{border:none;border-top:1px solid var(--line);margin:1.5rem 0;max-width:68ch}
+  .tw{overflow-x:auto;margin:1rem 0}
+  article table{border-collapse:collapse;font-family:var(--sans);font-size:.85rem;min-width:520px}
+  article th,article td{border-bottom:1px solid var(--line);padding:.4rem .55rem;text-align:left;vertical-align:top}
+  article th{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500}
+  @media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<div class="wrap">
+  <div class="eyebrow">Hybrid skill · tone profiles + concision · draft only</div>
+  <h1>Two existing posts, redrafted</h1>
+  <p class="lede">One short post rewritten casual (it had to come in under 400 words) and one long post rewritten crisp. Substance was frozen in both. Your live posts are unchanged; these are drafts.</p>
+  <div class="tabs" role="group" aria-label="Choose a post">
+    <button data-post="widgets" aria-pressed="true"><span class="tag t-casual">Casual</span>Widgets Do Not Export</button>
+    <button data-post="lifecycle" aria-pressed="false"><span class="tag t-crisp">Crisp</span>The AI Project Lifecycle</button>
+  </div>
+
+  <section id="p-widgets">
+    <div class="stats">
+      <div class="stat"><div class="k">Prose words</div><div class="v">601 → 399 <small>−34%</small></div></div>
+      <div class="stat"><div class="k">Contractions</div><div class="v">1 → 7</div></div>
+      <div class="stat"><div class="k">Words / sentence</div><div class="v">16.2 → 14.2</div></div>
+      <div class="stat"><div class="k">Claims kept</div><div class="v">15 of 15</div></div>
+    </div>
+    <div class="log">
+      <h2>Change log</h2>
+      <h3>Cut as repetition</h3>
+      <ul>
+        <li>"If prompting built it, prompting can rebuild it, and broadly that holds." The next sentence says the same thing.</li>
+        <li>"The section is present in your JSON and absent from the screen." Restates "it never renders".</li>
+        <li>"So do not aim for that." The following line carries the instruction.</li>
+      </ul>
+      <h3>Casual-profile moves</h3>
+      <ul>
+        <li>Fragment pair after the hook: "Nice way to work. Also the fastest route to something you can't move."</li>
+        <li>The post's rule as a one-line quote: "Pin the contract. Re-prompt the layout." It's new wording for two claims already in the post.</li>
+        <li>Bold lead-in for the second point: "<b>One trap if you hand-copy the JSON.</b>"</li>
+        <li>Heading "The wider point" became "Plan the path to Production now".</li>
+      </ul>
+      <h3><span class="flag">Check these:</span> compromises the 400 limit forced</h3>
+      <ul>
+        <li><b>Settings page.</b> "says the same thing in shorter form: use prompts, use AI to build and refine" became "Settings says the same". The claim survives, but the page's own wording is gone.</li>
+        <li><b>Risk.</b> "you can leave thinking about it until later without much risk" became "can wait". "Without much risk" is dropped.</li>
+        <li><b>Hand-copying.</b> "Copying the JSON does work" is now implied by "if you hand-copy the JSON" rather than stated.</li>
+        <li><b>Purpose.</b> "what it was supposed to do" became "what it was for". I read these as the same.</li>
+      </ul>
+    </div>
+    <div class="seg" role="group" aria-label="Version">
+      <button data-v="d" aria-pressed="true">Draft</button><button data-v="o" aria-pressed="false">Original</button>
+    </div>
+    <article class="v-d"><p>Agentic Studio wants you to build widgets by talking to it. The <a href="https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/agentic-studio-settings/create-or-edit-a-widget.html" target="_blank" rel="noopener">widget docs</a> put the Prompt pane first ("describe the widget you want to build"), with predefined prompts to start from. Settings says the same. Standard agents even offer Auto-generate widget, which builds one at runtime.</p>
+<p>Nice way to work. Also the fastest route to something you can't move.</p>
+<h2>Widgets have no export</h2>
+<p>Agents get Export JSON and Import JSON, both on the actions menu, both documented. Widgets get create and edit: Preview, JSON, Schema, Visual and Stream tabs, plus Save Widget and Update Widget. Nothing writes or reads a portable file.</p>
+<p>So a widget stays in its tenant. Moving it means copying out the JSON and schema separately, rebuilding by hand, and re-pointing the agent, whose export carries a <code>widgetTemplateId</code> that refers to nothing in the target tenant.</p>
+<h2>Re-prompting gets you close, not exact</h2>
+<p>Re-describe it in the new tenant and you'll usually land something that does the same job. Ask twice and you get two widgets that look similar and differ in the details. Chasing parity in a chat window isn't a good use of an afternoon.</p>
+<blockquote>Pin the contract. Re-prompt the layout.</blockquote>
+<p>Aim for the outcome: the data in, what it displays, what the user can do with it. Keep the input and output schemas, because your agent needs those to match.</p>
+<p><strong>One trap if you hand-copy the JSON.</strong> An element defined in the elements map but not referenced in any children array is unreachable from the root. It never renders, and nothing warns you. Check the rendered widget, not the file.</p>
+<h2>Plan the path to Production now</h2>
+<p>None of this is a crisis: Agentic Studio is new and moving fast, so gaps are expected. But on a normal Sitecore build, dev to Production is solved and can wait. Here it can't, yet. Some artefacts move cleanly, some <a href="https://blog.matthelam.com/blog/agentic-studio-agent-export-is-lossy" target="_blank" rel="noopener">move partially</a> (agent exports quietly drop a field or two), and at least one doesn't move at all.</p>
+<p>So work out early how your agents and widgets will reach Production, and note what you did as you go: the prompts, the schemas, the IDs you re-pointed, anything you fixed after an import. Not polished docs, just enough to rebuild.</p>
+<p>That's cheap. Finding out at cutover that your scorecard widget exists in exactly one tenant, and nobody wrote down what it was for, isn't.</p>
+<h2>References</h2>
+<ul><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/agentic-studio-settings/create-or-edit-a-widget.html" target="_blank" rel="noopener">Create or edit a widget</a> — Sitecore documentation</li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/export-or-import-an-agent.html" target="_blank" rel="noopener">Export or import an agent</a> — Sitecore documentation</li></ul></article>
+    <article class="v-o" hidden><p>Agentic Studio wants you to build widgets by talking to it. The <a href="https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/agentic-studio-settings/create-or-edit-a-widget.html" target="_blank" rel="noopener">documentation for creating a widget</a> puts the Prompt pane first and tells you to "describe the widget you want to build", with predefined prompts if you would rather start from one. The Settings page says the same thing in shorter form: use prompts, use AI to build and refine. And when you create a standard agent, one of your output options is Auto-generate widget, which lets the agent build one at runtime.</p>
+<p>That is a nice way to work. It is also the fastest route to something you cannot move.</p>
+<h2>Widgets have no export</h2>
+<p>Agents have Export JSON and Import JSON. Both are on the actions menu, both are documented.</p>
+<p>Widgets have create and edit. That is the list. You get Preview, JSON, Schema, Visual and Stream tabs, plus Save Widget and Update Widget. Nothing that produces a portable file, and nothing that consumes one.</p>
+<p>So a widget lives in the tenant where it was made. Moving it means opening the JSON tab, copying that out, copying the schema out separately, and rebuilding by hand at the other end. Then re-pointing the agent, because the agent's own export carries a <code>widgetTemplateId</code> that refers to nothing in the target tenant.</p>
+<h2>Re-prompting gets you close, not exact</h2>
+<p>If prompting built it, prompting can rebuild it, and broadly that holds. Describe the same widget in the new tenant and you will usually land something that does the same job.</p>
+<p>What is hard is an exact reproduction. Ask for the same widget twice and you get two widgets that look similar and differ in the details, and chasing parity through a chat window is not a good use of an afternoon.</p>
+<p>So do not aim for that. Aim for the outcome, and pin down the contract instead: what data goes in, what the widget displays, and what the user can do with the result. Keep the input and output schemas, because those are the part that has to match for your agent to work with it. The layout can be re-prompted.</p>
+<h2>Hand-copying has its own trap</h2>
+<p>Copying the JSON does work, but check the rendered widget rather than the file.</p>
+<p>An element defined in the elements map and not referenced in any children array is unreachable from the root, so it silently never renders. The section is present in your JSON and absent from the screen, and nothing warns you either way.</p>
+<h2>The wider point</h2>
+<p>None of this is a crisis. Agentic Studio is new, it is moving quickly, and these are the sort of gaps you would expect this early.</p>
+<p>It does change how you plan, though. On a normal Sitecore build the path from a dev instance to Production is a solved problem, and you can leave thinking about it until later without much risk. That does not hold here yet. Some artefacts move cleanly, some <a href="https://blog.matthelam.com/blog/agentic-studio-agent-export-is-lossy" target="_blank" rel="noopener">move partially</a> — agent exports quietly drop a field or two — and at least one does not move at all.</p>
+<p>So work out early how your agents and widgets are going to reach Production, and write down what you did while you are doing it. Not polished documentation. Just enough that someone can rebuild the thing: the prompts you used, the input and output schemas, the IDs you had to re-point, and anything you had to fix after an import.</p>
+<p>That costs very little. Discovering at cutover that your scorecard widget exists in exactly one tenant, and that nobody wrote down what it was supposed to do, costs considerably more.</p>
+<h2>References</h2>
+<ul><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/agentic-studio-settings/create-or-edit-a-widget.html" target="_blank" rel="noopener">Create or edit a widget</a> — Sitecore documentation</li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/export-or-import-an-agent.html" target="_blank" rel="noopener">Export or import an agent</a> — Sitecore documentation</li></ul></article>
+  </section>
+
+  <section id="p-lifecycle" hidden>
+    <div class="stats">
+      <div class="stat"><div class="k">Prose words</div><div class="v">2,518 → 2,117 <small>−16%</small></div></div>
+      <div class="stat"><div class="k">just / actually / also</div><div class="v">23 → 9</div></div>
+      <div class="stat"><div class="k">Words / sentence</div><div class="v">16.4 → 18.2</div></div>
+      <div class="stat"><div class="k">Table, links, refs</div><div class="v">unchanged</div></div>
+    </div>
+    <div class="log">
+      <h2>Change log</h2>
+      <h3>The main cut: one point made five times</h3>
+      <ul>
+        <li>The explanation that the "missing" phases are the human appeared in the intro, Actions, Briefs, Flows and Spaces. It's now explained once, in a new section, <b>The missing phases are you</b>.</li>
+        <li>Each later section keeps only its own evidence: Actions (risk is on you), Briefs (the In Review status), Flows (the pauses, the documentation quote, the Approval action), Spaces (it won't verify for you).</li>
+      </ul>
+      <h3>Throat-clearing removed</h3>
+      <ul>
+        <li>"Now here's where it gets interesting", "Basically:", "Now most people", "But here's the thing I noticed", "But here's the honest bit", and the generic <b>Introduction</b> heading.</li>
+      </ul>
+      <h3>Other repetition removed</h3>
+      <ul>
+        <li>"You don't have to re-explain your brand" appeared three times. It now appears once.</li>
+        <li>"You can tailor them to your needs" restated "configurable".</li>
+        <li>"The AI does a chunk of work, stops, and says 'here's what I've got…'" restated that flows pause for review.</li>
+      </ul>
+      <h3>Correctness fixes</h3>
+      <ul>
+        <li>Comma splices fixed throughout (six), for example "people treat it like one, fire off a prompt" became "people treat it like one: fire off a prompt".</li>
+        <li>"three months time" became "three months from now".</li>
+        <li>"Phases 1 through 6" became "Phases 1 to 6". This is Australian usage, a style choice rather than an error.</li>
+      </ul>
+      <h3>Casual moments</h3>
+      <ul>
+        <li>None added. Your existing punch lines stay: "Actions is that conversation.", "Not later.", "The judgment call is yours."</li>
+      </ul>
+      <h3><span class="flag">Findings</span></h3>
+      <ul>
+        <li><b>Less padded than expected.</b> Apart from the repeated point, most of the length is feature detail, which counts as substance. About 16% is what concision can remove. A much shorter post would mean choosing which features to drop (Refinement is the obvious candidate), and that's your decision, not a rewrite rule.</li>
+        <li><b>Sentences got longer.</b> Merging sentences raised the average to 18.2 words, just over the crisp target of 15–18. The skill should split more aggressively after merging.</li>
+      </ul>
+    </div>
+    <div class="seg" role="group" aria-label="Version">
+      <button data-v="d" aria-pressed="true">Draft</button><button data-v="o" aria-pressed="false">Original</button>
+    </div>
+    <article class="v-d"><p>I've been working obsessively on developing with AI lately, and the <strong>AI Project Lifecycle Framework</strong> below is how I've organised what I've learned, partly to share it and partly to frame it for myself. It's pretty much the root of what I've picked up across articles, GitHub repos, conference talks and a lot of late nights. The idea is that there's a structured way to work with AI agents that goes well beyond typing a prompt and hoping for the best:</p>
+<div class="tw"><table><thead><tr><th>Phase</th><th>Name</th><th>What It's About</th></tr></thead><tbody><tr><td>0</td><td>Intent Definition</td><td>Know what you actually want before you touch AI</td></tr><tr><td>1</td><td>Agent Skill Framing</td><td>Tell the AI what role it's playing</td></tr><tr><td>2</td><td>Working Environment</td><td>Set the constraints: tech stack, brand, rules</td></tr><tr><td>3</td><td>Request Context</td><td>Scope the task properly</td></tr><tr><td>4</td><td>Discovery Loop</td><td>Go back and forth until the ambiguity is gone</td></tr><tr><td>5</td><td>Assumption Logging</td><td>Call out what's being assumed</td></tr><tr><td>6</td><td>Risk Analysis</td><td>Think about what could go wrong</td></tr><tr><td>7</td><td>Brief Creation</td><td>Lock it all into a single document</td></tr><tr><td>8</td><td>Planning</td><td>Break it down before building it</td></tr><tr><td>9</td><td>Implementation</td><td>Do the thing</td></tr><tr><td>10</td><td>Verification</td><td>Check it against the original brief</td></tr><tr><td>11</td><td>Simplification</td><td>Strip out what doesn't need to be there</td></tr></tbody></table></div>
+<p>When I sat down with <strong>SitecoreAI's Agentic Studio</strong> and stopped clicking through it superficially, I noticed a lot of these steps were already there. Not perfectly, and not as a 1:1 match, but the bones of a structured lifecycle had been sitting in front of me the whole time.</p>
+<p>Whether a marketing workflow needs all of those phases, or whether some are overkill, honestly, I don't know yet. Time will tell. But what I found is worth walking through, if only as food for thought.</p>
+<h2>The missing phases are you</h2>
+<p>If you look at SitecoreAI and ask "where are Phases 5 and 6, the assumption logging and risk analysis?", there's a reason they don't have dedicated buttons. Sitecore leans heavily on <strong>human-in-the-loop</strong> design, which its glossary defines as a pattern where AI systems pause for human input, feedback or approval at key stages. So those phases aren't missing: <strong>you're the missing phase</strong>. The human brings the judgment, the domain knowledge and the risk awareness the AI can't. Sitecore has baked in the checkpoints, and you'll see them again below. What happens at them is on you.</p>
+<h2>Signals: the bit everyone scrolls past</h2>
+<p>The first phase, <strong>Intent Definition</strong>, is knowing what you want to do and why before you start doing it. In most teams that happens in a meeting, a Slack thread, or somebody's head at 11pm on a Sunday.</p>
+<p>In SitecoreAI, the closest thing is <strong>Signals</strong>: AI-generated research insights based on your configured preferences, namely industry, topic area and a guiding prompt you set up. They scan trusted sources and surface trends, competitor shifts and opportunities relevant to your world.</p>
+<p>Most people scroll straight past them, because they look like a news feed and get treated like one. But Signals aren't really about consuming information; they're about <strong>triggering intent</strong>. When a marketer sees a signal about a competitor's shift in positioning or a new trend in their vertical, that's the "should we do something about this?" moment. That's the seed for a campaign.</p>
+<p>The <strong>Action Signal</strong> button takes a signal and runs a deeper AI analysis to pull out what's relevant and suggest next steps. It's a structured way to move from "I just read something interesting" to "let's act on this."</p>
+<blockquote>I almost skipped past this feature entirely. I think most people do. But once you see it as the conversation starter rather than a dashboard widget, it changes how you think about the whole flow.</blockquote>
+<h2>Actions: where quality is defined</h2>
+<p>This is the one I most want to dig into, because I think it's the most misunderstood part of Agentic Studio.</p>
+<p><strong>Actions</strong> looks like a chat window, so people treat it like one: fire off a prompt, get something back, move on. Through the lens of a structured AI workflow, it's doing a LOT more than chatting.</p>
+<p>In the lifecycle framework, Phases 1 to 6 are where you frame the agent's role, set your constraints, scope the request, iterate through discovery, surface assumptions and think about risk. That's where <strong>quality gets defined</strong>: not during implementation, but in the conversation before it.</p>
+<p>Actions is that conversation.</p>
+<p>You can toggle it between Default, Fast and Expert mode. Expert prioritises deeper reasoning; it's slower, but for anything that matters you probably want it on. In effect it controls how carefully the AI thinks about your request.</p>
+<p>When you use Actions properly, you're:</p>
+<ul><li><strong>Picking which agent to use</strong>, which is framing the AI's role and expertise</li><li><strong>Attaching Brand Knowledge</strong> via the <code>@ Add context</code> feature, which grounds everything in your brand's tone, identity and rules before a word is generated</li><li><strong>Writing your prompt</strong>, which is really scoping the request, setting boundaries and defining what good looks like</li><li><strong>Going back and forth</strong>: refining, asking follow-ups, and letting the AI ask you clarifying questions. That's the discovery loop in real time</li><li><strong>Reading between the lines</strong> of the AI's responses for what it assumed about your audience, your channels and your goals. That's assumption logging, just not in a spreadsheet</li><li><strong>Deciding what's risky.</strong> The AI won't flag that your campaign might conflict with a regulatory constraint, or that your audience data is stale. That's on you</li></ul>
+<p>That's why Phases 5 and 6 have no buttons. Skip through the conversation quickly and you skip them entirely, and the downstream quality suffers. The platform can't force you to think critically; it can only give you the room.</p>
+<p>The other thing that caught me off guard: <strong>Actions keeps everything</strong>. Every conversation is saved, so you can go back to any thread, continue where you left off, chain different agents into it and carry context forward. It's less a throwaway chat than an evolving working document.</p>
+<p>You can even sequence agents within one thread: the output of a Researcher feeds a Bulk Content Generator, which feeds a Persona Content Auditor, all in one persistent conversation. That's several lifecycle phases in one window without losing context.</p>
+<blockquote>If you take one thing from this article: spend more time in Actions. The quality of everything downstream, your brief, your campaign, your content, is determined here. Not later.</blockquote>
+<h2>Brand Knowledge: set it once, use it everywhere</h2>
+<p>Phase 2 is defining your working environment. In a dev context that's your tech stack, deployment targets and regulatory constraints. In a marketing workflow, it's your brand.</p>
+<p>SitecoreAI handles this through <strong>Brand Knowledge</strong> and <strong>Brand Kits</strong>. You upload your brand documents (brand books, tone of voice guides, visual identity manuals, whatever you've got) and the platform ingests them into structured, retrievable chunks, organised into sections such as Brand Context, Tone of Voice, Do's and Don'ts, and Grammar Guidelines.</p>
+<p>From then on, every agent, every flow and every brief generation picks up those constraints automatically. The Brand Assistant uses your Brand Context. The Content Optimisation copilot gets your Tone of Voice and Do's and Don'ts injected with every request.</p>
+<p>That's a pretty big deal. The lifecycle framework calls the environment definition the "Constraint Layer", and the point is that you set it once and it governs everything that follows. Sitecore has done that at the platform level: the constraints are persistent and ambient, and you never re-explain your brand. For me it's one of the most practical things about the whole setup, and exactly what you'd want for anything beyond a one-off experiment.</p>
+<h2>Briefs: where ideas become commitments</h2>
+<p>Phase 7 consolidates everything from discovery, assumptions and risk analysis into a single document everyone can agree on. The framework calls it the "Execution Contract."</p>
+<p>In SitecoreAI, that's <strong>Briefs</strong>. The Brand Assistant can generate one directly from a conversation: describe what you're after, and the Brief agent organises it into Objectives, Target Audience, Key Messages, Channels, Metrics for Success and Timeline. You can also create Smart Briefs manually, with AI generating content for individual fields and suggesting timelines based on milestones.</p>
+<p>What I found interesting is that briefs are proper entities with their own lifecycle. They move through Draft, <strong>In Review</strong> and Approved, and you can link them to campaigns, assign reviewers and annotate them with tasks. It's not a Google Doc you forget about.</p>
+<p>That In Review status is another human-in-the-loop checkpoint. The AI generates the brief, but a person has to review it and sign off before it moves forward, and that review is where assumption logging and risk analysis are supposed to happen: "have we actually validated these assumptions? What could go wrong here?" The platform gives you the structure to pause. Whether you do the thinking is up to you.</p>
+<p>Then there's <strong>Convert Brief to Campaign</strong>. One click, and "here's what we agreed" becomes "here's how we're going to do it." I found that surprisingly clean.</p>
+<h2>Campaigns: plan it before you build it</h2>
+<p>Phase 8 is planning: break the work into steps, identify dependencies, confirm feasibility. Don't start building until you've got a plan.</p>
+<p>When a brief becomes a campaign, SitecoreAI structures it into <strong>Deliverables</strong> and <strong>Tasks</strong>. Deliverables are the tangible outcomes, grouped by campaign objective. Tasks are the individual work items, assigned to people, with priorities, durations and statuses. The AI can suggest both, and list, board and timeline views show what's happening and where things are stuck.</p>
+<p>What I appreciate is that the campaign exists as a structured plan before any content is produced. Each deliverable maps to a defined outcome, each task to a specific action. Planning before execution sounds obvious, but in practice most teams skip it and go straight to "let's just make the thing."</p>
+<blockquote>Whether this is the exact right structure for every campaign is debatable. But the discipline of stopping to plan before generating content is something I've seen make a real difference in agent workflows generally.</blockquote>
+<h2>Agents and Flows: the doing part</h2>
+<p>Phase 9 is implementation, and this is where Agentic Studio's agents and flows come in.</p>
+<p>Agents are the specialised workers: Blog Writer, Email Writer, Bulk Content Generator, Researcher, Competitor Analyzer and others. Each is configurable with its own context parameters, schemas, HTML templates and workflows.</p>
+<p>Flows chain agents into sequenced, multi-step workflows. The ABM Campaign flow, for example, runs an Account Data Enricher, then a Brief Generator, then a Bulk Content Generator, each receiving the previous agent's output.</p>
+<p>The detail that stood out to me: <strong>flows pause between agents</strong>. They don't auto-execute end to end; they present the output, ask you to review and confirm, and only then move to the next step. That's human-in-the-loop at its most practical.</p>
+<p>Sitecore's documentation describes flows as "a coordinated sequence of AI-driven and human-assisted steps." That wording is deliberate: AI-driven <strong>and</strong> human-assisted. The checkpoints aren't a safety net you can remove; they're part of the design. They're also where verification (Phase 10) happens in practice. You don't verify at the end, when everything's done. You verify at each handoff between agents, while there's still time to course-correct.</p>
+<p>You can also build custom agents in a no-code workflow editor, dragging and connecting actions to define the execution sequence. The action palette includes a dedicated <strong>Approval</strong> action you can place anywhere in a workflow to force a human review before it proceeds, so your organisation's checkpoints or compliance steps can be encoded directly in the agent's behaviour. That's pretty powerful for anyone who's been burned by agents doing things their own way.</p>
+<h2>Spaces: your audit trail</h2>
+<p>Phase 10 is verification: checking the output against what was originally asked for.</p>
+<p>Every agent run or flow launch creates a <strong>Space</strong>, which captures the steps executed, the generated artifacts and the current status. You can filter by agent, search by name, and open any Space to review what was produced. When someone asks "what did the AI actually generate for that campaign?", the answer is in Spaces. You can also edit outputs inline, redo generations, and compare what came out against what went in.</p>
+<p>But Spaces won't verify for you. It won't tell you "this doesn't match your brief" or "you missed a requirement." The platform provides the structure and the data. The judgment call is yours.</p>
+<h2>Refinement: ongoing, not a phase</h2>
+<p>The last step in the framework is simplification: removing unnecessary complexity while keeping what matters. What's the simplest version that still does the job?</p>
+<p>SitecoreAI doesn't have a separate simplification phase, and I think that might be the right call. Instead, the ability to refine and reduce is available everywhere:</p>
+<ul><li>Artifacts can be edited inline and regenerated</li><li>The Snackable Content Generator takes long-form content and condenses it</li><li>The Persona Content Auditor checks whether content matches the target persona</li><li>You can keep refining through continued conversation in the same Actions thread</li></ul>
+<p>Simplification as something you do continuously, rather than something you arrive at, feels right to me. But again, this is food for thought, not a definitive answer.</p>
+<hr>
+<p>This stuff is changing alarmingly fast. These are my learnings so far, and they probably won't age well even three months from now. Until then, I hope they're handy. I've attached a downloadable version of the AI Project Lifecycle Framework brief below for anyone who wants to take it, try different things with it, and see what works for them.</p>
+<p><strong>Download:</strong> <a href="https://blog.matthelam.com/static/files/AI_Project_Lifecycle_Framework_APLF.md" target="_blank" rel="noopener">AI Project Lifecycle Framework (APLF)</a></p>
+<hr>
+<h2>References</h2>
+<ul><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio.html" target="_blank" rel="noopener">SitecoreAI - Working with Agentic Studio</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-signals.html" target="_blank" rel="noopener">Understanding Signals</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-actions.html" target="_blank" rel="noopener">Understanding Actions</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/brand-knowledge.html" target="_blank" rel="noopener">Brand Knowledge</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/managing-briefs.html" target="_blank" rel="noopener">Managing Briefs</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/plan-campaign-strategy.html" target="_blank" rel="noopener">Plan Campaign Strategy</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-agents.html" target="_blank" rel="noopener">Understanding Agents</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-flows.html" target="_blank" rel="noopener">Understanding Flows</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-spaces.html" target="_blank" rel="noopener">Understanding Spaces</a></li><li><a href="https://developers.sitecore.com/sitecoreai/navigation" target="_blank" rel="noopener">SitecoreAI Navigation</a></li></ul></article>
+    <article class="v-o" hidden><h2>Introduction</h2>
+<p>Lately I've been working obsessively on developing with AI and I wanted to share with everyone, and also to help myself organise and frame my learnings, this <strong>AI Project Lifecycle Framework</strong>. It's pretty much the root of the collective learning I've done across articles, GitHub repos, conference talks, and a lot of late nights. The general idea is that there's a structured way to engage AI agents that goes well beyond just typing a prompt and hoping for the best. It looks something like this:</p>
+<div class="tw"><table><thead><tr><th>Phase</th><th>Name</th><th>What It's About</th></tr></thead><tbody><tr><td>0</td><td>Intent Definition</td><td>Know what you actually want before you touch AI</td></tr><tr><td>1</td><td>Agent Skill Framing</td><td>Tell the AI what role it's playing</td></tr><tr><td>2</td><td>Working Environment</td><td>Set the constraints: tech stack, brand, rules</td></tr><tr><td>3</td><td>Request Context</td><td>Scope the task properly</td></tr><tr><td>4</td><td>Discovery Loop</td><td>Go back and forth until the ambiguity is gone</td></tr><tr><td>5</td><td>Assumption Logging</td><td>Call out what's being assumed</td></tr><tr><td>6</td><td>Risk Analysis</td><td>Think about what could go wrong</td></tr><tr><td>7</td><td>Brief Creation</td><td>Lock it all into a single document</td></tr><tr><td>8</td><td>Planning</td><td>Break it down before building it</td></tr><tr><td>9</td><td>Implementation</td><td>Do the thing</td></tr><tr><td>10</td><td>Verification</td><td>Check it against the original brief</td></tr><tr><td>11</td><td>Simplification</td><td>Strip out what doesn't need to be there</td></tr></tbody></table></div>
+<p>Now here's where it gets interesting. When I actually sat down with <strong>SitecoreAI's Agentic Studio</strong> and stopped just clicking through it superficially, I started noticing that a lot of these steps were already there. Not perfectly, and not as a 1:1 match, but the bones of a structured lifecycle were sitting right in front of me the whole time.</p>
+<p>Whether it needs all of those phases or whether some of them are overkill for a marketing workflow, honestly, I don't know yet. Time will tell. But it's worth walking through what I found, because at the very least it's good food for thought.</p>
+<p>One thing to flag before we go further: if you look at SitecoreAI and think "hang on, where are Phases 5 and 6? Where's the assumption logging and risk analysis?", there's a reason those don't have dedicated buttons. Sitecore leans heavily on what they call <strong>human-in-the-loop</strong> design. Their glossary literally defines it as a pattern where AI systems pause for human input, feedback, or approval at key stages. So the phases that seem missing aren't missing at all, <strong>you're the missing phase</strong>. The human is expected to bring the judgment, the domain knowledge, and the risk awareness that the AI can't. Sitecore has baked in the checkpoints, but what happens at those checkpoints is on you.</p>
+<hr>
+<h2>Signals - The Bit Everyone Scrolls Past</h2>
+<p>So the first phase in any structured AI workflow is <strong>Intent Definition</strong>. Basically: know what you want to do and why, before you start doing it. In most teams this happens in a meeting, or a Slack thread, or somebody's head at 11pm on a Sunday.</p>
+<p>In SitecoreAI, the closest thing to this is <strong>Signals</strong>.</p>
+<p>Signals are these AI-generated research insights that show up based on your configured preferences: industry, topic area, and a guiding prompt you set up. They scan trusted sources and surface trends, competitor shifts, and opportunities that are relevant to your world.</p>
+<p>Now most people will scroll straight past these. They look like a news feed and they get treated like one. But here's the thing I noticed, Signals aren't really about consuming information. They're about <strong>triggering intent</strong>. When a marketer sees a signal about a shift in their competitor's positioning or a new trend in their vertical, that's the "should we do something about this?" moment. That's the seed for a campaign.</p>
+<p>There's even an <strong>Action Signal</strong> button that takes a signal and runs a deeper AI analysis to pull out what's relevant and suggest next steps. It's basically a structured way to move from "I just read something interesting" to "let's actually act on this."</p>
+<blockquote>I almost skipped past this feature entirely. I think most people do. But once you see it as the conversation starter rather than a dashboard widget, it changes how you think about the whole flow.</blockquote>
+<hr>
+<h2>Actions - Where Quality Is Actually Defined</h2>
+<p>This is the one I really want to dig into because I think it's the most misunderstood part of the whole Agentic Studio.</p>
+<p><strong>Actions</strong> looks like a chat window. And because it looks like a chat window, people treat it like one, fire off a prompt, get something back, move on. But if you look at it through the lens of a structured AI workflow, Actions is doing a LOT more than chatting.</p>
+<p>In the lifecycle framework, Phases 1 through 6 are where the real work happens. That's where you frame the agent's role, set your constraints, scope the request, iterate through discovery, surface assumptions, and think about risk. Those phases are where <strong>quality gets defined</strong>. Not during implementation, during the conversation that comes before it.</p>
+<p>Actions is that conversation.</p>
+<p>The Actions interface also lets you toggle between Default, Fast, and Expert mode. Expert prioritises deeper reasoning. It's slower, but for anything that matters you probably want it on. It's essentially controlling how carefully the AI thinks about your request.</p>
+<p>When you sit down in Actions properly, you're actually:</p>
+<ul><li><strong>Picking which agent to use</strong>, which is really you framing the AI's role and expertise</li><li><strong>Attaching Brand Knowledge</strong> via the <code>@ Add context</code> feature, which grounds everything in your brand's tone, identity, and rules before a single word gets generated</li><li><strong>Writing your prompt</strong>, but really you're scoping the request, setting boundaries, and defining what good looks like</li><li><strong>Going back and forth</strong>, refining, asking follow-ups, letting the AI ask you clarifying questions. This is the discovery loop happening in real time</li><li><strong>Reading between the lines</strong> of the AI's responses, what it assumed about your audience, your channels, your goals. That's assumption logging, just not in a spreadsheet</li><li><strong>Deciding what's risky</strong>, the AI won't flag that your campaign might conflict with a regulatory constraint or that your audience data is stale. That's on you. And this is where the human-in-the-loop pattern really matters. The platform gives you the space to do this thinking, but it doesn't do it for you</li></ul>
+<p>This is why I said earlier that the "missing" phases aren't really missing. Phases 5 and 6, assumption logging and risk analysis, don't have buttons because they're human activities. Actions gives you the environment to do them, but you have to actually do the work. If you skip through the conversation quickly, you skip those phases entirely, and the downstream quality suffers. The platform can't force you to think critically, it can only give you the room to do it.</p>
+<p>The other thing that caught me off guard: <strong>Actions keeps everything</strong>. Every conversation is saved. You can go back to any thread, continue where you left off, chain different agents into the same conversation, and carry context forward. It's not a throwaway chat, it's more like an evolving working document.</p>
+<p>You can even sequence agents within a single thread. So the output of a Researcher feeds into a Bulk Content Generator which feeds into a Persona Content Auditor, all within one persistent conversation. That's multiple lifecycle phases happening in one window without losing context.</p>
+<blockquote>If you take one thing from this article: spend more time in Actions. The quality of everything downstream, your brief, your campaign, your content, is determined here. Not later.</blockquote>
+<hr>
+<h2>Brand Knowledge - Set It Once, Use It Everywhere</h2>
+<p>Phase 2 in the lifecycle is about defining your working environment. In a dev context that's your tech stack, your deployment targets, your regulatory constraints. For a marketing workflow, it's your brand.</p>
+<p>SitecoreAI handles this through <strong>Brand Knowledge</strong> and <strong>Brand Kits</strong>.</p>
+<p>You upload your brand documents, brand books, tone of voice guides, visual identity manuals, whatever you've got, and the platform ingests them into structured, retrievable chunks. These get organised into sections like Brand Context, Tone of Voice, Do's and Don'ts, Grammar Guidelines, and so on.</p>
+<p>Once that's done, every agent, every flow, every brief generation automatically picks up those constraints. The Brand Assistant uses your Brand Context. The Content Optimisation copilot gets your Tone of Voice and Do's and Don'ts injected with every request. You don't have to re-explain your brand every time you start a new task.</p>
+<p>That's actually a pretty big deal. In the lifecycle framework, the environment definition is the "Constraint Layer", and the whole point is that you set it once and it governs everything that follows. Sitecore has essentially done that at the platform level. The constraints are persistent and ambient, every agent picks them up automatically, you never re-explain your brand. For me, that's one of the most practical things about the whole setup and exactly what you'd want for anything beyond a one-off experiment.</p>
+<hr>
+<h2>Briefs - Where Ideas Become Commitments</h2>
+<p>Phase 7 is about consolidating everything you've learned through discovery, assumptions, and risk analysis into a single document that everyone can agree on. The lifecycle framework calls it the "Execution Contract."</p>
+<p>In SitecoreAI, this is <strong>Briefs</strong>.</p>
+<p>The Brand Assistant can generate a brief directly from a conversation. You describe what you're after, and the Brief agent organises it into sections: Objectives, Target Audience, Key Messages, Channels, Metrics for Success, Timeline. You can also create Smart Briefs manually, with AI helping to generate content for individual fields and suggest timelines based on milestones.</p>
+<p>What I found interesting is that Sitecore treats briefs as proper entities with their own lifecycle. They have statuses: Draft, In Review, Approved. You can link them to campaigns, assign reviewers, and annotate them with tasks. It's not a Google Doc you forget about. It has its own workflow.</p>
+<p>And notice the statuses again: Draft, <strong>In Review</strong>, Approved. That "In Review" step is another human-in-the-loop checkpoint. The AI generates the brief, but a person has to review it and sign off before it moves forward. If you think back to the lifecycle framework, this is where assumption logging and risk analysis are supposed to happen, when a human reads the brief and asks "have we actually validated these assumptions? What could go wrong here?" The platform gives you the structure to pause and think. Whether you actually do that thinking is up to you.</p>
+<p>And then there's this: <strong>Convert Brief to Campaign</strong>. One click and the brief becomes a structured campaign. That transition from "here's what we agreed" to "here's how we're going to do it" is just a button press. I found that surprisingly clean.</p>
+<hr>
+<h2>Campaigns - Plan It Before You Build It</h2>
+<p>Phase 8 in the lifecycle is about planning: break the work into steps, identify dependencies, confirm feasibility. Don't start building until you've got a plan.</p>
+<p>When a brief gets converted into a campaign in SitecoreAI, the platform structures it into <strong>Deliverables</strong> and <strong>Tasks</strong>. Deliverables are the tangible outcomes grouped by campaign objective. Tasks are the individual work items, assigned to people, with priorities, durations, and statuses.</p>
+<p>The AI can suggest deliverables and tasks for you, and there are multiple views, list, board, timeline, for tracking what's happening and where things are stuck.</p>
+<p>The thing I appreciate about this is that the campaign exists as a structured plan before any content gets produced. Each deliverable maps to a defined outcome. Each task maps to a specific action. It's planning before execution, which sounds obvious but in practice most teams skip it and go straight to "let's just make the thing."</p>
+<blockquote>Whether this is the exact right structure for every campaign is debatable. But the discipline of stopping to plan before generating content is something I've seen make a real difference in agent workflows generally.</blockquote>
+<hr>
+<h2>Agents and Flows - The Doing Part</h2>
+<p>Phase 9. Implementation. This is where Agentic Studio's agents and flows come in.</p>
+<p>Agents are the specialised workers: Blog Writer, Email Writer, Bulk Content Generator, Researcher, Competitor Analyzer, and others. Each one is configurable with its own context parameters, schemas, HTML templates, and workflows. You can tailor them to your needs.</p>
+<p>Flows chain multiple agents together into sequenced, multi-step workflows. The ABM Campaign flow, for example, runs an Account Data Enricher, then a Brief Generator, then a Bulk Content Generator, each one receiving the output of the previous agent.</p>
+<p>The detail that stood out to me: <strong>flows pause between agents</strong>. They don't just auto-execute end to end. They present the output, ask you to review and confirm, and then move to the next step. This is human-in-the-loop at its most practical. The AI does a chunk of work, stops, and says "here's what I've got, does this look right?" before moving on.</p>
+<p>Sitecore's own documentation describes flows as "a coordinated sequence of AI-driven and human-assisted steps." That wording is deliberate. It's not AI-driven with optional human involvement. It's AI-driven <strong>and</strong> human-assisted. The human checkpoints aren't a safety net you can remove, they're part of the design. And this is where verification (Phase 10) actually happens in practice. You don't verify at the end when everything is done. You verify at each handoff between agents, while there's still time to course-correct.</p>
+<p>You can also build custom agents through a no-code workflow editor, dragging and connecting actions to define the execution sequence. The action palette even includes a dedicated <strong>Approval</strong> action that you can place anywhere in a workflow to force a human review before proceeding. So if your organisation has specific checkpoints or compliance steps, you can encode them directly into the agent's behaviour. That's pretty powerful for anyone who's been burned by agents doing things their own way.</p>
+<hr>
+<h2>Spaces - Your Audit Trail</h2>
+<p>Phase 10 is about verification, checking the output against what was originally asked for.</p>
+<p>Every time an agent runs or a flow is launched, SitecoreAI creates a <strong>Space</strong>. It captures the steps that were executed, the generated artifacts, and the current status. You can filter by agent, search by name, and open any space to review what was produced.</p>
+<p>It's your audit trail. When someone asks "what did the AI actually generate for that campaign?" you've got the answer in Spaces. You can also edit outputs inline, redo generations, and compare what came out against what went in.</p>
+<p>But here's the honest bit: Spaces gives you the tools to verify, but it doesn't verify for you. It won't tell you "this doesn't match your brief" or "you missed a requirement." That's the human-in-the-loop pattern again. The platform provides the structure and the data. The judgment call is yours.</p>
+<hr>
+<h2>Refinement - Ongoing, Not a Phase</h2>
+<p>The last step in the lifecycle framework is simplification, removing unnecessary complexity while keeping what matters. The question being: what's the simplest version that still does the job?</p>
+<p>SitecoreAI doesn't have a separate "simplification phase" and honestly I think that might be the right call. Instead, the ability to refine and reduce is available everywhere:</p>
+<ul><li>Artifacts can be edited inline and regenerated</li><li>The Snackable Content Generator takes long-form content and condenses it</li><li>The Persona Content Auditor checks whether content actually matches the target persona</li><li>You can keep refining through continued conversation in the same Actions thread</li></ul>
+<p>Simplification as something you do continuously rather than something you arrive at feels right to me. But again, this is food for thought territory, not a definitive answer.</p>
+<hr>
+<p>This stuff is changing alarmingly fast. These are pretty much the learnings I've made so far, and honestly they probably won't age well in even three months time. But hopefully it'll be handy to anyone who sees this until then. I've attached a downloadable version of the AI Project Lifecycle Framework brief below for anyone who wants to take it, try different things with it, and see what works for them.</p>
+<p><strong>Download:</strong> <a href="https://blog.matthelam.com/static/files/AI_Project_Lifecycle_Framework_APLF.md" target="_blank" rel="noopener">AI Project Lifecycle Framework (APLF)</a></p>
+<hr>
+<h2>References</h2>
+<ul><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio.html" target="_blank" rel="noopener">SitecoreAI - Working with Agentic Studio</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-signals.html" target="_blank" rel="noopener">Understanding Signals</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-actions.html" target="_blank" rel="noopener">Understanding Actions</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/brand-knowledge.html" target="_blank" rel="noopener">Brand Knowledge</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/managing-briefs.html" target="_blank" rel="noopener">Managing Briefs</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/plan-campaign-strategy.html" target="_blank" rel="noopener">Plan Campaign Strategy</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-agents.html" target="_blank" rel="noopener">Understanding Agents</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-flows.html" target="_blank" rel="noopener">Understanding Flows</a></li><li><a href="https://doc.sitecore.com/sai/en/users/sitecoreai/understanding-spaces.html" target="_blank" rel="noopener">Understanding Spaces</a></li><li><a href="https://developers.sitecore.com/sitecoreai/navigation" target="_blank" rel="noopener">SitecoreAI Navigation</a></li></ul></article>
+  </section>
+</div>
+<script>
+  (function(){
+    var tabs=[].slice.call(document.querySelectorAll('.tabs button'));
+    function showPost(k){
+      ['widgets','lifecycle'].forEach(function(p){document.getElementById('p-'+p).hidden=(p!==k);});
+      tabs.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.post===k));});
+      try{history.replaceState(null,'','#'+k);}catch(e){}
+    }
+    tabs.forEach(function(b){b.addEventListener('click',function(){showPost(b.dataset.post);});});
+    [].slice.call(document.querySelectorAll('section[id^="p-"]')).forEach(function(sec){
+      var btns=[].slice.call(sec.querySelectorAll('.seg button'));
+      btns.forEach(function(b){b.addEventListener('click',function(){
+        sec.querySelector('.v-d').hidden=(b.dataset.v!=='d'); sec.querySelector('.v-o').hidden=(b.dataset.v!=='o');
+        btns.forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});
+      });});
+    });
+    var h=(location.hash||'').replace('#',''); showPost(h==='lifecycle'?'lifecycle':'widgets');
+  })();
+</script>
