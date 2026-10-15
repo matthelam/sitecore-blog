@@ -6,7 +6,10 @@ import Image from './Image'
 import CustomLink from './Link'
 import TableWrapper from './TableWrapper'
 import Figure from './visuals/Figure'
+import GatedFlow from './visuals/GatedFlow'
+import LayerParallel from './visuals/LayerParallel'
 import MandateCheckout from './visuals/MandateCheckout'
+import SkillComposition from './visuals/SkillComposition'
 import StepThrough from './visuals/StepThrough'
 
 export const components: MDXComponents = {
@@ -17,6 +20,9 @@ export const components: MDXComponents = {
   table: TableWrapper,
   BlogNewsletterForm,
   Figure,
+  GatedFlow,
+  LayerParallel,
   MandateCheckout,
+  SkillComposition,
   StepThrough,
 }
