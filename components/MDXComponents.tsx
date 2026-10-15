@@ -8,6 +8,7 @@ import TableWrapper from './TableWrapper'
 import Figure from './visuals/Figure'
 import MandateCheckout from './visuals/MandateCheckout'
 import StepThrough from './visuals/StepThrough'
+import TokenRent from './visuals/TokenRent'
 
 export const components: MDXComponents = {
   Image,
@@ -19,4 +20,5 @@ export const components: MDXComponents = {
   Figure,
   MandateCheckout,
   StepThrough,
+  TokenRent,
 }

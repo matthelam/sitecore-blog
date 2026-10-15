@@ -1,0 +1,191 @@
+<title>Crisp Rewrites</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: one reading column; two post tabs; per post: stats, pipeline, structure, flow, words, visuals, calls, full render. */
+  :root{
+    --paper:#f6f6f3; --surface:#ffffff; --ink:#1b1c1e; --muted:#5b5e65; --line:#e4e4df; --faint:#efefeb;
+    --keep:#6b7079; --trim:#2f7a55; --cut:#a8433a; --add:#3f5f82;
+    --serif:"IBM Plex Serif",Georgia,serif; --sans:"IBM Plex Sans",-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --paper:#141519; --surface:#1c1e23; --ink:#e9e9e5; --muted:#9a9ea7; --line:#2b2d34; --faint:#22242a;
+    --keep:#a3a8b1; --trim:#5fb487; --cut:#e07a70; --add:#7aa0c7; color-scheme:dark;}}
+  :root[data-theme="dark"]{
+    --paper:#141519; --surface:#1c1e23; --ink:#e9e9e5; --muted:#9a9ea7; --line:#2b2d34; --faint:#22242a;
+    --keep:#a3a8b1; --trim:#5fb487; --cut:#e07a70; --add:#7aa0c7; color-scheme:dark;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:30px 64px}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:clamp(1.55rem,4vw,2.1rem);line-height:1.12;margin:.35rem 0 .5rem;letter-spacing:-.01em;text-wrap:balance}
+  .lede{color:var(--muted);max-width:68ch;margin:0}
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);padding-block:10px;z-index:4;border-bottom:1px solid var(--line)}
+  .tabs button{font-family:var(--sans);font-size:.9rem;font-weight:500;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.5rem 1rem;cursor:pointer}
+  .tabs button[aria-pressed="true"]{color:var(--ink);border-color:var(--ink)}
+  .tabs button:focus-visible{outline:2px solid var(--add);outline-offset:2px}
+  h2{font-size:1.15rem;margin:2.1rem 0 .6rem;text-wrap:balance}
+  .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+  .stat .k{font-size:.78rem;color:var(--muted)}
+  .stat .v{font-size:1.2rem;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px}
+  .stat .v small{font-size:.8rem;font-weight:500;color:var(--muted)}
+  .pipe{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.86rem;color:var(--muted)}
+  .pipe span.s{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:.25rem .55rem;color:var(--ink)}
+  table.struct{width:100%;border-collapse:collapse;font-size:.9rem}
+  .struct td{border-bottom:1px solid var(--line);padding:.55rem .4rem;vertical-align:top}
+  .struct td:first-child{width:42%;font-weight:500}
+  .tag{display:inline-block;font-size:.72rem;font-weight:600;border-radius:4px;padding:.05rem .4rem;margin-right:.4rem;border:1px solid currentColor}
+  .t-keep{color:var(--keep)}.t-trim{color:var(--trim)}.t-cut{color:var(--cut)}.t-add{color:var(--add)}
+  .scroll{overflow-x:auto}
+  .flow{font-family:var(--serif);font-size:1.02rem;line-height:1.7;max-width:68ch}
+  .pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+  .pair div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-family:var(--serif);font-size:.97rem;line-height:1.6;min-width:0}
+  .pair .lab{display:block;font-family:var(--sans);font-size:.75rem;color:var(--muted);margin-bottom:4px}
+  .pair .after{border-color:var(--trim)}
+  figure{margin:16px 0 26px}
+  figure img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+  figcaption{font-size:.88rem;color:var(--muted);margin-top:8px;max-width:72ch}
+  .duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .calls li{margin:.45rem 0;max-width:72ch}
+  .calls b{color:var(--ink)}
+  details{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  summary{cursor:pointer;font-weight:600}
+  details img{display:block;width:100%;height:auto;margin-top:12px;border-radius:6px}
+  code{font-family:var(--mono);font-size:.85em;background:var(--faint);padding:.05em .3em;border-radius:4px}
+  @media (max-width:680px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.pair,.duo{grid-template-columns:minmax(0,1fr)}}
+</style>
+<div class="wrap">
+  <div class="eyebrow">Hybrid + blog-visuals · crisp profile · drafts only</div>
+  <h1>Two posts, rewritten with every skill</h1>
+  <p class="lede">Both are draft copies (<code>draft: true</code>), built and rendered on the real site. Your published posts are unchanged. Every number, label and description in the visuals comes from the post itself.</p>
+
+  <div class="tabs" role="group" aria-label="Choose a post">
+    <button data-post="aac" aria-pressed="true">The Agent as Customer</button>
+    <button data-post="dims" aria-pressed="false">Three Dimensions of Agent Context</button>
+  </div>
+
+  <section id="p-aac">
+    <div class="stats">
+      <div class="stat"><div class="k">Prose words</div><div class="v">1,562 → 1,480 <small>−5%</small></div></div>
+      <div class="stat"><div class="k">Contractions</div><div class="v">9 → 37</div></div>
+      <div class="stat"><div class="k">Words per sentence</div><div class="v">17.2 → 16.3</div></div>
+      <div class="stat"><div class="k">New visuals</div><div class="v">1 <small>explorable</small></div></div>
+    </div>
+
+    <h2>How it came together</h2>
+    <div class="pipe"><span class="s">Voice guide</span>→<span class="s">Crisp profile (1,480 words, over 500)</span>→<span class="s">Concision</span>→<span class="s">Visual pass</span>→<span class="s">blog-visuals: reuse MandateCheckout</span>→<span class="s">Build + screenshots</span></div>
+
+    <h2>Structure</h2>
+    <div class="scroll"><table class="struct"><tbody>
+      <tr><td>Where this is coming from</td><td><span class="tag t-trim">Tone</span>Contractions; two sentences merged with a colon.</td></tr>
+      <tr><td>The shape of the work</td><td><span class="tag t-keep">Kept</span>Your journey diagram, byte-for-byte.</td></tr>
+      <tr><td>The eight components</td><td><span class="tag t-trim">Tone</span>The bold thesis now reads "you don't tell the agent 'please don't overspend'".</td></tr>
+      <tr><td>The worked example, end to end</td><td><span class="tag t-add">Visual</span>The mandate checkout explorable, placed right after both paths are described.</td></tr>
+      <tr><td>What to integrate, not build</td><td><span class="tag t-trim">Tone</span>One long sentence split; table unchanged.</td></tr>
+      <tr><td>What NOT to build · The first sprint</td><td><span class="tag t-keep">Kept</span></td></tr>
+      <tr><td>How you'll know it's working</td><td><span class="tag t-trim">Tone</span>Heading and one sentence contracted.</td></tr>
+      <tr><td>The whole guide in one line</td><td><span class="tag t-cut">Cut</span>It restates the body. Concision rule 4: a closing summary stays only if it adds. See your calls below.</td></tr>
+      <tr><td>This is a work in progress</td><td><span class="tag t-trim">Tone</span>Kept as the close; it invites argument, which is a next step.</td></tr>
+    </tbody></table></div>
+
+    <h2>Story flow</h2>
+    <p class="flow">Personal pivot (from the developer harness to products) → the late-90s analogy → one example threaded through: an agent buying a booster box with an A$300 ceiling → the shape of the work (your diagram) → the eight components → the example end to end. The reader has just read both the in-budget and the over-budget path, then plays them in the explorable. Seeing the gateway refuse the second box confirms the post's central rule by doing, not by reading again. Then: what to integrate, what not to build, the first sprint, how to measure it, and the honest close.</p>
+
+    <h2>How the words changed</h2>
+    <div class="pair">
+      <div><span class="lab">Before</span>The posts I have written so far - […] - were all from inside the developer harness. Local builds, local sandboxes, an advanced user wiring their own coding workflow. Where I am heading next is taking what I have prototyped there and turning it into real SaaS and retail products.</div>
+      <div class="after"><span class="lab">After</span>The posts I've written so far - […] - were all from inside the developer harness: local builds, local sandboxes, an advanced user wiring their own coding workflow. Where I'm heading next is turning what I've prototyped there into real SaaS and retail products.</div>
+    </div>
+    <div class="pair">
+      <div><span class="lab">Before</span><b>you do not tell the agent "please do not overspend"; you make overspending impossible.</b> The forbidden action simply is not available, the way a greyed-out button cannot be clicked.</div>
+      <div class="after"><span class="lab">After</span><b>you don't tell the agent "please don't overspend"; you make overspending impossible.</b> The forbidden action isn't available, the way a greyed-out button can't be clicked.</div>
+    </div>
+    <div class="pair">
+      <div><span class="lab">Before</span>Below is what I would reach for first per component, with the disclaimer that this stack is moving fast and the shortlist will look different in six months.</div>
+      <div class="after"><span class="lab">After</span>Below is what I'd reach for first per component. The disclaimer: this stack is moving fast, and the shortlist will look different in six months.</div>
+    </div>
+    <p class="lede">Fixed: "a A$300" → "an A$300" (twice).</p>
+
+    <h2>Visuals</h2>
+    <figure><img src="aac-light-figure1.png" alt="The mandate checkout explorable in light mode, showing one box at A$280 within the A$300 mandate."><figcaption><b>Mandate checkout (explorable, reused component).</b> Moving the slider to two boxes flips the gateway response to your post's real <code>over_mandate</code> JSON. Your journey diagram earlier in the post is unchanged.</figcaption></figure>
+    <figure><img src="aac-dark-figure1.png" alt="The same explorable in dark mode."><figcaption>Dark mode, following the site's own theme switch.</figcaption></figure>
+
+    <h2>Your calls</h2>
+    <ul class="calls">
+      <li><b>"The whole guide in one line" was cut.</b> It's a strong line, but it restates the body, and that's the restating summary you asked to lose. Restoring it takes one line.</li>
+      <li><b>"Pokemon" is left as you wrote it.</b> The brand spelling is "Pokémon".</li>
+      <li><b>Low cut rate is expected here.</b> This post was already tight, so most of the change is tone.</li>
+    </ul>
+
+    <details><summary>The full rendered draft (light)</summary><img src="aac-full.jpg" alt="Full-page render of the rewritten Agent as Customer draft." loading="lazy"></details>
+  </section>
+
+  <section id="p-dims" hidden>
+    <div class="stats">
+      <div class="stat"><div class="k">Prose words</div><div class="v">2,585 → 2,377 <small>−8%</small></div></div>
+      <div class="stat"><div class="k">Words per sentence</div><div class="v">13.3 → 13.4</div></div>
+      <div class="stat"><div class="k">Code blocks, tables</div><div class="v">unchanged</div></div>
+      <div class="stat"><div class="k">New visuals</div><div class="v">2 <small>diagram + explorable</small></div></div>
+    </div>
+
+    <h2>How it came together</h2>
+    <div class="pipe"><span class="s">Voice guide</span>→<span class="s">Crisp profile (2,377 words)</span>→<span class="s">Concision: repetition first</span>→<span class="s">Visual pass</span>→<span class="s">blog-visuals: inline SVG + new TokenRent</span>→<span class="s">Build + screenshots</span></div>
+
+    <h2>Structure</h2>
+    <div class="scroll"><table class="struct"><tbody>
+      <tr><td>Introduction</td><td><span class="tag t-trim">Trimmed</span>Generic "Introduction" heading removed; the opening is unchanged.</td></tr>
+      <tr><td>The naive approach</td><td><span class="tag t-keep">Kept</span></td></tr>
+      <tr><td>The over-engineered approach</td><td><span class="tag t-add">Visual</span>The rent explorable, placed right after "100,000 wasted tokens", at the post's turning point.</td></tr>
+      <tr><td>The three dimensions</td><td><span class="tag t-add">Visual</span>The before-and-after diagram, after the three questions, once the problem has been earned. <span class="tag t-trim">Trimmed</span>One sentence in Standards repeated an earlier paragraph.</td></tr>
+      <tr><td>The comparison · The deduplication proof</td><td><span class="tag t-keep">Kept</span>Both tables identical.</td></tr>
+      <tr><td>What I learned</td><td><span class="tag t-cut">Cut</span>Principles 1–4 restated the body almost word for word. The six headings stay; each body keeps only the line that adds something. Principle 5 trimmed; principle 6 kept whole.</td></tr>
+      <tr><td>Close</td><td><span class="tag t-keep">Kept</span>"Everything else is rent you're paying for an empty room."</td></tr>
+    </tbody></table></div>
+
+    <h2>Story flow</h2>
+    <p class="flow">Three iterations: too shallow → thorough but wasteful → the realisation that context is rent → the fix (three dimensions) → proof (comparison and deduplication tables) → lessons → close. The two visuals sit at the two turns of that arc. The explorable lands at the realisation, so the reader feels the rent by turning it up. The diagram lands at the reveal and draws the difference: four highlighted dots scattered across five stacked layers, collapsing into one dot in Posture's MINIMIZE.</p>
+
+    <h2>How the words changed</h2>
+    <div class="pair">
+      <div><span class="lab">Before (principle 1)</span>Agent context isn't documentation. It's loaded, transmitted, and processed on every LLM invocation. A 100-token saving across 1,000 invocations is 100,000 tokens you didn't pay for and 1,000 invocations where the LLM's attention wasn't diluted by redundant information. Design your context like you're paying per-word rent, because you are.</div>
+      <div class="after"><span class="lab">After</span>Design your context like you're paying per-word rent, because you are.<br><br><i>The arithmetic is already in "The critical realisation", and the explorable now sits there.</i></div>
+    </div>
+    <div class="pair">
+      <div><span class="lab">Before (principle 4)</span>Layers stack vertically and create ambiguity at their boundaries. […] Dimensions are orthogonal. They answer different questions: how to think, what quality to hit, what to know. A piece of context can only belong to one dimension because the dimensions don't overlap. This makes deduplication structural rather than something you have to manually maintain.</div>
+      <div class="after"><span class="lab">After</span>A piece of context can only belong to one dimension, because the dimensions don't overlap. That makes deduplication structural, rather than something you have to maintain by hand.</div>
+    </div>
+    <p class="lede">This post was already casual in register (71 contractions), so the change is structural. The word-level pass found only 1 of 13 "just / actually / also" that carried no meaning.</p>
+
+    <h2>Visuals</h2>
+    <figure><img src="dims-light-figure2.png" alt="Before and after diagram: five stacked layers with four instances of the same instruction, versus three orthogonal dimensions with one."><figcaption><b>Before and after (static inline SVG).</b> Drawn from the post's own layer names, dimension questions and token figures. It follows the site's light and dark theme.</figcaption></figure>
+    <div class="duo">
+      <figure><img src="dims-light-figure1.png" alt="Token rent explorable at the post's example values."><figcaption><b>Token rent (explorable, new component).</b> Starts at the post's example: 100 × 1,000 = 100,000.</figcaption></figure>
+      <figure><img src="dims-dark-tokenrent-after.png" alt="Token rent explorable after moving sliders to 500 tokens and 100,000 calls, in dark mode."><figcaption>After moving the sliders: 500 × 100,000 = 50,000,000 tokens.</figcaption></figure>
+    </div>
+    <figure><img src="dims-light-diagram-mobile.png" alt="The diagram at phone width, scrolling sideways."><figcaption>At phone width the diagram keeps readable text and scrolls sideways. Nothing yet tells the reader to swipe.</figcaption></figure>
+
+    <h2>Your calls</h2>
+    <ul class="calls">
+      <li><b>"What I learned" is the biggest structural change.</b> The six headings survive as a skimmable list, but their bodies shrank to the new line each adds. If you'd rather keep a fuller recap, that's the place to restore.</li>
+      <li><b><code>TokenRent</code> is a new component</b> and is draft-only until you approve it. It's listed in the blog-visuals catalogue as pending.</li>
+      <li><b>Phone readers aren't told to swipe</b> the diagram. Options: a short hint line, or a stacked mobile layout.</li>
+    </ul>
+
+    <details><summary>The full rendered draft (light)</summary><img src="dims-full.jpg" alt="Full-page render of the rewritten Three Dimensions draft." loading="lazy"></details>
+  </section>
+</div>
+<script>
+  (function(){
+    var tabs=[].slice.call(document.querySelectorAll('.tabs button'));
+    function show(k){
+      ['aac','dims'].forEach(function(p){document.getElementById('p-'+p).hidden=(p!==k);});
+      tabs.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.post===k));});
+      try{history.replaceState(null,'','#'+k);}catch(e){}
+    }
+    tabs.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.post);});});
+    var h=(location.hash||'').replace('#',''); show(h==='dims'?'dims':'aac');
+  })();
+</script>
