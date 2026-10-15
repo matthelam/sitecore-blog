@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "is-agentic": {
+      "type": "http",
+      "url": "https://is-agentic.com/mcp"
+    }
+  }
+}
