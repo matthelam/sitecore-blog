@@ -1,6 +1,6 @@
 ---
 name: blog-publish
-description: Take a finished post or site change on Matt Lam's blog from the working tree to live in production and prove it's live - pre-publish checks, feature branch, PR, Vercel preview, merge to main, then a check against the live site with the live URL reported. Use whenever Matt wants something on the blog to go live or come down - "publish this", "ship it", "put it live", "push it to prod", "make the post live", "release the series", "take the draft flag off", "unpublish that post", "update the published post" - and whenever a write-up or fix he asked for is ready to deliver. Also use it when he asks whether something is live or deployed yet ("is it live?", "did that go out?", "is post three up?"): answer with this skill's live check against the real site, never from memory or the merge state. Not for shaping an idea (blog-inception), writing or rewriting the words (blog-rewrite-hybrid) or building visuals (blog-visuals); and never for sending email or social posts directly (new posts reach subscribers only through Buttondown's RSS automation).
+description: Take a finished post or site change on Matt Lam's blog from the working tree to live in production and prove it's live - pre-publish checks, feature branch, PR, Vercel preview, merge to main, then a check against the live site with the live URL reported. Use whenever Matt wants something on the blog to go live or come down - "publish this", "ship it", "put it live", "push it to prod", "make the post live", "release the series", "take the draft flag off", "unpublish that post", "update the published post" - and whenever a write-up or fix he asked for is ready to deliver. Also use it when he asks whether something is live or deployed yet ("is it live?", "did that go out?", "is post three up?"): answer with this skill's live check against the real site, never from memory or the merge state. Not for shaping an idea (blog-inception), writing or rewriting the words (blog-rewrite-hybrid) or building visuals (blog-visuals); and never for sending email or posting to social media.
 ---
 
 # Blog Publish — from the working tree to live, proven
@@ -68,26 +68,11 @@ else is yours to resolve.
    on a fresh branch), take that through steps 4 to 7, and tell Matt what happened. Never
    force-push `main`.
 
-## The newsletter
+## Feed and newsletter
 
-New posts are emailed to subscribers automatically. Buttondown's RSS-to-email watches
-`https://blog.matthelam.com/feed.xml`, checks it about every 30 minutes, and sends each new item
-(Constitution law 3's standing exception). This affects publishing in four ways:
-
-- **Before a publish that adds a post to the feed**, tell Matt it will be emailed to subscribers
-  within about half an hour of going live, and that an email can't be recalled. Unpublishing
-  afterwards takes the page down but not the email.
-- **The `summary` is the email's body text.** The feed carries title, summary and link, so a
-  missing or weak summary makes a weak email. Treat preflight's "no summary" warning as
-  blocking for a new publish, and raise it with Matt instead of writing one (law 2).
-- **Never change a published post's slug, or `siteUrl`.** Both make up the feed `guid`
-  Buttondown uses to recognise posts, so a change looks like a new post and can be emailed
-  again.
-- **Updates to a published post don't email anyone.** The guid is unchanged. Don't move its
-  `date` to make it look new.
-
-After a publish goes live, also check that `/feed.xml` contains the new post's `<guid>`. That's
-what Buttondown will pick up. Never call the Buttondown API.
+The blog has no newsletter. It publishes an RSS feed (`/feed.xml`), and feed readers identify
+posts by `guid` (`siteUrl` + slug), so never change `siteUrl` or a published post's slug. After a
+publish goes live, check that `/feed.xml` contains the new post's `<guid>`.
 
 ## What this skill doesn't do
 
