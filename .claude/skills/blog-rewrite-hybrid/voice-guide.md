@@ -107,19 +107,36 @@ carry. Treat length as something every post has to justify.
 They average about 6 per 1,000 words; deleting all of them would shorten a post by roughly half a
 percent. So cut structure first.
 
-1. **One statement per idea.** If a paragraph restates a point already made, keep the stronger
-   wording and delete the other. This is not dropping substance; the claim survives once.
+1. **Explain each idea once; repeat it only for emphasis.** Cut re-explanation: a paragraph that
+   walks through a point already made, a second example that shows nothing new, a recap that
+   re-argues the body. Keep deliberate emphasis. The author usually has one point to land, or one
+   line that gives the overarching context, and coming back to it is a feature, not waste. An
+   emphasis repeat is short (one sentence, two at most), uses the author's strongest wording, and
+   sits where it frames what follows or lands what came before: the opening, a turn in the
+   argument, the close. (The author's correction, 2026-10-15: "I'm asking for efficiency, but where
+   appropriate and tactfully we place emphasis.")
 2. **Get to the point.** Delete setup paragraphs that only delay it. The first sentence of a
    section should carry its idea.
 3. **One example per point**, unless a second example shows something the first can't.
-4. **Summaries must add, or go.** In posts over about 1,000 words a closing summary is allowed, but
-   only if it adds a consequence or a next step. A summary that restates the body is cut.
+4. **Summaries: cut the re-argument, keep the one-liner.** A closing section that re-explains the
+   body goes. A one-line distillation that gives the reader the whole post in a sentence stays, for
+   example *The Agent as Customer*'s "The whole guide in one line". Takeaway lists keep one line per
+   point, and that line may restate the point; it's the emphasis.
 5. **Then the word-level pass.** The author's most frequent filler words, from the measurement:
    "just" (42 uses), "actually" (41), "also" (36). Delete each one that carries no meaning. Keep
    calibrated hedges ("I think", "I'm less confident"); those carry information.
 
-**Report the result.** Every rewrite states its prose word count before and after. Rewrites
-preserve substance, so a cut that removes a claim is a failure, not a saving.
+**Report the result.** Every rewrite states its prose word count before and after, and lists each
+repeat it kept on purpose, so the author can see the emphasis choices. Rewrites preserve
+substance, so a cut that removes a claim is a failure, not a saving.
+
+**Worked cases from the first full rewrites (2026-10-15):**
+- Cut, re-explanation: in *Three Dimensions*, principle 1 re-ran the 100 × 1,000 arithmetic already
+  shown in "The critical realisation".
+- Kept, emphasis: principle 1's one-liner, "Design your context like you're paying per-word rent,
+  because you are."
+- Restored after the author's correction: *The Agent as Customer*'s "The whole guide in one line".
+  The first pass cut it as a restating summary; it's the overarching one-liner this rule protects.
 
 ## Series conventions
 

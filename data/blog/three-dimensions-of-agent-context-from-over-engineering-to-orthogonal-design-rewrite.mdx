@@ -442,7 +442,7 @@ A piece of context can only belong to one dimension, because the dimensions don'
 
 ### 5. Templates with version placeholders beat static definitions
 
-A specialist pack that says `React {detected_version}` with conditional rules per version range beats fifty generic React tips. When the project upgrades from React 18 to 19, the specialist pack updates automatically — the agent starts recommending Server Components and stops recommending manual memoisation because the version condition changed, not because someone rewrote the prompt.
+A specialist pack that says `React {detected_version}` with conditional rules per version range beats fifty generic React tips. The template captures the decision logic. The project scanner fills in the specifics. When the project upgrades from React 18 to 19, the specialist pack updates automatically — the agent starts recommending Server Components and stops recommending manual memoisation because the version condition changed, not because someone rewrote the prompt.
 
 ### 6. Apply a simple test to every piece of context
 
