@@ -35,6 +35,8 @@ export function personSchema() {
     alternateName: authorAlternateNames,
     url: `${siteUrl}/about`,
     jobTitle: 'Technical Architect',
+    description:
+      'Sitecore Technical Architect at Aceik in Adelaide, South Australia, writing about agentic Sitecore development, Sitecore Agentic Studio and agent context engineering.',
     worksFor: { '@type': 'Organization', name: employer.name, url: employer.url },
     sameAs,
   }
