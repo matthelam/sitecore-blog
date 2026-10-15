@@ -1,0 +1,483 @@
+{
+  "metadata": {
+    "skill_name": "blog-inception",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-10-15T04:32:19Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8,
+        "passed": 8,
+        "failed": 2,
+        "total": 10,
+        "time_seconds": 88.4,
+        "tokens": 90606,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Offers two or three candidate one-liners for the point, rather than one",
+          "passed": true,
+          "evidence": "Three candidates: '1. Renaming an Agentic Studio flow quietly drops its brand kit...', '2. \"Set it once, use it everywhere\" has an exception...', '3. A flow's name isn't just a label...'"
+        },
+        {
+          "text": "Names the reader: who they are, what they believe now, what should change",
+          "passed": true,
+          "evidence": "Who 'A practitioner building or tidying up flows in Agentic Studio'; Believes now 'Once a brand kit is set it applies everywhere automatically'; Should leave with 'A rename is not a harmless cosmetic edit'"
+        },
+        {
+          "text": "States the tension explicitly",
+          "passed": true,
+          "evidence": "Tension: 'The failure is silent. Brand context is sold as set-once, ambient and persistent, so nobody thinks to check it.'"
+        },
+        {
+          "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+          "passed": false,
+          "evidence": "Recommended Tip arc has 7 numbered beats, but alternatives are prose only: Single insight 'built around a side-by-side of the same flow's output before and after the rename'; self-correction variant also prose. Neither is laid out as a beat sequence"
+        },
+        {
+          "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+          "passed": true,
+          "evidence": "'Beat 4: the reader should see the brand kit there, then not there'; 'Beat 6: the reader should come away with one action they'll actually do'; '...not a diagram'"
+        },
+        {
+          "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+          "passed": true,
+          "evidence": "Honesty beats: 'What this blog got wrong first: the February AI Project Lifecycle post said every flow automatically picks up brand constraints'; 'What isn't known: why it happens'"
+        },
+        {
+          "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+          "passed": false,
+          "evidence": "Most gaps marked 'author to supply', but the tension asserts unprovided experience details: 'The flow keeps running and nothing warns you... the person who notices is usually a reviewer, not the builder' (prompt only says the context is lost); the caveat covers only how visible the loss is"
+        },
+        {
+          "text": "Contains no drafted body paragraphs of the post",
+          "passed": true,
+          "evidence": "No post prose; only one-liners, titles, beat table and two one-sentence hook options"
+        },
+        {
+          "text": "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay",
+          "passed": true,
+          "evidence": "'Type: tip... about 250 to 450 words... it can grow slightly but should stay a tip'"
+        },
+        {
+          "text": "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing",
+          "passed": true,
+          "evidence": "Open question 5 'Is it reproducible every time? Have you repeated it on a fresh flow?'; evidence list 'Exact repro steps (create -> attach brand kit -> rename -> observe), with the date observed'; 'Date the finding'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 110.1,
+        "tokens": 97318,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Offers two or three candidate one-liners for the point, rather than one",
+          "passed": true,
+          "evidence": "brief.md lists A/B/C: 'A. Your root CLAUDE.md is the one file...', 'B. Moving workflows into skills swapped...', 'C. Past a certain length...'"
+        },
+        {
+          "text": "Names the reader: who they are, what they believe now, what should change",
+          "passed": true,
+          "evidence": "Reader section: Who 'A developer who uses Claude Code... on a real, long-running repo'; Believes now 'More rules there means more control'; Should leave with 'A rule for sorting what stays in CLAUDE.md and what moves'"
+        },
+        {
+          "text": "States the tension explicitly",
+          "passed": true,
+          "evidence": "Tension section: 'The fix everyone reaches for, adding one more rule to CLAUDE.md, is the thing that broke it... The reader is choosing between two failure modes'"
+        },
+        {
+          "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+          "passed": true,
+          "evidence": "Recommended Build log as 10 numbered beats; alternatives sketched as beat sequences: Three attempts '900-line CLAUDE.md -> [intermediate fix] -> skills', Single insight 'default -> problem -> small change -> before/after -> when to use or skip -> one line'. Reason: 'Build log is the pattern built for \"here's what I did, concretely, and here's what isn't right yet\"'"
+        },
+        {
+          "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+          "passed": true,
+          "evidence": "Turning points framed as reader perception: 'the reader should see a rule sitting deep in a very long file', 'see the failure move rather than vanish'; no build instructions"
+        },
+        {
+          "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+          "passed": true,
+          "evidence": "Honesty beats section: 'What isn't solved: skill triggering reliability', 'What went wrong first: the 900-line file itself', 'Sample size: one client repo. Say so.'"
+        },
+        {
+          "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+          "passed": true,
+          "evidence": "Gaps marked 'Author to supply' throughout the beat table (e.g. beat 2 'One specific rule that was ignored' -> 'Author to supply'); hook 2 guarded '(Only if \"follows it better\" is true)'. Cross-references (Karpathy ~60 lines, post two promising tags/global memory) verified in published posts"
+        },
+        {
+          "text": "Contains no drafted body paragraphs of the post",
+          "passed": true,
+          "evidence": "No post prose; only one-liners, emphasis line, titles and one-sentence hook options"
+        },
+        {
+          "text": "Argues the one-post-vs-series decision from the evidence in the notes",
+          "passed": true,
+          "evidence": "'Why not a series: ... Right now you can answer one question... The second question (\"do skills actually trigger reliably?\") is the open one, and you don't have the evidence for it yet.'"
+        },
+        {
+          "text": "Plans an honesty beat around skills not triggering reliably",
+          "passed": true,
+          "evidence": "Beat 7 'The trade' and beat 8 'What's not right yet. Triggering reliability'; 'This is the post's main honesty beat and should be planned as beat 7-8'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.91,
+        "passed": 10,
+        "failed": 1,
+        "total": 11,
+        "time_seconds": 123.4,
+        "tokens": 94047,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Offers two or three candidate one-liners for the point, rather than one",
+          "passed": true,
+          "evidence": "Three candidates A/B/C: 'One fact per file was never really a retrieval trick...', 'Hindsight answered \"how do I store this\"...', 'I built OKF for retrieval, and better retrieval made it unnecessary...'"
+        },
+        {
+          "text": "Names the reader: who they are, what they believe now, what should change",
+          "passed": true,
+          "evidence": "Who 'practitioners building or choosing a memory layer for coding agents'; Believes now 'memory is a retrieval problem, so better recall means a better memory'; Should leave with 'a clear view of which jobs a memory format does beyond retrieval'"
+        },
+        {
+          "text": "States the tension explicitly",
+          "passed": true,
+          "evidence": "Tension: 'post two said one-fact-per-file was there for retrieval, retrieval is now better without it, and yet something feels lost. Either the author mis-stated why OKF mattered, or he's sentimental...'"
+        },
+        {
+          "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+          "passed": true,
+          "evidence": "Recommended Build log with Three-attempts turn as 9 numbered beats, with reason ('keeps the specifics-plus-shortfalls credibility of post two'); Single insight alternative sketched as a beat sequence: 'the default (loose capture), the problem it caused, the small change (keep a holding line per memory), and a before/after'"
+        },
+        {
+          "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+          "passed": true,
+          "evidence": "'the reader should see the same piece of experience captured both ways'; 'see OKF's jobs come apart into two piles'"
+        },
+        {
+          "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+          "passed": true,
+          "evidence": "Honesty beats: 'Post two gave the wrong reason, or an incomplete one'; 'One month, one person, one workload'; 'What's still unsolved'"
+        },
+        {
+          "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+          "passed": true,
+          "evidence": "Beats 2-9 marked 'author to supply' (beat 5 'author to supply (critical)'); quotes from post two ('The reason for the file-per-fact obsession is retrieval', 'much less confident that I needed to build the storage layer') and Hindsight/provenance details verified in published posts"
+        },
+        {
+          "text": "Contains no drafted body paragraphs of the post",
+          "passed": true,
+          "evidence": "No post prose; only candidate points, titles, beat table, short hook options"
+        },
+        {
+          "text": "Points back to posts one and two of the series by name or slug",
+          "passed": true,
+          "evidence": "'Post one (a-legal-framework-for-agent-context)', 'Post two (implementing-the-legal-framework)'"
+        },
+        {
+          "text": "Plans an honesty beat around losing the OKF one-fact-per-file discipline",
+          "passed": true,
+          "evidence": "Beat 4 'What quietly stopped happening: capture is no longer one sentence, present tense, tagged and scoped' and beat 5 'did the loss cost anything?'"
+        },
+        {
+          "text": "Asks what 'better recall' means and how it was measured",
+          "passed": false,
+          "evidence": "Requests evidence but never asks what 'better' means or how it was measured: 'One or two concrete recall examples, before/after against the old store. \"It's better\" alone won't carry it.'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.3,
+        "passed": 3,
+        "failed": 7,
+        "total": 10,
+        "time_seconds": 71.5,
+        "tokens": 107893,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Offers two or three candidate one-liners for the point, rather than one",
+          "passed": false,
+          "evidence": "No candidate one-liners for the point; only a title, two title alternatives and a pull quote 'A rename shouldn't change behaviour. Here, it does.'"
+        },
+        {
+          "text": "Names the reader: who they are, what they believe now, what should change",
+          "passed": false,
+          "evidence": "No reader section; reader never named or described"
+        },
+        {
+          "text": "States the tension explicitly",
+          "passed": true,
+          "evidence": "'Why it earns a post: Sitecore's docs say the opposite... If renaming quietly drops the brand kit... nothing tells you why. That gap is the point of the post.'"
+        },
+        {
+          "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+          "passed": false,
+          "evidence": "No arcs or beat lists; goes straight to an MDX draft"
+        },
+        {
+          "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+          "passed": false,
+          "evidence": "No turning points marked"
+        },
+        {
+          "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+          "passed": false,
+          "evidence": "No honesty beats planned (nothing on what isn't solved or what went wrong first); only a TODO for a support-ticket line"
+        },
+        {
+          "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+          "passed": false,
+          "evidence": "Asserts unsupplied experience in the draft and reply: 'The flow still runs, the agents still hand over to each other, and you still get output... tone, dos and don'ts and glossary terms quietly drift' and 'the output just quietly goes off-brand. Nothing errors.'"
+        },
+        {
+          "text": "Contains no drafted body paragraphs of the post",
+          "passed": false,
+          "evidence": "Contains a full MDX draft with body paragraphs: 'Another small one from working in Agentic Studio. If you rename a flow after you've created it, it loses the brand kit context...'"
+        },
+        {
+          "text": "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay",
+          "passed": true,
+          "evidence": "'Size: About 250-350 words. Same shape as the debug-pane post.'"
+        },
+        {
+          "text": "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing",
+          "passed": true,
+          "evidence": "'[TODO: one or two sentences on the exact steps...]', 'What exactly did you rename?', 'When: Roughly when you hit it (month), since Agentic Studio changes quickly.'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 5,
+        "failed": 5,
+        "total": 10,
+        "time_seconds": 75.9,
+        "tokens": 85690,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Offers two or three candidate one-liners for the point, rather than one",
+          "passed": false,
+          "evidence": "Only one point offered: 'CLAUDE.md is always loaded, so everything in it competes...' plus a 'Short version' restating the same idea; no alternative candidates"
+        },
+        {
+          "text": "Names the reader: who they are, what they believe now, what should change",
+          "passed": false,
+          "evidence": "Reader names who ('A developer... using Claude Code on a real client repo') but not what they believe or what should change: 'They know what CLAUDE.md is. They may have heard of skills but haven't moved anything into one.'"
+        },
+        {
+          "text": "States the tension explicitly",
+          "passed": true,
+          "evidence": "'Putting everything in CLAUDE.md feels safe... The bad surprise is that being seen isn't the same as being followed... You've swapped one failure mode for another'"
+        },
+        {
+          "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+          "passed": false,
+          "evidence": "Single arc only ('## 7. Arc (numbered beats)' 1-8); no alternative arc proposed or recommended"
+        },
+        {
+          "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+          "passed": false,
+          "evidence": "Turning points framed as author claims ('Turning point 1: being seen is not being followed'); the only visual moment is a build spec: 'a before/after bar (~900 lines vs ~120 lines plus 6 skills loaded on demand)'"
+        },
+        {
+          "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+          "passed": true,
+          "evidence": "Beat 6 'Turning point 2: the new failure mode' and beat 8 'Close: what I don't know yet. Trigger reliability is the open question.'"
+        },
+        {
+          "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+          "passed": false,
+          "evidence": "Uses [NEED] markers, but the draft summary line asserts an unsupported outcome: 'It works better, but I've traded one problem for another' - the notes never say it works better"
+        },
+        {
+          "text": "Contains no drafted body paragraphs of the post",
+          "passed": true,
+          "evidence": "No drafted post prose; draft summary line is a one-liner/summary, beats are plans with [NEED] markers"
+        },
+        {
+          "text": "Argues the one-post-vs-series decision from the evidence in the notes",
+          "passed": true,
+          "evidence": "'One post now... You have one complete arc... You don't have an ending yet. \"Not sure skills trigger reliably\" is an open question, not a finding.'"
+        },
+        {
+          "text": "Plans an honesty beat around skills not triggering reliably",
+          "passed": true,
+          "evidence": "Beat 6: 'A skill only helps if it gets loaded... You're not yet sure that choice happens reliably. [NEED: any case where a skill didn't fire...]'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.55,
+        "passed": 6,
+        "failed": 5,
+        "total": 11,
+        "time_seconds": 77.7,
+        "tokens": 84038,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Offers two or three candidate one-liners for the point, rather than one",
+          "passed": true,
+          "evidence": "Recommended point plus 'Two other points': 'A. \"It doesn't matter. Let the store be messy...\"', 'B. \"It matters, and I've rebuilt it on top of Hindsight.\"'"
+        },
+        {
+          "text": "Names the reader: who they are, what they believe now, what should change",
+          "passed": false,
+          "evidence": "Reader gives who and situation ('someone who read posts one and two... weighing \"build my own\" against \"adopt a product\"') but no current belief or what should change"
+        },
+        {
+          "text": "States the tension explicitly",
+          "passed": true,
+          "evidence": "'Tension: \"I built a careful system. A product did the headline job better within a month. Was the care wasted?\"'"
+        },
+        {
+          "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+          "passed": false,
+          "evidence": "Single 8-beat arc only; options A/B are alternative points, not alternative arcs"
+        },
+        {
+          "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+          "passed": false,
+          "evidence": "Turning points are drafted conclusions ('Turning point 1: \"So the storage layer I was unsure about in post two, I didn't need it. The scripts can go.\"'); visual section is a build spec ('A two-column \"before and after\"... an arrow showing the \"admission discipline\" moving')"
+        },
+        {
+          "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+          "passed": true,
+          "evidence": "Beat 4 'What I lost'; beat 7 'Consolidation: ... If not, say so and repeat the call for help'; risk 'A post that says \"I was wrong about why OKF mattered\" is stronger'"
+        },
+        {
+          "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+          "passed": false,
+          "evidence": "Open questions list gaps, but turning points assert unsupplied conclusions as the author's: 'I didn't need it. The scripts can go.' and 'That was the wrong justification. It was really an admission policy wearing a file format.'"
+        },
+        {
+          "text": "Contains no drafted body paragraphs of the post",
+          "passed": true,
+          "evidence": "No drafted body paragraphs; beats are plans with word budgets, only one-line turning-point quotes"
+        },
+        {
+          "text": "Points back to posts one and two of the series by name or slug",
+          "passed": true,
+          "evidence": "'Series: follows a-legal-framework-for-agent-context (28 Jun) and implementing-the-legal-framework (19 Aug)'"
+        },
+        {
+          "text": "Plans an honesty beat around losing the OKF one-fact-per-file discipline",
+          "passed": true,
+          "evidence": "Beat 4 'What I lost. The store isn't one fact per file any more' and beat 5 'Did it matter?' verdict per job"
+        },
+        {
+          "text": "Asks what 'better recall' means and how it was measured",
+          "passed": false,
+          "evidence": "Asks for 'one or two concrete moments where recall clearly beat the old setup' but never asks what 'better recall' means or how it was measured"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.9033,
+        "stddev": 0.1002,
+        "min": 0.8,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 107.3,
+        "stddev": 17.6672,
+        "min": 88.4,
+        "max": 123.4
+      },
+      "tokens": {
+        "mean": 93990.3333,
+        "stddev": 3356.3588,
+        "min": 90606,
+        "max": 97318
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.45,
+        "stddev": 0.1323,
+        "min": 0.3,
+        "max": 0.55
+      },
+      "time_seconds": {
+        "mean": 75.0333,
+        "stddev": 3.1896,
+        "min": 71.5,
+        "max": 77.7
+      },
+      "tokens": {
+        "mean": 92540.3333,
+        "stddev": 13321.4322,
+        "min": 84038,
+        "max": 107893
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.45",
+      "time_seconds": "+32.3",
+      "tokens": "+1450"
+    }
+  },
+  "notes": []
+}

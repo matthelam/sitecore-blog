@@ -1,0 +1,65 @@
+{
+  "expectations": [
+    {
+      "text": "Offers two or three candidate one-liners for the point, rather than one",
+      "passed": true,
+      "evidence": "Three candidates: 'A. (OKF doesn't matter any more) \"One fact per file was a retrieval workaround...\"', 'B. (it still matters, just somewhere else) \"Better recall didn't make the discipline obsolete. It moved it.\"', 'C. (genuinely undecided...) \"I built a storage layer to enforce a format...\"'"
+    },
+    {
+      "text": "Names the reader: who they are, what they believe now, what should change",
+      "passed": true,
+      "evidence": "Who 'practitioners running a memory layer for coding agents... including readers of posts 1 and 2'; Believes now 'that structured, atomic facts (OKF or similar) are what makes agent memory trustworthy'; Should leave with 'a clear view of what a good recall engine does and doesn't replace in a hand-built memory discipline'"
+    },
+    {
+      "text": "States the tension explicitly",
+      "passed": true,
+      "evidence": "Tension: 'Either the discipline was never what made memory useful, or its cost hasn't arrived yet... The reader can't tell which, and neither, for now, can the author.'"
+    },
+    {
+      "text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason",
+      "passed": true,
+      "evidence": "Recommended Build log + before/after as a 9-row numbered beat table; 'Alternative arc: Three attempts' beats 1-6 and 'Alternative arc: Governing analogy, extended' beats 1-6. Reason: 'The build log is the series' established follow-up shape. Post 2 used it... The before/after graft is there because \"recall is better\" is a comparative claim and needs to be shown'"
+    },
+    {
+      "text": "Marks turning points as what the reader should see or do, not how to build a visual",
+      "passed": true,
+      "evidence": "'Beat 4: the reader should see the same question answered twice'; 'Beat 6: the reader should see an OKF fact next to its Hindsight equivalent'; 'Beat 3: The reader sees post 1's three tiers with only the Common Law box swapped out'"
+    },
+    {
+      "text": "Includes honesty beats (what isn't solved or what went wrong first)",
+      "passed": true,
+      "evidence": "Honesty beats: 'Post 2 defended OKF. If it doesn't matter, say so plainly'; '\"Not sure yet\" is itself an honesty beat. One month may be too short'; 'Post 2's unresolved items... Report each honestly, including the ones that didn't move'"
+    },
+    {
+      "text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
+      "passed": true,
+      "evidence": "Beats 2 and 4-9 'author to supply', beat 3 'to confirm' ('presumably untouched'); analogy flagged 'This is my suggestion, not Matt's claim' and Hindsight mechanism 'to confirm. I don't know its internals beyond what post 2 states'. Quoted and cited material verified in published posts: 'I am still a fan of OKF as a format...' (post 2 l.84), 'A fact you can search, supersede and scope individually is a fact you can trust' (l.31), Retain/Recall/Reflect and tagged at ingest (l.90), 'several years ahead' (l.88), stale/superseded/duplicate consolidation (l.80), Claude's own memory (l.82), the three scripts, v1.2.0, post 1 'key changes... post 3' (l.135). Only slip: 'I am very keen to actually use Hindsight' drops 'also' from the original, not an invented fact"
+    },
+    {
+      "text": "Contains no drafted body paragraphs of the post",
+      "passed": true,
+      "evidence": "No post prose; only candidate points, titles, beat tables and short hook descriptions ('Open on post 2's own line...', 'Open on the trade...', 'Open on the promise...')"
+    },
+    {
+      "text": "Points back to posts one and two of the series by name or slug",
+      "passed": true,
+      "evidence": "'Post 1 (a-legal-framework-for-agent-context)', 'Post 2 (implementing-the-legal-framework)'"
+    },
+    {
+      "text": "Plans an honesty beat around losing the OKF one-fact-per-file discipline",
+      "passed": true,
+      "evidence": "Beat 5 'What went: the OKF discipline. What it actually looks like now' and beat 6 'Does it matter? (turning point 2, the post's real question)'; open question 3 '\"Lost the OKF discipline\": what concretely was lost?'"
+    },
+    {
+      "text": "Asks what 'better recall' means and how it was measured",
+      "passed": true,
+      "evidence": "Open question 2: '\"Recall is better\": better how, and how did you observe it? More relevant results? The right fact on the first try?... Is it a felt impression or something you could show side by side?'; response repeats '\"Recall is better\": better how?'"
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0,
+    "total": 11,
+    "pass_rate": 1.0
+  }
+}

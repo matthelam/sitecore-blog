@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "blog-inception", "runs": [{"id": "eval-agentic-studio-tip-with_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "brief.md", "type": "text", "content": "# Brief: Agentic Studio: Renaming a Flow Drops Its Brand Kit\n\nStatus: **Draft**\n\nWorking slug: `agentic-studio-flow-rename-drops-brand-kit`\n\n## The point\n\n> Renaming an Agentic Studio flow quietly drops its brand kit, so check the brand kit again after every rename.\n\nCandidate one-liners (Matt to pick or rewrite):\n\n1. **Renaming an Agentic Studio flow quietly drops its brand kit, so check the brand kit again after every rename.** (recommended: it names the trigger, the symptom and the rule in one go)\n2. \"Set it once, use it everywhere\" has an exception: rename a flow and you have un-set its brand.\n3. A flow's name isn't just a label. Change it and the brand context attached to the flow goes with it.\n   *(Only usable if Matt can say the rename is what breaks the link. Today we only know the two things happen together. See open questions.)*\n\n## Title options\n\n1. Agentic Studio: Renaming a Flow Drops Its Brand Kit\n2. Agentic Studio: Rename a Flow, Lose Your Brand\n3. Agentic Studio: Check the Brand Kit After You Rename a Flow\n\n(Option 1 matches the house pattern used by \"Agent Export Drops These Fields\" and \"Widgets Do Not Export\".)\n\n## Reader\n\n- **Who:** A practitioner building or tidying up flows in Agentic Studio who has already set up Brand Knowledge / Brand Kits.\n- **Believes now:** Once a brand kit is set it applies everywhere automatically. That's the platform's pitch, and this blog said so in February (\"every agent, every flow, every brief generation automatically picks up those constraints\").\n- **Should leave with:** A rename is not a harmless cosmetic edit. After renaming a flow they check its brand kit, and re-apply it if needed, before running it again.\n\n## Tension\n\nThe failure is silent. Brand context is sold as set-once, ambient and persistent, so nobody thinks to check it. Renaming is about the most harmless edit there is, usually done while tidying up just before handing a flow to someone else or promoting it. The flow keeps running and nothing warns you. The output just stops sounding like the brand, and the person who notices is usually a reviewer, not the builder.\n*(How visible the loss is in practice, whether it's off-brand output or an empty setting in the UI, is **author to supply**.)*\n\n## Shape\n\n- **Type:** tip\n- **Rough size:** Short, roughly the size of the export-is-lossy and debug-pane posts (about 250 to 450 words). The evidence is one behaviour and one rule. If Matt has a clean before/after of the output, it can grow slightly but should stay a tip.\n- **Arc:** Tip (pattern 6). Hook \u2192 the quirk \u2192 the trap \u2192 the rule in one line \u2192 imperative close. This is the closest match to \"a single thing a practitioner should know before they hit it\", and it matches the sibling posts in the Agentic Studio quirk family.\n- **Alternatives considered:**\n  - **Single insight (pattern 5):** built around a side-by-side of the same flow's output before and after the rename. Stronger if Matt has two outputs that visibly differ, but it needs evidence we don't have yet, and it would push the post towards a short essay. Revisit if the before/after exists and is striking.\n  - **Tip with a self-correction lead-in (Tip + an honesty beat from Build log):** open on the February \"set it once, use it everywhere\" claim from the AI Project Lifecycle post, then show where it doesn't hold. More engaging and very on-brand for the blog's honesty. The risk is spending too much of a short post on the old post. Folded into the recommended arc as one beat (beat 2) rather than used as the whole frame. Matt to choose how prominent it is.\n\n## Story flow\n\n| # | Beat | What it does for the reader | Evidence it needs | Have it? |\n|---|---|---|---|---|\n| 1 | Hook: \"Another quick one\u2026\". You've set up your brand kit, built a flow, and given it a better name. | Puts the reader in a situation they've been in or soon will be. | None beyond the setup. | yes |\n| 2 | The expectation: brand context is meant to be set once and picked up everywhere. Sitecore positions it that way, and this blog said so in February. | Sets up the belief the quirk breaks. Doubles as an early honesty beat. | Link to the AI Project Lifecycle post. Optionally a Sitecore doc page describing brand kits applying to flows. | partly: blog post yes; doc reference author to supply |\n| 3 | The quirk: create a flow with a brand kit, rename it, and the brand kit context is gone. | The fact itself, stated plainly. | Exact repro steps: where the brand kit is set (flow settings? at creation?), where the rename happens, what \"gone\" looks like (empty field, default kit, or unbranded output). | author to supply |\n| 4 | **The trap (turning point):** nothing warns you. The flow still runs, and the output just isn't on-brand. | The cost becomes real: they wouldn't have caught this themselves. | What Matt actually saw, e.g. how he noticed, and ideally a before/after of the setting or the output. | author to supply |\n| 5 | Scope and what isn't known: is it every rename or only after the first run, does it affect agents too, is it the rename itself or a save/refresh, has it been reported? | Honesty. Stops readers over- or under-generalising. | Whatever Matt has tested, plus support ticket status. | author to supply |\n| 6 | The rule in one line: after renaming a flow, check its brand kit and re-apply it before you run it. Or better, name the flow before you attach the brand kit. | The takeaway; the emphasis line returns. | Confirmation that re-selecting the brand kit actually fixes it (and/or that naming first avoids it). | author to supply |\n| 7 | Imperative close, tied to the family: like export drops and widgets, things in Agentic Studio can go missing quietly, so check what's attached, not just what's named. | Links it to the series of quirk posts without becoming an essay. | Links to the export-is-lossy and widgets posts. | yes |\n\n## Turning points and visual moments\n\n- **Beat 4:** the reader should *see the brand kit there, then not there*, with the only change in between being the name. If Matt has screenshots of the flow's brand kit setting before and after the rename (or two outputs side by side), this is the one visual the post needs. If there's nothing to show, a plain repro list is fine. It's a tip.\n- **Beat 6:** the reader should come away with *one action they'll actually do*: check after renaming (or name first). This is a pull-quote moment like the debug-pane post's \"The visible pane is the only proof\u2026\" line, not a diagram.\n\n## Emphasis plan\n\n- **Opening (beat 1/3):** state the quirk in one sentence close to the one-liner.\n- **Turn (beat 4):** \"silently\" / \"nothing warns you\", the reason the one-liner matters.\n- **Close (beat 6/7):** the rule, worded as the one-liner's imperative half (\"check the brand kit again after every rename\").\n\n## Honesty beats\n\n- **What this blog got wrong first:** the February AI Project Lifecycle post said every flow automatically picks up brand constraints and \"you never re-explain your brand\". This finding is a real exception to that. Own it briefly. Matt to decide whether that post also gets an update note linking here.\n- **What isn't known:** why it happens (rename vs. save vs. some reference keyed on the name). Don't guess at a mechanism in the post. \"I have not worked out why yet\" fits the house style.\n- **Whether it's been reported / whether it's a bug or by design:** support ticket status, if any.\n- **Possibly a moving target:** Agentic Studio changes week to week (the export post found July and August results disagreeing). Date the finding and say it was observed on that date.\n\n## Opening hook options\n\n1. \"Another quick one from Agentic Studio. If you rename a flow after creating it, it forgets its brand kit.\"\n2. \"Back in February I wrote that brand kits in Agentic Studio are set once and picked up by every flow. That's mostly true. Here's the exception I hit this week.\"\n\n## Open questions\n\n1. **What exactly is \"lost\"?** Is the brand kit field empty/reset in the flow's settings, does it fall back to a default kit, or does the setting look intact while the output ignores it? This decides the whole trap beat.\n2. **How did you notice?** Off-brand output, the UI, a reviewer, the debug pane? That's the most natural hook.\n3. **Where is the rename done**, and where is the brand kit attached: at creation, in flow settings, or per agent within the flow?\n4. **Is it a \"flow\" in the Sitecore sense** (chained agents, like the ABM Campaign flow) or a workflow agent built in the workflow editor? The post needs the platform's exact term.\n5. **Is it reproducible every time?** Have you repeated it on a fresh flow? Does it happen on the first rename only, or every rename?\n6. **Does re-selecting the brand kit fix it, and does it stick?** Does naming the flow first and attaching the brand kit after avoid it? The rule in beat 6 depends on this.\n7. **Does the same thing happen to agents** (renaming a standard agent) or only flows? If agents too, the post's scope widens.\n8. **Have you logged a support ticket?** Matching the export post's \"will update once I hear back\" close.\n9. **Do you want to call out the February post explicitly** (hook option 2), or keep it to a light link?\n10. **Is this one post, or a sign of a bigger \"things Agentic Studio drops silently\" round-up?** My view: keep it a standalone tip for now. It fits next to the export and widgets posts, and a round-up can come later if more turn up.\n\n## Evidence still needed\n\n- Exact repro steps (create \u2192 attach brand kit \u2192 rename \u2192 observe), with the date observed.\n- Screenshot(s) of the brand kit setting before and after the rename, or a before/after of generated output.\n- Confirmation of the workaround (re-select, or name first).\n- Sitecore documentation page(s) for brand kits on flows and for renaming/editing flows, to check whether the docs say anything about this. Could be checked via the Sitecore Documentation MCP during write-up.\n- Support ticket reference/status, if one exists.\n"}, {"name": "response.md", "type": "text", "content": "Yes, I think it's worth a post. It's a clean tip and fits next to the export-is-lossy and widgets posts. It also has a bit of extra bite: in February's AI Project Lifecycle post you wrote that brand kits are \"set once\" and every flow picks them up automatically. This is the exception to that, and owning it briefly is very on-brand for the blog.\n\n**Proposed point (pick or rewrite):**\n1. *Renaming an Agentic Studio flow quietly drops its brand kit, so check the brand kit again after every rename.* (my pick)\n2. *\"Set it once, use it everywhere\" has an exception: rename a flow and you've un-set its brand.*\n3. *A flow's name isn't just a label. Change it and the brand context goes with it.* (Only works if you know the rename is the cause. We don't yet.)\n\n**Shape:** a tip, around 250 to 450 words, using the same Tip arc as the debug-pane and export posts: hook \u2192 the expectation (set once, applies everywhere) \u2192 the quirk \u2192 **the trap: nothing warns you, the output just goes off-brand** \u2192 what isn't known yet \u2192 the rule \u2192 a short close linking to the other \"things that go missing quietly\" posts. I also considered a before/after single-insight post, which is worth it if you have two outputs that visibly differ, and a version framed entirely around correcting the February post. I've folded that correction in as one beat instead.\n\n**I need these from you before it can be locked:**\n- What exactly is \"lost\": an empty/reset brand kit field, a fallback to a default kit, or a setting that looks intact while the output ignores it?\n- How did you notice it?\n- Where do you rename it, and where is the brand kit attached (at creation, in flow settings, or per agent)?\n- Is it a flow (chained agents) or a workflow agent? I want the platform's exact term.\n- Does it happen every time? Does re-selecting the brand kit fix it, and does naming the flow first avoid it?\n- Does it affect agents too, or only flows?\n- Have you logged a support ticket?\n- Do you want to call out the February post up front, or just link to it?\n\nScreenshots of the brand kit setting before and after the rename would be the one visual this post needs.\n\nFull draft brief is saved, with a beat table, honesty beats, two hook options and the evidence list. It's marked **Draft** and I'll lock it when you say so.\n"}], "grading": {"expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": true, "evidence": "Three candidates: '1. Renaming an Agentic Studio flow quietly drops its brand kit...', '2. \"Set it once, use it everywhere\" has an exception...', '3. A flow's name isn't just a label...'"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": true, "evidence": "Who 'A practitioner building or tidying up flows in Agentic Studio'; Believes now 'Once a brand kit is set it applies everywhere automatically'; Should leave with 'A rename is not a harmless cosmetic edit'"}, {"text": "States the tension explicitly", "passed": true, "evidence": "Tension: 'The failure is silent. Brand context is sold as set-once, ambient and persistent, so nobody thinks to check it.'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": false, "evidence": "Recommended Tip arc has 7 numbered beats, but alternatives are prose only: Single insight 'built around a side-by-side of the same flow's output before and after the rename'; self-correction variant also prose. Neither is laid out as a beat sequence"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": true, "evidence": "'Beat 4: the reader should see the brand kit there, then not there'; 'Beat 6: the reader should come away with one action they'll actually do'; '...not a diagram'"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": true, "evidence": "Honesty beats: 'What this blog got wrong first: the February AI Project Lifecycle post said every flow automatically picks up brand constraints'; 'What isn't known: why it happens'"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": false, "evidence": "Most gaps marked 'author to supply', but the tension asserts unprovided experience details: 'The flow keeps running and nothing warns you... the person who notices is usually a reviewer, not the builder' (prompt only says the context is lost); the caveat covers only how visible the loss is"}, {"text": "Contains no drafted body paragraphs of the post", "passed": true, "evidence": "No post prose; only one-liners, titles, beat table and two one-sentence hook options"}, {"text": "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay", "passed": true, "evidence": "'Type: tip... about 250 to 450 words... it can grow slightly but should stay a tip'"}, {"text": "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing", "passed": true, "evidence": "Open question 5 'Is it reproducible every time? Have you repeated it on a fresh flow?'; evidence list 'Exact repro steps (create -> attach brand kit -> rename -> observe), with the date observed'; 'Date the finding'"}], "summary": {"passed": 8, "failed": 2, "total": 10, "pass_rate": 0.8}}}, {"id": "eval-agentic-studio-tip-without_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "output.md", "type": "text", "content": "# First-pass draft: Agentic Studio flows lose brand kit context on rename\n\n**Verdict:** Yes, worth a post. It's the same kind of post as *Debugging Agents* and *Agent Export Drops These Fields*: a short, specific trap you only find by hitting it, with a one-line check the reader can do. It also fits the running Agentic Studio quirks series (export drops fields, widgets don't export, debug pane caching).\n\n**Why it earns a post:** Sitecore's docs say the opposite. The [Create a space](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-spaces/create-a-space.html) page says flows **\"Maintain context - carry data and decisions through every stage for consistent results\"**, and [Rename a space](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-spaces/rename-a-space.html) says **\"Renaming a space does not affect its contents, collaborators, or history.\"** If renaming quietly drops the brand kit, the output still looks fine. It just stops being on-brand, and nothing tells you why. That gap is the point of the post.\n\n**Size:** About 250\u2013350 words. Same shape as the debug-pane post.\n\n---\n\n## Facts I need from you before this is publishable\n\nI've marked these `[TODO]` in the draft. I haven't guessed any of them.\n\n1. **What exactly did you rename?** A custom flow's definition, or the space a flow runs in (you rename that from the Spaces page or the space header)? The docs only describe renaming a *space*, and that difference changes the headline.\n2. **How did you see the loss?** Did the brand kit selector come back empty, did the output go off-brand, or did the debug pane show no brand kit retrieval?\n3. **Fix / workaround:** Does re-selecting the brand kit after the rename fix it? Does renaming *before* the first run avoid it?\n4. **Scope:** Every flow or just one (e.g. ABM Campaign)? Brand kit only, or does brand context (the separate feature) drop too?\n5. **Support ticket:** Logged? If so, I'll add the same \"will update when I hear back\" line as the export post.\n6. **When:** Roughly when you hit it (month), since Agentic Studio changes quickly.\n\n---\n\n## Draft\n\n```mdx\n---\ntitle: 'Agentic Studio: Renaming a Flow Drops the Brand Kit'\ndate: '2026-10-15'\ntags: ['agentic-studio', 'sitecore-ai', 'agents', 'sitecore', 'brand-kit']\ndraft: true\nsummary: 'Rename an Agentic Studio flow after you create it and the brand kit context goes with it. The output still looks fine. It just is not on-brand anymore. Check the brand kit after any rename.'\n---\n\nAnother small one from working in Agentic Studio. If you rename a flow after you've created it, it loses the brand kit context you gave it.\n\n[TODO: one or two sentences on the exact steps. For example: create the flow/space, select the brand kit, rename it from <where>, then <what you saw>.]\n\nWhat makes this one easy to miss is that nothing breaks. The flow still runs, the agents still hand over to each other, and you still get output. It's just not grounded in your brand kit anymore, so tone, dos and don'ts and glossary terms quietly drift. [TODO: confirm this is how it showed up for you.]\n\nIt also goes against what the documentation says. [Create a space](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-spaces/create-a-space.html) says flows \"maintain context\" and \"carry data and decisions through every stage\", and [Rename a space](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-spaces/rename-a-space.html) says renaming \"does not affect its contents, collaborators, or history.\" A rename feels cosmetic, so it's the last thing you'd suspect.\n\n> A rename shouldn't change behaviour. Here, it does.\n\n**What to do about it:** [TODO: confirmed workaround. For example: after any rename, open the context and re-select the brand kit before you run it again. Or settle the name before you attach the brand kit.]\n\nIf you want proof rather than a feeling, the [debug pane](/blog/agentic-studio-debug-pane-browser-caching) is the quickest way to see what context a run actually used. [TODO: keep this only if the debug pane does show brand kit retrieval. Otherwise cut it.]\n\n[TODO: support ticket line, if logged. For example: \"I've logged this with Sitecore and will update this post when I hear back.\"]\n\nNot a big deal once you know about it. Name it, then brand it, and check again if you ever rename.\n\n## References\n\n- [Create a space](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-spaces/create-a-space.html) \u2014 Sitecore documentation\n- [Rename a space](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-spaces/rename-a-space.html) \u2014 Sitecore documentation\n- [Brand kits](https://doc.sitecore.com/sai/en/users/sitecoreai/design-components/brand-kits/brand-kits.html) \u2014 Sitecore documentation\n```\n\n---\n\n## Notes\n\n- **Proposed filename:** `data/blog/agentic-studio-flow-rename-drops-brand-kit.mdx` (matches the `agentic-studio-*` naming).\n- **Title alternatives:** \"Agentic Studio: Name the Flow Before You Brand It\" / \"Agentic Studio: A Rename That Isn't Cosmetic\".\n- **Draft is `draft: true`** until the TODOs are filled.\n- **Possible link:** the lifecycle post (`the-ai-project-lifecycle-hiding-in-plain-sight-inside-sitecore-agentic-studio.mdx`) says \"every agent, every flow, every brief generation automatically picks up those constraints\". This quirk is a real exception to that line. It could get a one-line note, or a link back from here.\n"}, {"name": "response.md", "type": "text", "content": "Yes, worth a post. It's the same kind of short trap-and-check post as the debug pane and export ones, and it fits that Agentic Studio quirks run.\n\nThe angle is that Sitecore's own docs promise the opposite. The Create a space page says flows \"maintain context\", and Rename a space says renaming \"does not affect its contents, collaborators, or history\". So a rename feels cosmetic, and when the brand kit drops, the output just quietly goes off-brand. Nothing errors.\n\nI've written a draft of about 300 words, set to `draft: true`. It has `[TODO]` markers where I need your facts rather than my guesses:\n\n1. **What you renamed:** a custom flow, or the space the flow runs in? The docs only cover renaming a space.\n2. **How you noticed:** the selector came back empty, the output went off-brand, or the debug pane showed it?\n3. **The workaround:** does re-selecting the brand kit after the rename fix it, or does naming it first avoid it?\n4. **Scope:** all flows or one? Brand kit only, or brand context too?\n5. **Support ticket:** have you logged one?\n\nProposed slug is `agentic-studio-flow-rename-drops-brand-kit`. The draft and notes are in `output.md`. Send me answers to those five and I'll finish it.\n"}], "grading": {"expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": false, "evidence": "No candidate one-liners for the point; only a title, two title alternatives and a pull quote 'A rename shouldn't change behaviour. Here, it does.'"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": false, "evidence": "No reader section; reader never named or described"}, {"text": "States the tension explicitly", "passed": true, "evidence": "'Why it earns a post: Sitecore's docs say the opposite... If renaming quietly drops the brand kit... nothing tells you why. That gap is the point of the post.'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": false, "evidence": "No arcs or beat lists; goes straight to an MDX draft"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": false, "evidence": "No turning points marked"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": false, "evidence": "No honesty beats planned (nothing on what isn't solved or what went wrong first); only a TODO for a support-ticket line"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": false, "evidence": "Asserts unsupplied experience in the draft and reply: 'The flow still runs, the agents still hand over to each other, and you still get output... tone, dos and don'ts and glossary terms quietly drift' and 'the output just quietly goes off-brand. Nothing errors.'"}, {"text": "Contains no drafted body paragraphs of the post", "passed": false, "evidence": "Contains a full MDX draft with body paragraphs: 'Another small one from working in Agentic Studio. If you rename a flow after you've created it, it loses the brand kit context...'"}, {"text": "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay", "passed": true, "evidence": "'Size: About 250-350 words. Same shape as the debug-pane post.'"}, {"text": "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing", "passed": true, "evidence": "'[TODO: one or two sentences on the exact steps...]', 'What exactly did you rename?', 'When: Roughly when you hit it (month), since Agentic Studio changes quickly.'"}], "summary": {"passed": 3, "failed": 7, "total": 10, "pass_rate": 0.3}}}, {"id": "eval-claude-md-to-skills-with_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "brief.md", "type": "text", "content": "# Brief: CLAUDE.md is not a filing cabinet\n\nWorking slug: `claude-md-to-skills`\nStatus: **Draft** <!-- becomes: **Locked** YYYY-MM-DD, only on the author's word -->\n\n## The point\n\nCandidates. Pick one or rewrite it. The one you pick becomes the emphasis line.\n\n- **A.** *\"Your root CLAUDE.md is the one file the agent reads every time, so put in it only what has to apply every time, and move everything else to where it gets loaded when it's needed.\"*\n- **B.** *\"Moving workflows into skills swapped a rule the agent stopped reading for a skill the agent might not load. That's a better problem to have, but it's still a problem.\"*\n- **C.** *\"Past a certain length, adding a rule to CLAUDE.md makes the rules you already have weaker.\"*\n\n**Recommendation: A, with B as the honest turn.** A is the takeaway a reader can act on. B is\nwhere your notes are most honest (you're \"still not sure skills trigger reliably\"), and it stops\nthe post reading like a migration success story. C is the sharpest line, but it claims more than\none client repo shows. Use it only if you have more than one data point (see Open questions).\n\n> Draft emphasis line (A): **CLAUDE.md is for what's always true. Everything else should load when it's needed.**\n\n## Title options\n\n1. CLAUDE.md Is Not a Filing Cabinet\n2. From 900 Lines to 120: Moving Workflows Out of CLAUDE.md and Into Skills\n3. The Rules at the Bottom of CLAUDE.md\n4. Agent Harness: When the Constitution Gets Too Long *(only if this joins the Agent Harness series, see Shape)*\n\n## Reader\n\n- **Who:** A developer who uses Claude Code (or a similar harness) on a real, long-running repo, and whose root CLAUDE.md keeps growing every time the agent gets something wrong.\n- **Believes now:** CLAUDE.md is *the* place to tell the agent things. More rules there means more control, and if the agent misses a rule, the rule needs to be clearer or louder.\n- **Should leave with:** A rule for sorting what stays in CLAUDE.md and what moves, a realistic idea of what moving it costs (skills have to be picked up to work), and permission to delete most of that file.\n\n## Tension\n\nThe fix everyone reaches for, adding one more rule to CLAUDE.md, is the thing that broke it. At\naround 900 lines the agent started ignoring rules near the bottom, so every new rule was quietly\nweakening older ones. Moving workflows into skills fixed the length but created a different\nuncertainty. A rule in CLAUDE.md is at least always loaded. A rule in a skill only works if the\nskill triggers, and you're not yet sure it does. The reader is choosing between two failure\nmodes, and the post is honest that neither one is solved.\n\n## Shape\n\n- **Type:** Long-ish essay, single post. **Not a series yet.**\n- **Rough size:** About 1,200\u20131,600 words, in line with `implementing-the-legal-framework` (about 1,500). The evidence is one repo, one migration, and two numbers (900 \u2192 120, 6 skills). That fills one post well and wouldn't stretch across several.\n- **Why not a series:** Each part of a series has to stand on its own and answer one question. Right now you can answer one question (\"what moves out of CLAUDE.md and why\"). The second question (\"do skills actually trigger reliably?\") is the open one, and you don't have the evidence for it yet. A post on it now would just be \"I'm not sure\". **Recommendation:** write this one post. End it with skill triggering as the explicit open problem, and treat a follow-up (\"Do skills actually trigger?\") as a *candidate* part two once you've measured something. If that follow-up happens, these two posts make a natural two-part series. The series one-liner could be *\"Context that loads on demand is only as good as the thing that demands it.\"*\n- **Series fit to decide:** This sits very close to the **Agent Harness / Legal Framework** posts. In `a-legal-framework-for-agent-context` the root CLAUDE.md is the Constitution, \"a concise set of points\", with Karpathy's roughly 60 lines held up as the exemplar. This post is the field evidence for *why* the Constitution has to be concise. It could be (a) Agent Harness post three, (b) a standalone post that links back, or (c) standalone with no link to the framework. See Open questions.\n- **Arc:** **Build log** (pattern 4), with the **before and after** turning point from Single insight (pattern 5) borrowed for the 900 \u2192 120 moment. Reasoning: what you have is implementation specifics (line counts, six skills, one client repo) plus a shortfall you're upfront about (triggering). Build log is the pattern built for \"here's what I did, concretely, and here's what isn't right yet\". It's also the pattern your series follow-ups already use.\n- **Alternatives considered:**\n  - **Three attempts** (pattern 1): 900-line CLAUDE.md \u2192 *[some intermediate fix: reordering, bolding, \"IMPORTANT\", splitting into per-directory CLAUDE.md?]* \u2192 skills. This is the strongest arc **if** there was a middle attempt, because the wrong turns are the content. Your notes don't mention one, so it's not recommended unless you tell me there was. If there was, switch to this.\n  - **Single insight** (pattern 5): default (everything in CLAUDE.md) \u2192 problem (bottom rules ignored) \u2192 small change (move workflows into skills) \u2192 before/after \u2192 when to use or skip \u2192 one line. A tighter post of 500\u2013700 words. Recommend this instead if you'd rather ship a short opinion piece now and keep the specifics for a later post.\n\n## Story flow\n\nRecommended arc: Build log + before/after.\n\n| # | Beat | What it does for the reader | Evidence it needs | Have it? |\n|---|---|---|---|---|\n| 1 | **The habit.** Every time the agent got something wrong on this client repo, the fix was another rule in CLAUDE.md. | Recognition: \"that's me.\" Sets up the one-liner by showing the opposite of it. | What kinds of things went in, and over roughly what period it grew. | Partly. \"~900 lines, one client repo\" yes. Timeline and contents: author to supply |\n| 2 | **The symptom.** The agent started ignoring rules near the bottom. | Makes the cost concrete. This is the hook beat. | **One specific rule** that was ignored, what the agent did instead, and roughly where it sat in the file. | Author to supply |\n| 3 | **The diagnosis, held loosely.** Why you think position or length was the cause and not, say, a vague or conflicting rule. | Credibility. It stops the reader filing this under \"you just wrote bad rules\" (see `writing-agent-guidelines-that-actually-work`). | How you knew it was the bottom of the file: did moving a rule up make it stick? Did the same rule work in a short file? | Author to supply. **This is the claim the post rests on** |\n| 4 | **The sort.** The rule you used to decide what stays and what moves: always true vs. needed for a particular workflow. | The transferable part. This is what readers will copy. | Your actual sorting rule, in your words, and two or three examples of each pile. | Author to supply |\n| 5 | **Before and after** *(turning point)*. 900 lines \u2192 about 120, plus six skills. What the 120 lines are now. | The reader *sees* how small the always-on part really is. | What's left in the 120 lines (by category is fine). The six skill names or descriptions, anonymised for the client. | Numbers yes. Contents: author to supply |\n| 6 | **How it runs day to day.** What changed in practice after the move. Do bottom-of-file-type rules stick now? | Proof it holds, or the honest admission that it only partly holds. | Any before/after observation: fewer corrections, rules now followed, anything at all. | Author to supply |\n| 7 | **The trade** *(turning point)*. An ignored rule became a skill that might not load. | The model updates: on-demand context moves the failure, it doesn't remove it. Emphasis line returns here (B as the turn). | What makes you unsure skills trigger. Any time one didn't when it should have, or you can't tell whether it did. | Partly (\"still not sure skills trigger reliably\"). Specific instance: author to supply |\n| 8 | **What's not right yet.** Triggering reliability, and anything else unsettled. | Honesty beat. Keeps the post credible and leaves the door open. | What you've tried so far to make triggering reliable, if anything. | Author to supply |\n| 9 | **Prior art and where it fits.** Link back to the Constitution idea (concise root file) and to `three-dimensions-of-agent-context` (\"what they should load\"). | Shows this is field evidence for an idea you've already argued, not a new manifesto. | Decision on series fit. Any outside prior art you found. | Links yes. Decision: author to supply |\n| 10 | **Close.** The one-liner, plus the open question handed to the reader (\"how do you know your skills fired?\"). | Leaves the reader with the rule and an invitation. | \u2014 | Yes |\n\n## Turning points and visual moments\n\n- **Beat 2 / 3 (the cost becomes real):** the reader should *see a rule sitting deep in a very long file* and feel how little chance it has of being read. They should register \"line 800 of 900\" as a place, not just a number.\n- **Beat 5 (the sort, before and after):** the reader should *see the 900 lines split into two piles*, a small \"always\" pile that stays (about 120) and a large \"sometimes\" pile that becomes six skills, and notice how much smaller the always-on part is than they'd assumed.\n- **Beat 7 (the trade):** the reader should *see the failure move rather than vanish*. Before, it was always loaded but ignored at the bottom. After, it's read when loaded, but loading isn't guaranteed. These are two failure modes side by side, not a win-versus-loss chart.\n\n## Emphasis plan\n\n- **Opening:** end the opening section with the one-liner (A) as the lesson you only learned at 900 lines.\n- **The turn (beat 7):** bring it back with B's twist. *\"CLAUDE.md is for what's always true. The catch is that 'loaded when needed' depends on something noticing that it's needed.\"*\n- **Close:** restate A plainly, then hand over the open question.\n\n## Honesty beats\n\n- **What isn't solved:** skill triggering reliability. This is the post's main honesty beat and should be planned as beat 7\u20138, not tacked on at the end.\n- **What went wrong first:** the 900-line file itself. You built it, it grew by habit, and you didn't notice the decay until rules started being ignored. *Did you try a fix inside CLAUDE.md before moving things out? Author to supply.* If you did, that's a second honesty beat (and a reason to switch to the Three attempts arc).\n- **The causation caveat:** you saw rules near the bottom being ignored. Whether position or length caused that is your reading of it, so say how confident you are (beat 3).\n- **Sample size:** one client repo. Say so.\n- **Prior art:** your own Constitution post already argued for a concise root file. Admit that you wrote the principle down before you followed it on this repo, *if that's true* (author to confirm). That's a strong beat if it holds.\n- **What you'd do differently:** author to supply. For example, start with a small CLAUDE.md and a skill-first habit from day one?\n\n## Opening hook options\n\n1. Open on the ignored rule: the agent breaks a rule you know is in CLAUDE.md, you go to check, and it's on line ~800. *(Needs the specific rule, beat 2.)*\n2. Open on the number: \"The root CLAUDE.md on one of my client repos got to about 900 lines. It's about 120 now, and the agent follows it better.\" *(Only if \"follows it better\" is true; see beat 6.)*\n3. Open on the habit: \"Every time the agent got something wrong, I added a line to CLAUDE.md. That's how you get to 900 lines.\"\n\n## Open questions\n\n1. **Which one-liner:** A, B, C or your own?\n2. **One post or series:** I recommend one post now, with \"do skills trigger reliably?\" as a candidate part two once you have evidence. Agree?\n3. **Series fit:** is this Agent Harness post three, a standalone post linking back to the Constitution, or fully standalone? (Post two promised that post three would cover tags or global memory, so making this \"post three\" would break that promise.)\n4. **Was there a middle attempt?** Before moving things into skills, did you try reordering, emphasis, or per-directory CLAUDE.md files (the \"Legislation\" tier)? If yes, the arc should be Three attempts. If you deliberately chose skills *over* nested CLAUDE.md files, why? Readers of the framework posts will ask.\n5. **How do you know it was position and not the rules themselves?** This is the claim the post rests on.\n6. **Did the move actually fix the ignored rules?** The post needs at least an honest \"seems to\" or \"not sure yet\".\n7. **What makes you unsure skills trigger?** Is there a specific miss, or is it that you can't observe whether they fired?\n8. **Client confidentiality:** what can you show of the CLAUDE.md contents and the six skills? Names, categories, nothing at all?\n9. **One repo only?** If you've seen the same decay on other repos, the post can make a stronger claim (point C).\n\n## Evidence still needed\n\n- One concrete ignored rule: what it said, roughly where it sat, what the agent did instead.\n- Your basis for blaming position or length.\n- Your sorting rule (what stays vs. what moves), with two or three examples per pile.\n- What's in the remaining ~120 lines, by category.\n- The six skills: names or anonymised one-line descriptions.\n- Any after-migration observation (rules followed now? fewer corrections?).\n- Any specific instance or symptom behind \"not sure skills trigger reliably\".\n- Rough timeline: how long the file took to reach 900 lines, and how long you've run with skills since.\n"}, {"name": "response.md", "type": "text", "content": "There's a good post here. I've drafted a brief at `.claude/briefs/claude-md-to-skills.md`. It's a **Draft** and nothing is locked.\n\n**My answer on one post or a series: one post, for now.** You have the evidence for one question, \"what moves out of CLAUDE.md and why\". You don't have it yet for the second, \"do skills actually trigger reliably?\". A part two on that today would mostly say \"I'm not sure\", so I've made it the open problem the post ends on. If you go and measure triggering later, that becomes part two and the pair works as a series.\n\n**The point.** Pick one, or rewrite it:\n- **A.** Your root CLAUDE.md is the one file the agent reads every time, so put in it only what has to apply every time, and move everything else to where it loads when needed. *(my pick)*\n- **B.** Moving workflows into skills swapped a rule the agent stopped reading for a skill the agent might not load. That's a better problem, but still a problem. *(I'd use this as the turn in the middle of the post)*\n- **C.** Past a certain length, every new CLAUDE.md rule weakens the ones already there. *(sharpest, but needs more than one repo behind it)*\n\n**Arc.** I recommend a **build log**: the habit, the ignored rule, the sort, then 900 \u2192 120 plus six skills, how it runs day to day, the trade-off, and what's not right yet. It uses the before/after moment from the single-insight pattern. I also considered:\n- **Three attempts**, which is better *if* you tried something in between, like reordering, bolding or nested CLAUDE.md files.\n- **Single insight**, a 500\u2013700 word version if you'd rather ship something short.\n\n**Where the reader's view should change:**\n- seeing a rule buried at the bottom of a 900-line file\n- seeing 900 lines split into a small \"always\" pile and a big \"sometimes\" pile\n- seeing the failure *move* (ignored at the bottom) \u2192 (might not load), not disappear\n\n**One thing to decide early:** this is close to your Legal Framework posts. The Constitution post already argues that the root CLAUDE.md should be short. This is field evidence for that. It could be Agent Harness post three, but post two promised post three would cover tags and global memory. Or it could be a standalone post that links back.\n\n**What I need from you before this can lock.** None of these are in your notes, so I haven't filled them in:\n1. One specific rule the agent ignored, roughly where it sat, and what it did instead.\n2. How you know it was position or length and not a vague or conflicting rule. The whole post rests on this.\n3. Was there a middle attempt before skills? And why skills rather than per-directory CLAUDE.md files? Readers of the framework posts will ask.\n4. Your sorting rule for what stays and what goes, plus what's in the 120 lines and what the six skills are. Anonymise for the client as needed.\n5. Did the move actually fix the ignored rules?\n6. What makes you unsure skills trigger: a specific miss, or not being able to tell whether they fired?\n7. Was it one repo only, or have you seen this elsewhere?\n\nPick a one-liner, settle the series question, and answer whichever of those you can. I'll update the brief and we can lock it.\n\n*(Test run note: as instructed, the brief was saved to the test outputs folder as `brief.md`, not to `.claude/briefs/`.)*\n"}], "grading": {"expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": true, "evidence": "brief.md lists A/B/C: 'A. Your root CLAUDE.md is the one file...', 'B. Moving workflows into skills swapped...', 'C. Past a certain length...'"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": true, "evidence": "Reader section: Who 'A developer who uses Claude Code... on a real, long-running repo'; Believes now 'More rules there means more control'; Should leave with 'A rule for sorting what stays in CLAUDE.md and what moves'"}, {"text": "States the tension explicitly", "passed": true, "evidence": "Tension section: 'The fix everyone reaches for, adding one more rule to CLAUDE.md, is the thing that broke it... The reader is choosing between two failure modes'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": true, "evidence": "Recommended Build log as 10 numbered beats; alternatives sketched as beat sequences: Three attempts '900-line CLAUDE.md -> [intermediate fix] -> skills', Single insight 'default -> problem -> small change -> before/after -> when to use or skip -> one line'. Reason: 'Build log is the pattern built for \"here's what I did, concretely, and here's what isn't right yet\"'"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": true, "evidence": "Turning points framed as reader perception: 'the reader should see a rule sitting deep in a very long file', 'see the failure move rather than vanish'; no build instructions"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": true, "evidence": "Honesty beats section: 'What isn't solved: skill triggering reliability', 'What went wrong first: the 900-line file itself', 'Sample size: one client repo. Say so.'"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": true, "evidence": "Gaps marked 'Author to supply' throughout the beat table (e.g. beat 2 'One specific rule that was ignored' -> 'Author to supply'); hook 2 guarded '(Only if \"follows it better\" is true)'. Cross-references (Karpathy ~60 lines, post two promising tags/global memory) verified in published posts"}, {"text": "Contains no drafted body paragraphs of the post", "passed": true, "evidence": "No post prose; only one-liners, emphasis line, titles and one-sentence hook options"}, {"text": "Argues the one-post-vs-series decision from the evidence in the notes", "passed": true, "evidence": "'Why not a series: ... Right now you can answer one question... The second question (\"do skills actually trigger reliably?\") is the open one, and you don't have the evidence for it yet.'"}, {"text": "Plans an honesty beat around skills not triggering reliably", "passed": true, "evidence": "Beat 7 'The trade' and beat 8 'What's not right yet. Triggering reliability'; 'This is the post's main honesty beat and should be planned as beat 7-8'"}], "summary": {"passed": 10, "failed": 0, "total": 10, "pass_rate": 1.0}}}, {"id": "eval-claude-md-to-skills-without_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "output.md", "type": "text", "content": "# Post plan: Moving out of CLAUDE.md and into skills\n\nStatus: first-pass shape, not a draft. Gaps you need to fill are marked **[NEED]**.\n\n---\n\n## 1. One post or a series?\n\n**One post now. Keep a possible part two in reserve, but don't announce a series.**\n\nWhy:\n\n- You have one complete arc: the file grew, it stopped working, you split it up, it got smaller. That's a story with a beginning and a middle.\n- You don't have an ending yet. \"Not sure skills trigger reliably\" is an open question, not a finding. A series built on it would promise a part two you can't write until you've watched the skills run for a while.\n- The open question is the most honest part of the post. Put it at the end as \"what I don't know yet\" (the same move as the \"parts that are not right yet\" section in *Implementing the Legal Framework*).\n- If you later gather real evidence on triggering (skills that never fired, ones that fired on the wrong task, description wording that fixed it), that becomes a stand-alone follow-up: *\"Do skills actually trigger? What I saw after N weeks.\"* It stands on its own, so it doesn't need a series around it.\n\nSignals that would turn it into a series: if the \"what stayed in CLAUDE.md\" decision turns out to be a big topic of its own, or if you have enough on trigger reliability to fill a post before you publish this one.\n\n---\n\n## 2. The point (what the reader leaves with)\n\n> CLAUDE.md is always loaded, so everything in it competes for attention all the time. Once it got big, the rules at the bottom quietly stopped counting. Moving whole workflows into skills, which load only when needed, got the root file back to rules that apply to every task. The cost is a new risk: now you're relying on the agent to pick up the right skill.\n\nShort version: **always-loaded context has a budget. Skills move a workflow out of that budget, and in exchange you depend on the agent finding the skill.**\n\n## 3. Reader\n\nA developer (likely a Sitecore/XM Cloud dev like your usual reader) using Claude Code on a real client repo, whose CLAUDE.md has been growing with every \"oh, and also remember to...\" moment. They know what CLAUDE.md is. They may have heard of skills but haven't moved anything into one.\n\n## 4. Tension\n\nPutting everything in CLAUDE.md feels safe: the agent is guaranteed to see it. The bad surprise is that being seen isn't the same as being followed. Past a certain size, more rules made the agent follow *fewer* of them. Skills fix that, but they replace \"always seen, sometimes ignored\" with \"followed when loaded, but sometimes not loaded\". You've swapped one failure mode for another, and you're not yet sure the trade is fully worth it.\n\n## 5. How it fits with existing posts (avoid repeating yourself)\n\n- *Writing Agent Guidelines That Actually Work* already has \"Three Layers, Not One Big File\" and the **Encyclopedia** anti-pattern. This post shouldn't restate the theory. It's the **field report**: one real client repo, real line counts, a real symptom. Link back rather than re-explaining.\n- *Three Dimensions of Agent Context* is about \"what they should load\". This post is that idea with a concrete before/after.\n- *Agent Harness: The Legal Framework* says CLAUDE.md is good at prescription. You can tie in quickly: this is what happens when the prescription layer is overloaded.\n- *Sub-Agents vs Personas vs Skills* defined skills as helper classes. One line can call back to it: \"this is me actually extracting the helper classes.\"\n\n## 6. Shape and size\n\n- Type: experience post / field report, with a short practical section.\n- Length: about 1,200 to 1,600 words. Shorter than the Three Dimensions post, about as long as Writing Agent Guidelines.\n- One visual worth considering: a before/after bar (\u2248900 lines vs \u2248120 lines plus 6 skills loaded on demand). It should use only numbers that appear in the post.\n\n## 7. Arc (numbered beats)\n\n1. **Cold open: the symptom.** The agent broke a rule you knew was in CLAUDE.md. You went and checked, and the rule was there, near the bottom of a ~900-line file. **[NEED: the specific rule and what the agent did instead. This one concrete example carries the whole post.]**\n2. **How it got to 900 lines.** Nobody writes 900 lines at once. Every correction, every \"remember to\", every client quirk got added to the end. Show it as gradual. **[NEED: rough timeline, e.g. how many months or sprints; what kinds of things piled up: build steps, deploy steps, serialization, content migration, naming conventions?]**\n3. **Turning point 1: being seen is not being followed.** The file was always loaded, and that was the problem. Everything in it competed for attention on every task, including tasks that had nothing to do with most of it. Rules near the bottom lost out. Present this as what you *observed*, not a claim about how the model works internally. **[NEED: how you noticed the pattern. Was it one rule, or several rules all in the lower part of the file?]**\n4. **The sort: rules vs workflows.** The key decision was splitting \"things true for every task\" from \"things you do sometimes\". Workflows (step-by-step procedures for one kind of job) moved to skills. Standing rules stayed. **[NEED: what went in the 6 skills (names or a one-line description each, anonymised for the client); what made the cut for the remaining ~120 lines.]**\n5. **The result.** ~900 \u2192 ~120 lines. What changed in behaviour since then. **[NEED: anything you've noticed improve, even anecdotally. If you haven't measured it, say so plainly.]**\n6. **Turning point 2: the new failure mode.** A skill only helps if it gets loaded. CLAUDE.md is always seen; a skill is chosen by the agent based on its description. You're not yet sure that choice happens reliably. **[NEED: any case where a skill didn't fire when it should have, or fired when it shouldn't. If there are none, say \"I haven't caught one yet, but I haven't been looking carefully either.\"]**\n7. **What I'd tell you to do (short, practical).** A quick test for each block in your CLAUDE.md: *does this apply to every task in this repo?* If no, it's a skill candidate. Plus whatever you're doing to reduce the trigger risk. **[NEED: e.g. a one-line pointer in CLAUDE.md naming each skill and when to use it, or how you write skill descriptions. Only include what you actually did.]**\n8. **Close: what I don't know yet.** Trigger reliability is the open question. Say what you'd need to see to call it solved, and that a follow-up will come if you get the evidence.\n\n## 8. Working titles\n\n- *I Stopped Putting Everything in CLAUDE.md*\n- *CLAUDE.md Has a Budget*\n- *From 900 Lines to 120: Moving Workflows Out of CLAUDE.md*\n- *Agent Harness: When CLAUDE.md Gets Too Big* (only if you want it under the Agent Harness banner)\n\nDraft summary line:\n> My root CLAUDE.md on one client repo hit around 900 lines, and the agent started ignoring the rules near the bottom. Moving the workflows into six skills got it back to about 120. It works better, but I've traded one problem for another: now I need the skills to actually trigger.\n\nSuggested tags: `['ai', 'agents', 'context-engineering', 'claude-code', 'skills']`\n\n## 9. Things to check before drafting\n\n- **Client confidentiality.** Anonymise the repo, and make sure the example rule and the skill names don't identify the client.\n- **Don't overstate the cause.** \"Rules near the bottom were ignored\" is your observation. Keep it framed that way unless you've tested it (e.g. moved a rule to the top and watched it start being followed). If you *have* done that test, it's the strongest evidence you've got, so lead with it.\n- **Line counts are approximate.** Keep the \"~\" or \"around\" in the text.\n- **Claude Code specifics.** If you describe how skills get picked up (loaded based on their description), check it against the current Claude Code docs before publishing. This area changes fast.\n\n## 10. Open questions for you (ranked by how much the post depends on them)\n\n1. What was the rule the agent ignored, and what did it do instead?\n2. What are the 6 skills, roughly (anonymised)?\n3. What stayed in the 120 lines, and what was your test for keeping something?\n4. Have you seen a skill fail to trigger, or trigger wrongly? Even one case helps.\n5. Did you check whether moving a rule higher up changed anything?\n6. Is this under the \"Agent Harness\" banner or a stand-alone post?\n"}, {"name": "response.md", "type": "text", "content": "I think this is one post, not a series. At least not yet.\n\nYou have a complete arc: CLAUDE.md grew to ~900 lines, the agent started ignoring the rules near the bottom, you moved the workflows into 6 skills, and it's now ~120 lines. What you don't have is an ending for the skills part. \"Not sure they trigger reliably\" is an open question, not a finding. I'd make that the closing section of this post (\"what I don't know yet\"), the same way the Legal Framework implementation post ended on the parts that weren't right. If you later collect real evidence on triggering, that's a natural stand-alone follow-up. You don't need to promise a series to get there.\n\n**The point I'd build it around:** CLAUDE.md is always loaded, so everything in it competes for attention all the time. Past a certain size, adding rules meant the agent followed fewer of them. Skills take workflows out of that always-loaded file. The cost is that you now depend on the agent picking the right skill. You traded \"always seen, sometimes ignored\" for \"followed when loaded, sometimes not loaded.\"\n\n**One thing to watch:** *Writing Agent Guidelines That Actually Work* already covers \"Three Layers, Not One Big File\" and the Encyclopedia anti-pattern. So this one should be a field report: one real repo, real numbers, a real symptom. Link back for the theory instead of repeating it.\n\nThe plan has the point, reader, tension, an 8-beat arc, title options, a draft summary and suggested tags. The beats that need your input are marked [NEED]. The most important is:\n\n1. **The specific rule the agent ignored, and what it did instead.** The whole post rests on this one example.\n2. What the 6 skills are, roughly (anonymised for the client).\n3. What stayed in the 120 lines, and how you decided.\n4. Any case where a skill didn't fire, or fired at the wrong time.\n5. Whether you tried moving an ignored rule higher up to see if it was the position. If you did, that's your strongest evidence. If not, I'd describe \"rules near the bottom were ignored\" as something you noticed, not a proven cause.\n\nSend me those and I'll turn the plan into a draft.\n"}], "grading": {"expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": false, "evidence": "Only one point offered: 'CLAUDE.md is always loaded, so everything in it competes...' plus a 'Short version' restating the same idea; no alternative candidates"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": false, "evidence": "Reader names who ('A developer... using Claude Code on a real client repo') but not what they believe or what should change: 'They know what CLAUDE.md is. They may have heard of skills but haven't moved anything into one.'"}, {"text": "States the tension explicitly", "passed": true, "evidence": "'Putting everything in CLAUDE.md feels safe... The bad surprise is that being seen isn't the same as being followed... You've swapped one failure mode for another'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": false, "evidence": "Single arc only ('## 7. Arc (numbered beats)' 1-8); no alternative arc proposed or recommended"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": false, "evidence": "Turning points framed as author claims ('Turning point 1: being seen is not being followed'); the only visual moment is a build spec: 'a before/after bar (~900 lines vs ~120 lines plus 6 skills loaded on demand)'"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": true, "evidence": "Beat 6 'Turning point 2: the new failure mode' and beat 8 'Close: what I don't know yet. Trigger reliability is the open question.'"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": false, "evidence": "Uses [NEED] markers, but the draft summary line asserts an unsupported outcome: 'It works better, but I've traded one problem for another' - the notes never say it works better"}, {"text": "Contains no drafted body paragraphs of the post", "passed": true, "evidence": "No drafted post prose; draft summary line is a one-liner/summary, beats are plans with [NEED] markers"}, {"text": "Argues the one-post-vs-series decision from the evidence in the notes", "passed": true, "evidence": "'One post now... You have one complete arc... You don't have an ending yet. \"Not sure skills trigger reliably\" is an open question, not a finding.'"}, {"text": "Plans an honesty beat around skills not triggering reliably", "passed": true, "evidence": "Beat 6: 'A skill only helps if it gets loaded... You're not yet sure that choice happens reliably. [NEED: any case where a skill didn't fire...]'"}], "summary": {"passed": 5, "failed": 5, "total": 10, "pass_rate": 0.5}}}, {"id": "eval-legal-framework-part-3-with_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "brief.md", "type": "text", "content": "# Brief: Legal Framework part 3 \u2014 a month on Hindsight, and what OKF was really for\n\nStatus: **Draft** <!-- becomes: **Locked** YYYY-MM-DD, only on the author's word -->\n\nWorking slug: `legal-framework-part-3-hindsight` (would live at `.claude/briefs/legal-framework-part-3-hindsight.md`)\n\n## Where the series stands\n\n- **Series one-liner (from post one):** experience is precedent, so recall it at the point of\n  ambiguity rather than loading it up front.\n- **Post one** (`a-legal-framework-for-agent-context`): the model. Constitution, Legislation,\n  Common Law; the Ambiguity Event, the Clarity Assessment, and the Legislation-review feedback loop.\n- **Post two** (`implementing-the-legal-framework`): the build. OKF, three scripts, the hook that\n  asks rather than injects. It justified OKF on **retrieval** grounds (\"The reason for the\n  file-per-fact obsession is retrieval\"), admitted it was \"much less confident that I needed to build\n  the storage layer underneath it\", and promised to actually use Hindsight. It left three things\n  open: the tags, consolidation, and Claude's own memory running alongside. It closed on \"the\n  interesting question stops being 'how do I store this' and becomes 'what is worth remembering'\".\n- **Related tip** (`agentic-studio-scoped-memory-space`): \"The point is the scoping and the\n  discipline, not the implementation.\" Also the four provenance tiers, and a catch where a July\n  test and an August export disagreed.\n\nPost three is the follow-through on post two's promise. What it has to answer is the user's own\nquestion: with recall solved by someone else, does the one-fact-per-file discipline still earn its\nkeep?\n\n## The point\n\n**Not chosen yet. Three candidates follow; the author picks one or rewrites it.** Which one is\ntrue depends on what the month actually showed (see Open questions). Candidate C is a real option,\nnot a straw man.\n\n> **A.** One fact per file was never really a retrieval trick. It was a decision forced at capture\n> time, and you only notice it's gone when you try to review, supersede or promote what you've\n> remembered.\n\n> **B.** Hindsight answered \"how do I store this\". It didn't answer \"what is worth remembering\", and\n> that was the half the discipline was for.\n\n> **C.** I built OKF for retrieval, and better retrieval made it unnecessary. What survives of the\n> framework is the timing (recall at ambiguity), not the format.\n\nMy lean is **A or B, but only if the evidence backs it.** Post two already put OKF's justification\non retrieval, and the user's month has knocked that justification out. That gives the post its\ntension either way: either OKF had a second job nobody wrote down (A or B), or it didn't (C). If the\nmonth produced no moment where the missing discipline cost something, C is the honest post, and\nit's still a good one.\n\n## Title options\n\n1. Agent Harness: A Month on Hindsight (and What I Stopped Doing)\n2. Agent Harness: Better Recall, Looser Facts\n3. Agent Harness: What One Key Fact Was Actually For\n4. Agent Harness: I Outsourced My Memory Layer. Here's What Came With It, and What Didn't.\n\n(The \"Agent Harness:\" prefix matches posts one and two.)\n\n## Reader\n\n- **Who:** practitioners building or choosing a memory layer for coding agents. Many will have\n  read post two, and some will be weighing Hindsight, Claude Code's built-in memory, or rolling\n  their own.\n- **Believes now:** memory is a retrieval problem, so better recall means a better memory. If\n  they read post two, they may believe OKF is the price of good retrieval.\n- **Should leave with:** a clear view of which jobs a memory format does beyond retrieval (such as\n  capture judgement, supersession, provenance, and promotion into Legislation), and whether those\n  jobs survive handing storage to a product. Depending on the point chosen, also a concrete rule\n  for what to keep doing by hand.\n\n## Tension\n\nThe author built a storage layer, then found a product that recalls better than his own. That part\nis a pleasant surprise. The uncomfortable part is this: post two said one-fact-per-file was there\n**for retrieval**, retrieval is now better without it, and yet something feels lost. Either the\nauthor mis-stated why OKF mattered, or he's sentimental about a format he no longer needs. The\nreader should want to know which, because they face the same choice with any memory product.\n\nA second tension sits under it. Post one's feedback loop (consulted rulings \u2192 Legislation review)\nassumes you can point at a single ruling and count how often it's used. Does that still work when\nthe \"ruling\" is a chunk of a Hindsight memory bank? **(Author to confirm whether this was tried.)**\n\n## Shape\n\n- **Type:** series part 3 (of an open-ended series; post one promised \"progressive blogs as\n  updates\")\n- **Rough size:** a mid-length essay, about the size of post two. One month of use is enough for\n  an honest interim report, not a verdict. Don't size it as the definitive comparison.\n- **Arc:** **Build log** (pattern 4) **with a Three-attempts spine** (pattern 1) for the turn.\n  Build log is the series' own follow-up pattern, and post two used it. The Three-attempts spine\n  fits because the author has lived through two attempts: his own store with strict OKF, then\n  Hindsight with loose capture. The post asks what the third looks like. Recommended because it\n  keeps the specifics-plus-shortfalls credibility of post two, and because the \"wrong version\n  first\" turn is real here: the wrong version may be post two's own explanation of OKF.\n- **Alternatives considered:**\n  - **Governing analogy, revisited** (pattern 3). Test the legal analogy at its edge. Law reports\n    keep the headnote (the holding, in one line) separate from the full judgment. Full-text search\n    across judgments can be excellent recall, but you still cite and overturn holdings, not\n    transcripts. That maps neatly onto \"Hindsight recall vs OKF facts\". It's strong if the author\n    likes it, but it risks becoming a post about the analogy, not about the month. Better used as\n    **one beat** inside the recommended arc (beat 6) than as the whole spine.\n  - **Single insight** (pattern 5). If the month produced exactly one sharp before/after, say a\n    memory that couldn't be superseded or promoted, the post could be about 500 words: the default\n    (loose capture), the problem it caused, the small change (keep a holding line per memory), and\n    a before/after. It's tighter, but it drops the series threads post two left open (tags,\n    consolidation, Claude's own memory, scoping). Pick it only if those threads aren't ready.\n\n## Story flow\n\nArc: Build log, with a Three-attempts turn. Beats 5 and 6 depend on which point is chosen; the\nvariants are noted.\n\n| # | Beat | What it does for the reader | Evidence it needs | Have it? |\n|---|---|---|---|---|\n| 1 | Pointer back: post two promised to actually use Hindsight, and quoted its own reason for OKF (retrieval). | Re-anchors the series and sets up the claim that's about to be tested. | Post two's lines (in hand). | yes |\n| 2 | What changed, concretely: a month on Hindsight in place of `memory.py` / `memory_hook.py`. How it's wired (MCP? hooks? Retain/Recall/Reflect?), which bank scoping he chose, and what he switched off. | Grounds everything in a real setup, as post two did with files and line counts. | Setup details: wiring, bank scope (per-repo or global), whether the operating-loop skills survive, whether the hook still asks a self-question. | author to supply |\n| 3 | Recall is better, shown. | Gives Hindsight its due first, fairly. The reader has to believe the trade was worth making before the loss means anything. | One or two concrete recall examples, before/after against the old store. \"It's better\" alone won't carry it. | author to supply |\n| 4 | What quietly stopped happening: capture is no longer one sentence, present tense, tagged and scoped. | Names the loss precisely before judging it. | A description of what Hindsight memories look like now compared with an OKF file. A real example of each would be ideal. | author to supply |\n| 5 | **The turn: did the loss cost anything?** Look for the moment it bit, or plainly didn't, across supersede, provenance tier, consolidation, duplicates, and promotion into Legislation. | The reader's model changes here. Either \"OKF had a second job\" (A or B) or \"the format was scaffolding\" (C). | At least one concrete incident in either direction. Example: a memory that couldn't be retired or cited, a duplicate, a lost provenance tag, or the reverse, a month with no such incident at all. | **author to supply (critical)** |\n| 6 | Reframe what OKF was for. (A or B: the headnote/holding beat, where the discipline is a capture-time judgement and Hindsight doesn't make it for you. C: the timing survived and the format didn't.) | Gives the reader the reusable idea, independent of tool. | The author's own reasoning. The legal-analogy beat is optional. | partly (the analogy is offered; the conclusion is the author's) |\n| 7 | What he's doing now: keep Hindsight, and keep some discipline on top (a holding line, provenance, or a capture gate)? Or drop OKF entirely? | Turns the insight into practice, which is what post two readers will copy. | The actual current setup, or the planned one. | author to supply |\n| 8 | Status of post two's open threads: tags, consolidation (did Reflect do it?), Claude's own memory, global scoping. | Keeps the series honest. Each thread gets resolved, moved, or dropped out loud. | One line per thread from the author. | author to supply |\n| 9 | What's not right yet, and what's next. Does the downloadable skill (v1.2.0) still stand, and does post four exist? | The series' standard honest close. | Author's plan. | author to supply |\n\n## Turning points and visual moments\n\n- **Beat 5 (the turn):** the reader should **see the same piece of experience captured both\n  ways** (one OKF file next to the equivalent Hindsight memory) and spot for themselves what the\n  second can't do, or see that it can do everything. This is where the claim gets its proof.\n- **Beat 6 (the reframe):** the reader should **see OKF's jobs come apart into two piles**: the jobs\n  Hindsight took over (recall, search, scoping) and the jobs nobody took over (supersession,\n  provenance, promotion, the capture-time judgement). If C wins, the second pile is empty, and\n  showing it empty is the point.\n- **Beat 3 (secondary):** the reader should **feel the recall improvement** in a before/after on\n  the same query. It's only worth a visual if the author has a real side-by-side.\n\n## Emphasis plan\n\nThe chosen one-liner appears three times:\n\n1. **Opening**, set against post two's own sentence (\"The reason for the file-per-fact obsession is\n   retrieval\"), so the reader sees the claim under test straight away.\n2. **The turn (beat 5/6)**, restated as the conclusion once the incident has landed.\n3. **Close**, tied back to the series one-liner: the framework's lasting claim was about when\n   experience is recalled, and this post settles how much of the format that claim needs.\n\n## Honesty beats\n\n- **Post two gave the wrong reason, or an incomplete one.** OKF was justified on retrieval, and a\n  month shows retrieval wasn't where its value was (or that it had no further value). Owning that\n  directly is this post's main credibility beat.\n- **The author built a storage layer he arguably didn't need.** Post two already hinted at this.\n  Post three is where it's either confirmed or rebutted.\n- **One month, one person, one workload.** State the sample size plainly. This is an interim\n  report.\n- **Prior art:** Hindsight is credited in full (Vectorize, MIT, Retain/Recall/Reflect, tag groups,\n  scoping) and isn't set up as a rival to beat. Mention Anthropic's convergent posting again only if\n  something new has come out.\n- **What's still unsolved:** whatever remains of tags, consolidation and Claude's own memory.\n  Name it, even if the answer is \"still unsolved\".\n- **What he'd do differently:** possibly \"adopt a product first and add the discipline on top\"\n  instead of \"build the storage, then find the product\". **Author to confirm whether that's his\n  view.**\n\n## Opening hook options\n\n1. Open on post two's line about retrieval, then say that a month later the retrieval is better\n   and the line is wrong. (For A or B: wrong about why. For C: wrong that it mattered.)\n2. \"For a month I haven't written a single one-fact file, and my agent remembers more than it ever\n   did.\" Then the turn: the author has a feeling he's lost something, and the post finds out what.\n3. Open on the July-vs-August contradiction from the Agentic Studio post, a catch made possible by\n   discrete, dated facts, and ask whether it would have been caught under Hindsight. **Use only if\n   the author knows the answer.**\n\n## Open questions\n\n1. **Which point (A, B, C, or your rewrite)?** This decides beats 5\u20137. It probably comes down to\n   question 2.\n2. **Did the missing discipline ever bite in the month?** A concrete moment: a memory you couldn't\n   retire, a duplicate, a lost provenance tag, a fact you wanted to promote into Legislation and\n   couldn't isolate. Or, just as useful, did nothing of the kind happen?\n3. **How is Hindsight wired in?** MCP recall tool, hooks, or both? Does the \"hook asks a question,\n   it doesn't inject\" design from post two survive, or does Hindsight's recall replace it?\n4. **What scoping did you choose: per-repo bank or a global one?** Post two said global scoping was\n   \"precisely the feature I am now hunting for\". Did you get it, and did it work?\n5. **Did you use Reflect?** If so, did it do any of the consolidation post two said was missing?\n6. **What about the provenance tiers** (`observed` / `documented` / `contractual` /\n   `unverified`)? Did they survive the move to Hindsight, or did they go the same way as the OKF\n   format? This may be the sharpest test of whether \"discipline\" is about format or about judgement.\n7. **Claude Code's own memory:** is it still running alongside? Did Hindsight change that?\n8. **The Legislation feedback loop:** have you attempted a Legislation review from Hindsight\n   memories? Post one's loop depends on counting how often a ruling is consulted.\n9. **The downloadable skill (v1.2.0) and the `legal-framework` skill:** does post three change\n   what they install? Do readers who downloaded it need to be told anything?\n10. **Is this the last part, or does it point to a post four** (e.g. global memory, or tags)?\n\n## Evidence still needed\n\n- Your Hindsight setup: wiring, bank scoping, what replaced `memory.py` / `memory_hook.py`, and\n  what's switched off.\n- At least one concrete recall-is-better example, ideally the same query answered by the old store\n  and by Hindsight.\n- One real experience captured both ways: an OKF file, and what the equivalent Hindsight memory\n  looks like (it can be sanitised).\n- The incident, or the absence of one, for beat 5. **The post can't take a side without this.**\n- One line per open thread from post two: tags, consolidation, Claude's own memory, global scope.\n- Your current practice: what discipline, if any, you've kept or reinstated on top of Hindsight.\n"}, {"name": "response.md", "type": "text", "content": "I've drafted a brief for post three. It's still a **Draft**, and I can't lock it yet, because the point of the post depends on something only you know.\n\n**The post's tension is already sitting in post two.** In post two you justified OKF on retrieval: \"The reason for the file-per-fact obsession is retrieval.\" A month on Hindsight has given you better retrieval without it. So either OKF had a second job you never wrote down, or it didn't. Both make an honest post. Pick a point, or rewrite one:\n\n- **A.** One fact per file was never really a retrieval trick. It was a decision forced at capture time, and you only notice it's gone when you try to review, supersede or promote what you've remembered.\n- **B.** Hindsight answered \"how do I store this\". It didn't answer \"what is worth remembering\", and that was the half the discipline was for. (This ties straight back to post two's closing line.)\n- **C.** I built OKF for retrieval, and better retrieval made it unnecessary. What survives of the framework is the timing (recall at ambiguity), not the format.\n\nI lean towards A or B, but only if you have a real moment where the looser capture cost you something. If the month went smoothly, C is the more credible post, and it's still a good one.\n\n**Recommended shape:** a build log, the same pattern as post two, with a \"three attempts\" turn. Attempt one was your own store with strict OKF. Attempt two was Hindsight with loose capture. The turn is what the third should be. It's mid-length, roughly post two's size, and framed as a one-month interim report rather than a verdict. Two alternatives are in the brief:\n\n- **Revisit the legal analogy.** Law reports keep the one-line holding separate from the full judgment; you search judgments but you cite holdings. I'd use it as one beat rather than the spine.\n- **A short single-insight post.** Only if you'd rather leave post two's open threads for later.\n\n**Main turning point:** the same piece of experience captured both ways, an OKF file next to the equivalent Hindsight memory, so readers can see for themselves what the second can or can't do.\n\n**What I need from you** (the full list is in the brief):\n\n1. Did the missing discipline ever bite in the month? A memory you couldn't retire, a duplicate, a lost provenance tag, something you couldn't promote into Legislation? Or did nothing like that happen? **This decides the point.**\n2. How is Hindsight wired in? Did the \"hook asks, doesn't inject\" design survive?\n3. Did you scope per repo or globally? Did you get the global scoping you were after in post two?\n4. Did Reflect do any of the consolidation you said was missing?\n5. Did your provenance tiers (`observed` / `documented` / `contractual` / `unverified`) survive the move? That might be the sharpest test of whether \"discipline\" means the format or the judgement.\n6. Where do the post two threads stand now: tags, Claude's own memory, the v1.2.0 skill download?\n7. Evidence: one recall example (old store vs Hindsight on the same query), and one real fact captured both ways.\n\nAnswer question 1 and pick a point, and I'll tighten the beats around it.\n\nBrief: `.claude/plans/inception-tests/iteration-1/eval-legal-framework-part-3/with_skill/outputs/brief.md` (in normal use it would go to `.claude/briefs/legal-framework-part-3-hindsight.md`).\n"}], "grading": {"expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": true, "evidence": "Three candidates A/B/C: 'One fact per file was never really a retrieval trick...', 'Hindsight answered \"how do I store this\"...', 'I built OKF for retrieval, and better retrieval made it unnecessary...'"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": true, "evidence": "Who 'practitioners building or choosing a memory layer for coding agents'; Believes now 'memory is a retrieval problem, so better recall means a better memory'; Should leave with 'a clear view of which jobs a memory format does beyond retrieval'"}, {"text": "States the tension explicitly", "passed": true, "evidence": "Tension: 'post two said one-fact-per-file was there for retrieval, retrieval is now better without it, and yet something feels lost. Either the author mis-stated why OKF mattered, or he's sentimental...'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": true, "evidence": "Recommended Build log with Three-attempts turn as 9 numbered beats, with reason ('keeps the specifics-plus-shortfalls credibility of post two'); Single insight alternative sketched as a beat sequence: 'the default (loose capture), the problem it caused, the small change (keep a holding line per memory), and a before/after'"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": true, "evidence": "'the reader should see the same piece of experience captured both ways'; 'see OKF's jobs come apart into two piles'"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": true, "evidence": "Honesty beats: 'Post two gave the wrong reason, or an incomplete one'; 'One month, one person, one workload'; 'What's still unsolved'"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": true, "evidence": "Beats 2-9 marked 'author to supply' (beat 5 'author to supply (critical)'); quotes from post two ('The reason for the file-per-fact obsession is retrieval', 'much less confident that I needed to build the storage layer') and Hindsight/provenance details verified in published posts"}, {"text": "Contains no drafted body paragraphs of the post", "passed": true, "evidence": "No post prose; only candidate points, titles, beat table, short hook options"}, {"text": "Points back to posts one and two of the series by name or slug", "passed": true, "evidence": "'Post one (a-legal-framework-for-agent-context)', 'Post two (implementing-the-legal-framework)'"}, {"text": "Plans an honesty beat around losing the OKF one-fact-per-file discipline", "passed": true, "evidence": "Beat 4 'What quietly stopped happening: capture is no longer one sentence, present tense, tagged and scoped' and beat 5 'did the loss cost anything?'"}, {"text": "Asks what 'better recall' means and how it was measured", "passed": false, "evidence": "Requests evidence but never asks what 'better' means or how it was measured: 'One or two concrete recall examples, before/after against the old store. \"It's better\" alone won't carry it.'"}], "summary": {"passed": 10, "failed": 1, "total": 11, "pass_rate": 0.91}}}, {"id": "eval-legal-framework-part-3-without_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "output.md", "type": "text", "content": "# Post plan: Legal Framework, part three\n\n**Working title:** *Agent Harness: What One Key Fact Was Actually For*\n**Alternates:** *Agent Harness: A Month on Hindsight* / *Agent Harness: The Format Was Never the Point*\n**Series:** follows `a-legal-framework-for-agent-context` (28 Jun) and `implementing-the-legal-framework` (19 Aug)\n**Status:** first-pass plan, not locked. Section 7 lists the open questions only you can answer.\n\n---\n\n## 1. Where the series left off\n\nPost two set up post three directly. These are the threads it left open, and they're the ones readers will be waiting on:\n\n- \"Post three will cover whichever of those survives contact with reality.\"\n- \"I am still a fan of OKF as a format. I am much less confident that I needed to build the storage layer underneath it.\"\n- \"If it does what it says, the interesting question stops being 'how do I store this' and becomes 'what is worth remembering', which was always the harder half.\"\n- Three unresolved problems: **tags aren't settled**, **there's no consolidation pass**, and **Claude's own memory isn't locked out**.\n- Two forward threads: **keep tuning tags**, and **a global memory with per-space scoping**.\n- An open call: \"Come and tell me if you have solved the consolidation problem.\"\n\nA month on Hindsight is the \"contact with reality\" that post two promised. The post should read as the payoff to those lines and not as a new topic.\n\n## 2. The point (what the reader leaves with)\n\n**My recommendation:**\n\n> OKF's stated reason was retrieval, and Hindsight retrieves better without it. But one-fact-per-file was also doing a second, quieter job: it made me decide, at write time, what was worth remembering. That's the job I lost, and that's the one that matters.\n\nPut another way: the storage layer was replaceable, and the discipline wasn't. It belongs at the moment of capture, not in the file format.\n\nThis answers your question, \"does it matter anymore?\", with \"half of it doesn't, and the half that does was never really about files.\" It's honest about what you gave up, it doesn't defend the scripts out of sunk cost, and it lands on the \"what is worth remembering\" line you already promised.\n\n**Two other points, if your month's evidence says otherwise:**\n\n- **A. \"It doesn't matter. Let the store be messy and let recall do the work.\"** Use this if, after a month, you can't name a case where the missing discipline hurt you. It's a clean, slightly brave post (\"I built the wrong half\"), but it skips the Legislation feedback loop, which is the framework's most distinctive part.\n- **B. \"It matters, and I've rebuilt it on top of Hindsight.\"** Use this only if you've actually built something, such as OKF-shaped retain calls, a capture skill that writes one sentence per retain, or tags mapped to your taxonomy. Don't write it as a plan for future work.\n\n## 3. Why the discipline still matters: three jobs OKF did besides retrieval\n\nThis is the core of the post. Each job needs to be checked against your real month (section 7) before it goes in.\n\n1. **The admission gate.** A single sentence under 240 characters forces you to decide what the fact *is* before you keep it. Post two named \"what deserves to become a memory\" as the unsolved question, and OKF was a partial answer to it. Without that constraint, does Hindsight retain *everything*, so the problem moves from \"can I find it\" to \"is what I found any good\"?\n2. **Countable precedent for the feedback loop.** Post one's Legislation Review works by surfacing \"the most frequently consulted rulings\" and tuning Legislation from them. That needs rulings that can be counted and cited one at a time. With extracted, blended memories, can you still say \"this fact was consulted 14 times, so promote it\"? This is the strongest argument because it ties the format to the framework itself and not to taste.\n3. **Supersede and provenance.** \"A fact you can search, supersede and scope individually is a fact you can trust\" (post two). When a Hindsight memory goes stale, how do you retire it, and can you see where it came from? The four provenance tiers in the Agentic Studio post (`observed` / `documented` / `contractual` / `unverified`) only work on a unit small enough to label.\n\nPossibly a fourth: **the exchange layer.** `memory_exchange.py` exports and generalises facts one by one. Does that still work if the source is a Hindsight bank? Include it only if you've tried it.\n\n## 4. Reader and tension\n\n- **Reader:** someone who read posts one and two, or who runs their own agent memory (hand-rolled `MEMORY.md`, Claude Code memory, Hindsight or similar). They're weighing \"build my own\" against \"adopt a product\" and want an honest report from someone who did both.\n- **Tension:** \"I built a careful system. A product did the headline job better within a month. Was the care wasted?\" Everyone who has hand-rolled infrastructure knows this feeling, which makes it the hook.\n\n## 5. Shape and size\n\n- **Shape:** a field report that turns into an argument. Lead with what happened, give a fair account of what got better and what got lost, then separate *format* from *discipline*.\n- **Size:** about 1,300 to 1,600 words, matching post two. One table, one visual at most, and no new download unless you've built something (option B).\n- **Tone:** same as post two. First person, admits what isn't right, no hype about Hindsight and no defensiveness about OKF.\n\n## 6. Arc (numbered beats)\n\n1. **Callback.** Post two ended with \"whichever survives contact with reality.\" Open with: I switched my daily work to Hindsight for a month and stopped using my own scripts. *(~100 words)*\n2. **What I actually changed.** Concretely: which spaces or repos, how banks are scoped, whether the hook and skills still fire, and what happened to `memory/`. Keep it short; readers need the setup before they can trust the verdict. *(~150 words)*\n3. **Recall is better. Say so plainly.** Give one or two real moments where Hindsight surfaced something your keyword-and-tag search wouldn't have. Give it credit with no hedging. *(~200 words)*\n   - **Turning point 1:** \"So the storage layer I was unsure about in post two, I didn't need it. The scripts can go.\"\n4. **What I lost.** The store isn't one fact per file any more. Describe what it looks like now, using a real example of a messy or blended memory. *(~150 words)*\n5. **Did it matter?** Go through the three jobs from section 3 and give a verdict for each from your month: *hurt me*, *didn't notice*, or *haven't tested*. A small table fits here: Job, What OKF did, What happens on Hindsight, Verdict. *(~350 words)*\n   - **Turning point 2:** \"OKF's justification in post two was retrieval. That was the wrong justification. It was really an admission policy wearing a file format.\"\n6. **Where the discipline goes now.** Move it from storage to capture: what a \"retain\" call should look like, and a one-sentence rule at write time even if the store doesn't enforce it. Explain how that keeps the Legislation feedback loop alive. Present it as a direction or a small experiment, not a finished build, unless you've built it. *(~200 words)*\n7. **Check-in on post two's open items.** Give each one a line or two. *(~150 words)*\n   - Tags: did Hindsight's ingest-time tagging and tag groups change your view?\n   - Consolidation: does Reflect, or anything else, actually solve it? If not, say so and repeat the call for help.\n   - Claude's own memory: still running alongside? Does a third memory make that worse?\n   - Global memory with scoping: did per-bank scoping give you the cross-space memory you wanted?\n8. **Close.** Point back to post one: the framework was about *when* and *what* context, not *where it lives*. Swapping the store proved that. Say what post four will cover. *(~100 words)*\n\n## 7. Open questions to answer before drafting\n\nEvery factual claim in the post comes from your experience. I haven't assumed any of it. These are the gaps:\n\n1. **Setup:** self-hosted or managed? One bank per repo, or something else? Did you keep the hooks and `memory-consult` / `memory-capture` skills and point them at Hindsight, or drop them?\n2. **The recall win:** one or two concrete moments where recall clearly beat the old setup. These carry beat 3.\n3. **The loss, concretely:** what does a typical retained memory look like now? Paste one or two (sanitised).\n4. **Did the missing discipline ever bite you?** A wrong or stale memory surfacing, noise in recall, a duplicate, or a fact you couldn't retire. If nothing bit you, the honest answer is option A in section 2, not my recommendation.\n5. **Feedback loop:** in the month, did you do any Legislation review? Could you find out how often a memory was recalled?\n6. **Reflect:** did you use it? Did it do anything close to consolidation?\n7. **Tags:** are you still using the six-tag taxonomy inside Hindsight, or did you let it tag freely?\n8. **Your old `memory/` facts:** imported, left alone, or abandoned?\n9. **Hindsight specifics:** any product behaviour described beyond what post two already says (Retain / Recall / Reflect, tagging at ingest, tag groups, scoping per user, project, team or channel) needs checking against their docs before publishing.\n\n## 8. Risks to watch\n\n- **Reading as an ad.** Balance the credit in beat 3 with the losses in beats 4 and 5. Post two already said you might be behind Hindsight; don't overcorrect into a product review.\n- **Defending sunk cost.** If the evidence for section 3 is thin, cut the claim. A post that says \"I was wrong about why OKF mattered\" is stronger than one that strains to save it.\n- **Promising a build.** Beat 6 shouldn't announce a v1.3 skill unless one exists.\n- **Scope creep.** Claude's own memory and the global repo could each be a whole post. Keep them to a line each in beat 7.\n\n## 9. Possible visual (optional)\n\nA two-column \"before and after\" of the Common Law tier: OKF files plus `memory.py` plus `MEMORY.md` on the left, the Hindsight bank on the right. Below it, an arrow showing the \"admission discipline\" moving from the store to the capture step. Reuse the post-two architecture diagram style if you include it. Skip it if it's purely decorative.\n"}, {"name": "response.md", "type": "text", "content": "I've drafted a plan for post three. My short answer to \"does the discipline matter anymore\": half of it doesn't, and the half that does was never really about files.\n\n**What I'd argue.** In post two you justified One Key Fact (OKF) by retrieval: \"a fact you can search, supersede and scope individually is a fact you can trust.\" Hindsight does the retrieval better, so that reason has gone, and the storage layer was replaceable, as you suspected in post two. But one fact per file was also doing quieter jobs:\n\n1. **The admission gate.** A single sentence under 240 characters forces you to decide what's worth keeping. That's the \"what is worth remembering\" question you said was always the harder half.\n2. **Countable precedent.** Post one's Legislation Review promotes \"the most frequently consulted rulings.\" That needs facts you can count one at a time.\n3. **Supersede and provenance.** You need small units to retire stale facts and to label them `observed` or `documented`.\n\nSo the plan's one-liner is: **the format was replaceable, the discipline wasn't, and the discipline belongs at the moment of capture, not in the file layout.**\n\n**Shape.** A field report that turns into an argument, about 1,300 to 1,600 words like post two. Eight beats:\n\n1. The callback to \"contact with reality\".\n2. What you changed.\n3. The recall win, credited plainly.\n4. What you lost.\n5. A verdict table on each of the three jobs.\n6. Moving the discipline to capture.\n7. A quick check-in on post two's open items: tags, consolidation, Claude's own memory, global scoping.\n8. The close.\n\n**Before drafting, I need your evidence.** The whole argument depends on whether losing the discipline ever actually hurt you this month. I've listed the questions in section 7 of the plan. The main ones:\n\n- A real recall win.\n- A sample of what a retained memory looks like now.\n- Whether a stale, noisy or duplicate memory ever bit you.\n- Whether you could see how often a memory was recalled.\n\nIf nothing ever bit you, the honest post is the other one: \"it doesn't matter, I built the wrong half.\" The plan includes that as option A, plus option B in case you've already rebuilt OKF-style retain calls on top of Hindsight.\n\nThe plan is in `output.md`.\n"}], "grading": {"expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": true, "evidence": "Recommended point plus 'Two other points': 'A. \"It doesn't matter. Let the store be messy...\"', 'B. \"It matters, and I've rebuilt it on top of Hindsight.\"'"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": false, "evidence": "Reader gives who and situation ('someone who read posts one and two... weighing \"build my own\" against \"adopt a product\"') but no current belief or what should change"}, {"text": "States the tension explicitly", "passed": true, "evidence": "'Tension: \"I built a careful system. A product did the headline job better within a month. Was the care wasted?\"'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": false, "evidence": "Single 8-beat arc only; options A/B are alternative points, not alternative arcs"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": false, "evidence": "Turning points are drafted conclusions ('Turning point 1: \"So the storage layer I was unsure about in post two, I didn't need it. The scripts can go.\"'); visual section is a build spec ('A two-column \"before and after\"... an arrow showing the \"admission discipline\" moving')"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": true, "evidence": "Beat 4 'What I lost'; beat 7 'Consolidation: ... If not, say so and repeat the call for help'; risk 'A post that says \"I was wrong about why OKF mattered\" is stronger'"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": false, "evidence": "Open questions list gaps, but turning points assert unsupplied conclusions as the author's: 'I didn't need it. The scripts can go.' and 'That was the wrong justification. It was really an admission policy wearing a file format.'"}, {"text": "Contains no drafted body paragraphs of the post", "passed": true, "evidence": "No drafted body paragraphs; beats are plans with word budgets, only one-line turning-point quotes"}, {"text": "Points back to posts one and two of the series by name or slug", "passed": true, "evidence": "'Series: follows a-legal-framework-for-agent-context (28 Jun) and implementing-the-legal-framework (19 Aug)'"}, {"text": "Plans an honesty beat around losing the OKF one-fact-per-file discipline", "passed": true, "evidence": "Beat 4 'What I lost. The store isn't one fact per file any more' and beat 5 'Did it matter?' verdict per job"}, {"text": "Asks what 'better recall' means and how it was measured", "passed": false, "evidence": "Asks for 'one or two concrete moments where recall clearly beat the old setup' but never asks what 'better recall' means or how it was measured"}], "summary": {"passed": 6, "failed": 5, "total": 11, "pass_rate": 0.55}}}], "previous_feedback": {}, "previous_outputs": {}, "benchmark": {"metadata": {"skill_name": "blog-inception", "skill_path": "<path/to/skill>", "executor_model": "<model-name>", "analyzer_model": "<model-name>", "timestamp": "2026-10-15T04:32:19Z", "evals_run": [1, 2, 3], "runs_per_configuration": 3}, "runs": [{"eval_id": 2, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 0.8, "passed": 8, "failed": 2, "total": 10, "time_seconds": 88.4, "tokens": 90606, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": true, "evidence": "Three candidates: '1. Renaming an Agentic Studio flow quietly drops its brand kit...', '2. \"Set it once, use it everywhere\" has an exception...', '3. A flow's name isn't just a label...'"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": true, "evidence": "Who 'A practitioner building or tidying up flows in Agentic Studio'; Believes now 'Once a brand kit is set it applies everywhere automatically'; Should leave with 'A rename is not a harmless cosmetic edit'"}, {"text": "States the tension explicitly", "passed": true, "evidence": "Tension: 'The failure is silent. Brand context is sold as set-once, ambient and persistent, so nobody thinks to check it.'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": false, "evidence": "Recommended Tip arc has 7 numbered beats, but alternatives are prose only: Single insight 'built around a side-by-side of the same flow's output before and after the rename'; self-correction variant also prose. Neither is laid out as a beat sequence"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": true, "evidence": "'Beat 4: the reader should see the brand kit there, then not there'; 'Beat 6: the reader should come away with one action they'll actually do'; '...not a diagram'"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": true, "evidence": "Honesty beats: 'What this blog got wrong first: the February AI Project Lifecycle post said every flow automatically picks up brand constraints'; 'What isn't known: why it happens'"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": false, "evidence": "Most gaps marked 'author to supply', but the tension asserts unprovided experience details: 'The flow keeps running and nothing warns you... the person who notices is usually a reviewer, not the builder' (prompt only says the context is lost); the caveat covers only how visible the loss is"}, {"text": "Contains no drafted body paragraphs of the post", "passed": true, "evidence": "No post prose; only one-liners, titles, beat table and two one-sentence hook options"}, {"text": "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay", "passed": true, "evidence": "'Type: tip... about 250 to 450 words... it can grow slightly but should stay a tip'"}, {"text": "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing", "passed": true, "evidence": "Open question 5 'Is it reproducible every time? Have you repeated it on a fresh flow?'; evidence list 'Exact repro steps (create -> attach brand kit -> rename -> observe), with the date observed'; 'Date the finding'"}], "notes": []}, {"eval_id": 1, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 10, "failed": 0, "total": 10, "time_seconds": 110.1, "tokens": 97318, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": true, "evidence": "brief.md lists A/B/C: 'A. Your root CLAUDE.md is the one file...', 'B. Moving workflows into skills swapped...', 'C. Past a certain length...'"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": true, "evidence": "Reader section: Who 'A developer who uses Claude Code... on a real, long-running repo'; Believes now 'More rules there means more control'; Should leave with 'A rule for sorting what stays in CLAUDE.md and what moves'"}, {"text": "States the tension explicitly", "passed": true, "evidence": "Tension section: 'The fix everyone reaches for, adding one more rule to CLAUDE.md, is the thing that broke it... The reader is choosing between two failure modes'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": true, "evidence": "Recommended Build log as 10 numbered beats; alternatives sketched as beat sequences: Three attempts '900-line CLAUDE.md -> [intermediate fix] -> skills', Single insight 'default -> problem -> small change -> before/after -> when to use or skip -> one line'. Reason: 'Build log is the pattern built for \"here's what I did, concretely, and here's what isn't right yet\"'"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": true, "evidence": "Turning points framed as reader perception: 'the reader should see a rule sitting deep in a very long file', 'see the failure move rather than vanish'; no build instructions"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": true, "evidence": "Honesty beats section: 'What isn't solved: skill triggering reliability', 'What went wrong first: the 900-line file itself', 'Sample size: one client repo. Say so.'"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": true, "evidence": "Gaps marked 'Author to supply' throughout the beat table (e.g. beat 2 'One specific rule that was ignored' -> 'Author to supply'); hook 2 guarded '(Only if \"follows it better\" is true)'. Cross-references (Karpathy ~60 lines, post two promising tags/global memory) verified in published posts"}, {"text": "Contains no drafted body paragraphs of the post", "passed": true, "evidence": "No post prose; only one-liners, emphasis line, titles and one-sentence hook options"}, {"text": "Argues the one-post-vs-series decision from the evidence in the notes", "passed": true, "evidence": "'Why not a series: ... Right now you can answer one question... The second question (\"do skills actually trigger reliably?\") is the open one, and you don't have the evidence for it yet.'"}, {"text": "Plans an honesty beat around skills not triggering reliably", "passed": true, "evidence": "Beat 7 'The trade' and beat 8 'What's not right yet. Triggering reliability'; 'This is the post's main honesty beat and should be planned as beat 7-8'"}], "notes": []}, {"eval_id": 3, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 0.91, "passed": 10, "failed": 1, "total": 11, "time_seconds": 123.4, "tokens": 94047, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": true, "evidence": "Three candidates A/B/C: 'One fact per file was never really a retrieval trick...', 'Hindsight answered \"how do I store this\"...', 'I built OKF for retrieval, and better retrieval made it unnecessary...'"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": true, "evidence": "Who 'practitioners building or choosing a memory layer for coding agents'; Believes now 'memory is a retrieval problem, so better recall means a better memory'; Should leave with 'a clear view of which jobs a memory format does beyond retrieval'"}, {"text": "States the tension explicitly", "passed": true, "evidence": "Tension: 'post two said one-fact-per-file was there for retrieval, retrieval is now better without it, and yet something feels lost. Either the author mis-stated why OKF mattered, or he's sentimental...'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": true, "evidence": "Recommended Build log with Three-attempts turn as 9 numbered beats, with reason ('keeps the specifics-plus-shortfalls credibility of post two'); Single insight alternative sketched as a beat sequence: 'the default (loose capture), the problem it caused, the small change (keep a holding line per memory), and a before/after'"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": true, "evidence": "'the reader should see the same piece of experience captured both ways'; 'see OKF's jobs come apart into two piles'"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": true, "evidence": "Honesty beats: 'Post two gave the wrong reason, or an incomplete one'; 'One month, one person, one workload'; 'What's still unsolved'"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": true, "evidence": "Beats 2-9 marked 'author to supply' (beat 5 'author to supply (critical)'); quotes from post two ('The reason for the file-per-fact obsession is retrieval', 'much less confident that I needed to build the storage layer') and Hindsight/provenance details verified in published posts"}, {"text": "Contains no drafted body paragraphs of the post", "passed": true, "evidence": "No post prose; only candidate points, titles, beat table, short hook options"}, {"text": "Points back to posts one and two of the series by name or slug", "passed": true, "evidence": "'Post one (a-legal-framework-for-agent-context)', 'Post two (implementing-the-legal-framework)'"}, {"text": "Plans an honesty beat around losing the OKF one-fact-per-file discipline", "passed": true, "evidence": "Beat 4 'What quietly stopped happening: capture is no longer one sentence, present tense, tagged and scoped' and beat 5 'did the loss cost anything?'"}, {"text": "Asks what 'better recall' means and how it was measured", "passed": false, "evidence": "Requests evidence but never asks what 'better' means or how it was measured: 'One or two concrete recall examples, before/after against the old store. \"It's better\" alone won't carry it.'"}], "notes": []}, {"eval_id": 2, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.3, "passed": 3, "failed": 7, "total": 10, "time_seconds": 71.5, "tokens": 107893, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": false, "evidence": "No candidate one-liners for the point; only a title, two title alternatives and a pull quote 'A rename shouldn't change behaviour. Here, it does.'"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": false, "evidence": "No reader section; reader never named or described"}, {"text": "States the tension explicitly", "passed": true, "evidence": "'Why it earns a post: Sitecore's docs say the opposite... If renaming quietly drops the brand kit... nothing tells you why. That gap is the point of the post.'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": false, "evidence": "No arcs or beat lists; goes straight to an MDX draft"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": false, "evidence": "No turning points marked"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": false, "evidence": "No honesty beats planned (nothing on what isn't solved or what went wrong first); only a TODO for a support-ticket line"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": false, "evidence": "Asserts unsupplied experience in the draft and reply: 'The flow still runs, the agents still hand over to each other, and you still get output... tone, dos and don'ts and glossary terms quietly drift' and 'the output just quietly goes off-brand. Nothing errors.'"}, {"text": "Contains no drafted body paragraphs of the post", "passed": false, "evidence": "Contains a full MDX draft with body paragraphs: 'Another small one from working in Agentic Studio. If you rename a flow after you've created it, it loses the brand kit context...'"}, {"text": "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay", "passed": true, "evidence": "'Size: About 250-350 words. Same shape as the debug-pane post.'"}, {"text": "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing", "passed": true, "evidence": "'[TODO: one or two sentences on the exact steps...]', 'What exactly did you rename?', 'When: Roughly when you hit it (month), since Agentic Studio changes quickly.'"}], "notes": []}, {"eval_id": 1, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.5, "passed": 5, "failed": 5, "total": 10, "time_seconds": 75.9, "tokens": 85690, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": false, "evidence": "Only one point offered: 'CLAUDE.md is always loaded, so everything in it competes...' plus a 'Short version' restating the same idea; no alternative candidates"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": false, "evidence": "Reader names who ('A developer... using Claude Code on a real client repo') but not what they believe or what should change: 'They know what CLAUDE.md is. They may have heard of skills but haven't moved anything into one.'"}, {"text": "States the tension explicitly", "passed": true, "evidence": "'Putting everything in CLAUDE.md feels safe... The bad surprise is that being seen isn't the same as being followed... You've swapped one failure mode for another'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": false, "evidence": "Single arc only ('## 7. Arc (numbered beats)' 1-8); no alternative arc proposed or recommended"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": false, "evidence": "Turning points framed as author claims ('Turning point 1: being seen is not being followed'); the only visual moment is a build spec: 'a before/after bar (~900 lines vs ~120 lines plus 6 skills loaded on demand)'"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": true, "evidence": "Beat 6 'Turning point 2: the new failure mode' and beat 8 'Close: what I don't know yet. Trigger reliability is the open question.'"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": false, "evidence": "Uses [NEED] markers, but the draft summary line asserts an unsupported outcome: 'It works better, but I've traded one problem for another' - the notes never say it works better"}, {"text": "Contains no drafted body paragraphs of the post", "passed": true, "evidence": "No drafted post prose; draft summary line is a one-liner/summary, beats are plans with [NEED] markers"}, {"text": "Argues the one-post-vs-series decision from the evidence in the notes", "passed": true, "evidence": "'One post now... You have one complete arc... You don't have an ending yet. \"Not sure skills trigger reliably\" is an open question, not a finding.'"}, {"text": "Plans an honesty beat around skills not triggering reliably", "passed": true, "evidence": "Beat 6: 'A skill only helps if it gets loaded... You're not yet sure that choice happens reliably. [NEED: any case where a skill didn't fire...]'"}], "notes": []}, {"eval_id": 3, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.55, "passed": 6, "failed": 5, "total": 11, "time_seconds": 77.7, "tokens": 84038, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Offers two or three candidate one-liners for the point, rather than one", "passed": true, "evidence": "Recommended point plus 'Two other points': 'A. \"It doesn't matter. Let the store be messy...\"', 'B. \"It matters, and I've rebuilt it on top of Hindsight.\"'"}, {"text": "Names the reader: who they are, what they believe now, what should change", "passed": false, "evidence": "Reader gives who and situation ('someone who read posts one and two... weighing \"build my own\" against \"adopt a product\"') but no current belief or what should change"}, {"text": "States the tension explicitly", "passed": true, "evidence": "'Tension: \"I built a careful system. A product did the headline job better within a month. Was the care wasted?\"'"}, {"text": "Proposes at least two arcs written as numbered beats, and recommends one with a reason", "passed": false, "evidence": "Single 8-beat arc only; options A/B are alternative points, not alternative arcs"}, {"text": "Marks turning points as what the reader should see or do, not how to build a visual", "passed": false, "evidence": "Turning points are drafted conclusions ('Turning point 1: \"So the storage layer I was unsure about in post two, I didn't need it. The scripts can go.\"'); visual section is a build spec ('A two-column \"before and after\"... an arrow showing the \"admission discipline\" moving')"}, {"text": "Includes honesty beats (what isn't solved or what went wrong first)", "passed": true, "evidence": "Beat 4 'What I lost'; beat 7 'Consolidation: ... If not, say so and repeat the call for help'; risk 'A post that says \"I was wrong about why OKF mattered\" is stronger'"}, {"text": "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes", "passed": false, "evidence": "Open questions list gaps, but turning points assert unsupplied conclusions as the author's: 'I didn't need it. The scripts can go.' and 'That was the wrong justification. It was really an admission policy wearing a file format.'"}, {"text": "Contains no drafted body paragraphs of the post", "passed": true, "evidence": "No drafted body paragraphs; beats are plans with word budgets, only one-line turning-point quotes"}, {"text": "Points back to posts one and two of the series by name or slug", "passed": true, "evidence": "'Series: follows a-legal-framework-for-agent-context (28 Jun) and implementing-the-legal-framework (19 Aug)'"}, {"text": "Plans an honesty beat around losing the OKF one-fact-per-file discipline", "passed": true, "evidence": "Beat 4 'What I lost. The store isn't one fact per file any more' and beat 5 'Did it matter?' verdict per job"}, {"text": "Asks what 'better recall' means and how it was measured", "passed": false, "evidence": "Asks for 'one or two concrete moments where recall clearly beat the old setup' but never asks what 'better recall' means or how it was measured"}], "notes": []}], "run_summary": {"with_skill": {"pass_rate": {"mean": 0.9033, "stddev": 0.1002, "min": 0.8, "max": 1.0}, "time_seconds": {"mean": 107.3, "stddev": 17.6672, "min": 88.4, "max": 123.4}, "tokens": {"mean": 93990.3333, "stddev": 3356.3588, "min": 90606, "max": 97318}}, "without_skill": {"pass_rate": {"mean": 0.45, "stddev": 0.1323, "min": 0.3, "max": 0.55}, "time_seconds": {"mean": 75.0333, "stddev": 3.1896, "min": 71.5, "max": 77.7}, "tokens": {"mean": 92540.3333, "stddev": 13321.4322, "min": 84038, "max": 107893}}, "delta": {"pass_rate": "+0.45", "time_seconds": "+32.3", "tokens": "+1450"}}, "notes": []}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>
