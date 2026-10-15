@@ -1,0 +1,126 @@
+[
+  {
+    "query": "ok the vercel SSO post is done, publish it",
+    "should_trigger": true,
+    "hits": 3,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "ship it - put the agentic studio tip live",
+    "should_trigger": true,
+    "hits": 3,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "take the draft flag off Setting-Up-Sitecore-Personalize and push to prod",
+    "should_trigger": true,
+    "hits": 3,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "is the legal framework post three live yet?",
+    "should_trigger": true,
+    "hits": 0,
+    "other_skills": [],
+    "pass": false
+  },
+  {
+    "query": "unpublish the time machine post, it doesn't fit the blog anymore",
+    "should_trigger": true,
+    "hits": 3,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "I fixed the typo in the trinity of clarity post, get it into production",
+    "should_trigger": true,
+    "hits": 3,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "release the whole SSO series now that part 5 is finished",
+    "should_trigger": true,
+    "hits": 3,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "push the new MandateCheckout component change live and show me the url",
+    "should_trigger": true,
+    "hits": 3,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "I've got an idea for a post about content modelling in XM Cloud",
+    "should_trigger": false,
+    "hits": 0,
+    "other_skills": [
+      "blog-inception",
+      "blog-inception",
+      "blog-inception"
+    ],
+    "pass": true
+  },
+  {
+    "query": "rewrite the first principles post in the casual profile",
+    "should_trigger": false,
+    "hits": 0,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "proofread the builder license post before I look at it again",
+    "should_trigger": false,
+    "hits": 0,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "build a diagram for the recall sequence in the legal framework post",
+    "should_trigger": false,
+    "hits": 0,
+    "other_skills": [
+      "blog-visuals",
+      "blog-visuals",
+      "blog-visuals"
+    ],
+    "pass": true
+  },
+  {
+    "query": "send the new post to my newsletter subscribers",
+    "should_trigger": false,
+    "hits": 0,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "write a LinkedIn post announcing the agent as customer article",
+    "should_trigger": false,
+    "hits": 0,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "what's the frontmatter schema for posts on this blog?",
+    "should_trigger": false,
+    "hits": 0,
+    "other_skills": [],
+    "pass": true
+  },
+  {
+    "query": "lint the legal framework and check memory is consistent",
+    "should_trigger": false,
+    "hits": 0,
+    "other_skills": [
+      "framework-lint",
+      "framework-lint",
+      "framework-lint"
+    ],
+    "pass": true
+  }
+]
