@@ -1,0 +1,62 @@
+---
+title: 'Agent Harness: Memory as Context - The Legal Framework'
+date: '2026-06-28'
+draft: false
+tags: ['ai', 'agents', 'context-engineering', 'memory', 'claude-code']
+summary: 'Agent context is good at prescription - the rules an agent is told to follow - and poor at experience - the hard-won nudges supplied at the moment of ambiguity. The Legal Framework gives experience its own tier, the Common Law, and recalls it just-in-time rather than loading it up front.'
+images: []
+authors: ['default']
+layout: PostLayout
+---
+
+The craft of handing context to an agent has stabilised: instruction files at the repository root, skills, layered system prompts, a handful of memory stores. All of it documents one thing well - **Prescriptive Context**, the rules and standing guidance an agent is told to follow.
+
+Prescription has a ceiling. The developer still steps back into the loop to ask the sharper question, redirect the agent, or supply the insight that resolves an ambiguous moment. That accumulated judgement is a second kind of context - **Reflective Context** - and current harnesses load it at the wrong time. We load memory the way we load everything else: up front, indiscriminately, as standing context. Experience is precedent. It matters only when the rules in front of you run out, so loading it in advance wastes tokens and buries the signal.
+
+The Legal Framework fixes the timing. It separates context into three tiers by role, and delivers each tier when it is needed rather than all of it at once.
+
+## The three tiers
+
+The framework maps context onto the structure of a legal system: **ideology** (the Constitution), **prescription** (the Legislation), and **reflection** (the Common Law). Separating the tiers by runtime role is what lets the Legislation and Constitution stay small.
+
+<img
+  src="/static/images/legal-framework-implementation/part2-system-architecture.svg"
+  alt="System layout: the Constitution at the repository root and Legislation through the tree, with the Common Law in a separate vault connected as a queryable retrieval surface."
+  className="my-6 w-full"
+/>
+
+**The Constitution** is the root instruction file - CLAUDE.md, AGENTS.md, or the harness equivalent - a concise set of values for working on the repository. These values transfer across projects, because they describe how to behave as a developer rather than how one codebase works. Karpathy's published CLAUDE.md sets the bar: four behavioural pillars - think before coding, simplicity first, surgical changes, and goal-driven execution with verifiable success criteria - in about sixty lines. The Constitution is the final fallback when every other tier runs out of guidance.
+
+**The Legislation** applies the Constitution to specifics: architecture, design patterns, workflows, tool references. It loads just-in-time, scoped to the sub-directory the agent is working in. It is the guardrail layer - the same role most teams already give their per-directory rules - but the framework keeps it to a maintainable size by moving nuance out of it and into the Common Law.
+
+**The Common Law** is the developer's accumulated experience, chunked into atomic facts: points of verification, encountered issues and their fixes, preferences, and worked examples of what to do and what not to do. Each fact interprets the Legislation and narrows it. The Common Law loads only when the Legislation is unclear, triggered by an **Ambiguity Event** - precedent consulted when the written rule falls short, and invoked as memory because it draws on past work. The mechanism reuses the Memory.md access path the harness already has, so the addition is small.
+
+## Recall at the point of ambiguity
+
+The framework needs one change to the core harness: a stronger built-in sense of uncertainty, paired with the tools to resolve it from experience. Claude's Constitutional AI harness already shows the strongest progress toward this kind of self-checking.
+
+A new step raises that uncertainty into a signal. The **Clarity Assessment** asks the model to lint its intended action against the Legislation and return a scored list of the assumptions it is making. The score, rather than a flat list, lets the developer set the automation threshold and stops every possible assumption from flooding the context.
+
+Each scored assumption becomes a query to the Common Law. A strongly typed request structure keeps the query cheap to reason about: for each assumption, the model names what it needs - verification, issue, fix, preference, or example - plus keywords. That query runs against a graphed or weighted fact store and returns the top three snippets ranked against the tags.
+
+<img
+  src="/static/images/legal-framework-implementation/part2-recall-sequence.svg"
+  alt="Recall sequence: the Clarity Assessment surfaces doubt, raises an Ambiguity Event, and redirects into the Legal Check, which queries the Obsidian MCP; the MCP graph-searches and ranks the Common Law, and the ranked precedent returns as a snippet into the prompt."
+  className="my-6 w-full"
+/>
+
+## The feedback loop: Legislation review
+
+The Common Law also tunes the tiers above it. The most frequently consulted rulings reveal where the Legislation and Constitution left room for a wrong assumption. Surfacing them lets a developer sharpen the wording that led to the ambiguity - not by promoting every fact into prescription, but by aligning the existing rules to the intent behind them. A sustained shift in the rulings signals a genuine change in pattern, which can justify a material change to the Legislation.
+
+<img
+  src="/static/images/a-legal-framework-for-agent-context/legislation-feedback-loop.svg"
+  alt="Legislation review as a one-directional activity: the most frequently consulted rulings are surfaced from the Common Law, linted for alignment against the Constitution and Legislation, then a human tunes the wording and tags guided by that insight - sharpening outcomes while leaving the law largely unchanged. Major changes are allowed but not expected."
+  className="my-6 w-full"
+/>
+
+## Why the legal framing earns its place
+
+Framing context under three legal tiers shows when and how to use each one. The legal system is the mature model for exactly this problem - a Constitution for values, Legislation for rules, and Common Law for precedent applied only when the rules fall short - and agent context is doing the same work. Aligning the harness to those tiers delivers two wins at once: the message reaches the model more accurately, and it does so on fewer tokens, because snippet timing also controls where context lands in the window. Fewer, better-placed words produce better outcomes.
+
+The next post puts the framework into Claude: how the prototype is wired, and the changes the prototype has already forced.
