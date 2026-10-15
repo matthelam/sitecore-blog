@@ -40,6 +40,7 @@ happens to load first. That is worse than any single wrong rule.
 | Constitution index | The Legislation table in root `CLAUDE.md` lists files that don't exist, or omits ones that do |
 | Operating skills | `memory-consult`, `memory-capture`, `task-sense-check`, `knowledge-export`, `knowledge-import`, `framework-lint` all present |
 | Hook | Non-zero exit, or not wired in `.claude/settings.json` |
+| Hook path | Any `memory_hook` entry in `.claude/settings.json` calls the script or interpreter by a relative path (`scripts/memory_hook.py`, `.venv/...`). Every hook fails once the session changes directory. Fix: exec form, `args: ["${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py"]` |
 | Version | `framework_version` older than the installed `legal-framework` skill — needs its Upgrade mode |
 
 `empty_scopes` is not a failure. A scope with no facts yet is a scope nobody
