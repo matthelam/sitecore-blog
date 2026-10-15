@@ -1,5 +1,7 @@
 # Tone profiles
 
+Status: **approved by the author, 2026-10-15** (crisp default, casual for posts of 500 words or fewer and for chosen moments).
+
 Two profiles, chosen in the tone trial (`.claude/plans/register-trial/`). The post type decides
 which one is the base (table below). Both profiles sit under `voice-guide.md`: substance,
 calibrated hedges, coined concepts and AU spelling are never traded away for tone.

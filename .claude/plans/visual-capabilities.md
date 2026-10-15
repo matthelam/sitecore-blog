@@ -54,3 +54,59 @@ The blog can already render any diagram, image or animation. What it lacks is a 
 Redraw one existing Legal Framework diagram (the recall sequence) two ways: (a) a static
 diagram-design SVG and (b) an animated SVG version. Compare both side by side against the original
 in an artifact, then decide before anything is installed.
+
+---
+
+## 5. Round 2 — interactive visuals (2026-10-15)
+
+### What Claude's in-chat visuals are, and aren't
+
+The official page ("Claude builds interactive visuals right in your conversation") describes them
+as in-line and **temporary**: they "change or disappear as the conversation evolves", unlike
+artifacts. It doesn't disclose the implementation. Not portable as a feature. What is portable: the
+design method (skills below) and the output type (HTML/SVG/JS).
+
+### Platform constraints (verified in this repo)
+
+- `next.config.js` CSP: `frame-src giscus.app` blocks every other iframe, including same-origin.
+  `script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is` blocks CDN
+  libraries. Inline scripts are allowed. So libraries must come from npm; iframes need a CSP change.
+- Dark mode is a `.dark` class (next-themes `attribute="class"`, Tailwind
+  `@custom-variant dark`). Visuals must key off `.dark`, not `prefers-color-scheme`. An iframe
+  can't see the parent's `.dark` class without a postMessage bridge.
+
+### Skills reviewed (read in full unless noted)
+
+| Skill | Source | Fit | Fold in as |
+|---|---|---|---|
+| `dataviz` | Anthropic, bundled with Claude Code | High | The chart procedure: form first, colour last, run the palette validator, hover layer by default, dark mode selected not flipped. Reference it, don't copy it. Adapt theming to `.dark`. References folder not yet read. |
+| `artifact-diagramming` | Anthropic, bundled | High | The test for when a diagram earns its place, plus inline-SVG mechanics (`viewBox`, `currentColor`, labelled arrows, `figure`/`figcaption`, `role="img"`). Matches the author's existing SVG habits. |
+| `diagram-design` v2.6 | cathrynlavery (MIT) | High for static editorial diagrams | 45 diagram types, editorial rules. Outputs HTML pages, so SVG must be extracted. §0–4 read; references not yet read. |
+| `data-visualization` | NTCoding/claude-skillz | Medium | Reference material only: perceptual ranking, Shneiderman's "overview, zoom, details", and the layout-algorithm-to-library map (dagre/ELK, d3-hierarchy, d3-sankey). |
+| `frontend-design` | Anthropic | Medium | Anti-default design guard for widget styling. Overlaps `artifact-design`. |
+| `web-artifacts-builder` | Anthropic | Low | Bundles React + Tailwind + shadcn into one HTML file for claude.ai. Only useful for the iframe route; the blog is already React + Tailwind. |
+| Inline visualizer (claudskills.com) | community | Low | Chart.js in chat; CDN loading conflicts with the CSP. Not read. |
+| Visual Explainer (ericblue) | community | Low | Generates images via OpenAI/Gemini; not interactive. Not read. |
+| "dataink" plugin | community, privileged | Unknown | Data storytelling and infographic design. Not reviewed. |
+
+### Integration routes (decision for the author)
+
+- **A. Native MDX components** (`components/visuals/`, registered in `components/MDXComponents.tsx`,
+  libraries via npm). Best for theming, accessibility, search indexing and consistency. Costs an
+  up-front starter kit.
+- **B. Self-contained HTML widgets in an iframe** (`public/static/widgets/<slug>/`). Matches how
+  Claude already builds artifacts, so it's the fastest to author and isolated from the site build.
+  Needs `frame-src 'self'`, a height and theme bridge, and inlined libraries; not indexed.
+
+Recommendation: A for the repeatable patterns (chart, step-through diagram, explorable control),
+with B allowed for one-off bespoke explorables. Prototype any visual as an artifact first, then
+port it.
+
+### Proposed trial (same method as before)
+
+1. **Explorable:** in `the-agent-as-customer-a-practical-build-guide`, a cart-total slider against
+   the A$300 mandate that flips the checkout response between accepted and the post's real
+   `over_mandate` rejection JSON.
+2. **Step-through diagram:** the Legal Framework recall sequence (Clarity Assessment → Ambiguity
+   Event → Legal Check → ranked precedent) as a stepped, animated SVG that respects reduced motion.
+Both built as route A components, previewed with `yarn dev`, compared against the static originals.
