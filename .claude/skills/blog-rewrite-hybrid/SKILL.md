@@ -17,8 +17,8 @@ approach.
 3. Rewrite section by section. Apply the craft fragments **only** where they do not conflict with the
    voice guide. On any conflict, apply the voice guide and move on.
 4. Apply the Concision rules in `voice-guide.md` (structure first, then filler words). Then count
-   prose words and take the base tone profile from `tone-profiles.md`: 400 or fewer is casual
-   throughout, over 400 is crisp. In a crisp-based post, switch a passage to **casual** only where
+   prose words and take the base tone profile from `tone-profiles.md`: 500 or fewer is casual
+   throughout, over 500 is crisp. In a crisp-based post, switch a passage to **casual** only where
    that file allows it, within its limits, and only if it passes the drift check. If the post is part
    of a series, also apply the series conventions in `voice-guide.md`.
 5. Preserve substance exactly (every claim, number, code block, table, link). Fix only genuine
