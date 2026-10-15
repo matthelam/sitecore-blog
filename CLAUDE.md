@@ -81,7 +81,9 @@ watches `/feed.xml` and emails subscribers about each new post. Publishing a new
 emails subscribers, and an email can't be recalled. So before any publish that adds a post to the
 feed, say plainly that it will be emailed. Buttondown identifies posts by their feed `guid`
 (`siteUrl` + slug), so never change `siteUrl` or a published post's slug: every changed guid
-looks like a new post and can be emailed again. Nothing else ever calls the Buttondown API.
+looks like a new post and can be emailed again. Nothing else ever calls the Buttondown API, with
+one exception Matt approved on 2026-10-15: the one-time setup that registers `/feed.xml` as an
+RSS-to-email automation with "skip old items" on. That setup sends nothing by itself.
 
 ### 4. Delivery
 
