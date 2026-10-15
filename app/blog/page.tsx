@@ -1,16 +1,19 @@
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import { allBlogs } from 'contentlayer/generated'
 import { genPageMetadata } from 'app/seo'
+import JsonLd from '@/components/JsonLd'
+import { webPageSchema } from '@/data/schema'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 
 const POSTS_PER_PAGE = 5
 
-export const metadata = genPageMetadata({
-  title: 'Blog: Agentic Sitecore Development and Agent Context',
+const PAGE = {
+  title: 'Blog - Matt Lam on Agentic Sitecore Development',
   description:
-    'Every post by Matt Lam on agentic Sitecore development, Sitecore Agentic Studio, agent context engineering, Claude Code and Sitecore SSO.',
-  absoluteTitle: true,
-})
+    "Matt Lam's posts in one place: Sitecore Agentic Studio, agent context engineering, Claude Code, Sitecore XM Cloud, and Azure Entra ID SSO for Sitecore.",
+}
+
+export const metadata = genPageMetadata({ ...PAGE, absoluteTitle: true })
 
 export default async function BlogPage(props: { searchParams: Promise<{ page: string }> }) {
   const posts = allCoreContent(sortPosts(allBlogs))
@@ -23,11 +26,14 @@ export default async function BlogPage(props: { searchParams: Promise<{ page: st
   }
 
   return (
-    <ListLayout
-      posts={posts}
-      initialDisplayPosts={initialDisplayPosts}
-      pagination={pagination}
-      title="All Posts"
-    />
+    <>
+      <JsonLd data={webPageSchema('CollectionPage', 'blog', PAGE)} />
+      <ListLayout
+        posts={posts}
+        initialDisplayPosts={initialDisplayPosts}
+        pagination={pagination}
+        title="All Posts"
+      />
+    </>
   )
 }

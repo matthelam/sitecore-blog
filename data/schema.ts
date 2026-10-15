@@ -53,15 +53,32 @@ export function websiteSchema() {
   }
 }
 
-export function profilePageSchema() {
+export interface PageCopy {
+  title: string
+  description: string
+}
+
+/** A page node carrying the page's own title and description, linked to the WebSite node. */
+export function webPageSchema(
+  type: 'WebPage' | 'CollectionPage' | 'ProfilePage',
+  path: string,
+  page: PageCopy,
+  extra: Record<string, unknown> = {}
+) {
   return {
     '@context': SCHEMA_CONTEXT,
-    '@type': 'ProfilePage',
-    url: `${siteUrl}/about`,
-    name: `About ${authorName}`,
+    '@type': type,
+    url: path ? `${siteUrl}/${path}` : siteUrl,
+    name: page.title,
+    description: page.description,
     inLanguage: siteMetadata.locale,
-    mainEntity: personSchema(),
+    isPartOf: { '@id': `${siteUrl}#website` },
+    ...extra,
   }
+}
+
+export function profilePageSchema(page: PageCopy) {
+  return webPageSchema('ProfilePage', 'about', page, { mainEntity: personSchema() })
 }
 
 export function breadcrumbSchema(items: { name: string; path: string }[]) {
