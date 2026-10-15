@@ -56,12 +56,12 @@ const LayerParallel = ({ label, columns, highlight, highlightLabel }: LayerParal
             <div
               className={
                 marked
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-950/40 rounded-lg border-2 p-2'
+                  ? 'rounded-lg border-2 border-gray-800 bg-gray-100 p-2 dark:border-gray-200 dark:bg-gray-800'
                   : ''
               }
             >
               {marked && (
-                <p className="text-primary-700 dark:text-primary-300 pb-2 text-center text-xs font-semibold">
+                <p className="pb-2 text-center text-xs font-semibold text-gray-900 dark:text-gray-100">
                   {highlightLabel}
                 </p>
               )}
@@ -71,7 +71,7 @@ const LayerParallel = ({ label, columns, highlight, highlightLabel }: LayerParal
                     key={c.heading}
                     className={`rounded-md border px-2 py-2 text-center leading-snug sm:px-3 ${
                       marked
-                        ? 'border-primary-300 dark:border-primary-700 bg-white font-semibold text-gray-900 dark:bg-gray-900 dark:text-gray-100'
+                        ? 'border-gray-400 bg-white font-semibold text-gray-900 dark:border-gray-500 dark:bg-gray-900 dark:text-gray-100'
                         : 'border-gray-300 bg-white text-gray-800 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200'
                     }`}
                   >

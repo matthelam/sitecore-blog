@@ -29,3 +29,8 @@ own diagram and interactive components, governed in detail by the `blog-visuals`
    before it's built.
 5. **Lint and build before commit.** eslint (including jsx-a11y) and prettier pass, and
    `yarn build` passes.
+6. **Red is never a highlight.** The brand primary (`primary-*`) is a red, and red reads as
+   negative: error, rejection, failure. In visuals it is reserved for genuinely negative states
+   (always with an icon and words). Emphasis, active, focused and "look here" states use a strong
+   neutral instead: a dark gray border on a light gray fill, inverted in dark mode. Matt's rule,
+   2026-10-16.
