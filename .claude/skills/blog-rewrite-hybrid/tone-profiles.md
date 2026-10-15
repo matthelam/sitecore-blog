@@ -7,17 +7,18 @@ calibrated hedges, coined concepts and AU spelling are never traded away for ton
 ## Choosing the profile by post type
 
 Derived from a survey of the author's 27 published and draft posts (October 2025 – August 2026).
-Decide the type from the post's intent first; word counts are a guide, not the test.
+**The 400-word rule (the author's decision).** A post of 400 prose words or fewer is written casual
+throughout. Over 400, the base is crisp. Count prose only: exclude frontmatter, code blocks, tables,
+inline SVG, and the References list. If a casual post drafts past 400, first try cutting it back
+under 400 (see Concision in `voice-guide.md`); switch it to crisp only if the cut would lose
+substance.
 
-| Post type | What it is | Base profile | The author's examples |
+| Post type | What it is | Base profile | The author's examples (prose words) |
 |---|---|---|---|
-| **Tip** | One quirk, trap or trick. Usually one code or JSON block and a References list. | **casual throughout** | `agentic-studio-debug-pane-browser-caching` (196 words), `agentic-studio-agent-export-is-lossy` (222) |
-| **Short essay** | One idea argued briefly; few or no headings. | **casual throughout** | `first-principles-in-agent-conversations…` (416, no headings), `emerging-pattern-in-agentic-systems` (590) |
+| **Tip** | One quirk, trap or trick. Usually one code or JSON block and a References list. | casual if ≤ 400, else crisp | `agentic-studio-debug-pane-browser-caching` (196), `agentic-studio-agent-export-is-lossy` (222) |
+| **Short essay** | One idea argued briefly; few or no headings. | casual if ≤ 400, else crisp | `emerging-pattern-in-agentic-systems` (373). `first-principles-in-agent-conversations…` (416) is just over the line; trimmed under 400 it stays casual. |
 | **Long essay / framework** | A framework or argument across several sections. | **crisp**, casual moments only | `a-legal-framework-for-agent-context`, `three-dimensions-of-agent-context…`, `we-dont-build-the-website` |
 | **Step-by-step guide** | A procedure the reader follows, often in a series. | **crisp**; practical notes may be casual | `01-SSO-Preparation` … `05-SSO-Vercel-Setup` |
-
-Rule of thumb: a single-point post under about 700 words of prose is short. If a short post grows
-past about 800 words or a third `##` section, it's no longer short; switch the base to crisp.
 
 ### What casual throughout looks like (from the short posts)
 

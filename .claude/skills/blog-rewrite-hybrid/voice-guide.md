@@ -70,7 +70,9 @@ has failed, even if every sentence is individually cleaner.
 - **Close by looking forward or inviting the reader — or, when it fits, "In Summary".** The essay
   closes with an explicit "## In Summary"; the implementation post closes forward: "Post three will
   cover whichever of those survives contact with reality. Come and tell me if you have solved the
-  consolidation problem, because I have not." Both are valid. Never bolt on a generic marketing CTA.
+  consolidation problem, because I have not." Both are valid, but an "In Summary" must pass the
+  Concision rule: it stays only if it adds a consequence or a next step, never if it restates the
+  body. Never bolt on a generic marketing CTA.
 
 ## 5. Spelling, mechanics, components
 
@@ -95,6 +97,29 @@ Do **not**, under the banner of "correctness", remove hedging, cut an admission,
 coined term, shorten an `<aside>`, or rephrase a claim into something stronger than he wrote.
 
 ---
+
+## Concision
+
+The author's own judgement: many of the existing posts are too wordy for the information they
+carry. Treat length as something every post has to justify.
+
+**Measured (October 2026, 27 posts, ~26,000 prose words):** filler words are not the main cause.
+They average about 6 per 1,000 words; deleting all of them would shorten a post by roughly half a
+percent. So cut structure first.
+
+1. **One statement per idea.** If a paragraph restates a point already made, keep the stronger
+   wording and delete the other. This is not dropping substance; the claim survives once.
+2. **Get to the point.** Delete setup paragraphs that only delay it. The first sentence of a
+   section should carry its idea.
+3. **One example per point**, unless a second example shows something the first can't.
+4. **Summaries must add, or go.** In posts over about 1,000 words a closing summary is allowed, but
+   only if it adds a consequence or a next step. A summary that restates the body is cut.
+5. **Then the word-level pass.** The author's most frequent filler words, from the measurement:
+   "just" (42 uses), "actually" (41), "also" (36). Delete each one that carries no meaning. Keep
+   calibrated hedges ("I think", "I'm less confident"); those carry information.
+
+**Report the result.** Every rewrite states its prose word count before and after. Rewrites
+preserve substance, so a cut that removes a claim is a failure, not a saving.
 
 ## Series conventions
 

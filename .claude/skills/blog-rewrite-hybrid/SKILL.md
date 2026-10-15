@@ -16,13 +16,14 @@ approach.
 2. Read the source post end to end.
 3. Rewrite section by section. Apply the craft fragments **only** where they do not conflict with the
    voice guide. On any conflict, apply the voice guide and move on.
-4. Identify the post type (tip, short essay, long essay, step-by-step guide) and take its base tone
-   profile from `tone-profiles.md`. In a crisp-based post, switch a passage to **casual** only where
+4. Apply the Concision rules in `voice-guide.md` (structure first, then filler words). Then count
+   prose words and take the base tone profile from `tone-profiles.md`: 400 or fewer is casual
+   throughout, over 400 is crisp. In a crisp-based post, switch a passage to **casual** only where
    that file allows it, within its limits, and only if it passes the drift check. If the post is part
    of a series, also apply the series conventions in `voice-guide.md`.
 5. Preserve substance exactly (every claim, number, code block, table, link). Fix only genuine
    errors. Keep all `<aside>`, `<svg>`, `<img>`, and code components in place.
-6. Output valid MDX, then list: the correctness fixes; each passage written in casual, with the
+6. Output valid MDX, then list: prose word count before and after; the correctness fixes; each passage written in casual, with the
    reason; and any place where a craft fragment was overridden by the voice guide, with the
    one-line reason.
 
@@ -32,7 +33,7 @@ approach.
 |---|---|---|
 | "Replace 'seems/appears/might'; remove all hedging." | Keep calibrated hedges that carry certainty information ("I am less confident that…"); cut only information-free filler hedging. | His calibrated epistemics are a feature; flattening them misrepresents how sure he is. |
 | "Cut tangents that don't serve the thesis." | Keep `<aside>` reflections and the honest "what is not right yet" digressions. | The honest asides are the reason readers trust the posts. |
-| "Conclusions that extend, not summarise." | Allow the forward-looking close **and** an explicit "In Summary" when the source uses one. | Both are his real, working endings. |
+| "Conclusions that extend, not summarise." | Allow the forward-looking close **and** an explicit "In Summary" when the source uses one, provided the summary adds a consequence or next step (Concision rule 4). | Both are his real endings, but the author wants restating summaries cut. |
 | "Cut the preamble; start doing." | Keep his blunt problem-first or pointer opening ("This is that post."); only cut true throat-clearing ("In this article we will"). | His openings are already lean and are part of the voice. |
 | "Lead with authority; no first-sentence hedging." | Lead with the real position, but do not inflate confidence beyond what he wrote. | Authority here comes from specifics and honesty, not from removing doubt. |
 | "Active voice; vague adjectives → specifics." | Apply fully — no conflict. | This matches his instinct (line counts, prices, real product names). |
