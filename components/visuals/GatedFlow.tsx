@@ -17,57 +17,53 @@ const PauseIcon = () => (
   </svg>
 )
 
-const Chevron = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    aria-hidden="true"
-    className="ml-4 shrink-0 rotate-90 sm:ml-0 sm:rotate-0 sm:self-center"
-  >
-    <path
-      d="M4 2 L10 7 L4 12"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      className="text-gray-400"
-    />
-  </svg>
+// Grows to fill its lane, so a short workflow spans the same height as a long one beside it.
+const Arrow = () => (
+  <div className="flex min-h-6 flex-1 flex-col items-center py-1" aria-hidden="true">
+    <div className="w-px flex-1 bg-gray-400 dark:bg-gray-500" />
+    <svg width="10" height="6" viewBox="0 0 10 6" className="shrink-0">
+      <polygon points="1,0 9,0 5,6" className="fill-gray-400 dark:fill-gray-500" />
+    </svg>
+  </div>
 )
 
-// Workflows drawn as lanes of steps, with gates marked where the work pauses and is checked.
-// Lanes run top to bottom on phones and left to right, wrapping, from the sm breakpoint; gates are marked by an icon and the word "gate", not colour alone.
+// Workflows drawn as columns that read top to bottom, side by side when there is room, so each
+// step and gate gets the column's full width. A shorter lane's arrows stretch so both lanes start
+// and end level. Gates are marked by an icon and the word
+// "gate", not colour alone.
 const GatedFlow = ({ label, lanes }: GatedFlowProps) => (
-  <div role="group" aria-label={label} className="flex flex-col gap-5 font-sans text-sm">
+  <div
+    role="group"
+    aria-label={label}
+    className="grid gap-6 font-sans text-sm sm:gap-4"
+    style={{ gridTemplateColumns: `repeat(auto-fit, minmax(14rem, 1fr))` }}
+  >
     {lanes.map((lane) => (
-      <div key={lane.label}>
-        <p className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-400">
+      <div key={lane.label} className="flex min-w-0 flex-col">
+        <p className="pb-2 text-center text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-400">
           {lane.label}
         </p>
-        <ol className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-x-1 sm:gap-y-2">
+        <ol className="flex flex-1 flex-col">
           {lane.steps.map((step, i) => (
-            <li
-              key={step.label}
-              className="flex flex-col items-start gap-1 sm:flex-row sm:items-stretch"
-            >
-              {i > 0 && <Chevron />}
+            <li key={step.label} className={i > 0 ? 'flex flex-1 flex-col' : 'flex flex-col'}>
+              {i > 0 && <Arrow />}
               {step.gate ? (
-                <div className="border-primary-500 bg-primary-50 dark:bg-primary-950/40 flex max-w-[11rem] flex-col justify-center rounded-md border-2 px-2 py-1.5">
+                <div className="border-primary-500 bg-primary-50 dark:bg-primary-950/40 rounded-md border-2 px-3 py-2">
                   <span className="text-primary-700 dark:text-primary-300 flex items-center gap-1.5 text-[0.65rem] font-semibold tracking-wide uppercase">
                     <PauseIcon />
                     Gate
                   </span>
-                  <span className="font-semibold text-gray-900 dark:text-gray-100">
+                  <span className="block font-semibold text-gray-900 dark:text-gray-100">
                     {step.label}
                   </span>
                   {step.detail && (
-                    <span className="text-xs leading-snug text-gray-600 dark:text-gray-400">
+                    <span className="mt-0.5 block text-xs leading-snug text-gray-600 dark:text-gray-400">
                       {step.detail}
                     </span>
                   )}
                 </div>
               ) : (
-                <div className="flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-gray-800 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200">
+                <div className="rounded-md border border-gray-300 bg-white px-3 py-2 text-center text-gray-800 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200">
                   {step.label}
                 </div>
               )}
