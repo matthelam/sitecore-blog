@@ -1,7 +1,13 @@
 # Blog Skills Bake-Off — Plan & Scope
 
-Status: **DRAFT for your approval.** Nothing in the production blog system is built yet.
-Branch: `claude/friendly-ritchie-ujxr94`. Everything below is reversible (see §5).
+Status: **SKILLS INSTALLED — awaiting your Claude Desktop restart, then I run the tests.**
+Nothing in the production blog system is built yet. Branch: `claude/friendly-ritchie-ujxr94`.
+Everything is reversible (see `.claude/skills/README.md` teardown).
+
+Correction to §1: the earlier "Unknown skill" failure was a malformed probe file (closing `---`
+not on its own line), **not** proof that mid-session skills can't register. In fact all three arms
+registered in-session once written correctly. Restarting Desktop remains the reliable guarantee that
+they load for the test run.
 
 ---
 
