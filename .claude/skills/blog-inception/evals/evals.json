@@ -1,0 +1,23 @@
+{
+  "skill_name": "blog-inception",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to write about how I stopped cramming everything into CLAUDE.md and started moving stuff into skills instead. Notes: root CLAUDE.md got to ~900 lines on one client repo, agent started ignoring rules near the bottom, moved workflows into 6 skills, CLAUDE.md now ~120 lines, still not sure skills trigger reliably. Not sure if this is one post or a series.",
+      "expected_output": "A draft brief: candidate one-liners, reader, tension, a shape decision (one post vs series) argued from the evidence, 2-3 arcs with beats, turning points, emphasis plan, honesty beats including the unreliable triggering, and 'author to supply' marks where evidence is missing (e.g. what 'ignoring rules' looked like). No body prose.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "quick one - found that Agentic Studio flows lose the brand kit context if you rename the flow after creating it. worth a post?",
+      "expected_output": "Recognises a tip-sized idea, proposes the Tip arc (and maybe one alternative), keeps the brief short, flags what evidence is needed to confirm the behaviour, and does not inflate it into a long essay.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Help me plan post three of the Legal Framework series. I've been using Hindsight for a month instead of my own memory scripts. Recall is better, but I lost the OKF one-fact-per-file discipline and I'm not sure that matters anymore.",
+      "expected_output": "A series-part brief that points back to posts one and two and forward, keeps the series' point in view, proposes arcs such as Build log or Three attempts, plans the honesty beats around losing OKF discipline, and lists the evidence needed (what 'better recall' means, measured how).",
+      "files": []
+    }
+  ]
+}
