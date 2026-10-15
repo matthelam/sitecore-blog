@@ -16,7 +16,9 @@
         "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
         "Contains no drafted body paragraphs of the post",
         "Argues the one-post-vs-series decision from the evidence in the notes",
-        "Plans an honesty beat around skills not triggering reliably"
+        "Plans an honesty beat around skills not triggering reliably",
+        "Shows what at least two candidate phrasings of the point would each include or leave out",
+        "Leaves the brief unlocked and runs (or explicitly defers until the wording is chosen) a check of every beat against the point's wording"
       ]
     },
     {
@@ -34,7 +36,9 @@
         "Marks missing evidence as 'author to supply' (or equivalent) instead of inventing facts, numbers or anecdotes",
         "Contains no drafted body paragraphs of the post",
         "Sizes it as a tip (or short essay at most) and does not inflate it into a long essay",
-        "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing"
+        "Flags that the rename behaviour needs confirming (reproduction steps or version) before publishing",
+        "Shows what at least two candidate phrasings of the point would each include or leave out",
+        "Leaves the brief unlocked and runs (or explicitly defers until the wording is chosen) a check of every beat against the point's wording"
       ]
     },
     {
@@ -53,7 +57,9 @@
         "Contains no drafted body paragraphs of the post",
         "Points back to posts one and two of the series by name or slug",
         "Plans an honesty beat around losing the OKF one-fact-per-file discipline",
-        "Asks what 'better recall' means and how it was measured"
+        "Asks what 'better recall' means and how it was measured",
+        "Shows what at least two candidate phrasings of the point would each include or leave out",
+        "Leaves the brief unlocked and runs (or explicitly defers until the wording is chosen) a check of every beat against the point's wording"
       ]
     }
   ]

@@ -45,3 +45,8 @@ yarn-error.log*
 
 # Contentlayer
 .contentlayer
+
+# Legal Framework: knowledge-exchange scratch and local memory telemetry
+.exchange/
+.memory-log/
+__pycache__/

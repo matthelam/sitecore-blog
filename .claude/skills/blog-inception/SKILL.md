@@ -26,10 +26,15 @@ upgrades a guess into a claim will carry it into the post.
 
 1. **Take in the raw material as given.** Notes, a transcript, one sentence, a pile of links. Don't
    tidy it yet; the mess often shows where the energy is.
-2. **Find the point.** Offer two or three candidate one-liners drawn from the material: the
-   sentence the reader should leave with. The author picks or rewrites. This line becomes the
-   emphasis line the finished post returns to. If no point emerges, say so plainly. "There isn't a
-   post here yet, and this is what's missing" is a useful inception outcome.
+2. **Start looking for the point, but don't force it yet.** Offer two or three candidate
+   one-liners drawn from the material: the sentence the reader should leave with. Expect them to
+   change. The point often only becomes clear once the reader, the tension or the arc has been
+   worked out, so revisit the candidates at every later step and offer new ones whenever the
+   shape moves. The wording matters more than it looks: how the point is phrased sets the post's
+   dimension, what it covers and what it leaves out. Two phrasings of "the same" point make two
+   different posts, so show the author what each phrasing would include and exclude. If no point
+   emerges by the end, say so plainly. "There isn't a post here yet, and this is what's missing"
+   is a useful inception outcome.
 3. **Find the reader.** One sentence each: who they are, what they believe now, and what should
    change for them by the end.
 4. **Find the tension.** What's wrong, costly, surprising or unresolved: the reason anyone reads
@@ -46,7 +51,7 @@ upgrades a guess into a claim will carry it into the post.
    realisation, the reveal, the moment the cost becomes real. These are the visual moments. Say
    what the reader should *see or do* there ("feel the cost compound", "see the four repeats
    collapse into one"), not how to build it. Building is the later stage's job.
-8. **Plan the emphasis.** Decide where the one-liner returns: usually the opening, a turn in the
+8. **Plan the emphasis.** Decide where the one-liner (whichever candidate is leading) returns: usually the opening, a turn in the
    argument, and the close. Deliberate repetition of the point is part of the design.
 9. **Plan the honesty beats.** What isn't solved, what the author got wrong first, prior art they
    found, what they'd do differently. This blog's credibility comes from these beats, so plan
@@ -54,7 +59,12 @@ upgrades a guess into a claim will carry it into the post.
 10. **List the open questions and the evidence still needed.** For every evaluative word in the
     raw material ("better", "faster", "broke", "doesn't matter"), ask what it means and how the
     author observed or measured it. Those words usually hold the post's central claim.
-11. **Write the brief** using `assets/brief-template.md`, show it, and iterate. Mark it **Locked**,
+11. **Write the brief** using `assets/brief-template.md`, show it, and iterate.
+12. **Check every beat against the point's final wording before locking.** Once the author has
+    chosen the exact wording, go through the story flow and flag any beat the point doesn't cover
+    (it belongs to a different post, or the point is too narrow) and any part of the point no beat
+    delivers. The author drops the beat or rewords the point. The brief can't be marked **Locked**
+    until the author has chosen the point's wording and this check is clean. Mark it **Locked**,
     with the date, only when the author says so. A locked brief is the hand-off to the write-up
     stage.
 

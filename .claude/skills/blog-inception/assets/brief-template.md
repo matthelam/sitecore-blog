@@ -4,7 +4,12 @@ Status: **Draft** <!-- becomes: **Locked** YYYY-MM-DD, only on the author's word
 
 ## The point
 
-> <The one-liner the reader leaves with. This is the post's emphasis line.>
+> <The one-liner the reader leaves with. This is the post's emphasis line. Its wording sets what
+> the post covers; the brief can't lock until the author has chosen it.>
+
+**Candidates considered:** <the other phrasings, and what each would have included or left out>
+
+**Beat check:** <every beat serves this wording: clean / beats flagged and how they were resolved>
 
 ## Title options
 
