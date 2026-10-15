@@ -6,7 +6,7 @@ draft: false
 summary: "To debug agents in Agentic Studio, add debug=true to the conversations URL. The setting is cached in the browser, so ctrl+f5 if the panel does not show up."
 ---
 
-**In short:** add `debug=true` to the end of the Agentic Studio conversations URL and the debug console opens as a panel on the right. The setting is cached in the browser, so if the panel doesn't appear, hit ctrl+f5.
+**In short:** add `debug=true` to the end of the Agentic Studio conversations URL and the debug console opens as a panel on the right. The setting was cached in the browser, so when the panel didn't appear, ctrl+f5 was the fix. Sitecore Support verified that as a real issue, and recent releases have resolved it.
 
 Some might find this super useful when building Agents in Agentic Studio. There is a hidden debug console!
 
@@ -20,11 +20,13 @@ https://app-sitecore.cloud/agentic/conversations?tenantName=<TENANT_NAME>&organi
 
 1. Open the conversations URL with `debug=true` on the end.
 2. Look for the panel on the right.
-3. If it isn't there, hit ctrl+f5.
+3. If it isn't there, hit ctrl+f5. That was needed before the fix described below.
 
-## If the panel doesn't appear
+## If the panel didn't appear
 
-A quirk I noticed to be aware of when using it though is that the setting is actually cached on the browser and so if the right panel doesn't appear hit the ctrl+f5 so that it picks up the setting in the querystring.
+A quirk I noticed to be aware of when using it though was that the setting is actually cached on the browser and so if the right panel doesn't appear hit the ctrl+f5 so that it picks up the setting in the querystring.
+
+**Update:** Sitecore Support verified that this was a real issue. Recent releases have resolved it, and the agent now runs normally. Learning about the debug panel is still valuable, so the rest of this post stands.
 
 > The visible pane is the only proof the flag took effect. Not the URL, not the fact that you pressed enter.
 

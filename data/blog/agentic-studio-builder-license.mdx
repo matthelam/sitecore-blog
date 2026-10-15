@@ -53,6 +53,39 @@ That is your shortlist. Go and ask one of them.
 
 Seats can therefore sit unassigned for weeks while a whole team concludes the tenant has none. Availability on the tenant is not the same as assignment to your account, and only the second one lets you build.
 
+## How to tell if you have a Builder License
+
+There is a good record of what the Builder License unlocked and almost none of what the tenant looked like without one. That is the line to hold onto: without the license you only have the ability to edit. The clear signs people can check come from the licensed side, plus the admin page that states it directly.
+
+Here are five checks, strongest evidence first. Each one says where the evidence comes from.
+
+1. **Agentic > User permissions** (admins only). Sitecore's documentation says your row reads Builder in the Builder License column.
+2. **The Agents page.** Sitecore's documentation says there is a way to create a custom standard or workflow agent. We never saw this option missing without a license.
+3. **Any agent's card or menu.** Sitecore's documentation lists Duplicate as a permission. We only used it while licensed.
+4. **Open a duplicate, then the Workflow tab.** We saw Add Step, delete and Run on the canvas, and saving reads Update Workflow. We saw this while licensed.
+5. **Create a space.** Sitecore's documentation says the create flow needs the Builder License. We never tested it.
+
+### What we saw, with and without
+
+The left column covers 24 to 28 July, without a license. The right covers 29 July onward, with a license and the Editor role. Everything below is what we saw in the tenant, and "No record" means exactly that.
+
+| What                                | Without a license                                                                                                                        | With a license and the Editor role                                                                                                            |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prebuilt agent (AEO/SEO Researcher) | Shown as Installed, with no more-actions menu and no Edit option. Schemas, Parameters, HTML Templates and Workflow could not be reached. | The original prebuilt was never reopened to check.                                                                                            |
+| Duplicate of that prebuilt          | No record.                                                                                                                               | A fully editable Workflow canvas with Add Step, delete and Run. It has a Workflow ID and saves via Update Workflow.                           |
+| Custom agent                        | No record.                                                                                                                               | One was created (Page Metadata Editor, 30 July) with editable Instructions, Tools, Sitecore Page Tools, Allowed Items, Brand kit and Schemas. |
+| Schemas                             | Not reachable on the prebuilt.                                                                                                           | An Add Schema screen, including a Business Context selector that appears on Add only, not on Edit.                                            |
+| Multi-step flow                     | Built as chained plain chats passing artifacts, because the workflow editor is gated.                                                    | The Workflow canvas is available.                                                                                                             |
+
+### Two caveats
+
+- **The license and the Editor role are separate gates.** A Builder License lets you create agents. Editing an existing prebuilt agent also needs the Editor role. Someone with only one of the two sees a partial set of the signs above. The documentation's permissions table lists this split, but we could not confirm each cell.
+- **Only admins can see the User permissions page.** If you are not an admin you cannot tell whether seats exist or whether one is assigned to you, so checks 2 to 5 are all you have.
+
+### The trap
+
+**Do not read "no Edit button" as proof that you have no license.** I saw no Edit option on a prebuilt agent, and there were two possible causes that were never told apart: no license, or vendor-published agents being locked regardless of license. Treat it as a reason to run the checks above, not as the answer.
+
 ## Five seats is a message
 
 The other half of this tip. **Do not design as though everyone will have what you have.**
