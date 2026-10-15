@@ -34,13 +34,14 @@ installed in this repository. Until then they live here.
 | Role | Classes | Why |
 |---|---|---|
 | Neutral marks, text, controls | `gray-*` | The default for everything not carrying meaning |
-| Active or focused element | `primary-*` (the brand red-orange) | The site's accent, as in links |
+| Highlight, active or focused element | `border-gray-800 bg-gray-100` / `dark:border-gray-200 dark:bg-gray-800` (strong neutral) | Never `primary-*`: the brand colour is a red, and red reads as negative (Matt's rule, 2026-10-16; `components/CLAUDE.md` law 6) |
 | Enforced, rejected, failed | `red-600` / `dark:red-500`, always with an icon and words | Matches the Agent as Customer convention: red marks ENFORCED |
 | Advisory or upcoming | Dashed `gray-300` / `dark:gray-600` borders | Matches the same post: dashed marks ADVISORY |
 
 Lesson from the first trial: a slider styled in the brand red read as an error inside a component
-where red means "rejected". Keep `primary-*` off controls in any component that also uses red for
-failure.
+where red means "rejected". Matt then made it a rule (2026-10-16) after the We Don't Build the
+Website figures used the brand red for their highlights: `primary-*` is not used in visuals at all,
+and red appears only for genuinely negative states.
 
 ## Accessibility
 

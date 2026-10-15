@@ -12,8 +12,8 @@ type GatedFlowProps = {
 
 const PauseIcon = () => (
   <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" className="shrink-0">
-    <rect x="1" y="1" width="3" height="8" className="fill-primary-600 dark:fill-primary-400" />
-    <rect x="6" y="1" width="3" height="8" className="fill-primary-600 dark:fill-primary-400" />
+    <rect x="1" y="1" width="3" height="8" className="fill-gray-700 dark:fill-gray-300" />
+    <rect x="6" y="1" width="3" height="8" className="fill-gray-700 dark:fill-gray-300" />
   </svg>
 )
 
@@ -48,8 +48,8 @@ const GatedFlow = ({ label, lanes }: GatedFlowProps) => (
             <li key={step.label} className={i > 0 ? 'flex flex-1 flex-col' : 'flex flex-col'}>
               {i > 0 && <Arrow />}
               {step.gate ? (
-                <div className="border-primary-500 bg-primary-50 dark:bg-primary-950/40 rounded-md border-2 px-3 py-2">
-                  <span className="text-primary-700 dark:text-primary-300 flex items-center gap-1.5 text-[0.65rem] font-semibold tracking-wide uppercase">
+                <div className="rounded-md border-2 border-gray-800 bg-gray-100 px-3 py-2 dark:border-gray-200 dark:bg-gray-800">
+                  <span className="flex items-center gap-1.5 text-[0.65rem] font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
                     <PauseIcon />
                     Gate
                   </span>

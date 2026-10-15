@@ -16,7 +16,7 @@ type StepThroughProps = {
 
 const nodeClass = (index: number, active: number) => {
   if (index === active) {
-    return 'border-primary-500 bg-primary-50 font-semibold text-gray-900 dark:bg-primary-950/40 dark:text-gray-100'
+    return 'border-gray-900 bg-gray-100 font-semibold text-gray-900 dark:border-gray-100 dark:bg-gray-800 dark:text-gray-100'
   }
   if (index < active) {
     return 'border-gray-400 bg-white text-gray-800 dark:border-gray-500 dark:bg-gray-900 dark:text-gray-200'
@@ -62,7 +62,7 @@ const StepThrough = ({ label, steps }: StepThroughProps) => {
               onClick={() => go(index)}
               onKeyDown={(event) => onNodeKeyDown(event, index)}
               aria-current={index === active ? 'step' : undefined}
-              className={`focus-visible:outline-primary-500 rounded-md border-2 px-3 py-2 text-left transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ${nodeClass(index, active)}`}
+              className={`rounded-md border-2 px-3 py-2 text-left transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 motion-reduce:transition-none dark:focus-visible:outline-gray-100 ${nodeClass(index, active)}`}
             >
               <span className="mr-2 text-xs text-gray-400 tabular-nums">{index + 1}</span>
               {step.node}
@@ -78,12 +78,16 @@ const StepThrough = ({ label, steps }: StepThroughProps) => {
                     stroke="currentColor"
                     strokeWidth="1.5"
                     strokeDasharray={index + 1 > active ? '3 3' : undefined}
-                    className={index + 1 === active ? 'text-primary-500' : 'text-gray-400'}
+                    className={
+                      index + 1 === active ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400'
+                    }
                   />
                   <polygon
                     points="1,15 9,15 5,21"
                     className={
-                      index + 1 === active ? 'fill-primary-500' : 'fill-gray-400 dark:fill-gray-500'
+                      index + 1 === active
+                        ? 'fill-gray-700 dark:fill-gray-300'
+                        : 'fill-gray-400 dark:fill-gray-500'
                     }
                   />
                 </svg>
@@ -123,7 +127,7 @@ const StepThrough = ({ label, steps }: StepThroughProps) => {
             type="button"
             onClick={() => go(active + 1)}
             disabled={active === last}
-            className="bg-primary-600 hover:bg-primary-700 rounded-md px-3 py-1.5 text-white disabled:opacity-40"
+            className="rounded-md bg-gray-900 px-3 py-1.5 text-white hover:bg-gray-700 disabled:opacity-40 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300"
           >
             Next step
           </button>
