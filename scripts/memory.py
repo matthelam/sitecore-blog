@@ -99,7 +99,7 @@ STALE_DAYS = 90
 
 # Framework version of this installation. Read by the legal-framework skill's
 # Upgrade mode to decide which migrations to apply. Bump only via that skill.
-FRAMEWORK_VERSION = "1.4.0"
+FRAMEWORK_VERSION = "1.4.1"
 
 TAGS = ("verification", "issue", "fix", "preference", "example", "knowledge")
 STATUSES = ("active", "superseded")
