@@ -17,3 +17,7 @@ authoritative statement made outside the documentation, `unverified` is
 inference. Never read one tier as another.
 
 ## All facts by scope
+
+### repo
+- **hook-path-anchored-to-project-dir** [fix·observed] — Hook commands in .claude/settings.json use exec form with ${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py so they resolve from the project root whatever the working directory.
+- **hook-relative-path-fails-in-subfolder** [issue·observed] — Hooks written as 'python scripts/memory_hook.py' fail with exit 2 once the session's working directory is a subfolder, which blocks UserPromptSubmit and PreToolUse.
