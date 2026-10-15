@@ -28,7 +28,7 @@ done
 
 | Change | `<expected text>` and extra checks |
 |---|---|
-| Publish | The post title, on the post URL. The post also appears on `/blog`, and `/feed.xml` contains `<guid>https://blog.matthelam.com/blog/<slug></guid>` (what Buttondown emails from) |
+| Publish | The post title, on the post URL. The post also appears on `/blog`, and `/feed.xml` contains `<guid>https://blog.matthelam.com/blog/<slug></guid>` |
 | Update | A phrase that only exists in the new version |
 | Unpublish | The post URL returns 404 (`curl -s -o /dev/null -w '%{http_code}'`), and it's gone from `/blog` |
 | Site change | Whatever the change makes visible, or the changed asset's URL returns 200 |

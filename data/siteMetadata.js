@@ -31,11 +31,6 @@ const siteMetadata = {
   // set to true if you want a navbar fixed to the top
   stickyNav: false,
   // Analytics: Vercel Web Analytics, wired in app/layout.tsx (no config or env var needed here).
-  newsletter: {
-    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus, beehive
-    // Please add your .env file and modify it according to your selection
-    provider: 'buttondown',
-  },
   search: {
     provider: 'kbar', // kbar or algolia
     kbarConfig: {

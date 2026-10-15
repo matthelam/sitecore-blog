@@ -49,7 +49,7 @@ The quality of the post, creative and technical, comes before everything else he
 Before **every** `git commit` and before **every** `git push`, run a privacy, security and
 professionalism check over what is about to be shared. This repository is **public**. Check for:
 
-- Secrets: API keys (Buttondown, Umami, Giscus and any other), tokens, passwords, any `.env`
+- Secrets: API keys, tokens, passwords, any `.env`
   contents.
 - Client names, and anything that identifies a client engagement. Posts stay generic ("one
   client repo").
@@ -73,17 +73,8 @@ the post needs something the material doesn't contain, mark it **author to suppl
 
 ### 3. No external sends
 
-Never email newsletter subscribers (Buttondown), post to social media, comment, or send any
-message on Matt's behalf. If a task appears to require it, stop and ask.
-
-**The one standing exception, which Matt set up (2026-10-15):** Buttondown's RSS-to-email
-watches `/feed.xml` and emails subscribers about each new post. Publishing a new post therefore
-emails subscribers, and an email can't be recalled. So before any publish that adds a post to the
-feed, say plainly that it will be emailed. Buttondown identifies posts by their feed `guid`
-(`siteUrl` + slug), so never change `siteUrl` or a published post's slug: every changed guid
-looks like a new post and can be emailed again. Nothing else ever calls the Buttondown API, with
-one exception Matt approved on 2026-10-15: the one-time setup that registers `/feed.xml` as an
-RSS-to-email automation with "skip old items" on. That setup sends nothing by itself.
+Never email anyone, post to social media, comment, or send any message on Matt's behalf. The
+blog has no newsletter. If a task appears to require it, stop and ask.
 
 ### 4. Delivery
 
