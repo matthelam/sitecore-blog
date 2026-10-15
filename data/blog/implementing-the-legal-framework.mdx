@@ -3,7 +3,7 @@ title: 'Agent Harness: Implementing the Legal Framework'
 date: '2026-08-19'
 tags: ['ai', 'agents', 'context-engineering', 'memory', 'claude-code', 'skills']
 draft: false
-summary: 'Post two in the series. How the Legal Framework is actually built in Claude Code: three tiers, three Python scripts, a reflective hook, and the operating loop. Includes the skill as a download, plus the parts that are not right yet.'
+summary: 'Post two in the series. How the Legal Framework is actually built in Claude Code: three tiers, three Python scripts, a reflective hook, and the operating loop. Links to the skill repository, plus the parts that are not right yet.'
 authors: ['default']
 layout: PostLayout
 ---
@@ -12,9 +12,9 @@ layout: PostLayout
 
 If you would rather read the code than read me, take the skill and go:
 
-**[Download the Legal Framework skill (v1.2.0, 47 KB)](/static/downloads/legal-framework-skill-v1.2.0.zip)**
+**[Get the Legal Framework skill from its repository on GitHub](https://github.com/matthelam/legal-framework-setup-skill)**
 
-Unzip it into `.claude/skills/` and ask Claude to set up the legal framework in a repo. It will interview you for the supreme laws, scaffold the three tiers, install the scripts, and wire the hooks.
+Copy the `legal-framework` folder into `.claude/skills/` and ask Claude to set up the legal framework in a repo. It will interview you for the supreme laws, scaffold the three tiers, install the scripts, and wire the hooks.
 
 ## The three tiers, as files
 
@@ -34,7 +34,7 @@ The reason for the file-per-fact obsession is retrieval. A fact you can search, 
 
 **`memory.py`, 372 lines.** The gate. Every memory change goes through it: `create`, `update`, `read`, `delete`, `supersede`, `search`, `lint`, `reindex`, `list`. It validates the OKF schema before any write lands, and regenerates `MEMORY.md` atomically afterwards, so the index and the standard cannot drift apart. Nothing hand-edits `memory/`. That single rule is doing most of the work.
 
-**`memory_exchange.py`, 702 lines.** The knowledge-exchange layer, added in v1.2.0. Export selects a dimension of one repository's Common Law, reasons each fact into a transferable form, and seals it as a zip. Import reconciles every incoming fact against the destination's Constitution and Legislation before anything is written.
+**`memory_exchange.py`, 702 lines.** The knowledge-exchange layer. Export selects a dimension of one repository's Common Law, reasons each fact into a transferable form, and seals it as a zip. Import reconciles every incoming fact against the destination's Constitution and Legislation before anything is written.
 
 Two invariants hold it together. Exports are generalised, never copied verbatim — a client anecdote is not knowledge. And a fact that conflicts with the destination's law is never imported, with the human as the only one who can clear a conflict.
 
