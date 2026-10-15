@@ -6,12 +6,13 @@ import { genPageMetadata } from 'app/seo'
 import JsonLd from '@/components/JsonLd'
 import { profilePageSchema } from '@/data/schema'
 
-export const metadata = genPageMetadata({
-  title: 'About Matt Lam (Matthew Lam), Technical Architect at Aceik',
+const PAGE = {
+  title: 'Matt Lam, Sitecore Technical Architect at Aceik',
   description:
-    'Matt Lam (Matthew Lam, Matthelam) is a Sitecore Technical Architect at Aceik in Adelaide, writing about agentic Sitecore development and agent memory.',
-  absoluteTitle: true,
-})
+    'Matt Lam is a Sitecore Technical Architect at Aceik in Adelaide, writing on agentic Sitecore development, XM Cloud and persistent agent memory.',
+}
+
+export const metadata = genPageMetadata({ ...PAGE, absoluteTitle: true })
 
 export default function Page() {
   const author = allAuthors.find((p) => p.slug === 'default') as Authors
@@ -19,7 +20,7 @@ export default function Page() {
 
   return (
     <>
-      <JsonLd data={profilePageSchema()} />
+      <JsonLd data={profilePageSchema(PAGE)} />
       <AuthorLayout content={mainContent}>
         <p>
           I&apos;m Matt Lam (Matthew Lam, or Matthelam on GitHub), a Technical Architect at Aceik in

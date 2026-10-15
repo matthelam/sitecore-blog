@@ -3,13 +3,16 @@ import Tag from '@/components/Tag'
 import { slug } from 'github-slugger'
 import tagData from 'app/tag-data.json'
 import { genPageMetadata } from 'app/seo'
+import JsonLd from '@/components/JsonLd'
+import { webPageSchema } from '@/data/schema'
 
-export const metadata = genPageMetadata({
+const PAGE = {
   title: 'Topics: Agentic Sitecore, Agent Context and Sitecore SSO',
   description:
-    "Browse Matt Lam's posts by topic: Sitecore Agentic Studio, SitecoreAI, agent context engineering, agent memory, Sitecore XM Cloud and SSO.",
-  absoluteTitle: true,
-})
+    'Matt Lam writes about agentic Sitecore development: Sitecore Agentic Studio, Claude Code, multi-agent systems, agent memory, XM Cloud and Entra ID SSO.',
+}
+
+export const metadata = genPageMetadata({ ...PAGE, absoluteTitle: true })
 
 export default async function Page() {
   const tagCounts = tagData as Record<string, number>
@@ -17,6 +20,7 @@ export default async function Page() {
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
   return (
     <>
+      <JsonLd data={webPageSchema('CollectionPage', 'tags', PAGE)} />
       <div className="flex flex-col items-start justify-start divide-y divide-gray-200 md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6 md:divide-y-0 dark:divide-gray-700">
         <div className="space-x-2 pt-6 pb-8 md:space-y-5">
           <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:border-r-2 md:px-6 md:text-6xl md:leading-14 dark:text-gray-100">
