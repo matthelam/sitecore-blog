@@ -71,7 +71,7 @@ How agents are composed, named and patterned, plus the agent-as-customer guide.
 The older XM Cloud, Cloud Portal, Content Hub SSO series and the placeholders post. Keep: it proves Sitecore depth and anchors the entity, but it is not the growth area.
 
 - `01-SSO-Preparation`: Azure Entra ID SSO – What to Prepare First
-- `02-SSO-Entra-ID-Setup`: Azure Entra ID SSO – Enterprise Application SAML and Group Claims
+- `02-SSO-Entra-ID-Setup`: Azure Entra ID SSO – Set Up an Enterprise Application with SAML Group Claims
 - `03-SSO-Sitecore-Cloud-Portal-Setup`: Azure Entra ID SSO – Setting up Sitecore Cloud Portal
 - `04-SSO-Content-Hub-Setup`: Azure Entra ID SSO – Setting up Sitecore Content Hub
 - `The Leading Slash That Breaks Your Page Static vs Dynamic Placeholders in Sitecore`: The Leading Slash That Breaks Your Page, Static vs Dynamic Placeholders in Sitecore
