@@ -1,0 +1,134 @@
+---
+title: 'seo-jev-analyzer: Test Whether Your Page Answers the Search Before You Publish'
+date: 2026-10-16
+draft: true
+tags: ['seo', 'jev', 'mcp', 'claude-code']
+summary: 'seo-jev-analyzer uses Jev, a decision model rather than a chatbot, to score whether a page answers the question people search for, so you can test a title or description before you publish.'
+---
+
+This blog scores 99 out of 100 on [is-agentic](https://is-agentic.com)'s agent readiness scan. It still can't tell me whether a page actually answers what people search for. That was never its job.
+
+<Figure caption="is-agentic covers the technical side: whether agents and crawlers can reach, read and use the site.">
+  <Image
+    src="/static/images/seo-jev-analyzer/is-agentic-scan.png"
+    alt="is-agentic scan of blog.matthelam.com: 99 out of 100, Strong technical baseline. Essential checks 80 of 80, recommended checks 16.5 of 20, bonus signals plus 2.5."
+    width={1280}
+    height={470}
+    priority
+  />
+</Figure>
+
+So I built something for that job. **seo-jev-analyzer uses Jev, a decision model rather than a chatbot, to score whether a page answers the question people search for, consistently enough to test a title or description before you publish.**
+
+## Why I built it
+
+Tuning content for search was a slow round trip. Change a title, publish, wait, guess. I wanted that loop in seconds.
+
+Google is clear about where the effort should go. Its [SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide) says creating content people find compelling and useful "will likely influence your website's presence in search results more than any of the other suggestions in this guide". It also says: "Think about the words that a user might search for to find a piece of your content."
+
+Tools like is-agentic have already solved the technical side. What I couldn't find was something that helps an author check whether the page they just wrote has a clear purpose, and whether that purpose lines up with the searches they expect it to answer.
+
+## What it scores
+
+For each page you write two things: an **intent statement**, the question the page must answer, and **ten expected search terms**. Jev then rates two things on a 0 to 1 scale: how central each term is to the page, and how well the page answers the intent (the **intent fit**).
+
+**Score = (sum of the ten term ratings) × intent fit**, from 0 to 10.
+
+It produces two scores. The **metadata** score reads only the title, description, Open Graph tags and JSON-LD: what a search result shows. The **whole page** score adds the body text.
+
+Multiplying by intent fit is the important part, because it discounts keyword stuffing. The tool's guide shows it with three versions of the same page's metadata:
+
+| Metadata                                         | Term sum | Intent fit | Score |
+| ------------------------------------------------ | -------- | ---------- | ----- |
+| A casual title, no description                   | 0.68     | 0.006      | 0.00  |
+| A title and description that answer the question | 3.40     | 0.99       | 3.37  |
+| A list of the ten terms                          | 5.44     | 0.37       | 1.99  |
+
+The list of terms carries the most keywords and still loses to the version that answers the question.
+
+## Why Jev
+
+Most AI you meet generates text. Ask a chat model to rate a page and you get prose back, with a number somewhere in it.
+
+[Jev](https://docs.typesafe.ai) is TypeSafe's decision model. You give it text and a typed question, and it returns a probability for every possible answer instead of writing one. That's the niche it fills in AI: judgement, not generation.
+
+For seo-jev, every rating is a question with five levels, from "not mentioned" to "the page's central subject". The rating is the probability-weighted level. Jev is also cheap: $0.042 per million input tokens, with output free. That makes it practical to score a draft several times while you edit.
+
+## Can you trust a number from a model?
+
+It's the first question to ask of any new tool, so I measured it. The [consistency report](https://github.com/matthelam/seo-jev-analyzer/tree/main/docs/evidence/jev-consistency-2026-10-14) froze the text of 10 public pages, so only Jev could vary, and scored each page 100 times on both scores: 6,000 Jev requests.
+
+- The largest standard deviation of any score was **0.097** on the 0 to 10 scale.
+- **99.7%** of single runs landed within ±0.19 of their 100-run mean.
+- **17 of 20** metadata edits were detectable from one run before and one run after.
+
+That ±0.19 is the tool's noise floor. A change smaller than it counts as level, not as a win.
+
+The report is honest about its limits: one Jev version, one day, ten English pages. In its own words, it "measures consistency, not correctness".
+
+## Why it helps tuning
+
+The tool's `test_revision` scores an edit against the live page before anything is published. That's the round trip I wanted.
+
+Part two of my [Azure Entra ID SSO series](/blog/02-SSO-Entra-ID-Setup) shows what that buys. Its whole page scored well, but its metadata didn't say what the page does:
+
+|                  | Before                                                                                    | After                                                                                                                                                                 |
+| ---------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Description      | "A user guide to configuring SAML and role claims mapping through Entra ID group claims…" | "To set up an Entra ID enterprise application for Sitecore SAML SSO, create a non-gallery app, set the identifier and reply URL, add a groups claim with Object IDs…" |
+| Term sum         | 7.76                                                                                      | 7.99                                                                                                                                                                  |
+| Intent fit       | 0.37                                                                                      | 0.75                                                                                                                                                                  |
+| Metadata score   | 2.87                                                                                      | 6.01                                                                                                                                                                  |
+| Whole page score | 7.62                                                                                      | 7.78                                                                                                                                                                  |
+
+The keywords barely moved. What changed was a description that answers the question the page is for. Jev's own probabilities show the shift:
+
+{/* prettier-ignore */}
+<svg viewBox="0 0 360 350" xmlns="http://www.w3.org/2000/svg" className="jev-fit mx-auto my-6 w-full max-w-md" role="img" aria-label="Jev's probability for each intent-fit level of the post's metadata, before and after the new description. Before: 11% does not address the question, 65% mentions the topic but does not answer it, 4% answers in part, 5% answers with most key facts, 15% answers fully. After: 2%, 11%, 17%, 24% and 46%.">
+  <style>{`.jev-fit text { font-family: ui-sans-serif, system-ui, sans-serif; fill: currentColor; font-size: 13px; } .jev-fit .muted { opacity: 0.7; font-size: 12px; } .jev-fit .before { fill: var(--ds-line-strong); } .jev-fit .after { fill: var(--ds-ink); }`}</style>
+  <rect className="before" x="0" y="4" width="14" height="10" /><text x="20" y="13" className="muted">Before</text>
+  <rect className="after" x="80" y="4" width="14" height="10" /><text x="100" y="13" className="muted">After</text>
+  <text x="0" y="44">Doesn't address the question</text>
+  <rect className="before" x="0" y="52" width="29" height="11" /><text x="35" y="62" className="muted">11%</text>
+  <rect className="after" x="0" y="67" width="5" height="11" /><text x="11" y="77" className="muted">2%</text>
+  <text x="0" y="106">Mentions the topic, doesn't answer</text>
+  <rect className="before" x="0" y="114" width="169" height="11" /><text x="175" y="124" className="muted">65%</text>
+  <rect className="after" x="0" y="129" width="29" height="11" /><text x="35" y="139" className="muted">11%</text>
+  <text x="0" y="168">Answers in part</text>
+  <rect className="before" x="0" y="176" width="10" height="11" /><text x="16" y="186" className="muted">4%</text>
+  <rect className="after" x="0" y="191" width="44" height="11" /><text x="50" y="201" className="muted">17%</text>
+  <text x="0" y="230">Answers with most key facts</text>
+  <rect className="before" x="0" y="238" width="13" height="11" /><text x="19" y="248" className="muted">5%</text>
+  <rect className="after" x="0" y="253" width="62" height="11" /><text x="68" y="263" className="muted">24%</text>
+  <text x="0" y="292">Answers fully and directly</text>
+  <rect className="before" x="0" y="300" width="39" height="11" /><text x="45" y="310" className="muted">15%</text>
+  <rect className="after" x="0" y="315" width="120" height="11" /><text x="126" y="325" className="muted">46%</text>
+</svg>
+
+**The score didn't just say the metadata was weak. It said where: the description never answered the question.** The metadata now carries 77% of what the whole page scores, up from 38%.
+
+## Beside the traditional tools
+
+I run both. is-agentic tells me whether machines can read the site. seo-jev tells me whether a page answers the question it's meant to. Neither replaces the other.
+
+One caution from my own tuning: the ten terms have to come from researching the question, not from the page. When I drafted terms from the post itself, the post scored higher (metadata 4.12, against 3.11 for terms researched from the intent alone). That's the page being marked against what it already says. The lower number was the honest one.
+
+## What isn't right yet
+
+The ceiling. Scores run from 0 to 10, but a page is never going to reach 10, and the theoretical ceiling isn't clear. So what counts as success isn't clear either.
+
+For now I use the whole page score as the practical ceiling for the metadata, which is where that 77% comes from. It's a working measure, not a settled one.
+
+## Run your own
+
+The hosted instance is mine and stays private. It runs on my own Jev account, which isn't for commercial use. It's cheap, but I'm not ready for it to scale if it gets popular.
+
+The code is public. [seo-jev-analyzer](https://github.com/matthelam/seo-jev-analyzer) is MIT licensed and runs as a web app, an MCP server with eight tools (including `score_page` and `test_revision`) and an HTTP API. You bring your own TypeSafe key from the [TypeSafe console](https://console.typesafe.ai/keys) and set an access password. The app refuses to run in production without one, because an open deployment spends your Jev credits.
+
+The tuning loop I used on this blog is packaged as a Claude Code skill: [seo-tuning-skill](https://github.com/matthelam/seo-tuning-skill).
+
+```text
+/plugin marketplace add matthelam/seo-tuning-skill
+/plugin install seo-tuning@seo-tuning-skill
+```
+
+Write the question your page answers before you write the title. Then let the score tell you whether the title says it.
