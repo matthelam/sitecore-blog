@@ -6,7 +6,9 @@
           {
             "type": "command",
             "command": "python",
-            "args": ["${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py"]
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py"
+            ]
           }
         ]
       }
@@ -17,7 +19,9 @@
           {
             "type": "command",
             "command": "python",
-            "args": ["${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py"]
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py"
+            ]
           }
         ]
       }
@@ -29,7 +33,9 @@
           {
             "type": "command",
             "command": "python",
-            "args": ["${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py"]
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py"
+            ]
           }
         ]
       }
@@ -40,10 +46,112 @@
           {
             "type": "command",
             "command": "python",
-            "args": ["${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py"]
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py"
+            ]
           }
         ]
       }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(yarn build)",
+      "Bash(yarn build *)",
+      "Bash(yarn ds:check)",
+      "Bash(yarn lint)",
+      "Bash(yarn build-storybook*)",
+      "Bash(yarn storybook*)",
+      "Bash(yarn test:visual*)",
+      "Bash(yarn install*)",
+      "Bash(yarn dev*)",
+      "Bash(npx prettier *)",
+      "Bash(npx eslint *)",
+      "Bash(npx tsc *)",
+      "Bash(npx playwright *)",
+      "Bash(npx storybook *)",
+      "Bash(npx contentlayer2 *)",
+      "Bash(npx is-agentic*)",
+      "Bash(node scripts/*)",
+      "Bash(node ./scripts/*)",
+      "Bash(python scripts/*)",
+      "Bash(python -I scripts/*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git fetch*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(git branch*)",
+      "Bash(git worktree *)",
+      "Bash(git merge --ff-only*)",
+      "Bash(git mv *)",
+      "Bash(git rm *)",
+      "Bash(git ls-files*)",
+      "Bash(git check-ignore*)",
+      "Bash(git -C *)",
+      "Bash(git push*)",
+      "Bash(git -c credential.helper= *)",
+      "Bash(gh pr *)",
+      "Bash(gh run view *)",
+      "Bash(gh run list*)",
+      "Bash(curl *blog.matthelam.com*)",
+      "Bash(curl *localhost*)",
+      "mcp__seo-jev-analyzer",
+      "mcp__is-agentic",
+      "mcp__Claude_Browser",
+      "mcp__ccd_pr__get_status",
+      "mcp__ccd_pr__bind_pr",
+      "mcp__ccd_pr__set_monitor",
+      "mcp__ccd_pr__set_auto_merge",
+      "mcp__vercel__get_deployment",
+      "mcp__vercel__list_deployments",
+      "mcp__vercel__get_runtime_logs",
+      "mcp__vercel__get_runtime_errors",
+      "WebSearch",
+      "WebFetch(domain:blog.matthelam.com)",
+      "WebFetch(domain:is-agentic.com)",
+      "WebFetch(domain:doc.sitecore.com)",
+      "Skill(blog-inception)",
+      "Skill(blog-publish)",
+      "Skill(blog-rewrite-hybrid)",
+      "Skill(blog-visuals)",
+      "Skill(memory-consult)",
+      "Skill(memory-capture)",
+      "Skill(memory-promote)",
+      "Skill(framework-lint)",
+      "Skill(task-sense-check)",
+      "Skill(knowledge-export)",
+      "Skill(knowledge-import)",
+      "Edit(data/**)",
+      "Edit(components/**)",
+      "Edit(app/**)",
+      "Edit(layouts/**)",
+      "Edit(css/**)",
+      "Edit(public/static/**)",
+      "Edit(scripts/**)",
+      "Edit(tests/**)",
+      "Edit(.storybook/**)",
+      "Edit(brand/**)",
+      "Edit(.claude/skills/**)"
+    ],
+    "ask": [
+      "Bash(yarn add *)",
+      "Bash(yarn remove *)",
+      "Bash(yarn up *)",
+      "Bash(gh api *)",
+      "Edit(.github/**)",
+      "Edit(.claude/settings.json)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push * --force*)",
+      "Bash(git reset --hard*)",
+      "Bash(rm -rf *)",
+      "Bash(gh repo delete*)"
     ]
   }
 }
