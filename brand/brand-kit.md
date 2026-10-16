@@ -63,7 +63,7 @@ How agents are composed, named and patterned, plus the agent-as-customer guide.
 
 - `sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture`: Sub-Agents vs Personas vs Skills - A Journey Through Code Architecture
 - `composing-agent-teams-by-cognitive-profile`: Composing Agent Teams by Cognitive Profile, Not Function
-- `emerging-pattern-in-agentic-systems`: An Emerging Pattern in Agentic Systems
+- `emerging-pattern-in-agentic-systems`: Mind, Body and Soul: An Emerging Pattern for Agents
 - `the-agent-as-customer-a-practical-build-guide`: The Agent as Customer: A Practical Build Guide
 
 **Pillar 4: Sitecore platform foundations** (5 posts)
