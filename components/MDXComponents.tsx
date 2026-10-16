@@ -5,12 +5,12 @@ import type { MDXComponents } from 'mdx/types'
 import Image from './Image'
 import CustomLink from './Link'
 import TableWrapper from './TableWrapper'
-import Figure from './visuals/Figure'
-import GatedFlow from './visuals/GatedFlow'
-import LayerParallel from './visuals/LayerParallel'
-import MandateCheckout from './visuals/MandateCheckout'
-import SkillComposition from './visuals/SkillComposition'
-import StepThrough from './visuals/StepThrough'
+import Figure from './design-system/templates/Figure'
+import GatedFlow from './design-system/organisms/GatedFlow'
+import LayerParallel from './design-system/organisms/LayerParallel'
+import MandateCheckout from './design-system/organisms/MandateCheckout'
+import SkillComposition from './design-system/organisms/SkillComposition'
+import StepThrough from './design-system/organisms/StepThrough'
 
 export const components: MDXComponents = {
   Image,
