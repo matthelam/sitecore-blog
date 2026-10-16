@@ -1,23 +1,24 @@
 ---
-title: "Agentic Studio: Agent Export Drops These Fields"
+title: 'Agentic Studio: Agent Export Drops These Fields'
 date: '2026-08-19'
+lastmod: 2026-10-16
 tags: ['agentic-studio', 'sitecore-ai', 'agents', 'sitecore', 'agentic-sitecore']
 draft: false
-summary: "Agent Type and Tags are empty after you export and import an agent in Sitecore Agentic Studio, because the export is lossy. Set them, export, import to see it."
+summary: "Sitecore Agentic Studio's agent export quietly drops Agent Type and Tags. Knowing that is the workaround: note both before you export, and put them back after every import."
 ---
 
-**In short:** after you export an agent in Agentic Studio and import it again, Agent Type and Tags come back empty, so re-apply both by hand after every import. Whether the export file carries tags at all changed between my July test and an August export, and I haven't worked out why.
+**In short:** Agentic Studio's agent export quietly drops Agent Type and Tags. Knowing that is the workaround: note both before you export, and put them back after every import.
 
-This is a short post about a small quirk I found whilst working on Agents in Agentic Studio. When [exporting an agent](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/export-or-import-an-agent.html) there are 2 fields that get dropped or cannot be exported, even when you add them manually:
+This is a short post about a small quirk I found whilst working on Agents in Agentic Studio. It's easy to overlook, because nothing errors. When [exporting an agent](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/export-or-import-an-agent.html) there are 2 fields that get dropped or cannot be exported, even when you add them manually:
 
 1. **Agent Type**
 2. **Tags**
 
-Set them in the editor, export the agent, import it again, and both come back empty. You re-apply them by hand every time.
+Set them in the editor, export the agent, import it again, and both come back empty.
 
 ## What the export file shows
 
-We tested this deliberately back in July. Set both fields, re-exported, and the file gained no keys at all — nothing resembling a type or a tag anywhere in it.
+We tested this deliberately back in July. Set both fields, re-exported, and the file gained no keys at all, nothing resembling a type or a tag anywhere in it.
 
 Then it got murkier. An export I took this month has tags sitting in it at the top level:
 
@@ -27,22 +28,22 @@ Then it got murkier. An export I took this month has tags sitting in it at the t
 
 So either the platform changed between July and August, or our original test was narrower than we thought. I have not managed to separate those two yet.
 
-## What to do after an import
+## Knowing is the workaround
 
-What hasn't changed is the practical bit: after an import, check Agent Type and Tags and re-apply them.
+Before you export, note the agent's Agent Type and Tags. Then after an import:
 
 1. Import the agent. You need a Builder License to create an agent by importing a JSON file, which is covered in [Assign Yourself a Builder License First](/blog/agentic-studio-builder-license).
 2. Open the agent and check Agent Type and Tags.
-3. Re-apply both by hand.
+3. Put both back from your notes.
 4. If the agent uses a widget, re-point it as well. Widgets have no export, and the agent's own export carries a `widgetTemplateId` that refers to nothing in the target tenant (see [Widgets Do Not Export](/blog/agentic-studio-widgets-do-not-export)).
 
 ## Status
 
-I logged a support ticket with Sitecore about this. It was closed with a general response suggesting it won't be fixed, or that the behaviour is intentional. For now you have to live with it, which means re-applying both fields by hand after every import.
+I logged a support ticket with Sitecore about this. It was closed with a general response suggesting it won't be fixed, or that the behaviour is intentional.
 
-Nothing too alarming as I see it, but it's more just something to be aware of as you test out and migrate your agents around instances.
+Nothing too alarming as I see it, but it's something to be aware of as you test out and migrate your agents around instances.
 
-It is one gap on the way from a dev instance to Production. Some artefacts move cleanly, some move partially like this, and at least one does not move at all.
+Note them before you export. Put them back after you import.
 
 ## Related
 
@@ -52,4 +53,4 @@ It is one gap on the way from a dev instance to Production. Some artefacts move 
 
 ## References
 
-- [Export or import an agent](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/export-or-import-an-agent.html) — Sitecore documentation
+- [Export or import an agent](https://doc.sitecore.com/sai/en/users/sitecoreai/working-with-agentic-studio/understanding-agents/export-or-import-an-agent.html) - Sitecore documentation
