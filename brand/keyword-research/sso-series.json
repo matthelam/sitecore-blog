@@ -1,0 +1,357 @@
+{
+ "approved": "2026-10-16",
+ "method_notes": "Blind research from each page's intent (never the post): WebSearch over Microsoft Learn, doc.sitecore.com, developers.sitecore.com and practitioner blogs. Sources = distinct domains; Sitecore-specific terms are thinly sourced (doc.sitecore.com counts once).",
+ "pages": {
+  "01-SSO-Preparation": [
+   {
+    "term": "Sitecore SSO Entra ID",
+    "sources": 3,
+    "sourceList": [
+     "doc.sitecore.com Cloud Portal SAML single sign-on (names Microsoft Entra as IdP)",
+     "developers.sitecore.com Single-Sign On in Content Hub recipe (Entra ID SAML)",
+     "getfishtank.com Securing Content Hub using SAML (Azure AD)"
+    ]
+   },
+   {
+    "term": "Entra ID SAML federation metadata URL",
+    "sources": 4,
+    "sourceList": [
+     "doc.haivision.com finding required values in Entra ID (App Federation Metadata Url)",
+     "opswat.com Microsoft Entra ID config (App Federation Metadata URL)",
+     "kantega-sso.atlassian.net Entra ID SAML (metadata/Login URL)",
+     "support.ptc.com Entra enterprise app (Federation Metadata XML download)"
+    ]
+   },
+   {
+    "term": "Entra ID SAML prerequisites",
+    "sources": 4,
+    "sourceList": [
+     "docs.unity.com Set up SSO with Microsoft Entra ID (admin roles)",
+     "clerk.com Entra ID SAML integration for SaaS apps (admin role, test user)",
+     "help.tableau.com Configure SAML with Microsoft Entra ID",
+     "lantern.splunk.com Configuring SAML authentication (admin roles)"
+    ]
+   },
+   {
+    "term": "Entra ID SAML signing certificate",
+    "sources": 3,
+    "sourceList": [
+     "kantega-sso.atlassian.net Entra ID SAML (Certificate Base64)",
+     "opswat.com Microsoft Entra ID (SAML Certificates section)",
+     "support.ptc.com Entra enterprise app (certificate/metadata download)"
+    ]
+   },
+   {
+    "term": "Sitecore Cloud Portal SSO domain verification TXT record",
+    "sources": 2,
+    "sourceList": [
+     "doc.sitecore.com Configure SAML single sign-on (Verify domains, TXT records)",
+     "warsaw-dynamics.atlassian.net SSO Domain Verification (generic DNS TXT flow, not Sitecore)"
+    ]
+   },
+   {
+    "term": "Entra ID tenant ID",
+    "sources": 2,
+    "sourceList": [
+     "doc.haivision.com finding required values in Entra ID (tenant ID in URLs)",
+     "documentation.conga.com Entra as SAML identity provider (Tenant ID listed as required value)"
+    ]
+   },
+   {
+    "term": "SAML identifier entity ID reply URL",
+    "sources": 4,
+    "sourceList": [
+     "learn.microsoft.com Enable single sign-on for an enterprise application (Basic SAML Configuration)",
+     "clerk.com Entra ID SAML for SaaS apps (Identifier + Reply URL from SaaS app)",
+     "kantega-sso.atlassian.net Entra ID SAML",
+     "manual.na.ps.cloudstream.ricoh.com Microsoft Entra Single Sign-On"
+    ]
+   },
+   {
+    "term": "Entra ID SAML certificate expiry renewal",
+    "sources": 3,
+    "sourceList": [
+     "doc.sitecore.com Single sign-on (SAML certificates expire, consider OIDC)",
+     "kantega-sso.atlassian.net Entra ID SAML (3-year certificate, rotate via inactive cert)",
+     "opswat.com Microsoft Entra ID (SAML certificates)"
+    ]
+   },
+   {
+    "term": "Entra ID SAML test user",
+    "sources": 3,
+    "sourceList": [
+     "clerk.com Entra ID SAML for SaaS apps (prerequisite test user)",
+     "help.tableau.com Configure SAML with Microsoft Entra ID (user must be assigned)",
+     "oneuptime.com Set up SAML SSO in Entra ID (users must be assigned)"
+    ]
+   },
+   {
+    "term": "Sitecore Cloud Portal SSO",
+    "sources": 2,
+    "sourceList": [
+     "doc.sitecore.com Single sign-on (SSO) overview (prerequisites, limits)",
+     "developers.sitecore.com changelog SAML SSO now available for Sitecore Cloud Portal and apps"
+    ]
+   }
+  ],
+  "02-SSO-Entra-ID-Setup": [
+   {
+    "term": "Entra ID enterprise application SAML",
+    "sources": 4,
+    "sourceList": [
+     "learn.microsoft.com Enable single sign-on for an enterprise application",
+     "oneuptime.com Set up SAML SSO for enterprise apps in Entra ID",
+     "docs.unwrap.ai Microsoft Entra SSO setup",
+     "clerk.com Entra ID SAML for SaaS apps"
+    ]
+   },
+   {
+    "term": "Entra ID SAML group claims",
+    "sources": 5,
+    "sourceList": [
+     "learn.microsoft.com Configure group claims for applications by using Microsoft Entra ID",
+     "docs.sonarsource.com SAML SSO with Entra ID",
+     "docs.aigateway.cequence.ai Microsoft Entra groups",
+     "kantega-sso.atlassian.net Group claims from Entra ID (SAML)",
+     "developers.sitecore.com Single-Sign On in Content Hub (Security Groups claim)"
+    ]
+   },
+   {
+    "term": "Entra ID non-gallery application SAML",
+    "sources": 3,
+    "sourceList": [
+     "learn.microsoft.com Q&A How do I configure Azure AD SSO with SAML for a non-gallery application",
+     "oneuptime.com SAML SSO for enterprise apps (Create your own application, non-gallery)",
+     "developers.sitecore.com Single-Sign On in Content Hub (non-gallery enterprise application)"
+    ]
+   },
+   {
+    "term": "Entra ID Basic SAML Configuration identifier reply URL",
+    "sources": 4,
+    "sourceList": [
+     "learn.microsoft.com Enable single sign-on for an enterprise application",
+     "clerk.com Entra ID SAML for SaaS apps",
+     "kantega-sso.atlassian.net Entra ID SAML",
+     "manual.na.ps.cloudstream.ricoh.com Microsoft Entra Single Sign-On"
+    ]
+   },
+   {
+    "term": "Entra ID groups assigned to the application",
+    "sources": 3,
+    "sourceList": [
+     "learn.microsoft.com Configure group claims (recommended for large orgs)",
+     "docs.sonarsource.com SAML SSO with Entra ID",
+     "docs.aigateway.cequence.ai Microsoft Entra groups"
+    ]
+   },
+   {
+    "term": "Entra ID SAML 150 groups limit",
+    "sources": 4,
+    "sourceList": [
+     "learn.microsoft.com Configure group claims (150 SAML / 200 JWT)",
+     "developers.sitecore.com Single-Sign On in Content Hub (150-group caveat)",
+     "cisco.com Troubleshoot SAML Azure group matching (overage, groups.link)",
+     "docs.sonarsource.com SAML SSO with Entra ID"
+    ]
+   },
+   {
+    "term": "Entra ID SAML group object ID",
+    "sources": 4,
+    "sourceList": [
+     "community.veeam.com SAML SSO in Veeam and why your group claim is missing (GUIDs)",
+     "kantega-sso.atlassian.net Group claims from Entra ID (SAML)",
+     "developers.frontegg.com MS Entra ID SSO guide",
+     "docs.aigateway.cequence.ai Microsoft Entra groups"
+    ]
+   },
+   {
+    "term": "Entra ID SAML attributes and claims",
+    "sources": 3,
+    "sourceList": [
+     "oneuptime.com SAML SSO for enterprise apps (email, given name, surname)",
+     "developers.sitecore.com Single-Sign On in Content Hub (Email claim)",
+     "kantega-sso.atlassian.net Entra ID SAML"
+    ]
+   },
+   {
+    "term": "Entra ID app roles vs group claims",
+    "sources": 3,
+    "sourceList": [
+     "oneuptime.com Entra app roles vs group claims",
+     "kantega-sso.atlassian.net Group claims from Entra ID (user.assignedroles)",
+     "developers.frontegg.com MS Entra ID SSO guide"
+    ]
+   },
+   {
+    "term": "Sitecore SSO Entra ID",
+    "sources": 3,
+    "sourceList": [
+     "doc.sitecore.com Cloud Portal SAML single sign-on",
+     "developers.sitecore.com Single-Sign On in Content Hub",
+     "getfishtank.com Securing Content Hub using SAML"
+    ]
+   }
+  ],
+  "03-SSO-Sitecore-Cloud-Portal-Setup": [
+   {
+    "term": "Sitecore Cloud Portal SAML single sign-on",
+    "sources": 2,
+    "sourceList": [
+     "doc.sitecore.com Configure SAML single sign-on (Add SSO connection, test, verify, enable)",
+     "developers.sitecore.com changelog SAML SSO now available for Cloud Portal and Sitecore apps"
+    ]
+   },
+   {
+    "term": "Sitecore Cloud Portal claims mapping",
+    "sources": 1,
+    "sourceList": [
+     "doc.sitecore.com Claims mapping (Cloud Portal, SSO connection Configure > Claims mapping); also mirrored in doc.sitecore.com SitecoreAI docs (same domain)"
+    ]
+   },
+   {
+    "term": "assign SitecoreAI roles with claims mapping",
+    "sources": 1,
+    "sourceList": [
+     "doc.sitecore.com Assign SitecoreAI roles with claims mapping (also served under XM Cloud path, same domain)"
+    ]
+   },
+   {
+    "term": "Sitecore Cloud Portal add SSO connection",
+    "sources": 1,
+    "sourceList": [
+     "doc.sitecore.com Configure SAML single sign-on (Add SSO connection, SAML, up to 50 email domains)"
+    ]
+   },
+   {
+    "term": "Sitecore Cloud Portal SSO OIDC vs SAML",
+    "sources": 2,
+    "sourceList": [
+     "doc.sitecore.com Single sign-on (SSO) (OIDC or SAML; suggests OIDC to avoid cert maintenance)",
+     "developers.sitecore.com changelog SAML SSO (OIDC already supported)"
+    ]
+   },
+   {
+    "term": "Sitecore SAML SSO limitations JIT provisioning single logout",
+    "sources": 1,
+    "sourceList": [
+     "doc.sitecore.com Configure SAML single sign-on (SP-initiated only; no JIT, SLO, request signing, encryption)"
+    ]
+   },
+   {
+    "term": "Sitecore Cloud Portal SSO email domain",
+    "sources": 1,
+    "sourceList": [
+     "doc.sitecore.com Single sign-on (SSO) (5 connections, 50 domains each, one domain per connection, users still invited)"
+    ]
+   },
+   {
+    "term": "Sitecore Cloud Portal Audience URI ACS URL",
+    "sources": 1,
+    "sourceList": [
+     "doc.sitecore.com Configure SAML single sign-on (SP metadata URL, Audience URI, ACS URL)"
+    ]
+   },
+   {
+    "term": "SitecoreAI SSO login",
+    "sources": 1,
+    "sourceList": [
+     "doc.sitecore.com Log in to SitecoreAI (log in via Cloud Portal organization; XM Cloud renamed SitecoreAI)"
+    ]
+   },
+   {
+    "term": "Sitecore SSO Entra ID",
+    "sources": 3,
+    "sourceList": [
+     "doc.sitecore.com Cloud Portal SSO (Microsoft Entra listed as popular IdP)",
+     "developers.sitecore.com Single-Sign On in Content Hub",
+     "getfishtank.com Securing Content Hub using SAML"
+    ]
+   }
+  ],
+  "04-SSO-Content-Hub-Setup": [
+   {
+    "term": "Sitecore Content Hub SAML SSO",
+    "sources": 3,
+    "sourceList": [
+     "developers.sitecore.com Single-Sign On in Content Hub (recipe)",
+     "getfishtank.com Securing Sitecore Content Hub using SAML",
+     "doc.sitecore.com Content Hub external authentication providers (SAML)"
+    ]
+   },
+   {
+    "term": "Content Hub Azure AD SSO",
+    "sources": 3,
+    "sourceList": [
+     "doc.sitecore.com Content Hub Azure AD SSO configuration example",
+     "getfishtank.com Securing Content Hub using SAML (Azure AD)",
+     "tray.ai Sitecore Azure Active Directory integration"
+    ]
+   },
+   {
+    "term": "Content Hub SSO group to role mapping",
+    "sources": 3,
+    "sourceList": [
+     "developers.sitecore.com Single-Sign On in Content Hub (group mapping setting + sign-in script)",
+     "doc.sitecore.com User sign-in script (group claims to user groups)",
+     "tray.ai Azure AD security groups mapped to Sitecore roles (vendor page)"
+    ]
+   },
+   {
+    "term": "Content Hub user sign-in script",
+    "sources": 2,
+    "sourceList": [
+     "doc.sitecore.com User sign-in script (external authentication only)",
+     "developers.sitecore.com Single-Sign On in Content Hub (sign-in script reads group claims)"
+    ]
+   },
+   {
+    "term": "Content Hub external authentication providers",
+    "sources": 2,
+    "sourceList": [
+     "doc.sitecore.com External authentication providers",
+     "getfishtank.com Securing Content Hub using SAML (enabling external authentication)"
+    ]
+   },
+   {
+    "term": "Content Hub ExternalAuthenticationProviders settings",
+    "sources": 2,
+    "sourceList": [
+     "doc.sitecore.com External authentication providers (metadata_location, sp_entity_id, module_path)",
+     "developers.sitecore.com Single-Sign On in Content Hub (sp_entity_id, AuthServices-saml/Acs)"
+    ]
+   },
+   {
+    "term": "Content Hub Entra ID security groups claim",
+    "sources": 2,
+    "sourceList": [
+     "developers.sitecore.com Single-Sign On in Content Hub (Email and Security Groups claims, 150 limit)",
+     "docs.sonarsource.com SAML SSO with Entra ID (group claim, generic)"
+    ]
+   },
+   {
+    "term": "Content Hub user groups",
+    "sources": 1,
+    "sourceList": [
+     "doc.sitecore.com Standard user groups (M.Builtin.* groups) and User sign-in script (UserGroupToUser); single domain"
+    ]
+   },
+   {
+    "term": "Content Hub SAML ACS reply URL AuthServices",
+    "sources": 2,
+    "sourceList": [
+     "developers.sitecore.com Single-Sign On in Content Hub (Reply URL /AuthServices-saml/Acs)",
+     "doc.sitecore.com External authentication providers (module path /AuthServices-<provider>)"
+    ]
+   },
+   {
+    "term": "Sitecore SSO Entra ID",
+    "sources": 3,
+    "sourceList": [
+     "doc.sitecore.com Cloud Portal SSO",
+     "developers.sitecore.com Single-Sign On in Content Hub",
+     "getfishtank.com Securing Content Hub using SAML"
+    ]
+   }
+  ]
+ }
+}

@@ -1,40 +1,41 @@
 ---
-title: "Azure Entra ID SSO – Enterprise App SAML Group Claims"
+title: 'Azure Entra ID SSO – Enterprise Application SAML and Group Claims'
 date: 2025-10-12
+lastmod: 2026-10-16
 draft: false
-tags: ["azure", "entra-id", "identity", "sso", "sitecore", "setup"]
-summary: "A user guide to configuring SAML and role claims mapping through Entra ID group claims, the SAML signing certificate and metadata download for Sitecore SSO."
+tags: ['azure', 'entra-id', 'identity', 'sso', 'sitecore', 'setup']
+summary: 'To set up an Entra ID enterprise application for Sitecore SAML SSO, create a non-gallery app, set the identifier and reply URL, add a groups claim with Object IDs, then download the metadata.'
 ---
 
 ## Introduction
 
-If you’ve completed the [preparation checklist](/blog/01-SSO-Preparation) from the previous article, you should already have your tenant details, security groups, and test users ready. Now it’s time to jump into the Azure side and actually **create the Enterprise Applications** that Sitecore will authenticate against.
+If you’ve completed the [preparation checklist](/blog/01-SSO-Preparation) from the previous article, you should already have your tenant details, security groups and test users ready. Now it’s time to jump into the Azure side and **create the Enterprise Applications** that Sitecore will authenticate against.
 
-When configuring Single Sign-On (SSO) in Azure Entra ID, you don’t bind Azure directly to your application — you bind it to an **Enterprise Application** (the service principal that represents your app). The SAML assertions (claims) that Azure issues are scoped *for* that Enterprise Application. In other words, when a user signs in, Azure issues a token in the context of that specific application.
+In Azure Entra ID you don’t bind Azure directly to your application. You bind it to an **Enterprise Application**, the service principal that represents your app. The SAML assertions (claims) Azure issues are scoped _for_ that Enterprise Application, so when a user signs in, Azure issues a token in the context of that specific application.
 
 The Enterprise Application is the locus for **per-application access control and claim emission**. In it you define:
 
-- Which **users or security groups** are permitted access via assignment.  
-- Which **Conditional Access policies** (e.g. MFA, location restrictions, device compliance) should apply when accessing that app.  
-- The SAML **attributes & claims** that Azure will send to that application (for example, the `groups` claim).  
+- Which **users or security groups** are permitted access, via assignment.
+- Which **Conditional Access policies** (e.g. MFA, location restrictions, device compliance) apply when accessing that app.
+- The SAML **attributes & claims** Azure sends to that application (for example, the `groups` claim).
 
-While there are tenant-level identity and protection settings in Entra ID that apply globally, the Enterprise Application is how you tailor how identity is exposed to that particular service.
+Tenant-level identity and protection settings in Entra ID apply globally. The Enterprise Application is how you tailor how identity is exposed to one particular service.
 
-In this part of the series, we’ll create those Enterprise Applications we planned in the [Preparation Checklist](/blog/01-SSO-Preparation#2-enterprise-applications), and then configure them for **SAML-based** Single Sign-On. We’ll walk through creating **non-gallery apps**, configuring the **Basic SAML settings**, adding the **`groups` claim**, and exporting the **Federation Metadata XML** you’ll upload later to Sitecore Cloud Portal, Content Hub, and Vercel.
+In this part of the series we’ll create the Enterprise Applications we planned in the [Preparation Checklist](/blog/01-SSO-Preparation#2-enterprise-applications), then configure them for **SAML-based** Single Sign-On. That means creating **non-gallery apps**, configuring the **Basic SAML settings**, adding the **`groups` claim**, and exporting the **Federation Metadata XML** you’ll upload later to Sitecore Cloud Portal, Content Hub, and Vercel.
 
 ---
 
 ## 1. Create a New Enterprise Application (Non-Gallery)
 
-1. Go to **Azure Active Directory → Enterprise applications**.  
-2. Click **+ New application → Create your own application**.  
-3. Select **Integrate any other application you don’t find in the gallery (Non-gallery)**.  
-4. Assign a name that clearly identifies the target service, for example:  
-   - `CloudPortal-SAML-[ENV]`  
-   - `ContentHub-SAML-[ENV]`  
+1. Go to **Azure Active Directory → Enterprise applications**.
+2. Click **+ New application → Create your own application**.
+3. Select **Integrate any other application you don’t find in the gallery (Non-gallery)**.
+4. Assign a name that clearly identifies the target service, for example:
+   - `CloudPortal-SAML-[ENV]`
+   - `ContentHub-SAML-[ENV]`
    - `Vercel-SAML-[ENV]`
 
-Once created, record the **Application ID** and **Object ID** in your configuration documentation — you’ll need those later.
+Once created, record the **Application ID** and **Object ID** in your configuration documentation. You’ll need those later.
 
 > **Pro Tip:** Maintain consistent naming across `DEV`, `UAT`, `PROD` to simplify automation, debugging, and certificate rotation.
 
@@ -44,39 +45,40 @@ Once created, record the **Application ID** and **Object ID** in your configurat
 
 Now attach SAML to your Enterprise Application.
 
-1. Open the application → **Single sign-on → SAML**.  
-2. Under **Basic SAML Configuration**, enter:  
-   - **Identifier (Entity ID)** – the SP Entity ID for the specific service: `[Service Entity ID]`  
-   - **Reply URL (ACS URL)** – the ACS endpoint: `[Service ACS URL]`  
-   - **Sign-on URL (optional)** – `[Service Sign-on URL]` (if required by the SP)  
+1. Open the application → **Single sign-on → SAML**.
+2. Under **Basic SAML Configuration**, enter:
+   - **Identifier (Entity ID)** – the SP Entity ID for the specific service: `[Service Entity ID]`
+   - **Reply URL (ACS URL)** – the ACS endpoint: `[Service ACS URL]`
+   - **Sign-on URL (optional)** – `[Service Sign-on URL]` (if required by the SP)
 3. Click **Save**.
 
 **Example placeholders:**
 
-| Service | Identifier (Entity ID) | Reply URL (ACS URL) |
-|---------|--------------------------|----------------------|
+| Service      | Identifier (Entity ID)     | Reply URL (ACS URL)      |
+| ------------ | -------------------------- | ------------------------ |
 | Cloud Portal | `[Cloud Portal Entity ID]` | `[Cloud Portal ACS URL]` |
-| Content Hub | `[Content Hub Entity ID]` | `[Content Hub ACS URL]` |
-| Vercel | `[Vercel Entity ID]` | `[Vercel ACS URL]` |
+| Content Hub  | `[Content Hub Entity ID]`  | `[Content Hub ACS URL]`  |
+| Vercel       | `[Vercel Entity ID]`       | `[Vercel ACS URL]`       |
 
-> It’s okay if you don’t yet know every value — you can update them later once you have the exact metadata.
+> It’s okay if you don’t yet know every value. You can update them later once you have the exact metadata.
 
 ---
 
 ## 3. Add the `groups` Claim (Object ID)
 
-You must include group membership in the SAML token so your application (Sitecore / Cloud Portal / Content Hub) can perform role mapping.
+Include group membership in the SAML token so your application (Sitecore / Cloud Portal / Content Hub) can perform role mapping.
 
-1. In the Enterprise Application, navigate to **Attributes & Claims**.  
-2. Click **Add a group claim**.  
-3. Configure:  
-   - **Which groups**: *Groups assigned to the application*  
-   - **Source attribute**: *ObjectId*  
-   - **Name**: `groups`  
+1. In the Enterprise Application, navigate to **Attributes & Claims**.
+2. Click **Add a group claim**.
+3. Configure:
+   - **Which groups**: _Groups assigned to the application_
+   - **Source attribute**: _ObjectId_
+   - **Name**: `groups`
 4. Save the claim.
 
-Using **Object IDs** (GUIDs) rather than group display names is more robust, because display names can change. Azure’s documentation supports this practice.  
-Be aware: if a user is a member of many groups (over certain limits), Azure may omit group claims or trigger an overflow mechanism.
+Object IDs (GUIDs) are more robust than group display names, because display names can change. Azure’s documentation supports this practice.
+
+> **Be aware:** if a user is a member of many groups (over certain limits), Azure may omit group claims or trigger an overflow mechanism.
 
 ---
 
@@ -84,14 +86,14 @@ Be aware: if a user is a member of many groups (over certain limits), Azure may 
 
 Now link your security groups and test users to the Enterprise Application.
 
-1. In the application, go to **Users and groups → Add user/group**.  
-2. Select the Azure security groups you identified earlier:  
-   - `[<ENV>_Administrator]`  
-   - `[<ENV>_Content_Editor]`  
-   - `[<ENV>_Publisher]`  
+1. In the application, go to **Users and groups → Add user/group**.
+2. Select the Azure security groups you identified earlier:
+   - `[<ENV>_Administrator]`
+   - `[<ENV>_Content_Editor]`
+   - `[<ENV>_Publisher]`
 3. Ensure each group has your test user accounts as members from your preparation checklist.
 
-> **Best practice:** Always assign groups to the app rather than individual users — this centralizes access control and auditing.
+> **Best practice:** Always assign groups to the app rather than individual users. It centralises access control and auditing.
 
 ---
 
@@ -99,12 +101,12 @@ Now link your security groups and test users to the Enterprise Application.
 
 Before closing out, finish the trust setup:
 
-1. In the **SAML Signing Certificate** section, ensure the algorithm is set to **SHA-256**.  
-2. Download the **Federation Metadata XML** file.  
+1. In the **SAML Signing Certificate** section, ensure the algorithm is set to **SHA-256**.
+2. Download the **Federation Metadata XML** file.
 3. Save it in a traceable location (e.g. `cloudportal-saml-prod-metadata.xml`) and commit it to your configuration repository.
 
-| File | Description | Example Name | Owner / Contact |
-|------|-------------|-------------------------------|----------------|
+| File                    | Description                                                         | Example Name                         | Owner / Contact                 |
+| ----------------------- | ------------------------------------------------------------------- | ------------------------------------ | ------------------------------- |
 | Federation Metadata XML | The IdP metadata that your SP (Sitecore / Cloud Portal) will import | `cloudportal-saml-prod-metadata.xml` | `[SSO Certificate Owner Email]` |
 
 > Track the metadata and certificate expiry dates and schedule reminders well before rotation is required.
@@ -113,7 +115,6 @@ Before closing out, finish the trust setup:
 
 ## Summary
 
-At this point, your Azure Entra ID setup is ready for the next steps.  
-You have created enterprise applications, enabled SAML, configured group claims, and obtained the federation metadata files.
+At this point, your Azure Entra ID setup is ready for the next steps. You have created enterprise applications, enabled SAML, configured group claims, and obtained the federation metadata files.
 
-In the [next article](/blog/03-SSO-Sitecore-Cloud-Portal-Setup), we’ll walk through how to upload that metadata into **Sitecore Cloud Portal**, configure the SAML connection there, and conduct validation checks.  
+In the [next article](/blog/03-SSO-Sitecore-Cloud-Portal-Setup), we’ll walk through how to upload that metadata into **Sitecore Cloud Portal**, configure the SAML connection there, and conduct validation checks.

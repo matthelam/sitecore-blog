@@ -1,17 +1,17 @@
 ---
-title: "Azure Entra ID SSO – Content Hub SAML Role Mapping"
+title: 'Azure Entra ID SSO – Setting up Sitecore Content Hub'
 date: 2025-10-14
+lastmod: 2026-10-16
 draft: false
-tags: ["azure", "entra-id", "sso", "sitecore", "content-hub", "saml", "setup"]
-summary: "Step-by-step Azure Entra ID SAML SSO for Sitecore Content Hub, from metadata exchange and portal configuration to role claims mapping and the login script."
+tags: ['azure', 'entra-id', 'sso', 'sitecore', 'content-hub', 'saml', 'setup']
+summary: 'To configure Azure Entra ID SAML SSO for Sitecore Content Hub, exchange metadata, add the SAML provider and group_mappings to the portal configuration, then add a login script that assigns Content Hub groups.'
 ---
 
 ## Introduction
 
-After integrating **[Cloud Portal](/blog/03-SSO-Sitecore-Cloud-Portal-Setup)** with **Azure Entra ID**, the next step is to extend SSO into **Sitecore Content Hub** — ensuring a seamless login experience across all Sitecore SaaS applications.
+After integrating **[Cloud Portal](/blog/03-SSO-Sitecore-Cloud-Portal-Setup)** with **Azure Entra ID**, the next step is to extend SSO into **Sitecore Content Hub**, so you get a seamless login experience across all Sitecore SaaS applications.
 
-Unlike Cloud Portal, Content Hub manages SSO internally via its **Portal Configuration JSON**.  
-Here, you define the SAML provider, metadata endpoints, and claim mappings that determine how Azure Entra ID users and groups are recognized within Content Hub.
+Unlike Cloud Portal, Content Hub manages SSO internally through its **Portal Configuration JSON**. This is where you define the SAML provider, metadata endpoints, and claim mappings that decide how Azure Entra ID users and groups are recognised within Content Hub.
 
 This guide consolidates the official [Sitecore SSO documentation](https://developers.sitecore.com/learn/accelerate/content-hub/implementation/functional-security/sso-on-content-hub) into a practical workflow for Azure Entra ID.
 
@@ -19,13 +19,13 @@ This guide consolidates the official [Sitecore SSO documentation](https://develo
 
 ## Prerequisites
 
-Before beginning, ensure you have:
+Before you begin, make sure you have:
 
 - Admin access to **Azure Entra ID** and **Content Hub**.
-- A registered **Enterprise Application** in Entra ID configured for SAML.
+- A registered **Enterprise Application** in Entra ID, configured for SAML.
 - Exported **Federation Metadata XML** files:
   - **Azure IdP Metadata** → downloaded from Azure.
-  - **Content Hub SP Metadata** → obtained from your instance (for Azure configuration).
+  - **Content Hub SP Metadata** → obtained from your instance (for the Azure configuration).
 - A list of **Azure Group Object IDs** and their corresponding **Content Hub Groups**.
 - A designated **Content Hub Admin** for validation.
 
@@ -35,28 +35,27 @@ Before beginning, ensure you have:
 
 1. Log into **Content Hub** as an administrator.
 2. Navigate to **Manage → Settings → Portal Configuration**.
-3. In the `ExternalAuthenticationProviders` section, copy your **Entity ID (sp_entity_id)** or export the **metadata** via `/api/auth/metadata` endpoint.
+3. In the `ExternalAuthenticationProviders` section, copy your **Entity ID** (`sp_entity_id`) or export the **metadata** via the `/api/auth/metadata` endpoint.
 4. Upload this SP metadata file into the Azure SAML configuration for the application you created earlier.
 
-This completes the **trust relationship** between Azure Entra ID (IdP) and Content Hub (SP).
+That completes the **trust relationship** between Azure Entra ID (IdP) and Content Hub (SP).
 
 ---
 
 ## 2. Create Custom Settings Sections
 
-Before configuring SSO, you’ll need to create **custom configuration sections** in Content Hub.  
-These are logical containers used by the Portal Configuration JSON to reference identity providers, group mappings, and login behavior.
+Before configuring SSO, you’ll need to create **custom configuration sections** in Content Hub. These are logical containers the Portal Configuration JSON uses to reference identity providers, group mappings, and login behaviour.
 
 To do this:
 
 1. Go to **Manage → Settings → Configuration Sections**.
 2. Create two new sections:
-   - **`ExternalAuthenticationProviders`**
-   - **`Scripts`**
+   - `ExternalAuthenticationProviders`
+   - `Scripts`
 
-If they already exist (depending on your baseline), ensure they are **enabled** and **editable**.
+If they already exist (depending on your baseline), make sure they are **enabled** and **editable**.
 
-Each section is a JSON object accessible under Portal Configuration — think of it as a modular namespace for different aspects of Content Hub behavior.
+Each section is a JSON object accessible under Portal Configuration. Think of it as a modular namespace for a different aspect of Content Hub behaviour.
 
 ---
 
@@ -88,17 +87,18 @@ Replace or extend it with the following JSON block, substituting the placeholder
         "group_mappings": {
           "[AzureGroup_ObjectID_1]": "[ContentHub_Group_1]",
           "[AzureGroup_ObjectID_2]": "[ContentHub_Group_2]",
-          "[AzureGroup_ObjectID_3]": "[ContentHub_Group_3]"
+          "[AzureGroup_ObjectID_3]": "[ContentHub_Group_3]",
         },
-        "default_roles": ["Everyone"]
-      }
-    ]
-  }
+        "default_roles": ["Everyone"],
+      },
+    ],
+  },
 }
-
 ```
 
-> Pro Tip: Always keep a copy of your Portal Configuration JSON before editing. Any formatting error here can temporarily block all logins.
+> **Pro Tip:** Always keep a copy of your Portal Configuration JSON before editing. Any formatting error here can temporarily block all logins.
+
+---
 
 ## 4. Map Azure Groups to Content Hub Roles
 
@@ -106,31 +106,34 @@ Each Azure group included in the SAML assertion (by Object ID) must map to an ex
 
 Example mapping table:
 
-Azure Group (Object ID)	Content Hub Group	Access Level
-b0acfd2e-xxxx-xxxx	CH.Admins	Full access
-91f3315a-xxxx-xxxx	CH.Contributors	Create/Edit
-a91c7712-xxxx-xxxx	CH.Viewers	Read-only
+| Azure Group (Object ID) | Content Hub Group | Access Level |
+| ----------------------- | ----------------- | ------------ |
+| `b0acfd2e-xxxx-xxxx`    | `CH.Admins`       | Full access  |
+| `91f3315a-xxxx-xxxx`    | `CH.Contributors` | Create/Edit  |
+| `a91c7712-xxxx-xxxx`    | `CH.Viewers`      | Read-only    |
 
-Content Hub applies these mappings dynamically on login.
-If a user loses membership in an Azure group, access is automatically revoked during their next login session.
+Content Hub applies these mappings dynamically on login. If a user loses membership in an Azure group, access is automatically revoked during their next login session.
+
+---
 
 ## 5. Add a Login Script
 
-To complete the setup, you must define a login automation script.
-This script is executed by Content Hub during the authentication flow and ensures that users and their groups are properly synchronized before session creation.
+To complete the setup, you must define a login automation script. Content Hub runs it during the authentication flow, and it makes sure users and their groups are synchronised before the session is created.
 
 ### Why it’s required
-- Azure Entra ID only provides claims; it doesn’t automatically create user records in Content Hub.
-- The login script creates or updates the Content Hub user on-the-fly based on the SAML response.
+
+- Azure Entra ID only provides claims. It doesn’t automatically create user records in Content Hub.
+- The login script creates or updates the Content Hub user on-the-fly, based on the SAML response.
 - It also reconciles group memberships according to the mappings defined above.
 
 ### Create the Script
-1. Navigate to Manage → Settings → Scripts.
-2. Add a new script named SSO_AzureEntraID_LoginHandler.
-3. Set the trigger to User.Login.Succeeded.
+
+1. Navigate to **Manage → Settings → Scripts**.
+2. Add a new script named `SSO_AzureEntraID_LoginHandler`.
+3. Set the trigger to `User.Login.Succeeded`.
 4. Paste the following C# script example:
 
-```jsonc
+```csharp
 // Executed when a user logs in successfully via SAML
 var samlUser = Context.User;
 if (samlUser == null)
@@ -176,15 +179,19 @@ Log.Info($"SSO login script completed for {email}");
 ```
 
 ### What happens on login
+
 When a user signs in:
+
 1. The SAML response from Azure Entra ID is received.
 2. The user’s email and group claims are read.
 3. If the user doesn’t exist, Content Hub automatically creates them.
 4. The script assigns the appropriate Content Hub groups based on the claim values.
 5. User access is now consistent with their Azure group membership.
 
-You’ve now completed a secure Azure Entra ID → Sitecore Content Hub SAML integration, enabling centralized identity and role management.
-Users can now sign in once through Entra ID and access Content Hub seamlessly, with role-based permissions driven directly from Azure group claims. 
-> Make sure you test these new settings out thouroghly and according to your client's needs.
+---
+
+You’ve now completed a secure Azure Entra ID → Sitecore Content Hub SAML integration, with centralised identity and role management. **Users sign in once through Entra ID and reach Content Hub seamlessly, with role-based permissions driven directly from their Azure group claims.**
+
+> Make sure you test these new settings out thoroughly, and against your client’s needs.
 
 In the next article, we’ll connect the same Entra ID setup to Vercel, which hosts your websites.
