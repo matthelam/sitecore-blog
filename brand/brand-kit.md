@@ -265,6 +265,17 @@ Intent is the question a searcher or answer engine would ask that the page answe
 - **No `Person` structured data anywhere.** The name variants need a `Person` JSON-LD with `name`, `alternateName`, `jobTitle`, `worksFor` (Aceik) and `sameAs` (LinkedIn, GitHub only).
 - **`llms.txt` returns 404.**
 
+## 5b. Content backlog
+
+Subjects searchers use that no published page covers well enough. They are content work (a new post or a real expansion, through `blog-inception` and Matt's approval), never forced into an existing page's metadata or wording.
+
+| Term | Evidence | Why it is here | Raised |
+|---|---|---|---|
+| Claude Code subagents | 7 independent sources (keyword research for `we-dont-build-the-website`) | The strongest-evidenced searcher term for agent team design; no post names Claude Code subagents. A post on designing agent teams with Claude Code subagents would own it | 2026-10-16 |
+| composable CMS | 3 sources (same research) | Scores 0.42 on `we-dont-build-the-website`; closing the gap needs substance about composable CMS architecture the post does not have | 2026-10-16 |
+
+**SEO tuning record, `we-dont-build-the-website` (2026-10-16).** Pass 1 shipped (PR #74): metadata 3.11 to 3.78, whole page 5.20 to 6.72 on the live page, measured against the researched keywords. Pass 2 found no material improvement (six metadata versions and five wording edits, all level or down), so nothing shipped and the run stopped under the stop rule.
+
 ## 6. Open questions for Matt
 
 1. Canonical display name: "Matt Lam" (what searchers type) or keep "Matthew Lam" (what the config says)? The proposal uses Matt Lam with Matthew Lam as an alternate.
