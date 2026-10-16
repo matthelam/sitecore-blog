@@ -40,7 +40,9 @@ jobs:
           yarn install --immutable
 
       - name: Repository memory (OKF gate)
-        run: python scripts/memory.py lint
+        run: |
+          pip install -r requirements.txt
+          python scripts/memory.py lint
 
       - name: Content rules (em dashes, frontmatter, line endings)
         if: github.event_name == 'pull_request'
