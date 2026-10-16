@@ -50,3 +50,10 @@ yarn-error.log*
 .exchange/
 .memory-log/
 __pycache__/
+
+*storybook.log
+storybook-static
+
+# Playwright
+/test-results/
+/playwright-report/

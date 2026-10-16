@@ -33,6 +33,8 @@
   },
   "include": [
     "next-env.d.ts",
+    ".storybook/*.ts",
+    ".storybook/*.tsx",
     "**/*.js",
     "**/*.mjs",
     "**/*.ts",
