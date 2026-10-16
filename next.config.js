@@ -84,6 +84,22 @@ module.exports = () => {
       ],
       unoptimized,
     },
+    // One canonical host: matthelam.com. The old blog subdomain, www and the Vercel production
+    // aliases redirect permanently (308) with the path kept. Preview deployments keep their own hosts.
+    async redirects() {
+      return [
+        'blog.matthelam.com',
+        'www.matthelam.com',
+        'matthelam-sitecore-blog.vercel.app',
+        'sitecore-blog-matthewlam.vercel.app',
+        'sitecore-blog-git-main-matthewlam.vercel.app',
+      ].map((host) => ({
+        source: '/:path*',
+        has: [{ type: 'host', value: host }],
+        destination: 'https://matthelam.com/:path*',
+        permanent: true,
+      }))
+    },
     async headers() {
       return [
         {

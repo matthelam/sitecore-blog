@@ -65,9 +65,9 @@ export const privacyPage: TrustPage = {
   path: 'privacy',
   title: 'Privacy',
   description:
-    'What blog.matthelam.com does with visitor data: Vercel Web Analytics, browser storage for the theme setting, local search, and no accounts, comments or newsletter.',
+    'What matthelam.com does with visitor data: Vercel Web Analytics, browser storage for the theme setting, local search, and no accounts, comments or newsletter.',
   intro:
-    "This is Matt Lam's personal blog at blog.matthelam.com. It has no accounts, no sign-up forms, no comments and no newsletter. This page describes what the site does with visitor data, based on how the site is built.",
+    "This is Matt Lam's personal blog at matthelam.com. It has no accounts, no sign-up forms, no comments and no newsletter. This page describes what the site does with visitor data, based on how the site is built.",
   sections: [
     {
       heading: 'Analytics',

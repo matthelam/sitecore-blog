@@ -7,7 +7,10 @@ const siteMetadata = {
     'Field notes on agentic Sitecore development by Matt Lam: Sitecore Agentic Studio, SitecoreAI and agent context engineering. Technical Architect at Aceik.',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://blog.matthelam.com',
+  siteUrl: 'https://matthelam.com',
+  // RSS guids stay on the host the feed was first published from, so moving the site to
+  // matthelam.com doesn't make feed readers show every post again as new.
+  feedGuidBase: 'https://blog.matthelam.com',
   siteRepo: 'https://github.com/matthelam/sitecore-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   // Optional explicit logo dimensions used by the Header component
