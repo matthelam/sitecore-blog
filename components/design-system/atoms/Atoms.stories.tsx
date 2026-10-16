@@ -27,7 +27,7 @@ export const Surfaces: Story = {
 
 export const Arrows: Story = {
   render: () => (
-    <div className="flex items-start gap-8 font-sans text-sm">
+    <div className="flex flex-wrap items-start gap-8 font-sans text-sm">
       <div className="flex flex-col items-center">
         <Eyebrow>down</Eyebrow>
         <Arrow />

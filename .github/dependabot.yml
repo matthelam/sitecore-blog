@@ -1,0 +1,11 @@
+# Security updates for npm dependencies are handled by Dependabot security updates (repo setting).
+# This file keeps the SHA-pinned GitHub Actions current, grouped into one weekly PR.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
