@@ -4,7 +4,8 @@ import { readFileSync } from 'node:fs'
 // For every story in the built Storybook, in light and dark (per project width):
 // - no console errors
 // - nothing wider than the viewport (no horizontal scroll at 390px)
-// - matches the committed screenshot (update with: yarn test:visual --update-snapshots)
+// - matches the committed screenshot (update with: yarn test:visual --update-snapshots).
+//   CI sets SKIP_SCREENSHOTS because the baselines are rendered on Windows.
 
 type Entry = { id: string; type: string; title: string; name: string }
 const index = JSON.parse(readFileSync('storybook-static/index.json', 'utf8')) as {
@@ -28,7 +29,9 @@ for (const story of stories) {
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth
       )
       expect(overflow, 'horizontal overflow (px)').toBeLessThanOrEqual(0)
-      await expect(page).toHaveScreenshot(`${story.id}-${theme}.png`, { fullPage: true })
+      if (!process.env.SKIP_SCREENSHOTS) {
+        await expect(page).toHaveScreenshot(`${story.id}-${theme}.png`, { fullPage: true })
+      }
     })
   }
 }
