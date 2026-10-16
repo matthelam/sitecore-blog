@@ -1,9 +1,9 @@
 ---
-title: "What CMS Development Taught Me About Agent Teams"
+title: "AI Agent Teams: What Sitecore CMS Development Taught Me"
 date: 2026-02-24
 draft: false
 tags: ['sitecore', 'agents', 'skills', 'context-engineering', 'agentic-sitecore']
-summary: "CMS developers do not build the website, and designing agent teams is the same: composable skills and hooks as workflow gates, not skills baked into agents."
+summary: "Designing AI agent teams like a CMS: single responsibility agents, skills on demand, and human in the loop approval gates like Sitecore workflow states."
 images: []
 authors: ['default']
 ---
@@ -85,7 +85,7 @@ That's exactly what my agents looked like. `frontend-dev` knew how to commit cod
 
 Duplication. Drift risk. Token cost. The same problems I'd solve in a Sitecore project without thinking twice.
 
-## The Right Way: Composable Agent Skills
+## The Right Way: Single-Responsibility Agents, Composable Skills
 
 In a mature Sitecore build, you don't embed image optimisation in every component. You extract it into a shared rendering extension — a pipeline processor that runs on every image request regardless of which component produced it. You extract caching into its own processor. You extract analytics into a page-level wrapper. Components stay focused on **what they render**. Shared concerns live in shared infrastructure.
 
@@ -134,13 +134,13 @@ The impact is significant across three dimensions:
 
 Thinking about skills this way also changes how you see parallelism. When skills are independent, well-separated units — proper OO boundaries rather than tangled embedded logic — the orchestrator can swarm. Multiple agents can pick up different skills and run concurrently without stepping on each other. That's not a feature you build. It's a property that emerges from designing the capability surface correctly.
 
-## Agent Hooks: The Workflow Gates
+## Agent Hooks: Workflow Gates, Like Sitecore Workflow States
 
 Skills define what agents can do. But there's a second design surface that's just as important: where the workflow **pauses and checks**.
 
-In Sitecore, this is workflow approval states. A content author writes a page, but it doesn't go live immediately. It moves through Draft → Awaiting Approval → Published. An editor reviews it. A compliance check runs. The workflow gates exist because even well-designed components can be assembled incorrectly — wrong tone, outdated pricing, broken links. The gates catch what the components can't prevent.
+In Sitecore, these are workflow states. A content author writes a page, but it doesn't go live immediately. It moves through Draft → Awaiting Approval → Published. An editor reviews it. A compliance check runs. The workflow gates exist because even well-designed components can be assembled incorrectly: wrong tone, outdated pricing, broken links. The gates catch what the components can't prevent.
 
-Agent workflows need the same thing. In my delivery engine, these are **hooks** — human gates and verification phases that pause execution at critical transitions. After the brief is written, a human reviews it before planning begins. After the plan is approved, execution proceeds. After execution completes, a verification phase checks the output against acceptance criteria before anything is marked done.
+Agent workflows need the same thing. In my delivery engine, these are **hooks**: human-in-the-loop approval gates and verification phases that pause execution at critical transitions. After the brief is written, a human reviews it before planning begins. After the plan is approved, execution proceeds. After execution completes, a verification phase checks the output against acceptance criteria before anything is marked done.
 
 <Figure caption="The gates sit at the transitions, not inside the work. Sitecore's approval state and the delivery engine's hooks both pause the workflow and check before it moves on.">
   <GatedFlow
@@ -164,7 +164,7 @@ Agent workflows need the same thing. In my delivery engine, these are **hooks** 
   />
 </Figure>
 
-Skills are **what** agents can do. Hooks are **when the workflow stops and asks whether they should**. And the design insight is the same: you're not designing what the agent produces. You're designing the transitions between phases. Where does the workflow pause? What gets checked? Who has authority to approve? These questions matter more than any individual agent's capability, because a brilliant agent with no workflow gates is just a faster way to ship mistakes.
+Skills are **what** agents can do. Hooks are **when the workflow stops and asks whether they should**. And the design insight is the same: you're not designing what the agent produces. You're designing the transitions between phases, the structured handoffs from brief to plan to execution to verification. Where does the workflow pause? What gets checked? Who has authority to approve? These questions matter more than any individual agent's capability, because a brilliant agent with no workflow gates is just a faster way to ship mistakes.
 
 ## The Real Lesson
 

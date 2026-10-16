@@ -588,16 +588,16 @@
    "path": "/blog/we-dont-build-the-website",
    "intent": "What can CMS development teach me about designing teams of AI agents?",
    "expected": [
-    "composable agent skills",
-    "agent skills",
-    "agent hooks",
-    "agent context engineering",
-    "multi-agent systems",
-    "agentic Sitecore development",
-    "AI-assisted Sitecore development",
-    "agent architecture",
-    "agent personas",
-    "Claude Code"
+    "AI agent teams",
+    "skills vs subagents",
+    "multi-agent orchestration",
+    "single responsibility agents",
+    "human in the loop approval",
+    "agentic CMS",
+    "Sitecore workflow states",
+    "structured agent handoffs",
+    "orchestrator-workers pattern",
+    "composable CMS"
    ],
    "included": true
   },
