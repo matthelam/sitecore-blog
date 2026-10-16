@@ -1,10 +1,10 @@
 # Constitution
 
-Matt Lam's technical blog (blog.matthelam.com): Next.js + Contentlayer + MDX, deployed on Vercel
+Matt Lam's technical blog (matthelam.com): Next.js + Contentlayer + MDX, deployed on Vercel
 from `main`. Matt brings the subject expertise; the agent shapes, writes up, builds and ships.
 
 This repository's agent context follows the Legal Framework
-(https://blog.matthelam.com/blog/a-legal-framework-for-agent-context):
+(https://matthelam.com/blog/a-legal-framework-for-agent-context):
 
 * **Constitution** (this file) — values and supreme laws. Global, loaded every
   session, the final fallback when everything else is ambiguous.

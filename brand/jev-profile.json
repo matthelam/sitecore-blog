@@ -1,8 +1,8 @@
 {
  "schema": "seo-jev-analyzer/profile@1",
- "name": "blog.matthelam.com",
- "domain": "blog.matthelam.com",
- "sitemapUrl": "https://blog.matthelam.com/sitemap.xml",
+ "name": "matthelam.com",
+ "domain": "matthelam.com",
+ "sitemapUrl": "https://matthelam.com/sitemap.xml",
  "pathFilter": "",
  "terms": [
   "Matt Lam",
@@ -116,7 +116,7 @@
  ],
  "pages": [
   {
-   "url": "https://blog.matthelam.com/",
+   "url": "https://matthelam.com/",
    "path": "/",
    "intent": "Who is Matt Lam and where can I read about agentic Sitecore development?",
    "expected": [
@@ -134,7 +134,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog",
+   "url": "https://matthelam.com/blog",
    "path": "/blog",
    "intent": "Where can I find all of Matt Lam's posts on agentic Sitecore development and agent context?",
    "expected": [
@@ -152,7 +152,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/projects",
+   "url": "https://matthelam.com/projects",
    "path": "/projects",
    "intent": "What agentic Sitecore tools and projects has Matt Lam built?",
    "expected": [
@@ -170,7 +170,7 @@
    "included": false
   },
   {
-   "url": "https://blog.matthelam.com/tags",
+   "url": "https://matthelam.com/tags",
    "path": "/tags",
    "intent": "What topics does Matt Lam write about across agentic Sitecore development?",
    "expected": [
@@ -188,7 +188,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/about",
+   "url": "https://matthelam.com/about",
    "path": "/about",
    "intent": "Who is Matt Lam, the Sitecore Technical Architect at Aceik, and what does he work on?",
    "expected": [
@@ -206,7 +206,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/01-SSO-Preparation",
+   "url": "https://matthelam.com/blog/01-SSO-Preparation",
    "path": "/blog/01-SSO-Preparation",
    "intent": "What do I need to collect from Azure Entra ID before configuring SSO for Sitecore Cloud services?",
    "expected": [
@@ -224,7 +224,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/02-SSO-Entra-ID-Setup",
+   "url": "https://matthelam.com/blog/02-SSO-Entra-ID-Setup",
    "path": "/blog/02-SSO-Entra-ID-Setup",
    "intent": "How do I set up an Entra ID enterprise application with SAML and group claims for Sitecore SSO?",
    "expected": [
@@ -242,7 +242,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/03-SSO-Sitecore-Cloud-Portal-Setup",
+   "url": "https://matthelam.com/blog/03-SSO-Sitecore-Cloud-Portal-Setup",
    "path": "/blog/03-SSO-Sitecore-Cloud-Portal-Setup",
    "intent": "How do I configure SAML SSO and role claims mapping in the Sitecore Cloud Portal?",
    "expected": [
@@ -260,7 +260,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/04-SSO-Content-Hub-Setup",
+   "url": "https://matthelam.com/blog/04-SSO-Content-Hub-Setup",
    "path": "/blog/04-SSO-Content-Hub-Setup",
    "intent": "How do I configure Azure Entra ID SAML SSO and group-to-role mapping for Sitecore Content Hub?",
    "expected": [
@@ -278,7 +278,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/How-to-use-Sitecore-Documentation-in-AI-to-get-better-results",
+   "url": "https://matthelam.com/blog/How-to-use-Sitecore-Documentation-in-AI-to-get-better-results",
    "path": "/blog/How-to-use-Sitecore-Documentation-in-AI-to-get-better-results",
    "intent": "How can Sitecore developers use official Sitecore documentation to give AI agents better context?",
    "expected": [
@@ -296,7 +296,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/The%20Leading%20Slash%20That%20Breaks%20Your%20Page%20Static%20vs%20Dynamic%20Placeholders%20in%20Sitecore",
+   "url": "https://matthelam.com/blog/The%20Leading%20Slash%20That%20Breaks%20Your%20Page%20Static%20vs%20Dynamic%20Placeholders%20in%20Sitecore",
    "path": "/blog/The%20Leading%20Slash%20That%20Breaks%20Your%20Page%20Static%20vs%20Dynamic%20Placeholders%20in%20Sitecore",
    "intent": "Why does a dynamic placeholder in Sitecore need a leading slash, and how do I find the DynamicPlaceholderId?",
    "expected": [
@@ -314,7 +314,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/a-legal-framework-for-agent-context",
+   "url": "https://matthelam.com/blog/a-legal-framework-for-agent-context",
    "path": "/blog/a-legal-framework-for-agent-context",
    "intent": "How can a Constitution, Legislation and Common Law structure give AI agents memory of experience at the point of ambiguity?",
    "expected": [
@@ -332,7 +332,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/agentic-studio-agent-export-is-lossy",
+   "url": "https://matthelam.com/blog/agentic-studio-agent-export-is-lossy",
    "path": "/blog/agentic-studio-agent-export-is-lossy",
    "intent": "Why are Agent Type and Tags empty after exporting and importing an agent in Sitecore Agentic Studio?",
    "expected": [
@@ -350,7 +350,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/agentic-studio-builder-license",
+   "url": "https://matthelam.com/blog/agentic-studio-builder-license",
    "path": "/blog/agentic-studio-builder-license",
    "intent": "Why can't I create agents in Sitecore Agentic Studio, and how do I assign a Builder License?",
    "expected": [
@@ -368,7 +368,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/agentic-studio-debug-pane-browser-caching",
+   "url": "https://matthelam.com/blog/agentic-studio-debug-pane-browser-caching",
    "path": "/blog/agentic-studio-debug-pane-browser-caching",
    "intent": "How do I open the debug console in Sitecore Agentic Studio?",
    "expected": [
@@ -386,7 +386,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/agentic-studio-scoped-memory-space",
+   "url": "https://matthelam.com/blog/agentic-studio-scoped-memory-space",
    "path": "/blog/agentic-studio-scoped-memory-space",
    "intent": "How can I keep a persistent memory of what I learn about Sitecore Agentic Studio as it changes?",
    "expected": [
@@ -404,7 +404,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/agentic-studio-widgets-do-not-export",
+   "url": "https://matthelam.com/blog/agentic-studio-widgets-do-not-export",
    "path": "/blog/agentic-studio-widgets-do-not-export",
    "intent": "Can I export widgets from Sitecore Agentic Studio to move them to Production?",
    "expected": [
@@ -422,7 +422,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/composing-agent-teams-by-cognitive-profile",
+   "url": "https://matthelam.com/blog/composing-agent-teams-by-cognitive-profile",
    "path": "/blog/composing-agent-teams-by-cognitive-profile",
    "intent": "How should I compose a team of AI agents by cognitive profile rather than by function?",
    "expected": [
@@ -440,7 +440,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/emerging-pattern-in-agentic-systems",
+   "url": "https://matthelam.com/blog/emerging-pattern-in-agentic-systems",
    "path": "/blog/emerging-pattern-in-agentic-systems",
    "intent": "Is there a design principle that stabilises agentic systems the way patterns stabilised web development?",
    "expected": [
@@ -458,7 +458,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/first-principles-in-agent-conversations-when-to-stop-accommodating-and-start-reasoning",
+   "url": "https://matthelam.com/blog/first-principles-in-agent-conversations-when-to-stop-accommodating-and-start-reasoning",
    "path": "/blog/first-principles-in-agent-conversations-when-to-stop-accommodating-and-start-reasoning",
    "intent": "How do I get an AI agent to stop accommodating and reason from first principles during design work?",
    "expected": [
@@ -476,7 +476,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/implementing-the-legal-framework",
+   "url": "https://matthelam.com/blog/implementing-the-legal-framework",
    "path": "/blog/implementing-the-legal-framework",
    "intent": "How is the Legal Framework for agent context built in Claude Code with tiers, scripts and a hook?",
    "expected": [
@@ -494,7 +494,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture",
+   "url": "https://matthelam.com/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture",
    "path": "/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture",
    "intent": "What is the difference between sub-agents, personas and skills in multi-agent systems?",
    "expected": [
@@ -512,7 +512,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/the-agent-as-customer-a-practical-build-guide",
+   "url": "https://matthelam.com/blog/the-agent-as-customer-a-practical-build-guide",
    "path": "/blog/the-agent-as-customer-a-practical-build-guide",
    "intent": "What do I need to build when the next customer of my service is an AI agent rather than a person?",
    "expected": [
@@ -530,7 +530,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/the-ai-project-lifecycle-hiding-in-plain-sight-inside-sitecore-agentic-studio",
+   "url": "https://matthelam.com/blog/the-ai-project-lifecycle-hiding-in-plain-sight-inside-sitecore-agentic-studio",
    "path": "/blog/the-ai-project-lifecycle-hiding-in-plain-sight-inside-sitecore-agentic-studio",
    "intent": "What is the AI project lifecycle inside Sitecore Agentic Studio, from Signals to Spaces?",
    "expected": [
@@ -548,7 +548,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/the-trinity-of-clarity-getting-the-results-you-want",
+   "url": "https://matthelam.com/blog/the-trinity-of-clarity-getting-the-results-you-want",
    "path": "/blog/the-trinity-of-clarity-getting-the-results-you-want",
    "intent": "Why do my AI agents get it wrong, and how do agent context, environment context and strong interaction fix it?",
    "expected": [
@@ -566,7 +566,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design",
+   "url": "https://matthelam.com/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design",
    "path": "/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design",
    "intent": "How should I structure agent context so agents load only what they need?",
    "expected": [
@@ -584,7 +584,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/we-dont-build-the-website",
+   "url": "https://matthelam.com/blog/we-dont-build-the-website",
    "path": "/blog/we-dont-build-the-website",
    "intent": "What can CMS development teach me about designing teams of AI agents?",
    "expected": [
@@ -602,7 +602,7 @@
    "included": true
   },
   {
-   "url": "https://blog.matthelam.com/blog/writing-agent-guidelines-that-actually-work",
+   "url": "https://matthelam.com/blog/writing-agent-guidelines-that-actually-work",
    "path": "/blog/writing-agent-guidelines-that-actually-work",
    "intent": "How do I write agent guidelines that actually change agent behaviour?",
    "expected": [
