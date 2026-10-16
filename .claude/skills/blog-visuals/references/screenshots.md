@@ -1,6 +1,6 @@
 # Screenshots
 
-How a screenshot is decided, captured, redacted, checked, annotated and placed. A screenshot can
+How a screenshot is decided, captured, sanitised, checked, annotated and placed. A screenshot can
 come up at any phase: listed in the inception brief's visual plan, captured during the write-up,
 or added when a reviewer asks "where is that setting?". The steps are the same whenever it happens.
 
@@ -16,7 +16,7 @@ caption, and it decides the crop: everything outside what the sentence needs is 
 
 ## 2. Capture
 
-Raw captures go to the session's scratchpad, **never into the repo**. Only the redacted file
+Raw captures go to the session's scratchpad, **never into the repo**. Only the sanitised file
 enters `public/static/`.
 
 | Source                                                         | Tool                                          | How                                                                                                                                                                                                        |
@@ -34,44 +34,63 @@ change can produce, stop and ask Matt to set it up.
 For the blog's own pages, Playwright's `colorScheme` drives the theme, because the site follows
 the system theme (`siteMetadata.theme: 'system'`).
 
-## 3. Redact
+## 3. Review and sanitise (mandatory)
 
-Redact before the file goes anywhere near the repo. Look for:
+Matt's rule (`public/static/CLAUDE.md` law 1): every screenshot goes through a security and
+privacy review, and its information is modified so it is sanitised and safe to display publicly.
+This step is never skipped, not even for a screenshot that looks harmless.
 
-- people's names, emails, avatars and initials;
-- tenant, organisation, project and environment names or IDs;
-- hostnames and internal URLs, including the browser's address bar, tabs and bookmarks;
-- tokens, keys, connection strings, anything secret-shaped;
-- client names, logos and anything that identifies an engagement;
-- Aceik-internal processes, pricing or staff.
+**Review** the raw capture against this checklist, at full size:
 
-Then run `scripts/redact.py` (Pillow only, already installed locally; not a CI dependency):
+- [ ] people's names, emails, avatars and initials
+- [ ] tenant, organisation, project and environment names or IDs (GUIDs included)
+- [ ] internal URLs and hostnames
+- [ ] API keys, tokens, connection strings, anything secret-shaped
+- [ ] client names and logos, anything that identifies an engagement
+- [ ] Aceik-internal data: processes, pricing, staff
+- [ ] anything readable in browser chrome: address bar, tabs, bookmarks, extensions, notifications
+
+**Sanitise** every item found. Each is redacted (a solid box), blurred (an avatar or logo only;
+blurred text can sometimes be recovered) or replaced with a neutral placeholder. Placeholders are
+best where the reader should see that a value exists. They come from the source when its data is
+already neutral, such as a test tenant whose users have `example.com` addresses (capture stays
+read-only, so never edit data to get them); otherwise box the value. The precedent
+`/static/images/agentic-studio-builder-license/cloud-portal-org-admins.png` shows both:
+`user.one@example.com` addresses and a box over the tenant name.
+
+The tool is `scripts/sanitise.py` (Pillow, pytesseract and Tesseract OCR, installed locally; not
+a CI dependency). It finds text by OCR, boxes what matches, adds your manual boxes, then re-checks:
 
 ```bash
-python .claude/skills/blog-visuals/scripts/redact.py <scratch>/raw.png <scratch>/check.png --box 120,340,260,22 --outline
-python .claude/skills/blog-visuals/scripts/redact.py <scratch>/raw.png public/static/images/<post-slug>/<name>.png --box 120,340,260,22
+python .claude/skills/blog-visuals/scripts/sanitise.py <scratch>/raw.png <scratch>/check.png --name "<person or client>" --box 900,40,48,48 --outline
+python .claude/skills/blog-visuals/scripts/sanitise.py <scratch>/raw.png public/static/images/<post-slug>/<name>.png --name "<person or client>" --box 900,40,48,48
 ```
 
-- Rectangles are `x,y,width,height` in the image's own pixels. A device-scale-2 capture has
-  twice the CSS pixels, so a `getBoundingClientRect()` box is doubled.
-- Run with `--outline` first and look at the result: every box must cover its target fully, with
-  a margin.
-- `--box` (solid fill, default grey, `--fill #RRGGBB` to match) for text. `--blur` only for things
-  that should still read as present, like an avatar; blurred text can sometimes be recovered.
-- Where the reader needs to see that a value exists, the existing precedent
-  (`/static/images/agentic-studio-builder-license/cloud-portal-org-admins.png`) shows the pattern:
-  a box over the tenant name, and placeholder addresses like `user.one@example.com`.
-- The output is a fresh PNG with no metadata.
+- **Automatic detection** reads the image twice (as captured and as a 2x greyscale upscale) and
+  boxes emails, GUIDs and other long IDs, URLs and hostnames, tokens and keys, and every word of a
+  `--name` (or `--names <file>`) entry. Hex IDs are matched after correcting common OCR misreads
+  (`O` for `0`, `/` for `7`). Reserved placeholder domains (`example.com`, `.test`) are left alone.
+- **Manual boxes** cover what OCR can't read: avatars, logos, initials in circles, small or
+  low-contrast text. `x,y,width,height` in the image's own pixels; a device-scale-2 capture has
+  twice the CSS pixels. `--blur x,y,w,h` for an avatar or logo.
+- **`--outline` first.** It draws what would be redacted. Look at it: every box covers its target
+  with a margin, and nothing the reader needs is covered (`--allow <word>` keeps a false match).
+- **The re-check is mandatory.** The script OCRs its own output and exits 2 if anything still
+  matches. Never commit after a failed re-check: add boxes and run again.
+- **OCR is not enough on its own.** Open the sanitised file at full size and go through the
+  checklist again by eye, zooming on every box and every block of small text.
+- The output is a fresh PNG with no metadata. Test the tool with
+  `python .claude/skills/blog-visuals/scripts/test_sanitise.py`.
 
-Open the redacted file and read it at full size, zooming on every box, before step 4.
+Keep the script's summary (`detected email ... at x,y`): it is what step 6 reports in the PR.
 
 ## 4. Privacy check
 
 `public/static/CLAUDE.md` law 1 and Constitution law 1: anything here is downloadable by anyone.
-Read the redacted image as a stranger would, plus its file name, alt text and caption. Anything
-left from the list in step 3, or anything else that makes you hesitate, is a **PENDING ACTION**
-for Matt: what was found, where in the image, and the options (approve as is, redact more,
-re-capture, drop the screenshot). Don't commit until he decides.
+Read the sanitised image as a stranger would, plus its file name, alt text and caption. Anything
+left from the checklist, anything you're unsure about, or anything else that makes you hesitate is
+a **PENDING ACTION** for Matt: what was found, where in the image, and the options (approve as
+is, sanitise more, re-capture, drop the screenshot). Don't commit until he decides.
 
 ## 5. Annotate
 
@@ -98,6 +117,8 @@ Until it exists, refer to parts of the screenshot in the prose or a list under t
 
   Keep the blank lines inside `<Figure>`, or MDX won't parse the Markdown image.
 
+- In the PR description, say what was sanitised in each image and why ("3 emails and the tenant
+  ID boxed; avatar blurred"), never the values themselves (`public/static/CLAUDE.md` law 5).
 - Check it at 390px wide in light and dark (`yarn dev`, then the verification checklist in
   `architecture.md`). A 1280px capture shrunk to a phone often makes its text unreadable: crop
   tighter, or capture the 390px layout as well.

@@ -19,13 +19,13 @@ conventions are in `references/architecture.md`; read it before writing or chang
    sentence says it faster, write the sentence. If a three-column table says it, use the table.
 2. **Pick the kind.**
 
-   | The reader needs to…                                                              | Kind               | How                                                                         |
-   | --------------------------------------------------------------------------------- | ------------------ | --------------------------------------------------------------------------- |
-   | See a structure or flow at a glance                                               | **Static diagram** | Inline `<svg>` in the MDX, or an `.svg` under `/static/images/<post-slug>/` |
-   | Compare quantities or see change over time                                        | **Chart**          | Load the `dataviz` skill and follow its procedure                           |
-   | Move through an ordered sequence one step at a time                               | **Step-through**   | `StepThrough` component                                                     |
-   | Change an input and watch the outcome change                                      | **Explorable**     | Reuse a component, or propose a new one                                     |
-   | Recognise a real screen they will meet: where a setting lives, what a column says | **Screenshot**     | Capture, redact, privacy-check and place: `references/screenshots.md`       |
+   | The reader needs to…                                                              | Kind               | How                                                                                            |
+   | --------------------------------------------------------------------------------- | ------------------ | ---------------------------------------------------------------------------------------------- |
+   | See a structure or flow at a glance                                               | **Static diagram** | Inline `<svg>` in the MDX, or an `.svg` under `/static/images/<post-slug>/`                    |
+   | Compare quantities or see change over time                                        | **Chart**          | Load the `dataviz` skill and follow its procedure                                              |
+   | Move through an ordered sequence one step at a time                               | **Step-through**   | `StepThrough` component                                                                        |
+   | Change an input and watch the outcome change                                      | **Explorable**     | Reuse a component, or propose a new one                                                        |
+   | Recognise a real screen they will meet: where a setting lives, what a column says | **Screenshot**     | Capture, review and sanitise (mandatory), privacy-check and place: `references/screenshots.md` |
 
    A screenshot shows the real product UI a reader will meet; a diagram explains a mechanism. If
    the reader needs to find the thing, show it; if they need to understand how it works, draw it.
@@ -82,5 +82,5 @@ work is concerned.
 - Use colour as the only signal of state.
 - Add motion that runs without the reader acting, or ignore reduced-motion preferences.
 - Replace an author's existing diagram in a published post without the author's approval.
-- Commit an unredacted screenshot, or click anything that changes data or settings in a logged-in
-  tool while capturing one.
+- Commit a screenshot that hasn't been reviewed, sanitised and re-checked, or click anything that
+  changes data or settings in a logged-in tool while capturing one.
