@@ -296,8 +296,8 @@
    "included": true
   },
   {
-   "url": "https://matthelam.com/blog/The%20Leading%20Slash%20That%20Breaks%20Your%20Page%20Static%20vs%20Dynamic%20Placeholders%20in%20Sitecore",
-   "path": "/blog/The%20Leading%20Slash%20That%20Breaks%20Your%20Page%20Static%20vs%20Dynamic%20Placeholders%20in%20Sitecore",
+   "url": "https://matthelam.com/blog/sitecore-placeholder-leading-slash",
+   "path": "/blog/sitecore-placeholder-leading-slash",
    "intent": "Why does a dynamic placeholder in Sitecore need a leading slash, and how do I find the DynamicPlaceholderId?",
    "expected": [
     "Sitecore dynamic placeholders",

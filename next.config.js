@@ -93,12 +93,22 @@ module.exports = () => {
         'matthelam-sitecore-blog.vercel.app',
         'sitecore-blog-matthewlam.vercel.app',
         'sitecore-blog-git-main-matthewlam.vercel.app',
-      ].map((host) => ({
-        source: '/:path*',
-        has: [{ type: 'host', value: host }],
-        destination: 'https://matthelam.com/:path*',
-        permanent: true,
-      }))
+      ]
+        .map((host) => ({
+          source: '/:path*',
+          has: [{ type: 'host', value: host }],
+          destination: 'https://matthelam.com/:path*',
+          permanent: true,
+        }))
+        .concat([
+          // A post's first slug had spaces in it; its old URL keeps working.
+          {
+            source:
+              '/blog/The%20Leading%20Slash%20That%20Breaks%20Your%20Page%20Static%20vs%20Dynamic%20Placeholders%20in%20Sitecore',
+            destination: '/blog/sitecore-placeholder-leading-slash',
+            permanent: true,
+          },
+        ])
     },
     async headers() {
       return [
