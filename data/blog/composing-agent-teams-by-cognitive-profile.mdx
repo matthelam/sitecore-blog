@@ -1,76 +1,418 @@
 ---
-title: "How to Compose AI Agent Teams by Cognitive Profile"
+title: 'How to Compose AI Agent Teams by Cognitive Profile'
 date: '2026-03-04'
+lastmod: 2026-10-16
 tags: ['agents', 'context-engineering', 'multi-agent', 'claude-code']
 draft: false
-summary: "Compose a team of AI agents by cognitive profile (how they think), not function. Covers weighted traits, reasoning-mode escalation and the orchestrator problem."
+summary: 'Compose a team of AI agents by cognitive profile (how they think), not function. Covers weighted traits, reasoning-mode escalation and the orchestrator problem.'
 authors: ['default']
 layout: PostLayout
 ---
 
-Most agent teams are org charts. A coder, a reviewer, a planner, maybe a security specialist. Assign a function, give it a prompt, wire them together. It's the same structure as a human dev team, just faster and cheaper.
+An agent used to be one big prompt: who it is, what it knows, what it does and how it does it, all in one place. That's no longer how I build them.
 
-I built my first agent team this way. It worked the way org charts always work — everyone did their job, nobody did the thinking that falls between jobs. The frontend agent wrote components. The review agent checked them. Neither one stopped to ask whether the component should exist at all.
+What an agent does and knows now belongs in [skills](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture), loaded when the task needs them. How it does the work is set up in the harness, on the tools: the hooks, scripts and checks that run whether the agent remembers them or not. What's left for the agent definition itself is **how it thinks**, and that's what this post is about.
 
-The problem isn't the agents. It's the composition model. Functional decomposition tells you _what_ each agent does. It says nothing about _how_ each agent thinks. And the "how" is what determines whether the team produces mechanical output or considered work.
+Most agent teams are org charts: a coder, a reviewer, a planner, maybe a security specialist. You assign a function, give it a prompt and wire them together. It's the same structure as a human dev team, just faster and cheaper.
+
+I built my first agent team this way. It worked the way org charts always work. Everyone did their job, and nobody did the thinking that falls between jobs. The frontend agent wrote components. The review agent checked them. Neither one stopped to ask whether the component should exist at all.
+
+I don't think the agents were the problem. The composition model was. Functional decomposition tells you _what_ each agent does, but it says nothing about _how_ each agent thinks, and the "how" is what decides whether the team produces mechanical output or considered work.
 
 ## Cognitive profile is the useful axis
 
 When I started treating agents as cognitive profiles rather than functional roles, the team changed.
 
-A functional label says "frontend-dev writes React components." A cognitive profile says "frontend-dev defaults to implementation-mode thinking, with a low weighting toward first-principles reasoning." That second description tells you something about the agent's decision boundaries — when it should act, when it should escalate, and what kind of problem it's suited to handle.
+A functional label says "frontend-dev writes React components." A cognitive profile says "frontend-dev defaults to implementation-mode thinking, with a low weighting toward first-principles reasoning." That second description tells you something about the agent's decision boundaries: when it should act, when it should escalate, and what kind of problem it's suited to handle.
 
-I wrote about [three dimensions of agent context](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design) previously — posture, standards, and specialist knowledge. Cognitive profile sits in that first dimension. It's not what the agent knows. It's the shape of the agent's thinking, and it determines how the agent _uses_ what it knows.
+I wrote about [three dimensions of agent context](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design) previously: posture, standards and specialist knowledge. Cognitive profile sits in that first dimension. It isn't what the agent knows. It's the shape of the agent's thinking, and it decides how the agent _uses_ what it knows.
 
 ## Borrowed from Deloitte, applied to agents
 
-This isn't a new idea. Deloitte's [Business Chemistry](https://www.deloitte.com/us/en/services/consulting/services/business-chemistry.html) framework classifies people into four working styles: Pioneer (possibility-oriented, big-picture), Guardian (stability-oriented, detail-driven), Driver (challenge-oriented, results-focused), and Integrator (connection-oriented, consensus-building).
+This isn't a new idea. Deloitte's [Business Chemistry](https://www.deloitte.com/us/en/services/consulting/services/business-chemistry.html) framework classifies people into four working styles: Pioneer (possibility-oriented, big-picture), Guardian (stability-oriented, detail-driven), Driver (challenge-oriented, results-focused) and Integrator (connection-oriented, consensus-building).
 
-Everyone is a blend. Everyone has a primary and a secondary. The model doesn't box people into types — it describes their default cognitive stance and the traits they fall back on under pressure.
+Everyone is a blend, with a primary and a secondary. The model doesn't box people into types. It describes their default cognitive stance and the traits they fall back on under pressure.
 
-Agent teams work the same way:
+I've found agent teams work the same way:
 
-- My **architect agent** leads with first-principles reasoning. Questions assumptions, decomposes problems, challenges the brief before anything gets built. Pioneer-Driver blend.
-- My **frontend-dev** leads with implementation. Builds what's specified, follows established patterns, ships code. Guardian-Driver blend.
-- My **code reviewer** leads with evaluation. Checks consistency against project conventions, catches drift from agreed patterns. Guardian-Integrator blend.
-- My **security auditor** leads with adversarial thinking. Traces data flows, looks for what could break. Driver with a Guardian secondary.
+- My **architect agent** leads with first-principles reasoning. It questions assumptions, decomposes problems and challenges the brief before anything gets built. Pioneer-Driver blend.
+- My **frontend-dev** leads with implementation. It builds what's specified, follows established patterns and ships code. Guardian-Driver blend.
+- My **code reviewer** leads with evaluation. It checks consistency against project conventions and catches drift from agreed patterns. Guardian-Integrator blend.
+- My **security auditor** leads with adversarial thinking. It traces data flows and looks for what could break. Guardian with a Driver secondary.
 
-Different cognitive shapes, not different levels of capability. The reviewer isn't a lesser architect. The developer isn't a lesser reviewer. They're weighted differently because the work demands different default modes.
+These are different cognitive shapes, not different levels of capability. The reviewer isn't a lesser architect, and the developer isn't a lesser reviewer. They're weighted differently because the work needs different default modes.
 
-The distinction matters when the work demands a thinking mode the current agent isn't weighted toward.
+That matters most when the work needs a thinking mode the current agent isn't weighted toward.
+
+To make the blends easier to feel, I've put the four styles on a matrix. Drag the dot and the profile swings. What the agent prioritises and deprioritises comes from the twelve cognitive dimensions I use to describe how an agent thinks, each with a low and a high end, blended by how close the dot sits to each style.
+
+<Figure caption="Drag the dot. Names label regions, not a taxonomy: the twelve dimensions shift continuously, and the mapping onto Business Chemistry is illustrative. The behaviour is real; the trait behind it is not.">
+  <ProfileMatrix
+    label="Business Chemistry matrix: drag or click to profile an agent and see how it weighs what it reads"
+    styles={[
+      {
+        name: 'Pioneer',
+        gist: 'possibility, big picture',
+        thinks: [
+          'Should this exist at all, and what else could it be?',
+          'What is this really for, and where will it be in a year?',
+        ],
+        asSecondary: 'It also keeps one eye on a bigger possibility than the brief.',
+        leanings: {
+          'Attention Granularity': 0.2,
+          'Entropy Tolerance': 0.9,
+          'Causal Depth': 0.8,
+          'Temporal Horizon': 0.9,
+          'Assertion Drive': 0.6,
+          'Reversibility Sensitivity': 0.2,
+          'Coherence Need': 0.3,
+          'Compression Instinct': 0.5,
+          'Initiation Threshold': 0.2,
+          'Completion Drive': 0.3,
+          'Pattern Projection': 0.2,
+          'Relational Awareness': 0.4,
+        },
+      },
+      {
+        name: 'Driver',
+        gist: 'challenge, results',
+        thinks: [
+          "What's the fastest path to done?",
+          'What decision is blocking us, and can I make it now?',
+        ],
+        asSecondary: 'It also pushes to close the work rather than leave it open.',
+        leanings: {
+          'Attention Granularity': 0.4,
+          'Entropy Tolerance': 0.6,
+          'Causal Depth': 0.4,
+          'Temporal Horizon': 0.3,
+          'Assertion Drive': 0.9,
+          'Reversibility Sensitivity': 0.2,
+          'Coherence Need': 0.5,
+          'Compression Instinct': 0.8,
+          'Initiation Threshold': 0.2,
+          'Completion Drive': 0.9,
+          'Pattern Projection': 0.6,
+          'Relational Awareness': 0.2,
+        },
+      },
+      {
+        name: 'Guardian',
+        gist: 'stability, detail',
+        thinks: [
+          'What exactly does the spec say, and does this match it?',
+          'What could this break, and can we undo it?',
+        ],
+        asSecondary: 'It also checks the detail before it lets anything through.',
+        leanings: {
+          'Attention Granularity': 0.9,
+          'Entropy Tolerance': 0.2,
+          'Causal Depth': 0.6,
+          'Temporal Horizon': 0.5,
+          'Assertion Drive': 0.3,
+          'Reversibility Sensitivity': 0.9,
+          'Coherence Need': 0.9,
+          'Compression Instinct': 0.4,
+          'Initiation Threshold': 0.8,
+          'Completion Drive': 0.5,
+          'Pattern Projection': 0.8,
+          'Relational Awareness': 0.4,
+        },
+      },
+      {
+        name: 'Integrator',
+        gist: 'connection, consensus',
+        thinks: [
+          'Who else does this touch, and are they on board?',
+          'Which of us is best placed to take the next step?',
+        ],
+        asSecondary: 'It also considers who else the work affects.',
+        leanings: {
+          'Attention Granularity': 0.4,
+          'Entropy Tolerance': 0.6,
+          'Causal Depth': 0.4,
+          'Temporal Horizon': 0.6,
+          'Assertion Drive': 0.2,
+          'Reversibility Sensitivity': 0.6,
+          'Coherence Need': 0.4,
+          'Compression Instinct': 0.2,
+          'Initiation Threshold': 0.6,
+          'Completion Drive': 0.3,
+          'Pattern Projection': 0.4,
+          'Relational Awareness': 0.9,
+        },
+      },
+    ]}
+    dimensions={[
+      {
+        name: 'Attention Granularity',
+        low: 'broad strokes, big picture',
+        high: 'pixel-level detail, line by line',
+      },
+      {
+        name: 'Entropy Tolerance',
+        low: 'demands clarity before acting',
+        high: 'works productively in mess',
+      },
+      {
+        name: 'Causal Depth',
+        low: 'surface cause, fix the symptom',
+        high: 'root cause chains, fix the system',
+      },
+      {
+        name: 'Temporal Horizon',
+        low: 'immediate task only',
+        high: 'long-term consequences, historical patterns',
+      },
+      {
+        name: 'Assertion Drive',
+        low: 'hedges, qualifies, asks',
+        high: 'declares, commits, decides',
+      },
+      {
+        name: 'Reversibility Sensitivity',
+        low: 'acts boldly, fixes forward',
+        high: 'prefers reversible steps, cautious commits',
+      },
+      {
+        name: 'Coherence Need',
+        low: 'tolerates contradictions',
+        high: 'flags every inconsistency',
+      },
+      {
+        name: 'Compression Instinct',
+        low: 'preserves nuance and detail',
+        high: 'terse, dense output',
+      },
+      {
+        name: 'Initiation Threshold',
+        low: 'moves fast, asks forgiveness',
+        high: 'plans thoroughly, asks permission',
+      },
+      {
+        name: 'Completion Drive',
+        low: 'comfortable leaving work in progress',
+        high: 'pushes to close, ships aggressively',
+      },
+      {
+        name: 'Pattern Projection',
+        low: 'treats each situation as novel',
+        high: 'fast pattern-matching, reuses solutions',
+      },
+      {
+        name: 'Relational Awareness',
+        low: 'focuses on its own deliverable',
+        high: 'considers ripple effects across systems',
+      },
+    ]}
+    names={{
+      Pioneer: 'Research Spike agent',
+      'Pioneer|Driver': 'Software Architect',
+      'Pioneer|Integrator': 'Product Designer',
+      Driver: 'Delivery Lead',
+      'Driver|Pioneer': 'Prototype Builder',
+      'Driver|Guardian': 'Release Manager',
+      Guardian: 'Test Engineer',
+      'Guardian|Driver': 'Frontend Developer',
+      'Guardian|Integrator': 'Code Reviewer',
+      Integrator: 'Orchestrator',
+      'Integrator|Guardian': 'Technical Writer',
+      'Integrator|Pioneer': 'Business Analyst',
+    }}
+    balanced={{
+      name: 'Balanced: no strong default',
+      note: 'Every style pulls about equally, so nothing dominates. An agent like this needs a very clear brief, because it has no default way to resolve a hard call.',
+    }}
+  />
+</Figure>
 
 ## Traits are weighted, not binary
 
-Every agent has every trait. The weighting determines the default, not the boundary.
+Every agent has every trait. The weighting sets the default, not the boundary.
 
-My architect agent has first-principles reasoning weighted at around 85%. That's its primary mode — when uncertain, it reasons from fundamentals. My frontend-dev has the same trait weighted at around 20%. It _can_ reason from first principles. It shouldn't default to it, because most of its work is implementation where [first-principles thinking](/blog/first-principles-in-agent-conversations-when-to-stop-accommodating-and-start-reasoning) would be expensive overhead.
+My architect agent has first-principles reasoning weighted at around 85%. That's its primary mode: when it's uncertain, it reasons from fundamentals. My frontend-dev has the same trait weighted at around 20%. It _can_ reason from first principles, but it shouldn't default to it, because most of its work is implementation where [first-principles thinking](/blog/first-principles-in-agent-conversations-when-to-stop-accommodating-and-start-reasoning) would be expensive overhead.
 
-But that 20% is doing real work. It gives the frontend-dev the capacity to recognise when implementation-mode thinking isn't enough. When the component structure doesn't fit the data shape. When the state management pattern is fighting the feature requirements. When what was asked for doesn't match what the codebase actually needs. The developer doesn't resolve these — it recognises them. That recognition is the trait doing its job at 20%.
+That 20% is still doing real work. It gives the frontend-dev the capacity to recognise when implementation-mode thinking isn't enough: when the component structure doesn't fit the data shape, when the state management pattern is fighting the feature requirements, or when what was asked for doesn't match what the codebase actually needs. The developer doesn't resolve these. It recognises them, and that recognition is the trait doing its job at 20%.
+
+## Same skill, different thinking
+
+This is where the split between skills and profiles shows up. Give four agents the same skill and the same prompt, and they don't do the same work. The skill tells each of them how to build an atomic component. Their profile decides what they notice first, and what they never think to question.
+
+An implementer will see the prompt and drill down, but it won't stop to ask whether the component should be there at all. That's not a flaw in the skill, and it's not a flaw in the agent either. It's the profile doing exactly what it was weighted to do.
+
+There's a benefit in this too. When every agent references the same skill, we get a level of consistency we may not have had before, because all of them are working off the same context. They're simply applying it, or thinking about it, in a different way - the way they should.
+
+<Figure caption="The same skill and the same prompt, read by four profiles. The responses are illustrative, written to show each profile's default thinking.">
+  <PerspectiveTabs
+    label="One skill, one prompt, four cognitive profiles"
+    context={[
+      { label: 'Skill', value: 'Build atomic components with Radix UI and Tailwind' },
+      { label: 'Prompt', value: 'Add a Tooltip atom for the icon buttons.' },
+    ]}
+    perspectives={[
+      {
+        name: 'Frontend Developer',
+        tag: 'Guardian–Driver',
+        rows: [
+          { label: 'Reads it as', text: 'A build task with a clear spec.' },
+          {
+            label: 'First move',
+            text: 'Drills into the Radix Tooltip primitive, wraps it as an atom on the theme tokens, adds the variants and a story.',
+          },
+          { label: "Doesn't ask", text: 'Whether a tooltip should be there at all.' },
+        ],
+      },
+      {
+        name: 'Software Architect',
+        tag: 'Pioneer–Driver',
+        rows: [
+          { label: 'Reads it as', text: 'A design decision hiding inside a build task.' },
+          {
+            label: 'First move',
+            text: 'Asks whether the icon buttons need tooltips, or whether visible labels or accessible names would serve better, and whether a tooltip belongs at the atom layer.',
+          },
+          {
+            label: "Doesn't ask",
+            text: 'Which Tailwind classes to use. That detail is for later, or for someone else.',
+          },
+        ],
+      },
+      {
+        name: 'Code Reviewer',
+        tag: 'Guardian–Integrator',
+        rows: [
+          { label: 'Reads it as', text: 'A change to an existing family of atoms.' },
+          {
+            label: 'First move',
+            text: 'Checks the new atom against the existing ones: API shape, naming, tokens and stories, and flags anything that drifts from the agreed patterns.',
+          },
+          {
+            label: "Doesn't ask",
+            text: 'Whether the design system needs a tooltip in the first place.',
+          },
+        ],
+      },
+      {
+        name: 'Security Auditor',
+        tag: 'Guardian with a Driver secondary',
+        rows: [
+          { label: 'Reads it as', text: 'A new place where content gets rendered.' },
+          {
+            label: 'First move',
+            text: 'Traces what the tooltip can display, checks it never renders untrusted HTML, finds little risk, and says so.',
+          },
+          { label: "Doesn't ask", text: 'How it looks, or whether it matches the other atoms.' },
+        ],
+      },
+    ]}
+    note="Illustrative: written to show each profile's default thinking, not recorded agent output."
+  />
+</Figure>
+
+---
 
 ## Escalation is a reasoning-mode hierarchy
 
-This is where composition by cognitive profile pays off. When the frontend-dev hits a problem that exceeds its first-principles weighting, the work flows to the agent with a higher weighting of that trait. Not because the developer failed. Because it correctly identified that the moment requires a different cognitive mode.
+This is where composition by cognitive profile pays off. When the frontend-dev hits a problem that exceeds its first-principles weighting, the work flows to the agent with a higher weighting of that trait. That isn't the developer failing. It has correctly identified that the moment needs a different cognitive mode.
 
 The escalation pattern maps to the trait hierarchy:
 
-- **Implementation uncertainty** — peer consult. Another agent with similar weighting, different domain knowledge.
-- **Design uncertainty** — architect. Higher first-principles weighting.
-- **Requirement uncertainty** — human gate. No agent has sufficient context.
+- **Implementation uncertainty:** peer consult. Another agent with similar weighting and different domain knowledge.
+- **Design uncertainty:** architect. Higher first-principles weighting.
+- **Requirement uncertainty:** human gate. No agent has enough context.
 
-Each tier matches the kind of thinking the problem demands. Peer consultation solves "how do I build this?" Design escalation solves "should I build this?" Human gates solve "what are we actually trying to do?"
+Each tier matches the kind of thinking the problem needs. Peer consultation answers "how do I build this?" Design escalation answers "should I build this?" Human gates answer "what are we actually trying to do?"
 
-The 20% first-principles weighting in the developer is what makes the chain work. Without it, the developer would implement its way through design problems — producing code that technically runs and architecturally misses. The trait weighting doesn't give the developer the answer. It gives it the self-awareness to stop.
+The 20% first-principles weighting in the developer is what makes the chain work. Without it, the developer would implement its way through design problems, producing code that technically runs and architecturally misses. The weighting doesn't give the developer the answer. It gives it the self-awareness to stop.
 
 ## The orchestrator problem
 
-The hardest agent to define is the one that decides which cognitive profile the moment needs. Not a router mapping task types to agents. A genuine orchestrator that reads the shape of the current problem and recognises whether it needs implementation thinking, analytical thinking, or a human decision.
+The hardest agent to define is the one that decides which cognitive profile the moment needs: whether it needs someone to build, someone to question or someone to decide. I don't have this solved, though I think of it as the Integrator in Deloitte's model, optimised for the transitions between modes rather than any one of them.
 
-I don't have this solved. What I have is the recognition that the orchestrator isn't another functional role — it's the agent with the widest trait distribution and the lowest confidence threshold. It's the Integrator in Deloitte's model. The one that sees across profiles and knows when to bring in the Pioneer, when to let the Guardian run, and when to get out of the way.
+I also don't think the problem is as severe as I used to make it sound. When people filled these roles, the delivery lead or the lead architect was still a person who could make mistakes and judgement calls. The point of an orchestrator isn't to be flawless. It's to bring consistency to those line-call decisions, and to be the place where the buck stops. In practice, I've used Claude Fable or Opus for it, especially since the 5 releases.
 
-The orchestrator doesn't need to be the smartest agent. It needs to be the most situationally aware. It reads whether the current moment needs someone to build, someone to question, or someone to decide — and it routes accordingly. Every other agent is optimised for a mode. The orchestrator is optimised for transitions between modes.
+Back to the org chart I started with. Here's a scrum team, with each role profiled on the same matrix. A scrum team isn't a hierarchy, so the Product Owner, the Scrum Master and the Developers sit side by side.
+
+<Figure caption="A scrum team profiled on the matrix above. Each role's profile is taken from its point on the matrix, simplified to what it thinks first, what it prioritises and what it defocuses.">
+  <TeamProfiles
+    label="A scrum team by cognitive profile"
+    hint="Hover, focus or tap a role to see its profile."
+    thinksLabel="Thinks first"
+    prioritisesLabel="Prioritises"
+    defocusesLabel="Defocuses"
+    groups={[
+      {
+        name: 'Product Owner',
+        roles: [
+          {
+            name: 'Product Owner',
+            profile: 'Product Designer (Pioneer–Integrator)',
+            thinks: 'Should this exist at all, and what else could it be?',
+            prioritises: ['working in ambiguity', 'the long view', 'root causes'],
+            defocuses: ['detail', 'reusing patterns', 'finishing'],
+          },
+        ],
+      },
+      {
+        name: 'Scrum Master',
+        roles: [
+          {
+            name: 'Scrum Master',
+            profile: 'Orchestrator (strongly Integrator)',
+            thinks: 'Who else does this touch, and are they on board?',
+            prioritises: ['ripple effects', 'the long view', 'working in ambiguity'],
+            defocuses: ['brevity', 'making the call', 'finishing'],
+          },
+        ],
+      },
+      {
+        name: 'Developers',
+        roles: [
+          {
+            name: 'Architect',
+            profile: 'Software Architect (Pioneer–Driver)',
+            thinks: 'Should this exist at all, and what else could it be?',
+            prioritises: ['working in ambiguity', 'making the call', 'brevity'],
+            defocuses: ['planning first', 'reversible steps', 'ripple effects'],
+          },
+          {
+            name: 'Frontend Developer',
+            profile: 'Guardian, leaning Driver',
+            thinks: 'What exactly does the spec say, and does this match it?',
+            prioritises: ['consistency', 'reusing patterns', 'detail'],
+            defocuses: ['ripple effects', 'working in ambiguity', 'the long view'],
+          },
+          {
+            name: 'Code Reviewer',
+            profile: 'Guardian–Integrator',
+            thinks: 'What exactly does the spec say, and does this match it?',
+            prioritises: ['reversible steps', 'planning first', 'consistency'],
+            defocuses: ['making the call', 'brevity', 'working in ambiguity'],
+          },
+          {
+            name: 'Tester',
+            profile: 'Test Engineer (strongly Guardian)',
+            thinks: 'What exactly does the spec say, and does this match it?',
+            prioritises: ['consistency', 'reversible steps', 'detail'],
+            defocuses: ['working in ambiguity', 'making the call', 'brevity'],
+          },
+          {
+            name: 'Security',
+            profile: 'Security Auditor (Guardian, with a Driver secondary)',
+            thinks: 'What could this break, and can we undo it?',
+            prioritises: ['consistency', 'detail', 'reversible steps'],
+            defocuses: ['working in ambiguity', 'ripple effects', 'making the call'],
+          },
+        ],
+      },
+    ]}
+  />
+</Figure>
+
+---
 
 ## The pattern
 
-Compose agent teams by how they think, not what they do. Give every agent every trait at different weightings. Let the weightings determine defaults and escalation boundaries. Build the hierarchy around reasoning modes, not reporting lines.
+Define an agent by how it thinks. Put what it does and knows in skills, and how it does it in the harness. Then compose the team by thinking profile: give every agent every trait at different weightings, let the weightings set defaults and escalation boundaries, and build the hierarchy around reasoning modes rather than reporting lines.
 
 Your agents, your weightings, your boundaries. The idea is that cognitive profile is the useful composition axis. How you apply it is yours.

@@ -4,8 +4,11 @@ import AnnotatedScreenshot from './AnnotatedScreenshot'
 import GatedFlow from './GatedFlow'
 import LayerParallel from './LayerParallel'
 import MandateCheckout from './MandateCheckout'
+import PerspectiveTabs from './PerspectiveTabs'
+import ProfileMatrix from './ProfileMatrix'
 import SkillComposition from './SkillComposition'
 import StepThrough from './StepThrough'
+import TeamProfiles from './TeamProfiles'
 
 // Organisms inside their Figure, with the props the published posts pass. The stories copy
 // those props; the posts stay the source of the facts.
@@ -221,6 +224,347 @@ export const AnnotatedScreenshotStory: Story = {
           { x: 16, y: 25.5, label: 'Sidebar item', detail: 'The third entry in the navigation.' },
           { x: 73.5, y: 32.8, label: 'Column header' },
           { x: 91.8, y: 41.2, label: 'Row menu', detail: 'One per row.' },
+        ]}
+      />
+    </Figure>
+  ),
+}
+
+export const ProfileMatrixStory: Story = {
+  name: 'ProfileMatrix (How to Compose AI Agent Teams by Cognitive Profile)',
+  render: () => (
+    <Figure caption="Drag the dot. Names label regions, not a taxonomy: the twelve dimensions shift continuously, and the mapping onto Business Chemistry is illustrative. The behaviour is real; the trait behind it is not.">
+      <ProfileMatrix
+        label="Business Chemistry matrix: drag or click to profile an agent and see how it weighs what it reads"
+        styles={[
+          {
+            name: 'Pioneer',
+            gist: 'possibility, big picture',
+            thinks: [
+              'Should this exist at all, and what else could it be?',
+              'What is this really for, and where will it be in a year?',
+            ],
+            asSecondary: 'It also keeps one eye on a bigger possibility than the brief.',
+            leanings: {
+              'Attention Granularity': 0.2,
+              'Entropy Tolerance': 0.9,
+              'Causal Depth': 0.8,
+              'Temporal Horizon': 0.9,
+              'Assertion Drive': 0.6,
+              'Reversibility Sensitivity': 0.2,
+              'Coherence Need': 0.3,
+              'Compression Instinct': 0.5,
+              'Initiation Threshold': 0.2,
+              'Completion Drive': 0.3,
+              'Pattern Projection': 0.2,
+              'Relational Awareness': 0.4,
+            },
+          },
+          {
+            name: 'Driver',
+            gist: 'challenge, results',
+            thinks: [
+              "What's the fastest path to done?",
+              'What decision is blocking us, and can I make it now?',
+            ],
+            asSecondary: 'It also pushes to close the work rather than leave it open.',
+            leanings: {
+              'Attention Granularity': 0.4,
+              'Entropy Tolerance': 0.6,
+              'Causal Depth': 0.4,
+              'Temporal Horizon': 0.3,
+              'Assertion Drive': 0.9,
+              'Reversibility Sensitivity': 0.2,
+              'Coherence Need': 0.5,
+              'Compression Instinct': 0.8,
+              'Initiation Threshold': 0.2,
+              'Completion Drive': 0.9,
+              'Pattern Projection': 0.6,
+              'Relational Awareness': 0.2,
+            },
+          },
+          {
+            name: 'Guardian',
+            gist: 'stability, detail',
+            thinks: [
+              'What exactly does the spec say, and does this match it?',
+              'What could this break, and can we undo it?',
+            ],
+            asSecondary: 'It also checks the detail before it lets anything through.',
+            leanings: {
+              'Attention Granularity': 0.9,
+              'Entropy Tolerance': 0.2,
+              'Causal Depth': 0.6,
+              'Temporal Horizon': 0.5,
+              'Assertion Drive': 0.3,
+              'Reversibility Sensitivity': 0.9,
+              'Coherence Need': 0.9,
+              'Compression Instinct': 0.4,
+              'Initiation Threshold': 0.8,
+              'Completion Drive': 0.5,
+              'Pattern Projection': 0.8,
+              'Relational Awareness': 0.4,
+            },
+          },
+          {
+            name: 'Integrator',
+            gist: 'connection, consensus',
+            thinks: [
+              'Who else does this touch, and are they on board?',
+              'Which of us is best placed to take the next step?',
+            ],
+            asSecondary: 'It also considers who else the work affects.',
+            leanings: {
+              'Attention Granularity': 0.4,
+              'Entropy Tolerance': 0.6,
+              'Causal Depth': 0.4,
+              'Temporal Horizon': 0.6,
+              'Assertion Drive': 0.2,
+              'Reversibility Sensitivity': 0.6,
+              'Coherence Need': 0.4,
+              'Compression Instinct': 0.2,
+              'Initiation Threshold': 0.6,
+              'Completion Drive': 0.3,
+              'Pattern Projection': 0.4,
+              'Relational Awareness': 0.9,
+            },
+          },
+        ]}
+        dimensions={[
+          {
+            name: 'Attention Granularity',
+            low: 'broad strokes, big picture',
+            high: 'pixel-level detail, line by line',
+          },
+          {
+            name: 'Entropy Tolerance',
+            low: 'demands clarity before acting',
+            high: 'works productively in mess',
+          },
+          {
+            name: 'Causal Depth',
+            low: 'surface cause, fix the symptom',
+            high: 'root cause chains, fix the system',
+          },
+          {
+            name: 'Temporal Horizon',
+            low: 'immediate task only',
+            high: 'long-term consequences, historical patterns',
+          },
+          {
+            name: 'Assertion Drive',
+            low: 'hedges, qualifies, asks',
+            high: 'declares, commits, decides',
+          },
+          {
+            name: 'Reversibility Sensitivity',
+            low: 'acts boldly, fixes forward',
+            high: 'prefers reversible steps, cautious commits',
+          },
+          {
+            name: 'Coherence Need',
+            low: 'tolerates contradictions',
+            high: 'flags every inconsistency',
+          },
+          {
+            name: 'Compression Instinct',
+            low: 'preserves nuance and detail',
+            high: 'terse, dense output',
+          },
+          {
+            name: 'Initiation Threshold',
+            low: 'moves fast, asks forgiveness',
+            high: 'plans thoroughly, asks permission',
+          },
+          {
+            name: 'Completion Drive',
+            low: 'comfortable leaving work in progress',
+            high: 'pushes to close, ships aggressively',
+          },
+          {
+            name: 'Pattern Projection',
+            low: 'treats each situation as novel',
+            high: 'fast pattern-matching, reuses solutions',
+          },
+          {
+            name: 'Relational Awareness',
+            low: 'focuses on its own deliverable',
+            high: 'considers ripple effects across systems',
+          },
+        ]}
+        names={{
+          Pioneer: 'Research Spike agent',
+          'Pioneer|Driver': 'Software Architect',
+          'Pioneer|Integrator': 'Product Designer',
+          Driver: 'Delivery Lead',
+          'Driver|Pioneer': 'Prototype Builder',
+          'Driver|Guardian': 'Release Manager',
+          Guardian: 'Test Engineer',
+          'Guardian|Driver': 'Frontend Developer',
+          'Guardian|Integrator': 'Code Reviewer',
+          Integrator: 'Orchestrator',
+          'Integrator|Guardian': 'Technical Writer',
+          'Integrator|Pioneer': 'Business Analyst',
+        }}
+        balanced={{
+          name: 'Balanced: no strong default',
+          note: 'Every style pulls about equally, so nothing dominates. An agent like this needs a very clear brief, because it has no default way to resolve a hard call.',
+        }}
+      />
+    </Figure>
+  ),
+}
+
+export const PerspectiveTabsStory: Story = {
+  name: 'PerspectiveTabs (How to Compose AI Agent Teams by Cognitive Profile)',
+  render: () => (
+    <Figure caption="The same skill and the same prompt, read by four profiles. The responses are illustrative, written to show each profile's default thinking.">
+      <PerspectiveTabs
+        label="One skill, one prompt, four cognitive profiles"
+        context={[
+          { label: 'Skill', value: 'Build atomic components with Radix UI and Tailwind' },
+          { label: 'Prompt', value: 'Add a Tooltip atom for the icon buttons.' },
+        ]}
+        perspectives={[
+          {
+            name: 'Frontend Developer',
+            tag: 'Guardian–Driver',
+            rows: [
+              { label: 'Reads it as', text: 'A build task with a clear spec.' },
+              {
+                label: 'First move',
+                text: 'Drills into the Radix Tooltip primitive, wraps it as an atom on the theme tokens, adds the variants and a story.',
+              },
+              { label: "Doesn't ask", text: 'Whether a tooltip should be there at all.' },
+            ],
+          },
+          {
+            name: 'Software Architect',
+            tag: 'Pioneer–Driver',
+            rows: [
+              { label: 'Reads it as', text: 'A design decision hiding inside a build task.' },
+              {
+                label: 'First move',
+                text: 'Asks whether the icon buttons need tooltips, or whether visible labels or accessible names would serve better, and whether a tooltip belongs at the atom layer.',
+              },
+              {
+                label: "Doesn't ask",
+                text: 'Which Tailwind classes to use. That detail is for later, or for someone else.',
+              },
+            ],
+          },
+          {
+            name: 'Code Reviewer',
+            tag: 'Guardian–Integrator',
+            rows: [
+              { label: 'Reads it as', text: 'A change to an existing family of atoms.' },
+              {
+                label: 'First move',
+                text: 'Checks the new atom against the existing ones: API shape, naming, tokens and stories, and flags anything that drifts from the agreed patterns.',
+              },
+              {
+                label: "Doesn't ask",
+                text: 'Whether the design system needs a tooltip in the first place.',
+              },
+            ],
+          },
+          {
+            name: 'Security Auditor',
+            tag: 'Guardian with a Driver secondary',
+            rows: [
+              { label: 'Reads it as', text: 'A new place where content gets rendered.' },
+              {
+                label: 'First move',
+                text: 'Traces what the tooltip can display, checks it never renders untrusted HTML, finds little risk, and says so.',
+              },
+              {
+                label: "Doesn't ask",
+                text: 'How it looks, or whether it matches the other atoms.',
+              },
+            ],
+          },
+        ]}
+        note="Illustrative: written to show each profile's default thinking, not recorded agent output."
+      />
+    </Figure>
+  ),
+}
+
+export const TeamProfilesStory: Story = {
+  name: 'TeamProfiles (How to Compose AI Agent Teams by Cognitive Profile)',
+  render: () => (
+    <Figure caption="A scrum team profiled on the matrix above. Each role's profile is taken from its point on the matrix, simplified to what it thinks first, what it prioritises and what it defocuses.">
+      <TeamProfiles
+        label="A scrum team by cognitive profile"
+        hint="Hover, focus or tap a role to see its profile."
+        thinksLabel="Thinks first"
+        prioritisesLabel="Prioritises"
+        defocusesLabel="Defocuses"
+        groups={[
+          {
+            name: 'Product Owner',
+            roles: [
+              {
+                name: 'Product Owner',
+                profile: 'Product Designer (Pioneer–Integrator)',
+                thinks: 'Should this exist at all, and what else could it be?',
+                prioritises: ['working in ambiguity', 'the long view', 'root causes'],
+                defocuses: ['detail', 'reusing patterns', 'finishing'],
+              },
+            ],
+          },
+          {
+            name: 'Scrum Master',
+            roles: [
+              {
+                name: 'Scrum Master',
+                profile: 'Orchestrator (strongly Integrator)',
+                thinks: 'Who else does this touch, and are they on board?',
+                prioritises: ['ripple effects', 'the long view', 'working in ambiguity'],
+                defocuses: ['brevity', 'making the call', 'finishing'],
+              },
+            ],
+          },
+          {
+            name: 'Developers',
+            roles: [
+              {
+                name: 'Architect',
+                profile: 'Software Architect (Pioneer–Driver)',
+                thinks: 'Should this exist at all, and what else could it be?',
+                prioritises: ['working in ambiguity', 'making the call', 'brevity'],
+                defocuses: ['planning first', 'reversible steps', 'ripple effects'],
+              },
+              {
+                name: 'Frontend Developer',
+                profile: 'Guardian, leaning Driver',
+                thinks: 'What exactly does the spec say, and does this match it?',
+                prioritises: ['consistency', 'reusing patterns', 'detail'],
+                defocuses: ['ripple effects', 'working in ambiguity', 'the long view'],
+              },
+              {
+                name: 'Code Reviewer',
+                profile: 'Guardian–Integrator',
+                thinks: 'What exactly does the spec say, and does this match it?',
+                prioritises: ['reversible steps', 'planning first', 'consistency'],
+                defocuses: ['making the call', 'brevity', 'working in ambiguity'],
+              },
+              {
+                name: 'Tester',
+                profile: 'Test Engineer (strongly Guardian)',
+                thinks: 'What exactly does the spec say, and does this match it?',
+                prioritises: ['consistency', 'reversible steps', 'detail'],
+                defocuses: ['working in ambiguity', 'making the call', 'brevity'],
+              },
+              {
+                name: 'Security',
+                profile: 'Security Auditor (Guardian, with a Driver secondary)',
+                thinks: 'What could this break, and can we undo it?',
+                prioritises: ['consistency', 'detail', 'reversible steps'],
+                defocuses: ['working in ambiguity', 'ripple effects', 'making the call'],
+              },
+            ],
+          },
         ]}
       />
     </Figure>

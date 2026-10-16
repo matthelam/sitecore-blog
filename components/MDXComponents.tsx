@@ -10,8 +10,11 @@ import AnnotatedScreenshot from './design-system/organisms/AnnotatedScreenshot'
 import GatedFlow from './design-system/organisms/GatedFlow'
 import LayerParallel from './design-system/organisms/LayerParallel'
 import MandateCheckout from './design-system/organisms/MandateCheckout'
+import PerspectiveTabs from './design-system/organisms/PerspectiveTabs'
+import ProfileMatrix from './design-system/organisms/ProfileMatrix'
 import SkillComposition from './design-system/organisms/SkillComposition'
 import StepThrough from './design-system/organisms/StepThrough'
+import TeamProfiles from './design-system/organisms/TeamProfiles'
 
 export const components: MDXComponents = {
   Image,
@@ -25,6 +28,9 @@ export const components: MDXComponents = {
   GatedFlow,
   LayerParallel,
   MandateCheckout,
+  PerspectiveTabs,
+  ProfileMatrix,
   SkillComposition,
   StepThrough,
+  TeamProfiles,
 }
