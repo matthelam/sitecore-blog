@@ -1,70 +1,105 @@
 ---
-title: "Azure Entra ID SSO – Setting up Sitecore Cloud Portal"
+title: 'Azure Entra ID SSO – Setting up Sitecore Cloud Portal'
 date: 2025-10-13
+lastmod: 2026-10-16
 draft: false
-tags: ["azure", "identity", "sso", "sitecore", "cloud-portal", "saml", "xm-cloud"]
-summary: "To configure SAML SSO in the Sitecore Cloud Portal, upload the federation metadata, map Entra ID group claims to roles, then test the token claims."
+tags: ['azure', 'identity', 'sso', 'sitecore', 'cloud-portal', 'saml', 'xm-cloud']
+summary: 'To configure SAML SSO in Sitecore Cloud Portal, add an SSO connection, upload the Entra ID federation metadata, map the groups claim to xmc_role with claims mapping, then test the token.'
 ---
 
 ## Introduction
 
-Now that the [Azure Entra ID side](/blog/02-SSO-Entra-ID-Setup) is complete, it’s time to bring Sitecore Cloud Portal into the loop.  
-This article focuses on the **Cloud Portal** side of the SAML setup — uploading the IdP metadata, creating the SSO connection, mapping incoming claims (like `groups`) into **target claims** Cloud Portal adds to tokens, and running the first authentication tests.
+Now that the [Azure Entra ID side](/blog/02-SSO-Entra-ID-Setup) is complete, it’s time to bring Sitecore Cloud Portal into the loop. This article covers the **Cloud Portal** side of the SAML setup: uploading the IdP metadata, creating the SSO connection, mapping incoming claims (like `groups`) into **target claims** that Cloud Portal adds to tokens, and running the first authentication tests.
 
 Before you begin, make sure you’ve already collected:
+
 - The **Federation Metadata XML** exported from Azure: `/sso/cloudportal-saml-[ENV].xml`
 - A **list of Azure Group Object IDs** and **test users** from your [Preparation Checklist](/blog/01-SSO-Preparation#3-saml-metadata--identifiers)
 
-This is the foundation step for SSO across Sitecore services; the same connection will later drive **role propagation** into XM Cloud.
+This is the foundation step for SSO across Sitecore services. The same connection will later drive **role propagation** into XM Cloud.
 
 ---
 
 ## 1. Add a New SSO Connection in Cloud Portal
 
-1. Sign in to **Sitecore Cloud Portal** as an organisation or cloud administrator.  
-2. Navigate to **Admin → SSO**.  
-3. Click **Add SSO Connection → SAML**.  
+1. Sign in to **Sitecore Cloud Portal** as an organisation or cloud administrator.
+2. Navigate to **Admin → SSO**.
+3. Click **Add SSO Connection → SAML**.
 4. Name the connection by environment:
    - `Azure-SAML-DEV`
    - `Azure-SAML-UAT`
    - `Azure-SAML-PROD`
 5. Add allowed email domains (e.g., `yourcompany.com`) so only trusted corporate accounts use SSO.
 
-> **Pro Tip:** Keep your connection names consistent across environments — it simplifies configuration, logging, and certificate management.
+> **Pro Tip:** Keep your connection names consistent across environments - it simplifies configuration, logging, and certificate management.
 
 ---
 
 ## 2. Upload Federation Metadata
 
-1. Choose **Upload IdP Metadata**.  
-2. Select your exported XML: `[Cloud Portal Metadata File]`.  
+1. Choose **Upload IdP Metadata**.
+2. Select your exported XML: `[Cloud Portal Metadata File]`.
 3. **Save**.
 
-Cloud Portal parses and displays the IdP Issuer, SSO URL, and Certificate.  
-Double-check these against Azure’s **Enterprise Application** → **Single sign-on** → **SAML** pane to confirm they match.
+Cloud Portal parses and displays the IdP Issuer, SSO URL, and Certificate. Double-check these against the **Enterprise Application → Single sign-on → SAML** pane in Azure to confirm they match.
 
-> If you see an error parsing the XML, re-download the metadata from Azure — older cached versions often contain outdated certificates.
+> If you see an error parsing the XML, re-download the metadata from Azure - older cached versions often contain outdated certificates.
 
 ---
 
 ## 3. Claims Mapping for Role Propagation
 
-Cloud Portal can **transform IdP claims** into new claims attached to the issued Sitecore access token.  
-This is where you bridge **Azure group membership** to **Sitecore roles** by generating an `xmc_role` claim.
+Cloud Portal can **transform IdP claims** into new claims attached to the issued Sitecore access token. This is where you bridge **Azure group membership** to **Sitecore roles** by generating an `xmc_role` claim.
+
+<Figure caption="How an Entra ID group membership becomes an XM Cloud role. The prefixed name from the token step is the one XM Cloud must use.">
+  <StepThrough
+    label="From Entra ID group to XM Cloud role"
+    steps={[
+      {
+        node: 'Entra ID security group',
+        edge: 'assigned to the Enterprise Application',
+        detail:
+          'The user is a member of a security group, identified by its Object ID (GUID) rather than its display name.',
+      },
+      {
+        node: 'SAML groups claim',
+        edge: 'received by the SSO connection',
+        detail:
+          'Azure sends the Object IDs of the groups assigned to the application in a claim named groups.',
+      },
+      {
+        node: 'Claims mapping',
+        edge: 'adds a target claim',
+        detail:
+          'Cloud Portal matches the groups value with a regex and adds the target claim xmc_role, with the Sitecore role as its value, for example sitecore\\Administrator.',
+      },
+      {
+        node: 'Prefixed token claim',
+        edge: 'referenced by',
+        detail:
+          'Cloud Portal prefixes the target claim name with the SSO connection ID at issue time: xmc-connection-12345.xmc_role.',
+      },
+      {
+        node: 'XM Cloud role mapping',
+        detail:
+          'XM Cloud role mappings use the exact prefixed name. With the prefix wrong or missing, login works but no roles appear.',
+      },
+    ]}
+  />
+</Figure>
 
 ### 3.1 Design your mapping
 
 Create a mapping table per environment:
 
-| Azure Group (Object ID) | Target Claim Name | Target Claim Values (Array) |
-|--------------------------|------------------|------------------------------|
-| `[Entra ID GUID]` | `xmc_role` | `["sitecore\\Administrator"]` |
-| `[Entra ID GUID]` | `xmc_role` | `["sitecore\\Author"]` |
-| `[Entra ID GUID]` | `xmc_role` | `["sitecore\\Sitecore Client Publishing"]` |
+| Azure Group (Object ID) | Target Claim Name | Target Claim Values (Array)                |
+| ----------------------- | ----------------- | ------------------------------------------ |
+| `[Entra ID GUID]`       | `xmc_role`        | `["sitecore\\Administrator"]`              |
+| `[Entra ID GUID]`       | `xmc_role`        | `["sitecore\\Author"]`                     |
+| `[Entra ID GUID]`       | `xmc_role`        | `["sitecore\\Sitecore Client Publishing"]` |
 
-> **Why `xmc_role`?**  
-> The target claim name is arbitrary — `xmc_role` is a common convention since it’s later referenced in XM Cloud role mappings.  
-> Cloud Portal automatically prefixes it with your **SSO Connection ID** during token issuance, e.g.:
+> **Why `xmc_role`?** The target claim name is arbitrary, but `xmc_role` is a common convention since it’s later referenced in XM Cloud role mappings. Cloud Portal automatically prefixes it with your **SSO Connection ID** during token issuance, for example:
+>
 > ```
 > xmc-connection-12345.xmc_role
 > ```
@@ -73,8 +108,8 @@ Create a mapping table per environment:
 
 ### 3.2 Configure mapping in Cloud Portal UI
 
-1. Go to **Claims Mapping** in your SSO connection.  
-2. Click **Add Mapping**.  
+1. Go to **Claims Mapping** in your SSO connection.
+2. Click **Add Mapping**.
 3. Add a **Source Claim**:
    - **Name:** `groups`
    - **Value (Regex):** match the group Object ID (e.g., `^00000001-0001-0001-0001-000000000001$`)
@@ -93,34 +128,27 @@ If you prefer to define mappings via JSON configuration (for automation or docum
 {
   "claimsMapping": [
     {
-      "sourceClaims": [
-        { "name": "groups", "value": "^00000001-0001-0001-0001-000000000001$" }
-      ],
-      "targetClaims": [
-        { "name": "xmc_role", "value": "sitecore\\Administrator" }
-      ]
+      "sourceClaims": [{ "name": "groups", "value": "^00000001-0001-0001-0001-000000000001$" }],
+      "targetClaims": [{ "name": "xmc_role", "value": "sitecore\\Administrator" }],
     },
     {
-      "sourceClaims": [
-        { "name": "groups", "value": "^00000001-0001-0001-0001-000000000001$" }
-      ],
-      "targetClaims": [
-        { "name": "xmc_role", "value": "sitecore\\Author" }
-      ]
-    }
-  ]
+      "sourceClaims": [{ "name": "groups", "value": "^00000001-0001-0001-0001-000000000001$" }],
+      "targetClaims": [{ "name": "xmc_role", "value": "sitecore\\Author" }],
+    },
+  ],
 }
-````
+```
 
-> **Role Mapping Pro Tip:**
-> Claims Mapping in Cloud Portal — you add source claims (from the IdP) and target claims (added by Cloud Portal to ID/access tokens).
-> Target claim names are arbitrary (e.g., `xmc_role`).
-> Source claim values can use **regex**; values must be **strings or arrays**; up to **20 source claims per mapping**; and target claim names are **prefixed with the SSO connection ID** at issue time.
+> **Role Mapping Pro Tip:** In Cloud Portal Claims Mapping, you add source claims (from the IdP) and target claims (added by Cloud Portal to ID/access tokens).
+>
+> - Target claim names are arbitrary (e.g., `xmc_role`).
+> - Source claim values can use **regex**, values must be **strings or arrays**, and you can have up to **20 source claims per mapping**.
+> - Target claim names are **prefixed with the SSO connection ID** at issue time.
 
 **Official documentation:**
 
-* [Sitecore Cloud Portal – Claims Mapping](https://doc.sitecore.com/xmc/en/developers/cloud-portal/claims-mapping.html)
-* [Configure SSO Connections in Cloud Portal](https://doc.sitecore.com/xmc/en/users/cloud-portal/set-up-single-sign-on.html)
+- [Sitecore Cloud Portal – Claims Mapping](https://doc.sitecore.com/xmc/en/developers/cloud-portal/claims-mapping.html)
+- [Configure SSO Connections in Cloud Portal](https://doc.sitecore.com/xmc/en/users/cloud-portal/set-up-single-sign-on.html)
 
 ---
 
@@ -129,24 +157,20 @@ If you prefer to define mappings via JSON configuration (for automation or docum
 Once mapping is saved:
 
 1. Sign out of Cloud Portal.
-2. Sign in again — it should redirect to Azure Entra ID.
+2. Sign in again - it should redirect to Azure Entra ID.
 3. Use your test accounts:
-
-   * `[admin-test@yourcompany.com]`
-   * `[editor-test@yourcompany.com]`
+   - `[admin-test@yourcompany.com]`
+   - `[editor-test@yourcompany.com]`
 4. Confirm:
 
-   * The login flow completes successfully.
-   * The token now includes your **prefixed target claim**:
+   - The login flow completes successfully.
+   - The token now includes your **prefixed target claim**:
 
      ```json
      "xmc-connection-12345.xmc_role": ["sitecore\\Administrator"]
      ```
 
-> **Hot Tip – Token Inspection:**
-> Cloud Portal doesn’t always show the full token.
-> To verify claims, copy the **Bearer token** from your browser’s Network tab (`Authorization: Bearer ...`) and paste it into [jwt.ms](https://jwt.ms/) for decoding.
-> Sometimes the token appears in the UI under “System Information” — otherwise you must capture it from the network traffic.
+> **Hot Tip – Token Inspection:** Cloud Portal doesn’t always show the full token. To verify claims, copy the **Bearer token** from your browser’s Network tab (`Authorization: Bearer ...`) and paste it into [jwt.ms](https://jwt.ms/) to decode it. Sometimes the token appears in the UI under “System Information”; otherwise you must capture it from the network traffic.
 
 ---
 
@@ -169,20 +193,14 @@ Once mapping is saved:
 
 By this stage, you should have:
 
-* Working SAML trust between **Azure Entra ID** and **Sitecore Cloud Portal**
-* Valid token inspection showing your `xmc_role` claim
-* A functional base for role propagation into XM Cloud
+- Working SAML trust between **Azure Entra ID** and **Sitecore Cloud Portal**
+- Valid token inspection showing your `xmc_role` claim
+- A functional base for role propagation into XM Cloud
 
 ---
 
 ## Summary
 
-You’ve:
+You’ve created the SAML connection, uploaded the Azure metadata, configured claims mapping with target `xmc_role` claims, tested SSO and verified the token. That leaves you ready for downstream XM Cloud role mapping.
 
-1. Created a SAML connection in Cloud Portal
-2. Uploaded Azure metadata
-3. Configured claims mapping with target `xmc_role` claims
-4. Tested SSO and verified the token
-5. Prepared for downstream XM Cloud role mapping
-
-In the [next article](/blog/04-SSO-Content-Hub-Setup), we’ll walk through how to setup **Content Hub**, configure the SAML connection there, and conduct validation checks.
+In the [next article](/blog/04-SSO-Content-Hub-Setup), we’ll walk through how to set up **Content Hub**, configure the SAML connection there, and conduct validation checks.
