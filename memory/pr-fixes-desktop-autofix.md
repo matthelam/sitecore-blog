@@ -5,6 +5,7 @@ tags:
 keywords:
 - auto-fix
 - autofix
+- auto-merge
 - pull request
 - PR
 - CI
@@ -12,6 +13,7 @@ keywords:
 - GitHub Action
 - claude-code-action
 - agent
+- merge
 scope: repo
 status: active
 provenance: contractual
@@ -20,7 +22,7 @@ created: '2026-10-16'
 updated: '2026-10-16'
 source: Matt, 2026-10-16
 ---
-Failing pull requests are fixed through the Claude desktop app's Auto-fix on a session-bound PR, not a GitHub Action; every PR a session opens is bound and has Auto-fix turned on.
+Session-opened pull requests are bound, get the desktop app's Auto-fix (not a GitHub Action) and GitHub auto-merge, so they merge once all required checks pass.
 
 ## Context
-Chosen over the Claude GitHub Action: no stored credentials in a public repo, and full local context and rules. Trade-off: it runs only while the app is open.
+Matt, 2026-10-16. Auto-fix chosen over the Claude GitHub Action: no stored credentials in a public repo, full local context and rules; it runs only while the app is open. Auto-merge is safe because the main ruleset requires checks, design-system, Vercel and CodeQL.
