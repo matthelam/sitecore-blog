@@ -334,7 +334,7 @@
   {
    "url": "https://matthelam.com/blog/agentic-studio-agent-export-is-lossy",
    "path": "/blog/agentic-studio-agent-export-is-lossy",
-   "intent": "Why are Agent Type and Tags empty after exporting and importing an agent in Sitecore Agentic Studio?",
+   "intent": "What easy-to-miss issue with exporting and importing agents in Sitecore Agentic Studio should I know about?",
    "expected": [
     "Sitecore Agentic Studio",
     "agentic Sitecore development",
