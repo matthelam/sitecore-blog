@@ -48,3 +48,12 @@ export type SequenceStep = {
   detail: string
   edge?: string
 }
+
+/** One numbered callout on an AnnotatedScreenshot: where it points, as a percentage of the
+ * image's width (x) and height (y), and what it marks. */
+export type Callout = {
+  x: number
+  y: number
+  label: string
+  detail?: string
+}

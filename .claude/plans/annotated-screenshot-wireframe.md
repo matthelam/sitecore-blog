@@ -1,6 +1,8 @@
-# AnnotatedScreenshot: wireframe for approval
+# AnnotatedScreenshot: wireframe
 
-**Status: awaiting Matt's approval. Not built.** (`components/CLAUDE.md` law 4: wireframe, then build.)
+**Status: approved and built (2026-10-16).** Matt: "Approved as recommended: that layout, a new
+round Marker atom, static (no hover link)." Built as `components/design-system/atoms/Marker.tsx` and
+`components/design-system/organisms/AnnotatedScreenshot.tsx`. (`components/CLAUDE.md` law 4.)
 
 A screenshot with numbered callout markers placed on it, and the same numbers as a list below, so
 the post can say "look at 2" without painting arrows into the PNG. Proposed in
@@ -84,6 +86,8 @@ type AnnotatedScreenshotProps = {
   and a catalogue row in `blog-visuals/SKILL.md`, in the same change.
 
 ## Decisions for Matt
+
+Decided 2026-10-16: layout approved, a new `Marker` atom, static. The options as put to him:
 
 1. **Approve the layout** above, or change it.
 2. **New `Marker` atom**, or reuse `Chip variant="inverse"` with a number (a pill, not a circle)?

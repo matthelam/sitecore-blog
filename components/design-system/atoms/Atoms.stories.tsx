@@ -3,6 +3,7 @@ import Arrow from './Arrow'
 import Chip from './Chip'
 import Eyebrow from './Eyebrow'
 import Icon from './Icon'
+import Marker from './Marker'
 import Surface, { type SurfaceTone } from './Surface'
 
 // Every atom in every variant, on one page per atom. Sample text only.
@@ -82,6 +83,20 @@ export const Eyebrows: Story = {
     <div className="flex flex-col gap-2">
       <Eyebrow>left</Eyebrow>
       <Eyebrow align="center">center</Eyebrow>
+    </div>
+  ),
+}
+
+export const Markers: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-4">
+      {[1, 2, 3, 12].map((n) => (
+        <Marker key={n} n={n} />
+      ))}
+      <Surface tone="muted" className="flex gap-3">
+        <Marker n={1} />
+        <Marker n={2} />
+      </Surface>
     </div>
   ),
 }
