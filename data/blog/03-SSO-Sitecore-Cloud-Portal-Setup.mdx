@@ -16,7 +16,7 @@ Before you begin, make sure you’ve already collected:
 - The **Federation Metadata XML** exported from Azure: `/sso/cloudportal-saml-[ENV].xml`
 - A **list of Azure Group Object IDs** and **test users** from your [Preparation Checklist](/blog/01-SSO-Preparation#3-saml-metadata--identifiers)
 
-This is the foundation step for SSO across Sitecore services. The same connection will later drive **role propagation** into XM Cloud.
+This is the foundation step for SSO across Sitecore services. The same connection will later drive **role propagation** into XM Cloud (now SitecoreAI).
 
 ---
 
@@ -132,7 +132,7 @@ If you prefer to define mappings via JSON configuration (for automation or docum
       "targetClaims": [{ "name": "xmc_role", "value": "sitecore\\Administrator" }],
     },
     {
-      "sourceClaims": [{ "name": "groups", "value": "^00000001-0001-0001-0001-000000000001$" }],
+      "sourceClaims": [{ "name": "groups", "value": "^00000002-0002-0002-0002-000000000002$" }],
       "targetClaims": [{ "name": "xmc_role", "value": "sitecore\\Author" }],
     },
   ],
