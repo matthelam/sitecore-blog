@@ -49,8 +49,10 @@ upgrades a guess into a claim will carry it into the post.
    most generic one.
 7. **Mark the turning points.** Name the beats where the reader's model should change: the
    realisation, the reveal, the moment the cost becomes real. These are the visual moments. Say
-   what the reader should *see or do* there ("feel the cost compound", "see the four repeats
-   collapse into one"), not how to build it. Building is the later stage's job.
+   what the reader should _see or do_ there ("feel the cost compound", "see the four repeats
+   collapse into one"), not how to build it. Building is the later stage's job. Note any
+   screenshot the post needs (which screen, what it proves, whether it's behind Matt's login), so
+   the write-up stage can capture it with `blog-visuals`.
 8. **Plan the emphasis.** Decide where the one-liner (whichever candidate is leading) returns: usually the opening, a turn in the
    argument, and the close. Deliberate repetition of the point is part of the design.
 9. **Plan the honesty beats.** What isn't solved, what the author got wrong first, prior art they
