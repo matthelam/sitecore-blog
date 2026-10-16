@@ -57,3 +57,43 @@ export type Callout = {
   label: string
   detail?: string
 }
+
+/** One thinking dimension an agent can lean on, with what each end of it looks like in practice. */
+export type CognitiveDimension = {
+  name: string
+  low: string
+  high: string
+}
+
+/** One of the four styles in the corners of a ProfileMatrix. `leanings` holds 0..1 per dimension
+ * name; `thinks` are the two first-person thoughts used when this style is primary, and
+ * `asSecondary` is a full sentence shown as an extra thought when it is the secondary. */
+export type WorkingStyle = {
+  name: string
+  gist: string
+  thinks: string[]
+  asSecondary: string
+  leanings: Record<string, number>
+}
+
+/** One profile's reading of a shared prompt: one tab of a PerspectiveTabs. */
+export type Perspective = {
+  name: string
+  tag: string
+  rows: { label: string; text: string }[]
+}
+
+/** One role in a TeamProfiles chart: its simplified cognitive profile. */
+export type TeamRole = {
+  name: string
+  profile: string
+  thinks: string
+  prioritises: string[]
+  defocuses: string[]
+}
+
+/** A group of roles shown side by side (equals, not a hierarchy). */
+export type TeamGroup = {
+  name: string
+  roles: TeamRole[]
+}
