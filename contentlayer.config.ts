@@ -110,6 +110,9 @@ export const Blog = defineDocumentType(() => ({
     layout: { type: 'string' },
     bibliography: { type: 'string' },
     canonicalUrl: { type: 'string' },
+    // The RSS guid a post was first published under, kept when its slug changes so feed readers
+    // don't show it again as new.
+    feedGuid: { type: 'string' },
   },
   computedFields: {
     ...computedFields,

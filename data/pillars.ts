@@ -50,7 +50,7 @@ export const pillars: Pillar[] = [
       '02-SSO-Entra-ID-Setup',
       '03-SSO-Sitecore-Cloud-Portal-Setup',
       '04-SSO-Content-Hub-Setup',
-      'The Leading Slash That Breaks Your Page Static vs Dynamic Placeholders in Sitecore',
+      'sitecore-placeholder-leading-slash',
     ],
   },
 ]
