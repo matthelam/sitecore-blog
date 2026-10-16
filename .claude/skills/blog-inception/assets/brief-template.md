@@ -36,13 +36,14 @@ Status: **Draft** <!-- becomes: **Locked** YYYY-MM-DD, only on the author's word
 
 ## Story flow
 
-| # | Beat | What it does for the reader | Evidence it needs | Have it? |
-|---|---|---|---|---|
-| 1 | … | … | … | yes / author to supply |
+| #   | Beat | What it does for the reader | Evidence it needs | Have it?               |
+| --- | ---- | --------------------------- | ----------------- | ---------------------- |
+| 1   | …    | …                           | …                 | yes / author to supply |
 
 ## Turning points and visual moments
 
 - **Beat N:** <what the reader should see or do here, not how to build it>
+- **Screenshots:** <which screen, what it proves, whether it's behind Matt's login; or none>
 
 ## Emphasis plan
 

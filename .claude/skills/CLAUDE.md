@@ -2,13 +2,13 @@
 
 The skills that run this blog. Two groups live here:
 
-| Group | Skills | Role |
-|---|---|---|
-| Blog authoring | `blog-inception` | Creative stage: shapes an idea into a locked story-flow brief. No prose |
-| | `blog-rewrite-hybrid` | Write-up stage: voice guide, concision, tone profiles, series conventions |
-| | `blog-visuals` | Diagrams and interactive visuals as MDX components |
-| | `blog-publish` | Delivery stage: preflight, branch, PR, preview, merge, and proof the change is live |
-| Legal Framework operating loop | `memory-consult`, `memory-capture`, `task-sense-check`, `memory-promote`, `knowledge-export`, `knowledge-import`, `framework-lint` | Installed by the legal-framework skill (v1.4.1); fixed machinery |
+| Group                          | Skills                                                                                                                             | Role                                                                                |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Blog authoring                 | `blog-inception`                                                                                                                   | Creative stage: shapes an idea into a locked story-flow brief. No prose             |
+|                                | `blog-rewrite-hybrid`                                                                                                              | Write-up stage: voice guide, concision, tone profiles, series conventions           |
+|                                | `blog-visuals`                                                                                                                     | Diagrams, screenshots and interactive visuals as MDX components                     |
+|                                | `blog-publish`                                                                                                                     | Delivery stage: preflight, branch, PR, preview, merge, and proof the change is live |
+| Legal Framework operating loop | `memory-consult`, `memory-capture`, `task-sense-check`, `memory-promote`, `knowledge-export`, `knowledge-import`, `framework-lint` | Installed by the legal-framework skill (v1.4.1); fixed machinery                    |
 
 `README.md` records how the authoring skills were chosen (the 2026-10-15 bake-off).
 

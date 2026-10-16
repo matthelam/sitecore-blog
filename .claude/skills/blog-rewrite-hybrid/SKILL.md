@@ -25,7 +25,9 @@ approach.
    mechanism from prose. If so, hand the section to the `blog-visuals` skill, which picks the kind
    (static diagram, chart, step-through, explorable), reuses a component where one fits, and
    builds it from facts already in the post. Keep every existing visual unless the author approves
-   replacing it; a new interactive version sits beside the original until then.
+   replacing it; a new interactive version sits beside the original until then. Where the reader
+   has to find a real screen (a setting, a column, an error), consider a screenshot, captured and
+   redacted through `blog-visuals`.
 6. Preserve substance exactly (every claim, number, code block, table, link). Fix only genuine
    errors. Keep all `<aside>`, `<svg>`, `<img>`, and code components in place.
 7. Output valid MDX, then list: prose word count before and after; the correctness fixes; each
@@ -35,15 +37,15 @@ approach.
 
 ## The override table (where external craft and this author collide)
 
-| External rule | Hybrid behaviour | Why |
-|---|---|---|
-| "Replace 'seems/appears/might'; remove all hedging." | Keep calibrated hedges that carry certainty information ("I am less confident that…"); cut only information-free filler hedging. | His calibrated epistemics are a feature; flattening them misrepresents how sure he is. |
-| "Cut tangents that don't serve the thesis." | Keep `<aside>` reflections and the honest "what is not right yet" digressions. | The honest asides are the reason readers trust the posts. |
-| "Conclusions that extend, not summarise." | Allow the forward-looking close **and** an explicit "In Summary" when the source uses one, provided it adds a consequence or next step, or is a one-line distillation of the whole post (Concision rule 4). | Both are his real endings. The author wants re-argued summaries cut but overarching one-liners kept. |
-| "Cut the preamble; start doing." | Keep his blunt problem-first or pointer opening ("This is that post."); only cut true throat-clearing ("In this article we will"). | His openings are already lean and are part of the voice. |
-| "Lead with authority; no first-sentence hedging." | Lead with the real position, but do not inflate confidence beyond what he wrote. | Authority here comes from specifics and honesty, not from removing doubt. |
-| "Active voice; vague adjectives → specifics." | Apply fully — no conflict. | This matches his instinct (line counts, prices, real product names). |
-| "Signal-to-noise; one purpose per sentence; parallel logic." | Apply fully — no conflict. | Pure craft improvement; keep the long-setup-then-hammer rhythm. |
+| External rule                                                | Hybrid behaviour                                                                                                                                                                                            | Why                                                                                                  |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| "Replace 'seems/appears/might'; remove all hedging."         | Keep calibrated hedges that carry certainty information ("I am less confident that…"); cut only information-free filler hedging.                                                                            | His calibrated epistemics are a feature; flattening them misrepresents how sure he is.               |
+| "Cut tangents that don't serve the thesis."                  | Keep `<aside>` reflections and the honest "what is not right yet" digressions.                                                                                                                              | The honest asides are the reason readers trust the posts.                                            |
+| "Conclusions that extend, not summarise."                    | Allow the forward-looking close **and** an explicit "In Summary" when the source uses one, provided it adds a consequence or next step, or is a one-line distillation of the whole post (Concision rule 4). | Both are his real endings. The author wants re-argued summaries cut but overarching one-liners kept. |
+| "Cut the preamble; start doing."                             | Keep his blunt problem-first or pointer opening ("This is that post."); only cut true throat-clearing ("In this article we will").                                                                          | His openings are already lean and are part of the voice.                                             |
+| "Lead with authority; no first-sentence hedging."            | Lead with the real position, but do not inflate confidence beyond what he wrote.                                                                                                                            | Authority here comes from specifics and honesty, not from removing doubt.                            |
+| "Active voice; vague adjectives → specifics."                | Apply fully — no conflict.                                                                                                                                                                                  | This matches his instinct (line counts, prices, real product names).                                 |
+| "Signal-to-noise; one purpose per sentence; parallel logic." | Apply fully — no conflict.                                                                                                                                                                                  | Pure craft improvement; keep the long-setup-then-hammer rhythm.                                      |
 
 ## What this skill must never do
 

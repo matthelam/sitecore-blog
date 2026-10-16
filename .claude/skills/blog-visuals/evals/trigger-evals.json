@@ -1,0 +1,52 @@
+[
+  {
+    "query": "for the builder license post, grab a screenshot of the Agentic Studio user permissions page and blank out the emails",
+    "should_trigger": true
+  },
+  {
+    "query": "can you screenshot where the Organization Admin column is in the cloud portal for my draft? I'm logged in already in chrome",
+    "should_trigger": true
+  },
+  {
+    "query": "the vercel SSO part 3 post needs a screenshot of the deployment protection settings page, capture it in light and dark",
+    "should_trigger": true
+  },
+  {
+    "query": "this screenshot in the agent export post shows our tenant name, redact it before we publish",
+    "should_trigger": true
+  },
+  {
+    "query": "add numbered callouts to the cloud portal screenshot in the builder license post so readers can see which column to look at",
+    "should_trigger": true
+  },
+  {
+    "query": "should the personalize post use a screenshot of the experience editor or a diagram of how the decision model flows?",
+    "should_trigger": true
+  },
+  {
+    "query": "the legal framework post needs a diagram showing how memory recall flows at an ambiguity event",
+    "should_trigger": true
+  },
+  {
+    "query": "build a chart for the cost section of the agent as customer post comparing the token spend",
+    "should_trigger": true
+  },
+  { "query": "add a new organism to the design system for a timeline", "should_trigger": true },
+  {
+    "query": "take a screenshot of the localhost build error so I can see what's wrong",
+    "should_trigger": false
+  },
+  { "query": "publish the builder license post and give me the live url", "should_trigger": false },
+  {
+    "query": "I've got an idea for a post about Cloud Portal roles, help me shape it",
+    "should_trigger": false
+  },
+  {
+    "query": "tighten the wording of the intro paragraph in the SSO part 2 post",
+    "should_trigger": false
+  },
+  {
+    "query": "check my memory facts for anything about Vercel deployments",
+    "should_trigger": false
+  }
+]
