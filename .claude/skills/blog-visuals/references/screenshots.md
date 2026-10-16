@@ -95,10 +95,29 @@ is, sanitise more, re-capture, drop the screenshot). Don't commit until he decid
 ## 5. Annotate
 
 Point at things with numbered callouts beside the image, not arrows painted into the PNG: painted
-marks don't adapt to dark mode, scale badly on phones and can't be read by a screen reader. The
-`AnnotatedScreenshot` organism is proposed for this (wireframe in
-`.claude/plans/annotated-screenshot-wireframe.md`, awaiting Matt's approval; not built).
-Until it exists, refer to parts of the screenshot in the prose or a list under the figure.
+marks don't adapt to dark mode, scale badly on phones and can't be read by a screen reader. Use
+the `AnnotatedScreenshot` organism inside `<Figure>`: numbered markers at a percentage of the
+image, and the same numbers as a list below it.
+
+```mdx
+<Figure caption="The Individual access column tells you who the admins are.">
+  <AnnotatedScreenshot
+    src="/static/images/<post-slug>/org-admins.png"
+    alt="Cloud Portal Admin Users list with an Individual access column"
+    width={1600}
+    height={900}
+    label="What to look for"
+    callouts={[{ x: 62, y: 18, label: 'Individual access', detail: 'Organization Admin or Owner' }]}
+  />
+</Figure>
+```
+
+`width` and `height` are the PNG's own pixels. Find `x` and `y` as a percentage of them (a point
+at 992,162 in a 1600x900 image is `x: 62, y: 18`). The marker is centred on that point and is
+opaque, so put the point just beside the target (left of a column header, after a menu item),
+never on the words it points at. Then check the markers land in the right place at 1280px and at
+390px. Every label and detail comes from the post. Keep callouts few: three or
+four. A screenshot that needs more is cropped too loosely.
 
 ## 6. Place
 

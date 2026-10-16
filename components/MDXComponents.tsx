@@ -6,6 +6,7 @@ import Image from './Image'
 import CustomLink from './Link'
 import TableWrapper from './TableWrapper'
 import Figure from './design-system/templates/Figure'
+import AnnotatedScreenshot from './design-system/organisms/AnnotatedScreenshot'
 import GatedFlow from './design-system/organisms/GatedFlow'
 import LayerParallel from './design-system/organisms/LayerParallel'
 import MandateCheckout from './design-system/organisms/MandateCheckout'
@@ -20,6 +21,7 @@ export const components: MDXComponents = {
   table: TableWrapper,
   BlogNewsletterForm,
   Figure,
+  AnnotatedScreenshot,
   GatedFlow,
   LayerParallel,
   MandateCheckout,

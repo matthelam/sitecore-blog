@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import Figure from '../templates/Figure'
+import AnnotatedScreenshot from './AnnotatedScreenshot'
 import GatedFlow from './GatedFlow'
 import LayerParallel from './LayerParallel'
 import MandateCheckout from './MandateCheckout'
@@ -168,6 +169,59 @@ export const MandateCheckoutStory: Story = {
         unitPriceAud={30}
         itemLabel="boxes"
         maxQuantity={6}
+      />
+    </Figure>
+  ),
+}
+
+// A generated placeholder screen: grey bars only, no real text or data. No post uses
+// AnnotatedScreenshot yet, so its props here are sample ones.
+const bar = (x: number, y: number, w: number, h: number, fill: string, r = 4) =>
+  `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}"/>`
+const rows = Array.from(
+  { length: 6 },
+  (_, i) =>
+    bar(280, 290 + i * 64, 180, 14, '#9ca3af') +
+    bar(560, 290 + i * 64, 240, 14, '#d1d5db') +
+    bar(900, 286 + i * 64, 110, 22, '#e5e7eb', 11) +
+    bar(1120, 293 + i * 64, 24, 8, '#9ca3af') +
+    bar(260, 330 + i * 64, 910, 1, '#e5e7eb', 0)
+).join('')
+const placeholderScreen = `data:image/svg+xml;utf8,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">` +
+    bar(0, 0, 1200, 720, '#ffffff', 0) +
+    bar(0, 0, 1200, 56, '#f3f4f6', 0) +
+    bar(24, 18, 120, 20, '#9ca3af') +
+    bar(1080, 16, 96, 24, '#d1d5db', 12) +
+    bar(0, 56, 220, 664, '#f9fafb', 0) +
+    [0, 1, 2, 3, 4, 5]
+      .map((i) => bar(24, 96 + i * 44, i === 2 ? 150 : 120, 14, i === 2 ? '#6b7280' : '#d1d5db'))
+      .join('') +
+    bar(260, 90, 260, 26, '#4b5563') +
+    bar(260, 140, 320, 36, '#f3f4f6', 8) +
+    bar(260, 216, 910, 40, '#f9fafb', 0) +
+    bar(280, 230, 90, 12, '#9ca3af') +
+    bar(560, 230, 90, 12, '#9ca3af') +
+    bar(900, 230, 120, 12, '#4b5563') +
+    rows +
+    `</svg>`
+)}`
+
+export const AnnotatedScreenshotStory: Story = {
+  name: 'AnnotatedScreenshot (sample)',
+  render: () => (
+    <Figure caption="Sample caption: the claim the screenshot makes.">
+      <AnnotatedScreenshot
+        src={placeholderScreen}
+        alt="A placeholder admin screen with a navigation sidebar and a table of six rows"
+        width={1200}
+        height={720}
+        label="Sample callouts"
+        callouts={[
+          { x: 16, y: 25.5, label: 'Sidebar item', detail: 'The third entry in the navigation.' },
+          { x: 73.5, y: 32.8, label: 'Column header' },
+          { x: 91.8, y: 41.2, label: 'Row menu', detail: 'One per row.' },
+        ]}
       />
     </Figure>
   ),
