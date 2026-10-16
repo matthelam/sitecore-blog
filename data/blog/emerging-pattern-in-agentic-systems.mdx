@@ -1,60 +1,99 @@
 ---
-title: "SOLID Principles for Agents: An Emerging Pattern"
+title: 'Mind, Body and Soul: An Emerging Pattern for Agents'
 date: '2026-03-19'
+lastmod: 2026-10-16
 tags: ['agents', 'context-engineering', 'architecture', 'skills', 'claude-code']
 draft: false
-summary: "Agents are where the web was before patterns existed. A draft thesis mapping SOLID principles to agents, and why AI is a new medium, not a new epistemology."
+summary: 'Agents are where the web was before SOLID and MVC. Thinking aloud about the pattern emerging now (a Soul, a Mind and a Body) and how it pointed to the Legal Framework.'
 authors: ['default']
 layout: PostLayout
 ---
 
 ## The Same Pre-Pattern Moment
 
-I was deep into the third restructure of the [skills engine](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture) when it clicked: the agent space is in the same moment the web was before MVC. One developer's controller was another's helper was another's just-a-file-I-put-code-in. Strongly typed roles, eventual enforcement, and the ambiguity collapsed.
+I was deep into the third restructure of the [skills engine](/blog/sub-agents-vs-personas-vs-skills-a-journey-through-code-architecture) when it clicked: the agent space is in the same moment the web was before MVC. One developer's controller was another's helper, and another's just-a-file-I-put-code-in. Then came strongly typed roles and eventual enforcement, and the ambiguity collapsed.
 
-I think the principle that settles the agent space already has a name.
+That rush gave us patterns like SOLID and MVC, and today they're everywhere. I think we're in the middle of the next one.
 
 ## AI Is a New Medium, Not a New Epistemology
 
-The problems agents solve — coordination, decomposition, knowledge management, quality gates — existed before LLMs. Accumulated software wisdom still applies. The question is whether we recognise it, or reinvent it poorly.
+The problems agents solve (coordination, decomposition, knowledge management, quality gates) existed before LLMs. Accumulated software wisdom still applies. The question is whether we recognise it, or reinvent it poorly.
 
-SOLID didn't describe OO code specifically — it described how to make any composable system maintainable. Mapped to Agent profile, Skills + CLI, and MCP, the principles land with uncomfortable precision.
+What's new is that we're naming the parts before we've agreed on the shape. Terms like **skills** and **harness** have appeared in the last year, and everyone, me included, is madly rushing to figure out how they fit together.
 
-## The SOLID Mapping
+## Mind, Body and Soul
 
-| Principle                     | Agent equivalent                                                                                                                                                                       |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **S — Single Responsibility** | One reason to change per axis. Posture shapes how the agent thinks. Skills and CLI shape how it acts. MCP shapes what it knows. The separation is the principle made structural.       |
-| **O — Open/Closed**           | Extend capability by composing new skills or connecting new knowledge sources. Never modify the cognitive profile to add capability.                                                   |
-| **L — Liskov Substitution**   | Any skill fulfilling the same contract is substitutable without breaking the agent that uses it. Requires typed contracts — the missing enforcement layer in most agent systems today. |
-| **I — Interface Segregation** | An agent loads only the skills and knowledge relevant to its task. Fat skill files violate this. Atomic, single-purpose skills don't.                                                  |
-| **D — Dependency Inversion**  | The agent profile depends on skill abstractions, not specific implementations. Cognitive architecture depends on contracts, not concretions.                                           |
+I'm almost thinking the pattern that's emerging hints at something like Mind, Body and Soul:
 
-These aren't analogies. Same problems, different medium.
+- **Soul:** the Constitution. The values and supreme laws the agent holds to, whatever it's working on.
+- **Mind:** the Legislation and the Memory. The rules for the work in front of it, and the experience it has built up along the way.
+- **Body:** the tools. What it actually acts with.
 
-## Three Axes, One Execution Point
+{/* prettier-ignore */}
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" className="axes-diagram mx-auto my-6 hidden w-full max-w-2xl sm:block" role="img" aria-label="Soul (the Constitution: values and supreme laws), Mind (Legislation and Memory: rules and experience) and Body (the tools it acts with) all meet in the agent at the point of execution, together rather than in sequence.">
+  <style>{`.axes-diagram text { font-family: ui-sans-serif, system-ui, sans-serif; fill: currentColor; text-anchor: middle; } .axes-diagram .box { fill: var(--ds-surface-muted); stroke: var(--ds-line-strong); stroke-width: 1.5; } .axes-diagram .title { font-size: 14px; font-weight: 700; } .axes-diagram .sub { font-size: 11px; opacity: 0.75; } .axes-diagram .link { stroke: var(--ds-line-strong); stroke-width: 1.5; stroke-dasharray: 6 3; fill: none; } .axes-diagram .core { fill: var(--ds-inverse-fill); } .axes-diagram .core-text { fill: var(--ds-inverse-ink); font-size: 12px; font-weight: 600; } .axes-diagram .note { font-size: 11px; opacity: 0.6; }`}</style>
+  <path className="link" d="M 170 137 L 268 186" />
+  <path className="link" d="M 320 100 L 320 152" />
+  <path className="link" d="M 470 137 L 372 186" />
+  <rect className="box" x="20" y="95" width="150" height="85" rx="8" />
+  <text className="title" x="95" y="124">Soul</text>
+  <text className="sub" x="95" y="144">Constitution</text>
+  <text className="sub" x="95" y="162">values, supreme laws</text>
+  <rect className="box" x="245" y="15" width="150" height="85" rx="8" />
+  <text className="title" x="320" y="44">Mind</text>
+  <text className="sub" x="320" y="64">Legislation and Memory</text>
+  <text className="sub" x="320" y="82">rules, experience</text>
+  <rect className="box" x="470" y="95" width="150" height="85" rx="8" />
+  <text className="title" x="545" y="124">Body</text>
+  <text className="sub" x="545" y="144">Tools</text>
+  <text className="sub" x="545" y="162">what it acts with</text>
+  <circle className="core" cx="320" cy="210" r="55" />
+  <text className="core-text" x="320" y="205">The agent at</text>
+  <text className="core-text" x="320" y="222">execution</text>
+  <text className="note" x="320" y="290">together, not in sequence</text>
+</svg>
 
-The diagram is not a flow diagram. These axes don't run in sequence — they arrive simultaneously. Posture shapes interpretation. Skills and CLI define available actions. MCP defines what can be retrieved. All three are present the moment the agent picks up a task.
+{/* prettier-ignore */}
+<svg viewBox="0 0 340 470" xmlns="http://www.w3.org/2000/svg" className="axes-diagram mx-auto my-6 block w-full max-w-sm sm:hidden" role="img" aria-label="Soul (the Constitution: values and supreme laws), Mind (Legislation and Memory: rules and experience) and Body (the tools it acts with) all meet in the agent at the point of execution, together rather than in sequence.">
+  <rect className="box" x="20" y="10" width="300" height="70" rx="8" />
+  <text className="title" x="170" y="38">Soul</text>
+  <text className="sub" x="170" y="60">Constitution: values, supreme laws</text>
+  <rect className="box" x="20" y="100" width="300" height="70" rx="8" />
+  <text className="title" x="170" y="128">Mind</text>
+  <text className="sub" x="170" y="150">Legislation and Memory: rules, experience</text>
+  <rect className="box" x="20" y="190" width="300" height="70" rx="8" />
+  <text className="title" x="170" y="218">Body</text>
+  <text className="sub" x="170" y="240">Tools: what it acts with</text>
+  <path className="link" d="M 60 260 L 140 320" />
+  <path className="link" d="M 170 260 L 170 308" />
+  <path className="link" d="M 280 260 L 200 320" />
+  <circle className="core" cx="170" cy="362" r="52" />
+  <text className="core-text" x="170" y="358">The agent at</text>
+  <text className="core-text" x="170" y="375">execution</text>
+  <text className="note" x="170" y="446">together, not in sequence</text>
+</svg>
 
-<img
-  src="/static/images/emerging-pattern-in-agentic-systems/axes-diagram.svg"
-  alt="Three axes composing at the point of execution"
-  className="my-6 w-full"
-/>
+Looking back over my own work, I keep landing on these same three seams under different names:
 
-| Axis        | Technology    | Natural grain  | Optimised for |
-| ----------- | ------------- | -------------- | ------------- |
-| Condition   | Agent profile | Interpretation | HOW to think  |
-| Interaction | Skills + CLI  | Execution      | HOW to act    |
-| Knowledge   | MCP           | Retrieval      | WHAT is known |
+| Where it shows up                                                      | Soul                       | Mind                               | Body                                       |
+| ---------------------------------------------------------------------- | -------------------------- | ---------------------------------- | ------------------------------------------ |
+| [Legal Framework](/blog/a-legal-framework-for-agent-context)           | Constitution               | Legislation and Common Law         | the tools it governs                       |
+| [Cognitive profiles](/blog/composing-agent-teams-by-cognitive-profile) | how the agent thinks       | skills: what it does and knows     | the harness: how it gets done              |
+| My harness tiers                                                       | cognitive profile (tier 3) | agent guidance and skills (tier 2) | tool config: linters, CI, scripts (tier 1) |
 
-CLI and MCP both move information but have different natural grains. CLI is an action interface: precise, composable, backed by decades of accumulated tooling — package managers, version control, linters, CI/CD — that completed the full enforcement cycle. MCP is a query interface with real strengths, but it hasn't been through that cycle. CLI won this race before the agent space began.
+That's my rough mapping, not a settled one, and the edges are blurry. Skills feel like Mind, but they carry capability too. An agent's way of thinking could be Soul, or it could be Mind. This is a thought, not an answer. I'm thinking aloud about where I'm at today, and like everyone else I'm madly rushing to formulate my own string theory.
 
-## A Draft Thesis — Come Argue With Me
+## It Pointed to the Legal Framework
 
-I want to be clear: this is a draft thesis, not a settled pattern.
+When I first wrote this post, it pointed towards what became my [Legal Framework for agent context](/blog/a-legal-framework-for-agent-context). The framework is different now, but it held a similar ideal: separation of concerns along these seams. The Constitution is the Soul. The Legislation and the Common Law, its memory, are the Mind. The tools are the Body. I wrote up how that runs day to day in [Implementing the Legal Framework](/blog/implementing-the-legal-framework).
 
-If Agent, Skills + CLI, and MCP are treated as typed contracts — not informal conventions — agentic systems become composable by design, not by accident. The enforcement that made SOLID actionable was linters, type systems, and code review norms. The agent equivalent doesn't exist yet, and hopefully through continued discussion we can establish one, the same way SOLID did.
+I'm happy to say I had to come back and rewrite this post. My first version mapped SOLID's five principles onto agents, and I felt there was more value in where my thinking has gone since.
+
+## A Draft Thesis: Come Argue With Me
+
+This is still a draft thesis, not a settled pattern.
+
+The enforcement that made SOLID actionable was linters, type systems and code review norms. Whatever settles the agent space will need its own enforcement, and hopefully through continued discussion we can establish it, the same way SOLID did.
 
 If you've built multi-agent systems and think I'm wrong, I want to hear it. That's how patterns settle.
 
