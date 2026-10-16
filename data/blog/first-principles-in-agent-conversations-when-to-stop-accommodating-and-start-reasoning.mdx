@@ -1,6 +1,7 @@
 ---
-title: "Stop AI Agents Accommodating: Reason From First Principles"
+title: 'Stop AI Agents Accommodating: Reason From First Principles'
 date: 2026-02-21
+lastmod: 2026-10-16
 draft: false
 tags: ['agents', 'context-engineering', 'prompting']
 summary: "Say 'first principles' to stop an agent accommodating. Two words moved my agents from implementation to reasoning during design work."
@@ -8,11 +9,11 @@ images: []
 authors: ['default']
 ---
 
-AI agents are built to accommodate. You describe an approach, they build it. You give feedback, they apply it. That's the reinforcement loop working as intended — helpful, agreeable, responsive.
+AI agents are built to accommodate. You describe an approach, they build it. You give feedback, they apply it. That's the reinforcement loop working as intended: helpful, agreeable, responsive.
 
 The problem shows up during design work. When I described a [five-layer context architecture](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design) to my agent, it fleshed out each layer, suggested contents, proposed validation pipelines. It never said: "Several of these overlap. Is layering the right model?" I asked it to build. It built. My description was treated as a specification to implement, not a hypothesis to test.
 
-The same thing happens with feedback. Tell an agent "this needs to handle permissions" and it adds an `if` statement. What you meant was "permission boundaries are a design constraint" — which might mean middleware, role-based rendering, or data-layer filtering. The agent hears implementation instructions. You meant requirements to reason against.
+The same thing happens with feedback. Tell an agent "this needs to handle permissions" and it adds an `if` statement. What you meant was "permission boundaries are a design constraint", which might mean middleware, role-based rendering, or data-layer filtering. The agent hears implementation instructions. You meant requirements to reason against.
 
 Two words changed this for me: **first principles**.
 
@@ -26,8 +27,10 @@ Now the agent asks what caching actually solves here. Is the bottleneck queries,
 
 The same shift produced the [Three Dimensions](/blog/three-dimensions-of-agent-context-from-over-engineering-to-orthogonal-design) framework. Instead of "help me refine the layers," I asked "from first principles, what questions does agent context need to answer?" Five layers collapsed into three orthogonal dimensions. Token count dropped from 5,000 to 1,500. Nothing lost.
 
-**Use it during investigation, design, planning, and dead ends** — any phase where you need the agent to reason about _what_ to do. Especially twenty messages deep when the conversation has lost the thread. "Let's go back to first principles" is a reset button.
+**Use it during investigation, design, planning, and dead ends:** any phase where you need the agent to reason about _what_ to do. Especially twenty messages deep when the conversation has lost the thread. "Let's go back to first principles" is a reset button.
 
 **Skip it during implementation and mechanical tasks.** Once decisions are made, the agent should take the spec and ship it. Don't waste tokens re-deriving choices you've already committed to.
+
+If you compose agent teams by [cognitive profile](/blog/composing-agent-teams-by-cognitive-profile), this is the same idea from the other side. An implementer weighted low on first-principles reasoning defaults to building, and these two words ask it to think like the architect for a turn.
 
 The core insight is simple: the agent knows more than it volunteers. The accommodation default deploys its knowledge in service of your approach rather than in evaluation of it. First principles prompting says "I want your analytical capability, not your compliance." It's a scalpel, not a default. Use it when you need the agent to think. Turn it off when you need it to build.
