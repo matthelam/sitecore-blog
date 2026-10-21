@@ -27,13 +27,11 @@ text below, under each fact's scope.
 ## All facts by scope
 
 ### repo
-
 - **hook-path-anchored-to-project-dir** [fix·observed] — Hook commands in .claude/settings.json use exec form with ${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py so they resolve from the project root whatever the working directory.
 - **hook-relative-path-fails-in-subfolder** [issue·observed] — Hooks written as 'python scripts/memory_hook.py' fail with exit 2 once the session's working directory is a subfolder, which blocks UserPromptSubmit and PreToolUse.
-- **live-check-needs-allowed-domains** [knowledge·observed] — Live checks from the cloud session need matthelam.com, \*.vercel.app and vercel.com in the environment's Allowed domains; without them curl fails with 'CONNECT tunnel failed, response 403'.
+- **live-check-needs-allowed-domains** [knowledge·observed] — Live checks from the cloud session need matthelam.com, *.vercel.app and vercel.com in the environment's Allowed domains; without them curl fails with 'CONNECT tunnel failed, response 403'.
 - **pr-fixes-desktop-autofix** [preference·contractual] — Session-opened pull requests are bound, get the desktop app's Auto-fix (not a GitHub Action) and GitHub auto-merge, so they merge once all required checks pass.
 
 ### blog
-
 - **check-origin-main-for-published-posts** [verification·observed] — The local main checkout can lag origin/main, so check origin/main or the live site before saying a post is unpublished or can't be linked.
 - **sandbox-tenant-name-may-be-shown** [preference·observed] — Under law 1, Aceik's sandbox tenant name may appear in screenshots or videos of the sandbox; client names and private data still need raising.
