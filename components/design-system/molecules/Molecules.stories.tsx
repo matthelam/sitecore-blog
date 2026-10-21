@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
+import { useState } from 'react'
 import AgentCard from './AgentCard'
 import FlowNode from './FlowNode'
+import TabList from './TabList'
 
 // Molecules in their states. Sample text only.
 
@@ -38,4 +40,22 @@ export const AgentCards: Story = {
       </div>
     )
   },
+}
+
+const TabListDemo = () => {
+  const [active, setActive] = useState(0)
+  return (
+    <TabList
+      label="Sample tabs"
+      idBase="sample"
+      active={active}
+      onChange={setActive}
+      tabs={['First', 'Second', 'Third']}
+    />
+  )
+}
+
+export const TabLists: Story = {
+  name: 'TabList',
+  render: () => <TabListDemo />,
 }

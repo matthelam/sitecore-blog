@@ -1,14 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import Figure from '../templates/Figure'
 import AnnotatedScreenshot from './AnnotatedScreenshot'
+import CountCheck from './CountCheck'
+import FieldSets from './FieldSets'
 import GatedFlow from './GatedFlow'
 import LayerParallel from './LayerParallel'
 import MandateCheckout from './MandateCheckout'
 import PerspectiveTabs from './PerspectiveTabs'
+import PromptAnatomy from './PromptAnatomy'
 import ProfileMatrix from './ProfileMatrix'
+import SeriesOverview from './SeriesOverview'
 import SkillComposition from './SkillComposition'
 import StepThrough from './StepThrough'
 import TeamProfiles from './TeamProfiles'
+import WhoCarries from './WhoCarries'
+import YouTubePlayer from './YouTubePlayer'
 
 // Organisms inside their Figure, with the props the published posts pass. The stories copy
 // those props; the posts stay the source of the facts.
@@ -566,6 +572,175 @@ export const TeamProfilesStory: Story = {
             ],
           },
         ]}
+      />
+    </Figure>
+  ),
+}
+
+export const YouTubePlayerStory: Story = {
+  name: 'YouTubePlayer (Agentic Studio, stage 1)',
+  render: () => (
+    <Figure caption="The recorded stage 1 run: seven prompts in a plain Agentic Studio chat.">
+      <YouTubePlayer
+        videoId="Nkhjg0PifeQ"
+        title="Sitecore AI - Agentic Studio SEO Agent, Stage 1: Prompt"
+      />
+    </Figure>
+  ),
+}
+
+export const SeriesOverviewStory: Story = {
+  name: 'SeriesOverview (Agentic Studio, stage 1)',
+  render: () => (
+    <Figure caption="The task is the same at every stage. Only the machinery around it changes.">
+      <SeriesOverview
+        label="The five stages of the series"
+        stages={[
+          {
+            number: '1',
+            name: 'Prompt',
+            status: 'This post',
+            rows: [
+              { label: 'Quality it adds', text: 'Actionable' },
+              {
+                label: 'What gets built',
+                text: 'A plain chat: no agent, no tools ticked, no MCP.',
+              },
+            ],
+          },
+          {
+            number: '2',
+            name: 'Context',
+            status: 'Planned',
+            rows: [
+              { label: 'Quality it adds', text: 'Quality' },
+              {
+                label: 'What gets built',
+                text: 'The same chat, grounded on the Boulderfest brand kit, with the page fetched through tools.',
+              },
+            ],
+          },
+        ]}
+        constant={{
+          eyebrow: 'The task, identical at every stage',
+          headline: 'How much does a casual bouldering session cost in Adelaide?',
+          rows: [{ label: 'Page', text: '/climb/casual-entry' }],
+        }}
+      />
+    </Figure>
+  ),
+}
+
+export const PromptAnatomyStory: Story = {
+  name: 'PromptAnatomy (Agentic Studio, stage 1)',
+  render: () => (
+    <Figure caption="A prompt with its craft and its guardrails marked.">
+      <PromptAnatomy
+        label="A stage 1 prompt with marks"
+        views={[
+          { kind: 'craft', label: 'What makes it work' },
+          { kind: 'guardrail', label: 'Guardrails', countLabel: 'words are guardrail text' },
+        ]}
+        rounds={[
+          {
+            round: '2',
+            title: 'Round 2: Analyse',
+            prompt:
+              'Act as an SEO specialist. Assess each of the five fields. Do not propose new values yet.',
+            marks: [
+              { text: 'Act as an SEO specialist.', kind: 'craft', note: 'A role.' },
+              {
+                text: 'Do not propose new values yet.',
+                kind: 'guardrail',
+                note: 'A guardrail, typed into this prompt by hand.',
+              },
+            ],
+          },
+        ]}
+      />
+    </Figure>
+  ),
+}
+
+export const FieldSetsStory: Story = {
+  name: 'FieldSets (Agentic Studio, stage 1)',
+  render: () => (
+    <Figure caption="One page item, two sets of SEO fields.">
+      <FieldSets
+        label="Two sets of fields on one item"
+        item="/climb/casual-entry: one content item"
+        renderedLabel="Rendered on the live page"
+        notRenderedLabel="Not rendered"
+        sets={[
+          {
+            heading: 'Page Meta Properties and OpenGraph',
+            rendered: true,
+            fields: [{ name: 'Page title', output: '<title>' }],
+          },
+          {
+            heading: 'Metadata and Open Graph',
+            rendered: false,
+            fields: [{ name: 'Metadata Title' }],
+            flag: 'Round 6 read this set.',
+          },
+        ]}
+      />
+    </Figure>
+  ),
+}
+
+export const CountCheckStory: Story = {
+  name: 'CountCheck (Agentic Studio, stage 1)',
+  render: () => (
+    <Figure caption="Edit either value to see the count change.">
+      <CountCheck
+        label="Title and description with live counts"
+        claimedLabel="The chat said"
+        passLabel="Meets the rule"
+        failLabel="Breaks the rule"
+        resetLabel="Reset"
+        fields={[
+          {
+            label: 'Title',
+            value: 'Casual Bouldering $28 in Adelaide | Boulderfest',
+            claimed: '44, then 46 on recount',
+            max: 60,
+            rule: '60 characters or fewer',
+          },
+          {
+            label: 'Description',
+            value:
+              'Casual bouldering costs $28 for adults in Adelaide. Includes unlimited climbing for the day across six zones, the training area and yoga corner. Plan your visit.',
+            claimed: '160',
+            min: 150,
+            max: 160,
+            rule: '150 to 160 characters',
+            multiline: true,
+          },
+        ]}
+      />
+    </Figure>
+  ),
+}
+
+export const WhoCarriesStory: Story = {
+  name: 'WhoCarries (Agentic Studio, stage 1)',
+  render: () => (
+    <Figure caption="The score goes to the person, never back into the chat.">
+      <WhoCarries
+        label="The operator between the chat, the live page and the scorer"
+        chat={{ name: 'Studio chat', lines: ['Analyses, proposes, writes'] }}
+        operator={{ name: 'Operator', lines: ['Approves, publishes'] }}
+        live={{ name: 'Live page', lines: ['Served through a cache'] }}
+        instrument={{ name: 'seo-jev-analyzer', lines: ['Separate window'] }}
+        edges={{
+          toOperator: 'proposals',
+          toChat: 'rules, feedback',
+          publish: 'publish',
+          reads: 'reads',
+          report: 'score',
+        }}
+        note="The chat never sees the score"
       />
     </Figure>
   ),

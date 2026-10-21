@@ -62,20 +62,27 @@ conventions are in `references/architecture.md`; read it before writing or chang
 | `ProfileMatrix`       | Explorable     | `label`, `styles` (four `{ name, gist, thinks[2], asSecondary, leanings }`, clockwise from top-left), `dimensions: { name, low, high }[]`, `names`, `balanced: { name, note }`, `initial?` | `composing-agent-teams-by-cognitive-profile`: drag a dot in a square with a working style in each corner; the readout names the profile, how it thinks, what it prioritises and deprioritises. Pure logic in `profileMatrixLogic.ts` |
 | `PerspectiveTabs`     | Step-through   | `label`, `context: { label, value }[]`, `perspectives: { name, tag, rows: { label, text }[] }[]`, `note?`                                                                                  | `composing-agent-teams-by-cognitive-profile`: one skill and one prompt, a tab per profile showing how its thinking differs; every panel is in the DOM                                                                                |
 | `TeamProfiles`        | Explorable     | `label`, `hint`, `thinksLabel`, `prioritisesLabel`, `defocusesLabel`, `groups: { name, roles: { name, profile, thinks, prioritises[], defocuses[] }[] }[]`                                 | `composing-agent-teams-by-cognitive-profile`: a scrum team (Product Owner, Scrum Master, Developers side by side); hover, focus or tap a role for its simplified profile                                                             |
+| `YouTubePlayer`       | Video          | `videoId`, `title`, `start?` (seconds)                                                                                                                                                     | `agentic-studio-stage-1-prompt` (draft): the stage 1 run video, via Google's IFrame Player API with a "Watch on YouTube" link beneath                                                                                                |
+| `SeriesOverview`      | Explorable     | `label`, `stages: { number, name, status, rows: { label, text }[] }[]`, `initial?`, `constant: { eyebrow, headline, rows }`                                                                | `agentic-studio-stage-1-prompt` (draft): the five stages as tabs, with the constant task panel beneath                                                                                                                               |
+| `PromptAnatomy`       | Explorable     | `label`, `rounds: { round, title, prompt, marks: { text, kind, note }[] }[]`, `views: { kind, label, countLabel? }[]`, `initialView?`                                                      | `agentic-studio-stage-1-prompt` (draft): the seven prompts with craft or guardrail spans marked; the guardrail word count is derived from the marks                                                                                  |
+| `FieldSets`           | Static diagram | `label`, `item`, `sets: { heading, rendered, fields: { name, output? }[], note?, flag? }[]`, `renderedLabel`, `notRenderedLabel`                                                           | `agentic-studio-stage-1-prompt` (draft): the item's rendered and unrendered SEO fields, with the set Round 6 read flagged                                                                                                            |
+| `CountCheck`          | Explorable     | `label`, `fields: { label, value, claimed, min?, max, rule, multiline? }[]`, `claimedLabel`, `passLabel`, `failLabel`, `resetLabel`                                                        | `agentic-studio-stage-1-prompt` (draft): live character counts against the chat's claimed counts and the rules                                                                                                                       |
+| `WhoCarries`          | Static diagram | `label`, `chat`, `operator`, `live`, `instrument` (each `{ name, lines[] }`), `edges`, `note?`                                                                                             | `agentic-studio-stage-1-prompt` (draft): the operator between the chat, the live page and the scorer                                                                                                                                 |
 | `AnnotatedScreenshot` | Screenshot     | `src`, `alt`, `width`, `height`, `label`, `callouts: { x, y, label, detail? }[]` (x, y as % of the image)                                                                                  | Not yet used in a post: a sanitised screenshot with numbered markers on it and the same numbers as a list below                                                                                                                      |
 
 Building blocks for new organisms (`components/design-system/`, see `components/CLAUDE.md`):
 
-| Layer    | Component   | Use                                                                    |
-| -------- | ----------- | ---------------------------------------------------------------------- |
-| Atom     | `Surface`   | Every box. `tone`: plain, muted, emphasis, negative, advisory, inverse |
-| Atom     | `Arrow`     | Every connector. `direction`: down, up, right; `stretch`; `dashed`     |
-| Atom     | `Chip`      | A labelled item. `variant`: solid, inverse, dashed; optional `icon`    |
-| Atom     | `Icon`      | pause, duplicate, check, cross (uses the text colour)                  |
-| Atom     | `Eyebrow`   | Small uppercase label                                                  |
-| Atom     | `Marker`    | Numbered circle; matches a place on an image to its list item          |
-| Molecule | `FlowNode`  | A workflow step or gate                                                |
-| Molecule | `AgentCard` | An agent, its core and its capabilities, duplicates marked             |
+| Layer    | Component   | Use                                                                      |
+| -------- | ----------- | ------------------------------------------------------------------------ |
+| Atom     | `Surface`   | Every box. `tone`: plain, muted, emphasis, negative, advisory, inverse   |
+| Atom     | `Arrow`     | Every connector. `direction`: down, up, right, left; `stretch`; `dashed` |
+| Atom     | `Chip`      | A labelled item. `variant`: solid, inverse, dashed; optional `icon`      |
+| Atom     | `Icon`      | pause, duplicate, check, cross (uses the text colour)                    |
+| Atom     | `Eyebrow`   | Small uppercase label                                                    |
+| Atom     | `Marker`    | Numbered circle; matches a place on an image to its list item            |
+| Molecule | `FlowNode`  | A workflow step or gate                                                  |
+| Molecule | `AgentCard` | An agent, its core and its capabilities, duplicates marked               |
+| Molecule | `TabList`   | A row of tabs with the arrow-key pattern; the parent renders the panels  |
 
 Add a row whenever a component is added. A component with no row doesn't exist as far as future
 work is concerned.
@@ -83,7 +90,8 @@ work is concerned.
 ## What this skill must never do
 
 - Invent a number, label, result or behaviour the post doesn't state.
-- Load a script from a CDN or embed an iframe (the site's CSP blocks both; see architecture.md).
+- Load a script from a CDN or hand-write an iframe (the site's CSP blocks both; see architecture.md).
+  The one exception is `YouTubePlayer`, which uses Google's official IFrame Player API.
 - Use colour as the only signal of state.
 - Add motion that runs without the reader acting, or ignore reduced-motion preferences.
 - Replace an author's existing diagram in a published post without the author's approval.
