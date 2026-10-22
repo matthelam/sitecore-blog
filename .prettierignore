@@ -1,3 +1,6 @@
 # Generated and schema-gated by scripts/memory.py (the OKF gate); Prettier must not reformat them.
 MEMORY.md
 memory/
+# seo-jev-analyzer export format, and the brand kit's wide tables: Prettier rewrites them wholesale.
+brand/jev-profile.json
+brand/brand-kit.md

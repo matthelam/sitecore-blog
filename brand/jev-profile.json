@@ -618,6 +618,24 @@
     "prompting AI agents"
    ],
    "included": true
+  },
+  {
+   "url": "https://matthelam.com/blog/agentic-studio-stage-1-prompt",
+   "path": "/blog/agentic-studio-stage-1-prompt",
+   "intent": "What can you do with just a prompt in Sitecore Agentic Studio, and where does prompting fall short?",
+   "expected": [
+    "prompt engineering vs context engineering",
+    "limitations of prompt engineering",
+    "agentic engineering",
+    "stages of agentic engineering: prompt, context, harness",
+    "Sitecore Agentic Studio",
+    "Agentic Studio chat",
+    "why AI gives different answers to the same prompt",
+    "AI-generated SEO meta title and meta description",
+    "prompt engineering best practices",
+    "context rot in long AI chat sessions"
+   ],
+   "included": true
   }
  ]
 }

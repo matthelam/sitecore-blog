@@ -1,0 +1,165 @@
+{
+  "intent": "What can you do with just a prompt in Sitecore Agentic Studio, and where does prompting fall short?",
+  "method_notes": "Method v2. 15 WebSearch calls (standard mode), each returning 9-10 links plus a summary; no page bodies fetched. Distinct domains counted from result URLs; doc.sitecore.com and developers.sitecore.com counted as one publisher (Sitecore). Caveats: the 'prompt engineering best practices' search returned one Hostinger article mirrored across about 9 URLs, so that term's count rests on other searches. Sitecore-specific coverage is thin (Sitecore docs and changelog plus a few partners); no independent page covers prompting technique inside Agentic Studio chat. Sources disagree on how many stages agentic engineering has (3, 4, 5 or 8). No search volumes available. Keywords approved by Matt on 2026-10-22.",
+  "selected": [
+    {
+      "term": "prompt engineering vs context engineering",
+      "sources": [
+        "blog.promptlayer.com",
+        "teradata.com",
+        "datahub.com",
+        "intuitionlabs.ai",
+        "elastic.co",
+        "educative.io",
+        "walturn.com",
+        "kasadara.com"
+      ],
+      "count": 8
+    },
+    {
+      "term": "limitations of prompt engineering",
+      "sources": [
+        "giancarlomori.substack.com",
+        "mindstudio.ai",
+        "arxiv.org",
+        "latitude.so",
+        "concepts.dsebastien.net"
+      ],
+      "count": 5
+    },
+    {
+      "term": "agentic engineering",
+      "sources": [
+        "hobo-web.co.uk",
+        "uxcel.com",
+        "zencoder.ai",
+        "chatbotkit.com",
+        "smartdev.com",
+        "simonwillison.net (via conffab.com)",
+        "path.kilo.ai",
+        "agentic-ai.readthedocs.io"
+      ],
+      "count": 8
+    },
+    {
+      "term": "stages of agentic engineering: prompt, context, harness",
+      "sources": [
+        "futureagi.com",
+        "manjeet.substack.com",
+        "besthub.dev",
+        "aibuilderclub.com",
+        "agentic-ai.readthedocs.io",
+        "codemyspec.com"
+      ],
+      "count": 6
+    },
+    {
+      "term": "Sitecore Agentic Studio",
+      "sources": [
+        "doc.sitecore.com / developers.sitecore.com",
+        "oshyn.com",
+        "rdadigital.com",
+        "verndale.com"
+      ],
+      "count": 4
+    },
+    {
+      "term": "Agentic Studio chat",
+      "sources": ["doc.sitecore.com (Understanding chat)", "rdadigital.com"],
+      "count": 2
+    },
+    {
+      "term": "why AI gives different answers to the same prompt",
+      "sources": [
+        "arxiv.org",
+        "flowhunt.io",
+        "outlookbusiness.com",
+        "community.openai.com",
+        "dev.to",
+        "mer.vin",
+        "makemeexpert.beehiiv.com"
+      ],
+      "count": 7
+    },
+    {
+      "term": "AI-generated SEO meta title and meta description",
+      "sources": [
+        "github.com (nurdigitalmarketing)",
+        "easycontent.io",
+        "apps.shopify.com",
+        "wpslimseo.com",
+        "cipher.co.th"
+      ],
+      "count": 5
+    },
+    {
+      "term": "prompt engineering best practices",
+      "sources": ["hostinger.com", "doc.sitecore.com (AI best practices)", "latitude.so", "dev.to"],
+      "count": 4
+    },
+    {
+      "term": "context rot in long AI chat sessions",
+      "sources": [
+        "blog.logrocket.com",
+        "claudecodefornoncoders.substack.com",
+        "dev.to",
+        "newsletter.learnprompting.org",
+        "mindstudio.ai",
+        "harness.io",
+        "memx.app"
+      ],
+      "count": 7
+    }
+  ],
+  "candidates": [
+    {
+      "term": "context engineering",
+      "count": 7
+    },
+    {
+      "term": "harness engineering",
+      "count": 4
+    },
+    {
+      "term": "SitecoreAI agents",
+      "count": 5
+    },
+    {
+      "term": "LLM-as-a-judge self-preference bias",
+      "count": 5
+    },
+    {
+      "term": "generate JSON-LD schema markup with ChatGPT",
+      "count": 5
+    },
+    {
+      "term": "prompt fragility / prompt stability",
+      "count": 2
+    },
+    {
+      "term": "LLM non-determinism at temperature 0",
+      "count": 4
+    },
+    {
+      "term": "lost in the middle (long-context recall)",
+      "count": 3
+    },
+    {
+      "term": "SEO prompts for titles and meta descriptions",
+      "count": 3
+    },
+    {
+      "term": "prompt engineering vs agent engineering",
+      "count": 2
+    }
+  ],
+  "unsupported_by_post": [
+    "harness engineering: a Stage 3 topic; only named in the series outline",
+    "context engineering (standalone): only pointed to as Stage 2",
+    "LLM non-determinism at temperature 0: the post says nothing about model settings",
+    "LLM-as-a-judge self-preference bias: would need research claims the post doesn't make",
+    "SitecoreAI agents: Stage 1 deliberately uses no agent",
+    "lost in the middle: a research claim the post doesn't make"
+  ],
+  "approved": "2026-10-22"
+}
