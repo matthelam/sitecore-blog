@@ -10,6 +10,7 @@ import AnnotatedScreenshot from './design-system/organisms/AnnotatedScreenshot'
 import CountCheck from './design-system/organisms/CountCheck'
 import FieldSets from './design-system/organisms/FieldSets'
 import GatedFlow from './design-system/organisms/GatedFlow'
+import InfoTip from './design-system/organisms/InfoTip'
 import LayerParallel from './design-system/organisms/LayerParallel'
 import MandateCheckout from './design-system/organisms/MandateCheckout'
 import PerspectiveTabs from './design-system/organisms/PerspectiveTabs'
@@ -34,6 +35,7 @@ export const components: MDXComponents = {
   CountCheck,
   FieldSets,
   GatedFlow,
+  InfoTip,
   LayerParallel,
   MandateCheckout,
   PerspectiveTabs,

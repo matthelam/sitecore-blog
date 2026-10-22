@@ -23,6 +23,7 @@ applying the rule; do not re-litigate a settled reading. Full
 text below, under each fact's scope.
 
 - **constitution#law-1** — sandbox-tenant-name-may-be-shown
+- **constitution#value-4** — noise-is-what-detracts-from-the-moment
 
 ## All facts by scope
 
@@ -34,4 +35,7 @@ text below, under each fact's scope.
 
 ### blog
 - **check-origin-main-for-published-posts** [verification·observed] — The local main checkout can lag origin/main, so check origin/main or the live site before saying a post is unpublished or can't be linked.
+- **noise-is-what-detracts-from-the-moment** [preference·observed] — Noise is any information, whatever its origin or intent, that detracts from the current moment of the communication; future ideas are fine only when they add value.
 - **sandbox-tenant-name-may-be-shown** [preference·observed] — Under law 1, Aceik's sandbox tenant name may appear in screenshots or videos of the sandbox; client names and private data still need raising.
+
+_1 superseded fact(s) retained for history._

@@ -3,24 +3,20 @@ title: 'Agentic Studio: Stage 1, Getting It Done With Just a Prompt'
 date: 2026-10-22
 draft: true
 tags: ['agentic-studio', 'sitecore-ai', 'agents', 'prompting', 'seo']
-summary: 'Stage 1 of five in agentic engineering: a plain Agentic Studio chat and a good prompt tune a page for SEO. It gets real work done, and it shows where repeatability and reliability start to slip.'
+summary: 'The first of five stages of Agentic Engineering in Sitecore Agentic Studio. A plain chat and a good prompt tune a page for SEO, and show where repeatability and reliability start to slip.'
 ---
 
-Most people's first agent is a chat box and a well-written prompt. That turns out to be a better start than it sounds, and a worse place to stop.
+**Prompting well is the first skill of Agentic Engineering, and it's amazing how much you can get done if you're willing to just try a prompt and see. Its limits show when you need the work done the same way every time, and done right without checking it yourself.** We'll follow one working example through each stage of Agentic Engineering, and see how each stage improves the process.
 
-**Prompting well is the first skill of agentic engineering, and a good prompt gets real work done. Its limits show when you need the work done the same way every time, and done right without checking it yourself.**
+## One goal, five stages
 
-This is the first of five posts. Each one builds the same SEO agent in Sitecore Agentic Studio, with more machinery each time.
+This post starts a series on building agents in Sitecore's new Agentic Studio. Each post repeats the same SEO optimisation task, adapted to show what one stage of Agentic Engineering looks like. If you're new to AI, these stages are a popular way to describe the journey many people have taken as they discover the complexities of this latest form of AI.
 
-## One task, five stages
-
-The series does two jobs at once. It's a hands-on reveal of Agentic Studio's building blocks, one set at a time: the bare chat, then brand kits and context, then a standard agent with tools and a scorer, then a workflow agent that loops, then a graph of agents across many pages. And it puts something concrete behind the stages of agentic engineering everyone talks about: prompts, context, harnesses, loops and multi-agent graphs.
-
-The constant is the task. One page, one question, five SEO fields, the same pass bar and the same independent score at every stage. Only the machinery around the task changes, so any difference in effort, quality or consistency comes from the stage, not the job.
+Every stage works on the same page, question and five SEO fields, and is scored the same way. The steps change as each stage brings in more of Agentic Studio's functionality, so any difference in effort, quality or consistency comes from the stage itself.
 
 Each stage is named for the one quality it adds.
 
-<Figure caption="The task is the same at every stage. Only the machinery around it changes, and each stage is named for the one quality it adds.">
+<Figure caption="Pick a stage to see what it adds and what gets built. Each stage's task fills in as its post is released.">
   <SeriesOverview
     label="The five stages of the series"
     stages={[
@@ -28,6 +24,36 @@ Each stage is named for the one quality it adds.
         number: '1',
         name: 'Prompt',
         status: 'This post',
+        source: {
+          label: 'Further reading: Anthropic, Prompt engineering overview',
+          href: 'https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview',
+        },
+        detail: {
+          eyebrow: 'The task',
+          headline: 'How much does a casual bouldering session cost in Adelaide?',
+          rows: [
+            {
+              label: 'Page',
+              text: '/climb/casual-entry on matthelam Boulderfest, a fictional Adelaide bouldering gym',
+            },
+            {
+              label: 'Fields',
+              text: 'Page title, meta description, Open Graph title, Open Graph description, JSON-LD structured data',
+            },
+            {
+              label: 'Starting values',
+              text: 'Title and Open Graph title "Casual entry"; the other three empty',
+            },
+            {
+              label: 'Facts allowed',
+              text: 'Only what the page states: adults $28, concession $24, under 15 $20, shoe hire $6, free chalk, 10-visit pass $250, five-minute safety induction, six zones',
+            },
+            {
+              label: 'Scored by',
+              text: 'seo-jev-analyzer on the live page, 0 to 10',
+            },
+          ],
+        },
         rows: [
           {
             label: 'Quality it adds',
@@ -47,6 +73,10 @@ Each stage is named for the one quality it adds.
         number: '2',
         name: 'Context',
         status: 'Planned',
+        source: {
+          label: 'Further reading: Andrej Karpathy on context engineering over prompt engineering',
+          href: 'https://x.com/karpathy/status/1937902205765607626',
+        },
         rows: [
           {
             label: 'Quality it adds',
@@ -66,6 +96,10 @@ Each stage is named for the one quality it adds.
         number: '3',
         name: 'Harness',
         status: 'Planned',
+        source: {
+          label: 'Further reading: Anthropic, Effective harnesses for long-running agents',
+          href: 'https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents',
+        },
         rows: [
           {
             label: 'Quality it adds',
@@ -85,6 +119,11 @@ Each stage is named for the one quality it adds.
         number: '4',
         name: 'Loop',
         status: 'Planned',
+        source: {
+          label:
+            "Further reading: Boris Cherny on loops, in TechCrunch's The AI world is getting loopy",
+          href: 'https://techcrunch.com/2026/06/22/the-ai-world-is-getting-loopy/',
+        },
         rows: [
           {
             label: 'Quality it adds',
@@ -104,6 +143,10 @@ Each stage is named for the one quality it adds.
         number: '5',
         name: 'Graph',
         status: 'Planned',
+        source: {
+          label: 'Further reading: Anthropic, How we built our multi-agent research system',
+          href: 'https://www.anthropic.com/engineering/multi-agent-research-system',
+        },
         rows: [
           {
             label: 'Quality it adds',
@@ -120,46 +163,21 @@ Each stage is named for the one quality it adds.
         ],
       },
     ]}
-    constant={{
-      eyebrow: 'The task, identical at every stage',
-      headline: 'How much does a casual bouldering session cost in Adelaide?',
-      rows: [
-        {
-          label: 'Page',
-          text: '/climb/casual-entry on matthelam Boulderfest, a fictional Adelaide bouldering gym',
-        },
-        {
-          label: 'Fields',
-          text: 'Page title, meta description, Open Graph title, Open Graph description, JSON-LD structured data',
-        },
-        {
-          label: 'Starting values',
-          text: 'Title and Open Graph title "Casual entry"; the other three empty',
-        },
-        {
-          label: 'Facts allowed',
-          text: 'Only what the page states: adults $28, concession $24, under 15 $20, shoe hire $6, free chalk, 10-visit pass $250, five-minute safety induction, six zones',
-        },
-        {
-          label: 'Scored by',
-          text: 'seo-jev-analyzer on the live page, 0 to 10',
-        },
-      ],
-    }}
+    pending={{ eyebrow: 'The task', text: 'Pending release' }}
   />
 </Figure>
 
-## The example: a bouldering gym that doesn't exist
+## Scenario
 
-The page belongs to matthelam Boulderfest, a fictional Adelaide bouldering gym. The agent's job is to tune the SEO of one page, `/climb/casual-entry`, so that a search engine or AI answer engine cites it for one question:
+We run a website called matthelam Boulderfest, for a fictional Adelaide bouldering gym. The agent's job is to tune the SEO of one page, `/climb/casual-entry`, so that a search engine or AI answer engine cites it for one question:
 
 > How much does a casual bouldering session cost in Adelaide?
 
-Five fields are in scope: page title, meta description, Open Graph title, Open Graph description and JSON-LD structured data. They start deliberately weak, so there's something to improve. The title and Open Graph title say "Casual entry", and the other three are empty. The only facts allowed are the ones the page states: adults \$28, concession \$24, under 15 \$20, shoe hire \$6, free chalk, a 10-visit pass for \$250, a five-minute safety induction and six zones.
+Five fields are in scope: page title, meta description, Open Graph title, Open Graph description and JSON-LD structured data.<InfoTip label="Why these five fields?" title="Why these five fields" body={["Stage 1 sticks to this metadata because the tooling is more basic and easier to manage. Later stages widen the work and learn to manage multiple tools.", "The metadata is also the page's first impression for people and agents. Search engines read the whole page, but the title and description shape the result people and agents choose from.", "Bing says weak titles and meta descriptions can reduce a page's 'eligibility for grounding results and citations' in Copilot, and that structured data 'may support clearer grounding'."]} links={[{ label: 'Bing Webmaster Guidelines', href: 'https://www.bing.com/webmasters/help/webmaster-guidelines-30fba23a' }, { label: 'Google: title links', href: 'https://developers.google.com/search/docs/appearance/title-link' }]} /> They start deliberately weak, so there's something to improve. The title and Open Graph title say "Casual entry", and the other three are empty. The only facts allowed are the ones the page states: adults \$28, concession \$24, under 15 \$20, shoe hire \$6, free chalk, a 10-visit pass for \$250, a five-minute safety induction and six zones.
 
-The independent score comes from [seo-jev-analyzer](/blog/seo-jev-analyzer), my own open-source scorer. It rates ten expected terms for how central they are, multiplies that by how fully the page answers the question, and gives a score from 0 to 10. At stage 1 it sits outside the chat. I run it on the live page before and after, and the chat never sees the result.
+An independent score comes from [seo-jev-analyzer](/blog/seo-jev-analyzer), my own open-source tool, which rates the page from 0 to 10 on how well it answers the question. At stage 1 it sits outside the chat, so I have to run and check it manually on the live page, before and after. The chat never sees the result.
 
-Stage 1 is what most people do first: Agentic > Chat > New chat, and type. Nothing is configured, so every rule, fact and check has to live in the prompt, or in my head.
+Stage 1 is what most people try first. You open Agentic > Chat > New chat and type. Nothing is configured, so every rule, fact and check has to live in the prompt.
 
 ## Watch the run
 
@@ -170,32 +188,32 @@ Stage 1 is what most people do first: Agentic > Chat > New chat, and type. Nothi
   />
 </Figure>
 
-The video runs 4:48. The grey sections at 4x are the chat working. The panel over Studio isn't part of Agentic Studio; it's a presentation aid from the script I recorded with. Its Prompt button opens each prompt with colour-coded callouts: blue where natural language does the job, amber where the result depends on choices the chat makes for itself, and red where a person has to write, read or judge by hand.
+Apologies for the lack of audio. I often get so caught up in trying all the cool things I can do with AI that I never quite get around to the things I need to do! I'll be reposting it properly with my narration.
 
-I won't retell the run here. The rest of this post is what it shows.
+Rather than repeat the video, this post covers the key points about Prompt Engineering. I've grouped my thoughts into three categories: Doable, Inconsistent and Tedious.
 
 ## Doable: a good prompt gets real work done
 
-**A model is a reasoning engine, and in Agentic Studio the tools are already within reach.** I didn't tick a single tool. Studio's built-in tools (Sites, Content, Pages and Web Search) were available anyway, and the chat called them by itself.
+**Models are reasoning engines and usually do a pretty good job of it, and Agentic Studio already gives the chat tools to work with.** I didn't tick any tools for this run, but Studio's built-in tools (Sites, Content, Pages and Web Search) were still available, and the chat used them without being asked.
 
-From seven plain-English prompts, it found the page, searched the web for Google's current guidance on titles, descriptions and structured data, and graded each field. It then drafted all five with valid JSON-LD, wrote them to the CMS behind Studio's own Apply changes card, and read them back. No agent, no configuration.
+I ended up using seven natural language prompts. With them, the chat found the page, searched the web for Google's current guidance on titles, descriptions and structured data, and graded each field. It then drafted all five fields with valid JSON-LD, wrote them to the CMS behind Studio's own Apply changes card, and read them back, all without an agent or any configuration.
 
-The recommendations were ok. Not brilliant, ok. From the true starting values, seo-jev-analyzer's metadata score went from 0.00 to 1.96, and the page score from 4.11 to 4.83 (three runs each). The gain is modest, and the reason is telling: the chat never saw the ten terms the scorer expects. A rewrite aimed at those terms scored 4.12 on metadata, roughly twice as high.
+The recommendations were OK. From the starting values, seo-jev-analyzer's metadata score went from 0.00 to 1.96, and the page score from 4.11 to 4.83 (three runs each).
 
-| Version of the five fields                | Metadata | Page |
-| ----------------------------------------- | -------- | ---- |
-| Starting values                           | 0.00     | 4.11 |
-| What the stage 1 run wrote                | 1.96     | 4.83 |
-| A rewrite aimed at the ten expected terms | 4.12     | 5.28 |
+| Version of the five fields | Metadata | Page |
+| -------------------------- | -------- | ---- |
+| Starting values            | 0.00     | 4.11 |
+| What the stage 1 run wrote | 1.96     | 4.83 |
 
 ### What the prompts did well
 
 {/* AUTHOR TO CONFIRM: which of these habits Matt claims as the craft, and anything to add. */}
 
-Looking back over the seven prompts, these are the habits doing the work:
+Looking back over the seven prompts, these habits did most of the work:
 
 - **A role.** "Act as an SEO specialist."
-- **The goal as an outcome, not a task.** "Be the page a search engine or AI answer engine cites when someone in Adelaide asks how much a casual bouldering session costs."
+- **The goal stated as an outcome.** "Be the page a search engine or AI answer engine cites when someone in Adelaide asks how much a casual bouldering session costs."
+- **Research on demand.** "Use web search to find Google's current guidance on title links, meta descriptions and structured data." Any AI with web search can do this, not just SitecoreAI. But the chat has to look up what good looks like every time, which adds up to a lot of repeated time and tokens, and it can interpret the same guidance differently each time.
 - **Exact fields and an exact output shape.** The five fields by name, a table with character counts, and the JSON-LD in a code block.
 - **A way to say "I don't know".** "Write EMPTY for a field that exists with no value and NOT RETURNED for a field your tools did not give you." Some tools leave fields out, and without this the chat fills the gap with a guess.
 - **Rules with numbers.** A title of 60 characters or fewer, a description of 150 to 160, ending with the site name.
@@ -256,7 +274,7 @@ Looking back over the seven prompts, these are the habits doing the work:
           {
             text: 'be the page a search engine or AI answer engine cites when someone in Adelaide asks how much a casual bouldering session costs',
             kind: 'craft',
-            note: 'The goal as an outcome, not a task.',
+            note: 'The goal stated as an outcome.',
           },
           {
             text: 'Do not propose new values yet.',
@@ -358,11 +376,11 @@ Looking back over the seven prompts, these are the habits doing the work:
   />
 </Figure>
 
-So a plain chat gets a long way. The trouble is that it doesn't get there the same way twice.
+A plain chat gets a long way, but it doesn't get there the same way each time.
 
 ## Inconsistent: same prompt, different work
 
-**The same prompt, sent twice, can produce different work, and the chat can't reliably tell you when its own work is wrong.** None of this shows in a single run. It shows across runs.
+**The same prompt, sent twice, can produce different work, and the chat can't reliably tell you when its own work is wrong.** You won't see most of this in a single run; it shows up across runs.
 
 **It picks its own tools.** In the recorded run, Round 1 used seven tools nobody asked for: tool search, list sites, search pages, get page, get page metadata, get page content and get page HTML. Another run of the same prompt chose a different set. Different tools return different fields, ask for approval differently and write by different routes. I saw this in every run, but I haven't tested how often each path comes up.
 
@@ -432,7 +450,7 @@ So a plain chat gets a long way. The trouble is that it doesn't get there the sa
   />
 </Figure>
 
-**It marks its own work.** Scores out of 10 and character counts come from the chat, with nothing outside to check them. Round 3 said the description was 160 characters. It was 161, one over the rule. Round 4 fixed it, but only because I thought to ask for a recount. Another operator, or me on a tired day, ships the 161. The title, "Casual Bouldering \$28 in Adelaide | Boulderfest", fared worse: Round 3 counted 44 characters, and the recount said 46. It's 47. {/* CHECKED 22 Oct: 47 by count; the source brief said 46 (the chat's recount). Matt to confirm. */}
+**It marks its own work.** Scores out of 10 and character counts come from the chat, with nothing outside to check them. Round 3 said the description was 160 characters. It was 161, one over the rule. Round 4 fixed it, but only because I thought to ask for a recount. Another operator, or me on a tired day, would ship the 161. The title, "Casual Bouldering \$28 in Adelaide | Boulderfest", was miscounted twice, as 44 characters in Round 3 and 46 on the recount. It's 47. {/* CHECKED 22 Oct: 47 by count; the source brief said 46 (the chat's recount). Matt to confirm. */}
 
 <Figure caption="The chat counts its own characters, and nothing outside checks the number. Edit either value to see the count change.">
   <CountCheck
@@ -463,17 +481,15 @@ So a plain chat gets a long way. The trouble is that it doesn't get there the sa
   />
 </Figure>
 
-**Guardrails are requests, not checks.** "Do not guess", "do not invent anything", "check your proposal against every rule": the model acts on them as it chooses, and nothing confirms it obeyed.
+**Guardrails are only requests.** "Do not guess", "do not invent anything", "check your proposal against every rule": the model acts on them as it chooses, and nothing confirms it obeyed.
 
 **Warnings slip past.** The Apply changes card appeared because of the tool the chat happened to pick; with another tool it asks in words instead. After the save, Studio reported that the changes "could not be fully applied". The run treated the save as done. A person reading quickly would too.
-
-Doable, yes. The same way every time, no.
 
 ## Tedious: the price of reliability by hand
 
 **Nothing in a plain chat makes the result reliable, so the person does it, every time.**
 
-Look at the prompts again and a good share of the text isn't the task. It's guardrails: what the chat can and can't do, don't guess, don't change anything, check your work. The same lines go into prompt after prompt, because a plain chat has nowhere else to keep them.
+A good share of the text in the prompts is guardrails rather than the task itself: what the chat can and can't do, don't guess, don't change anything, check your work. The same lines go into prompt after prompt, because a plain chat has nowhere else to keep them.
 
 <Figure
   caption={
@@ -528,7 +544,7 @@ Look at the prompts again and a good share of the text isn't the task. It's guar
           {
             text: 'be the page a search engine or AI answer engine cites when someone in Adelaide asks how much a casual bouldering session costs',
             kind: 'craft',
-            note: 'The goal as an outcome, not a task.',
+            note: 'The goal stated as an outcome.',
           },
           {
             text: 'Do not propose new values yet.',
@@ -632,7 +648,7 @@ Look at the prompts again and a good share of the text isn't the task. It's guar
 
 The person carries the context. The role, the goal, the house rules and the page's facts are all typed by hand.
 
-The person is also every control. When Round 1's tools didn't return three of the fields, I checked the CMS and typed their values in. From then on, the chat's picture of the page came from me, not from Sitecore. After that I read every reply, thought of each check and asked for it, approved the save, published in Sitecore, waited for the cache to serve the new title, and took the score in a separate window.
+The person is also the only check. When Round 1's tools didn't return three of the fields, I checked the CMS and typed their values in. From then on, the chat's picture of the page came from what I typed. After that I read every reply, thought of each check and asked for it, approved the save, published in Sitecore, waited for the live page to show the new title, and took the score in a separate window.
 
 <Figure caption="At stage 1 the person carries everything between the chat and the outside world. The score goes to the person, never back into the chat.">
   <WhoCarries
@@ -668,18 +684,10 @@ The person is also every control. When Round 1's tools didn't return three of th
   />
 </Figure>
 
-The panel kept count: 7 prompts sent, 443 words written by hand, 10 operator actions and 8 minutes, for one page. Take the operator away and the process stops. That's the figure the next four stages have to beat.
+The on-screen panel in the video kept count: 7 prompts sent, 443 words written by hand, 10 operator actions and 8 minutes, for one page. Take the operator away and the process stops. That's the figure the next four stages have to beat.
 
-## What stage 2 changes, and what it doesn't
+## Stage 2: Context Engineering
 
-Stage 2, Context, moves the facts and house rules out of the prompt and into a brand kit the chat reads every time: the page's goal, the prices, the title and description rules, the expected terms, and which fields are rendered. It's aimed squarely at the facts that lived in my head and at the question of which fields matter. Context comes first because it improves the output itself: the expected terms are what the score rewards.
+Next, we move on to Context Engineering. The popular definition of this stage is that, instead of stating everything in the prompt, we point the agent to information and it adds that to the prompt itself.
 
-It won't make stage 1 repeatable or reliable. The chat will still choose its own tools and mark its own work. Repeatability arrives with the harness at stage 3, and reliability with the loop at stage 4.
-
-## What I'd change on the next take
-
-- Name the rendered fields in every prompt, so the chat can't pick the wrong set.
-- Check the starting values on the live page, not in the chat's reply.
-- Treat "could not be fully applied" as a failed step, not a pass.
-
-A prompt is where agentic engineering starts, and prompting well can get you a long way. Its limits show when you need the work done the same way every time, and done right without checking it yourself. Stage 2 starts moving that weight out of the prompt.
+On its own, this technique doesn't improve our SEO results. The improvements come when we point the agent at knowledge that is much more detailed, and that someone has spent much more time curating.

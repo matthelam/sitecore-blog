@@ -104,6 +104,17 @@ export type SeriesStage = {
   name: string
   status: string
   rows: { label: string; text: string }[]
+  /** Optional further reading for the stage; opens in a new tab. */
+  source?: { label: string; href: string }
+  /** The stage's task section; a stage without one shows SeriesOverview's pending text. */
+  detail?: SeriesStageDetail
+}
+
+/** The task section of one SeriesOverview stage. */
+export type SeriesStageDetail = {
+  eyebrow: string
+  headline: string
+  rows: { label: string; text: string }[]
 }
 
 /** One marked span in a PromptAnatomy prompt. `text` must appear verbatim in the prompt. */

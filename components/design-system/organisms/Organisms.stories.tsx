@@ -4,6 +4,7 @@ import AnnotatedScreenshot from './AnnotatedScreenshot'
 import CountCheck from './CountCheck'
 import FieldSets from './FieldSets'
 import GatedFlow from './GatedFlow'
+import InfoTip from './InfoTip'
 import LayerParallel from './LayerParallel'
 import MandateCheckout from './MandateCheckout'
 import PerspectiveTabs from './PerspectiveTabs'
@@ -600,6 +601,11 @@ export const SeriesOverviewStory: Story = {
             number: '1',
             name: 'Prompt',
             status: 'This post',
+            detail: {
+              eyebrow: 'The task',
+              headline: 'How much does a casual bouldering session cost in Adelaide?',
+              rows: [{ label: 'Page', text: '/climb/casual-entry' }],
+            },
             rows: [
               { label: 'Quality it adds', text: 'Actionable' },
               {
@@ -621,11 +627,7 @@ export const SeriesOverviewStory: Story = {
             ],
           },
         ]}
-        constant={{
-          eyebrow: 'The task, identical at every stage',
-          headline: 'How much does a casual bouldering session cost in Adelaide?',
-          rows: [{ label: 'Page', text: '/climb/casual-entry' }],
-        }}
+        pending={{ eyebrow: 'The task', text: 'Pending release' }}
       />
     </Figure>
   ),
@@ -743,5 +745,29 @@ export const WhoCarriesStory: Story = {
         note="The chat never sees the score"
       />
     </Figure>
+  ),
+}
+
+export const InfoTipStory: Story = {
+  name: 'InfoTip (Agentic Studio, stage 1)',
+  render: () => (
+    <p className="max-w-prose font-sans text-base leading-relaxed">
+      Five fields are in scope, from the page title to JSON-LD structured data.
+      <InfoTip
+        label="Why these five fields?"
+        title="Why these five fields"
+        body={[
+          'Stage 1 sticks to this metadata because the tooling is more basic and easier to manage.',
+          "The metadata is also the page's first impression for people and agents.",
+        ]}
+        links={[
+          {
+            label: 'Google: title links',
+            href: 'https://developers.google.com/search/docs/appearance/title-link',
+          },
+        ]}
+      />{' '}
+      The rest of the paragraph continues here.
+    </p>
   ),
 }
