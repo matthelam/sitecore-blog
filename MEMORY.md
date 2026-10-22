@@ -37,5 +37,6 @@ text below, under each fact's scope.
 - **check-origin-main-for-published-posts** [verification·observed] — The local main checkout can lag origin/main, so check origin/main or the live site before saying a post is unpublished or can't be linked.
 - **noise-is-what-detracts-from-the-moment** [preference·observed] — Noise is any information, whatever its origin or intent, that detracts from the current moment of the communication; future ideas are fine only when they add value.
 - **sandbox-tenant-name-may-be-shown** [preference·observed] — Under law 1, Aceik's sandbox tenant name may appear in screenshots or videos of the sandbox; client names and private data still need raising.
+- **test-revision-revise-jsonld-with-summary** [knowledge·observed] — When testing a post summary change with seo-jev test_revision, revise the JSON-LD description too; the blog copies the summary into it, and leaving it stale inflates the predicted metadata score.
 
 _1 superseded fact(s) retained for history._
