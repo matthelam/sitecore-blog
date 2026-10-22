@@ -45,6 +45,10 @@ export const Arrows: Story = {
         <Eyebrow inline>right</Eyebrow>
         <Arrow direction="right" />
       </div>
+      <div className="flex items-center">
+        <Arrow direction="left" />
+        <Eyebrow inline>left</Eyebrow>
+      </div>
       <div className="flex h-32 flex-col items-center">
         <Eyebrow>stretch</Eyebrow>
         <Arrow stretch />

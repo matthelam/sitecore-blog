@@ -16,6 +16,15 @@ run and seen, `documented` is claimed but untested, `contractual` is an
 authoritative statement made outside the documentation, `unverified` is
 inference. Never read one tier as another.
 
+## Precedent — settled readings of a rule
+
+How a rule in a CLAUDE.md has been read before. Consult when
+applying the rule; do not re-litigate a settled reading. Full
+text below, under each fact's scope.
+
+- **constitution#law-1** — sandbox-tenant-name-may-be-shown
+- **constitution#value-4** — noise-is-what-detracts-from-the-moment
+
 ## All facts by scope
 
 ### repo
@@ -23,3 +32,10 @@ inference. Never read one tier as another.
 - **hook-relative-path-fails-in-subfolder** [issue·observed] — Hooks written as 'python scripts/memory_hook.py' fail with exit 2 once the session's working directory is a subfolder, which blocks UserPromptSubmit and PreToolUse.
 - **live-check-needs-allowed-domains** [knowledge·observed] — Live checks from the cloud session need matthelam.com, *.vercel.app and vercel.com in the environment's Allowed domains; without them curl fails with 'CONNECT tunnel failed, response 403'.
 - **pr-fixes-desktop-autofix** [preference·contractual] — Session-opened pull requests are bound, get the desktop app's Auto-fix (not a GitHub Action) and GitHub auto-merge, so they merge once all required checks pass.
+
+### blog
+- **check-origin-main-for-published-posts** [verification·observed] — The local main checkout can lag origin/main, so check origin/main or the live site before saying a post is unpublished or can't be linked.
+- **noise-is-what-detracts-from-the-moment** [preference·observed] — Noise is any information, whatever its origin or intent, that detracts from the current moment of the communication; future ideas are fine only when they add value.
+- **sandbox-tenant-name-may-be-shown** [preference·observed] — Under law 1, Aceik's sandbox tenant name may appear in screenshots or videos of the sandbox; client names and private data still need raising.
+
+_1 superseded fact(s) retained for history._

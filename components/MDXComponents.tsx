@@ -7,14 +7,21 @@ import CustomLink from './Link'
 import TableWrapper from './TableWrapper'
 import Figure from './design-system/templates/Figure'
 import AnnotatedScreenshot from './design-system/organisms/AnnotatedScreenshot'
+import CountCheck from './design-system/organisms/CountCheck'
+import FieldSets from './design-system/organisms/FieldSets'
 import GatedFlow from './design-system/organisms/GatedFlow'
+import InfoTip from './design-system/organisms/InfoTip'
 import LayerParallel from './design-system/organisms/LayerParallel'
 import MandateCheckout from './design-system/organisms/MandateCheckout'
 import PerspectiveTabs from './design-system/organisms/PerspectiveTabs'
+import PromptAnatomy from './design-system/organisms/PromptAnatomy'
 import ProfileMatrix from './design-system/organisms/ProfileMatrix'
+import SeriesOverview from './design-system/organisms/SeriesOverview'
 import SkillComposition from './design-system/organisms/SkillComposition'
 import StepThrough from './design-system/organisms/StepThrough'
 import TeamProfiles from './design-system/organisms/TeamProfiles'
+import WhoCarries from './design-system/organisms/WhoCarries'
+import YouTubePlayer from './design-system/organisms/YouTubePlayer'
 
 export const components: MDXComponents = {
   Image,
@@ -25,12 +32,19 @@ export const components: MDXComponents = {
   BlogNewsletterForm,
   Figure,
   AnnotatedScreenshot,
+  CountCheck,
+  FieldSets,
   GatedFlow,
+  InfoTip,
   LayerParallel,
   MandateCheckout,
   PerspectiveTabs,
+  PromptAnatomy,
   ProfileMatrix,
+  SeriesOverview,
   SkillComposition,
   StepThrough,
   TeamProfiles,
+  WhoCarries,
+  YouTubePlayer,
 }

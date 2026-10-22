@@ -8,23 +8,27 @@ govern how a visual is decided, designed and verified.
 
 ## Architecture
 
-| Piece                                | Purpose                                                                                                                                                                                             |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `MDXComponents.tsx`                  | Registers every component available in posts (organisms and the Figure template only)                                                                                                               |
-| `css/design-system.css` (repo root)  | **The theme.** Semantic colour roles (`ds-surface`, `ds-ink`, `ds-emphasis-*`, `ds-negative-*`, `ds-advisory-line`...) with light and dark values. The only place a design-system colour is defined |
-| `design-system/atoms/`               | Smallest parts: `Surface` (tones), `Arrow`, `Chip`, `Icon`, `Eyebrow`, `Marker`. Import nothing but React                                                                                           |
-| `design-system/molecules/`           | Small groups of atoms with one job: `FlowNode`, `AgentCard`. Import atoms only                                                                                                                      |
-| `design-system/organisms/`           | Whole visuals a post uses: `LayerParallel`, `GatedFlow`, `SkillComposition`, `StepThrough`, `MandateCheckout`, `AnnotatedScreenshot`. Import atoms and molecules                                    |
-| `design-system/templates/Figure.tsx` | The frame and caption every organism sits in                                                                                                                                                        |
-| `design-system/types.ts`             | Shared prop shapes (`Lane`, `FlowStep`, `LayerColumn`, `Agent`, `SkillPanel`, `SequenceStep`, `Callout`)                                                                                            |
-| `**/*.stories.tsx`                   | Storybook stories for every atom, molecule and organism, in light and dark                                                                                                                          |
-| `scripts/check-design-system.mjs`    | Enforces laws 6 to 8; runs before every `yarn build` (`yarn ds:check`)                                                                                                                              |
-| Everything else                      | Starter-blog site chrome (tailwind-nextjs-starter-blog v2.4.0)                                                                                                                                      |
+| Piece                                | Purpose                                                                                                                                                                                                                                                                  |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `MDXComponents.tsx`                  | Registers every component available in posts (organisms and the Figure template only)                                                                                                                                                                                    |
+| `css/design-system.css` (repo root)  | **The theme.** Semantic colour roles (`ds-surface`, `ds-ink`, `ds-emphasis-*`, `ds-negative-*`, `ds-advisory-line`...) with light and dark values. The only place a design-system colour is defined                                                                      |
+| `design-system/atoms/`               | Smallest parts: `Surface` (tones), `Arrow`, `Chip`, `Icon`, `Eyebrow`, `Marker`. Import nothing but React                                                                                                                                                                |
+| `design-system/molecules/`           | Small groups of atoms with one job: `FlowNode`, `AgentCard`, `TabList`. Import atoms only                                                                                                                                                                                |
+| `design-system/organisms/`           | Whole visuals a post uses: `LayerParallel`, `GatedFlow`, `SkillComposition`, `StepThrough`, `MandateCheckout`, `AnnotatedScreenshot`, `YouTubePlayer`, `SeriesOverview`, `PromptAnatomy`, `FieldSets`, `CountCheck`, `WhoCarries`, `InfoTip`. Import atoms and molecules |
+| `design-system/templates/Figure.tsx` | The frame and caption every organism sits in                                                                                                                                                                                                                             |
+| `design-system/types.ts`             | Shared prop shapes (`Lane`, `FlowStep`, `LayerColumn`, `Agent`, `SkillPanel`, `SequenceStep`, `Callout`)                                                                                                                                                                 |
+| `**/*.stories.tsx`                   | Storybook stories for every atom, molecule and organism, in light and dark                                                                                                                                                                                               |
+| `scripts/check-design-system.mjs`    | Enforces laws 6 to 8; runs before every `yarn build` (`yarn ds:check`)                                                                                                                                                                                                   |
+| Everything else                      | Starter-blog site chrome (tailwind-nextjs-starter-blog v2.4.0)                                                                                                                                                                                                           |
 
 ## Laws for this directory
 
-1. **CSP-safe only.** `next.config.js` allows scripts from self, giscus and umami, and frames from
-   giscus only. No CDN scripts and no iframes, including same-origin ones. Libraries come from npm.
+1. **CSP-safe only.** `next.config.js` allows scripts from self and `https://www.youtube.com`, and
+   frames from `https://www.youtube.com` only. No CDN scripts and no hand-written iframes,
+   including same-origin ones. Libraries come from npm. The one exception is `YouTubePlayer`, which
+   loads Google's official IFrame Player API (`https://www.youtube.com/iframe_api`); the API, not
+   our code, creates the player frame. Any other third-party embed needs Matt's approval and a CSP
+   change. (Amended 2026-10-22 at Matt's request for a YouTube viewer.)
 2. **Components hold no facts.** Every number, label and claim a visual shows arrives as a prop
    from the post, so the post stays the single owner of its content (Constitution law 2).
 3. **Checked in every theme and width.** Every visual is checked in light, dark and at 390px

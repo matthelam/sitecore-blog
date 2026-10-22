@@ -97,3 +97,71 @@ export type TeamGroup = {
   name: string
   roles: TeamRole[]
 }
+
+/** One stage of a SeriesOverview: its number, name, the quality it adds, and labelled rows. */
+export type SeriesStage = {
+  number: string
+  name: string
+  status: string
+  rows: { label: string; text: string }[]
+  /** Optional further reading for the stage; opens in a new tab. */
+  source?: { label: string; href: string }
+  /** The stage's task section; a stage without one shows SeriesOverview's pending text. */
+  detail?: SeriesStageDetail
+}
+
+/** The task section of one SeriesOverview stage. */
+export type SeriesStageDetail = {
+  eyebrow: string
+  headline: string
+  rows: { label: string; text: string }[]
+}
+
+/** One marked span in a PromptAnatomy prompt. `text` must appear verbatim in the prompt. */
+export type PromptMark = {
+  text: string
+  kind: string
+  note: string
+}
+
+/** One round of a PromptAnatomy: the prompt as sent and its marked spans. */
+export type PromptRound = {
+  round: string
+  title: string
+  prompt: string
+  marks: PromptMark[]
+}
+
+/** One view of a PromptAnatomy: which kind of mark it shows. `countLabel` turns on a word count
+ * of the marked text ("words of guardrail text"). */
+export type PromptView = {
+  kind: string
+  label: string
+  countLabel?: string
+}
+
+/** One set of fields in a FieldSets comparison. */
+export type FieldSet = {
+  heading: string
+  rendered: boolean
+  fields: { name: string; output?: string }[]
+  note?: string
+  flag?: string
+}
+
+/** One editable value in a CountCheck: what the chat claimed and the rule it must meet. */
+export type CountField = {
+  label: string
+  value: string
+  claimed: string
+  min?: number
+  max: number
+  rule: string
+  multiline?: boolean
+}
+
+/** A box in a WhoCarries diagram. */
+export type CarryNode = {
+  name: string
+  lines: string[]
+}
