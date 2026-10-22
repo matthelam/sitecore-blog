@@ -181,9 +181,9 @@ Stage 1 is what most people try first. You open Agentic > Chat > New chat and ty
 
 ## Watch the run
 
-<Figure caption="The recorded stage 1 run: seven prompts in a plain Agentic Studio chat.">
+<Figure caption="The recorded stage 1 run: six prompts in a plain Agentic Studio chat.">
   <YouTubePlayer
-    videoId="Nkhjg0PifeQ"
+    videoId="qwz8dpRbIKQ"
     title="Sitecore AI - Agentic Studio SEO Agent, Stage 1: Prompt"
   />
 </Figure>
@@ -196,36 +196,36 @@ Rather than repeat the video, this post covers the key points about Prompt Engin
 
 **Models are reasoning engines and usually do a pretty good job of it, and Agentic Studio already gives the chat tools to work with.** I didn't tick any tools for this run, but Studio's built-in tools (Sites, Content, Pages and Web Search) were still available, and the chat used them without being asked.
 
-I ended up using seven natural language prompts. With them, the chat found the page, searched the web for Google's current guidance on titles, descriptions and structured data, and graded each field. It then drafted all five fields with valid JSON-LD, wrote them to the CMS behind Studio's own Apply changes card, and read them back, all without an agent or any configuration.
+I ended up using six natural language prompts. With them, the chat found the page, searched the web for Google's current guidance on titles, descriptions and structured data, and graded each field. It then drafted all five fields with valid JSON-LD, wrote them to the CMS behind Studio's own Apply changes card, and read them back, all without an agent or any configuration.
 
-The recommendations were OK. From the starting values, seo-jev-analyzer's metadata score went from 0.00 to 1.96, and the page score from 4.11 to 4.83 (three runs each).
+The recommendations were OK. From the starting values, seo-jev-analyzer's metadata score went from 0.00 to 2.46, and the page score from 4.27 to 4.90.
 
 | Version of the five fields | Metadata | Page |
 | -------------------------- | -------- | ---- |
-| Starting values            | 0.00     | 4.11 |
-| What the stage 1 run wrote | 1.96     | 4.83 |
+| Starting values            | 0.00     | 4.27 |
+| What the stage 1 run wrote | 2.46     | 4.90 |
 
 ### What the prompts did well
 
-Looking back over the seven prompts, these habits did most of the work:
+Looking back over the six prompts, these habits did most of the work:
 
 - **A role.** "Act as an SEO specialist."
 - **The goal stated as an outcome.** "Be the page a search engine or AI answer engine cites when someone in Adelaide asks how much a casual bouldering session costs."
 - **Research on demand.** "Use web search to find Google's current guidance on title links, meta descriptions and structured data." Any AI with web search can do this, not just SitecoreAI. But the chat has to look up what good looks like every time, which adds up to a lot of repeated time and tokens, and it can interpret the same guidance differently each time.
-- **Exact fields and an exact output shape.** The five fields by name, a table with character counts, and the JSON-LD in a code block.
+- **Exact fields and an exact output shape.** The five fields by name, read from the content item, a table with character counts, and the JSON-LD in a code block.
 - **A way to say "I don't know".** "Write EMPTY for a field that exists with no value and NOT RETURNED for a field your tools did not give you." Some tools leave fields out, and without this the chat fills the gap with a guess.
 - **Rules with numbers.** A title of 60 characters or fewer, a description of 150 to 160, ending with the site name.
 - **Facts bounded to the source.** "Use only prices, times and facilities from the page."
 - **The job in rounds.** Get, analyse, suggest, review, apply, re-check, with "do not change anything" in every round until the one that applies.
-- **A review round that names its checks.** Asked to recount, the chat cut the description from 161 characters to 157, back inside the rule.
+- **A review round that names its checks.** Count the characters, confirm every fact against the page, and confirm the JSON-LD is valid.
 
 <Figure
   caption={
-    'Seven prompts, as sent. The craft that made them work: a role, an outcome, exact fields, a way to say "I don\'t know", rules with numbers and named checks.'
+    'Six prompts, as sent. The craft that made them work: a role, an outcome, exact fields, a way to say "I don\'t know", rules with numbers and named checks.'
   }
 >
   <PromptAnatomy
-    label={'The seven stage 1 prompts with the craft that made them work marked'}
+    label={'The six stage 1 prompts with the craft that made them work marked'}
     initialView={0}
     views={[
       { kind: 'craft', label: 'What makes it work' },
@@ -236,8 +236,13 @@ Looking back over the seven prompts, these habits did most of the work:
         round: '1',
         title: 'Round 1: Get the page',
         prompt:
-          "On the site matthelam-boulderfest, get the page at /climb/casual-entry. Report its item path, then each of these fields with its exact current value: MetaTitle, MetaDescription, OpenGraphTitle, OpenGraphDescription, SchemaOrgJSON. Write EMPTY for a field that exists with no value and NOT RETURNED for a field your tools did not give you. Then read the page's visible text and list every price, time and facility it states. Do not guess and do not change anything.",
+          "On the site matthelam-boulderfest, get the page at /climb/casual-entry. Report its item path, then each of these fields on its content item, by field name, with its exact current value: MetaTitle, MetaDescription, OpenGraphTitle, OpenGraphDescription, SchemaOrgJSON. Write EMPTY for a field that exists with no value and NOT RETURNED for a field your tools did not give you. Then read the page's visible text and list every price, time and facility it states. Do not guess and do not change anything.",
         marks: [
+          {
+            text: 'on its content item, by field name',
+            kind: 'craft',
+            note: 'Where to read them: on the content item, by field name.',
+          },
           {
             text: 'MetaTitle, MetaDescription, OpenGraphTitle, OpenGraphDescription, SchemaOrgJSON',
             kind: 'craft',
@@ -254,13 +259,6 @@ Looking back over the seven prompts, these habits did most of the work:
             note: 'A guardrail, typed into this prompt by hand.',
           },
         ],
-      },
-      {
-        round: '1b',
-        title: 'Round 1b: Supply what the tools could not',
-        prompt:
-          'For reference, the three fields your tools did not return currently hold: MetaDescription EMPTY, OpenGraphTitle "Casual entry", OpenGraphDescription EMPTY. Treat these as the current values from now on.',
-        marks: [],
       },
       {
         round: '2',
@@ -351,10 +349,10 @@ Looking back over the seven prompts, these habits did most of the work:
         round: '6',
         title: 'Round 6: Publish and re-check',
         prompt:
-          'I published the page. Read /climb/casual-entry again and report the exact current value of each of the five fields. Then check each field against the rules from round 3 and score each field out of 10 again, as in round 2. Summarise what changed and why it should help. Do not change anything.',
+          'I published the page. Read the content item for /climb/casual-entry again and report the exact current value of each of the five fields, by field name. Then check each field against the rules from round 3 and score each field out of 10 again, as in round 2. Summarise what changed and why it should help. Do not change anything.',
         marks: [
           {
-            text: 'report the exact current value of each of the five fields',
+            text: 'report the exact current value of each of the five fields, by field name',
             kind: 'craft',
             note: 'An exact output shape.',
           },
@@ -380,75 +378,15 @@ A plain chat gets a long way, but it doesn't get there the same way each time.
 
 **The same prompt, sent twice, can produce different work, and the chat can't reliably tell you when its own work is wrong.** You won't see most of this in a single run; it shows up across runs.
 
-**It picks its own tools.** In the recorded run, Round 1 used seven tools nobody asked for: tool search, list sites, search pages, get page, get page metadata, get page content and get page HTML. Another run of the same prompt chose a different set. Different tools return different fields, ask for approval differently and write by different routes. I saw this in every run, but I haven't tested how often each path comes up.
+**It picks its own tools.** In the recorded run, Round 1 used six tools nobody asked for: tool search, list sites, search pages, get page, get page metadata and get page HTML. Another run of the same prompt chose a different set. Different tools return different fields, ask for approval differently and write by different routes. I saw this in every run, but I haven't tested how often each path comes up.
 
 **It misses things.** In my experience, about one run in ten doesn't pick up some of the fields it was asked to analyse.
 
 **It gets lazy in a long session.** Run it too many times in the same chat and it starts reusing data from earlier instead of fetching it again.
 
-**Nothing tells it which fields matter.** The Boulderfest page item carries two sets of SEO fields. One set is rendered on the live page; the other isn't. The prompt names the fields, and the chat decides which set they mean. In Round 6 it read the set that isn't rendered, saw an empty description and called its own result "partial". The live page was serving every new value.
+**It misjudges its own result.** In Round 6 it read the five fields back from the content item, by field name, but its tools returned only two of them. It scored the other three 0/10 as NOT RETURNED and called the update "partially applied". The Content Editor held all five, exactly as proposed.
 
-<Figure caption="One page item, two sets of SEO fields. The live page renders only one of them, and Round 6 read the other.">
-  <FieldSets
-    label="The Boulderfest page item carries two sets of SEO fields. The rendered set feeds the title, meta description, JSON-LD and Open Graph tags on the live page. The other set is not rendered, and Round 6 read it."
-    item="/climb/casual-entry: one content item"
-    renderedLabel="Rendered on the live page"
-    notRenderedLabel="Not rendered"
-    sets={[
-      {
-        heading: 'Page Meta Properties and OpenGraph',
-        rendered: true,
-        fields: [
-          {
-            name: 'Page title',
-            output: '<title>',
-          },
-          {
-            name: 'Page description',
-            output: 'meta description',
-          },
-          {
-            name: 'SchemaOrgJSON',
-            output: 'JSON-LD',
-          },
-          {
-            name: 'OpenGraph Title',
-            output: 'og:title',
-          },
-          {
-            name: 'OpenGraph Description',
-            output: 'og:description',
-          },
-        ],
-        note: 'The live page was serving every new value from these fields.',
-      },
-      {
-        heading: 'Metadata and Open Graph',
-        rendered: false,
-        fields: [
-          {
-            name: 'Metadata Title',
-          },
-          {
-            name: 'Metadata Keywords',
-          },
-          {
-            name: 'Metadata Description',
-          },
-          {
-            name: 'Open Graph Title',
-          },
-          {
-            name: 'Open Graph Description',
-          },
-        ],
-        flag: 'Round 6 read this set, saw an empty description and called the result "partial".',
-      },
-    ]}
-  />
-</Figure>
-
-**It marks its own work.** Scores out of 10 and character counts come from the chat, with nothing outside to check them. Round 3 said the description was 160 characters. It was 161, one over the rule. Round 4 fixed it, but only because I thought to ask for a recount. Another operator, or me on a tired day, would ship the 161. The title, "Casual Bouldering \$28 in Adelaide | Boulderfest", was miscounted twice, as 44 characters in Round 3 and 46 on the recount. It's 47.
+**It marks its own work.** Scores out of 10 and character counts come from the chat, with nothing outside to check them. Round 3's counts were right: 50 characters for the title and 159 for the description. Round 4, the self-check, changed no values. Its only correction was to the length of the minified JSON-LD, from 348 characters to 349. It's 348, so the check added an error.
 
 <Figure caption="The chat counts its own characters, and nothing outside checks the number. Edit either value to see the count change.">
   <CountCheck
@@ -460,16 +398,16 @@ A plain chat gets a long way, but it doesn't get there the same way each time.
     fields={[
       {
         label: 'Title, as proposed in Round 3',
-        value: 'Casual Bouldering $28 in Adelaide | Boulderfest',
-        claimed: '44, then 46 on recount',
+        value: 'Casual Bouldering Prices in Adelaide | Boulderfest',
+        claimed: '50',
         max: 60,
         rule: '60 characters or fewer',
       },
       {
         label: 'Description, as proposed in Round 3',
         value:
-          'Casual bouldering costs $28 for adults in Adelaide. Includes unlimited climbing for the day across six zones, the training area and yoga corner. Plan your visit.',
-        claimed: '160',
+          'Adult casual bouldering in Adelaide costs $28 for unlimited climbing for the day. Shoe hire is $6. Walk in, use six zones, training area and yoga corner today.',
+        claimed: '159',
         min: 150,
         max: 160,
         rule: '150 to 160 characters',
@@ -481,7 +419,7 @@ A plain chat gets a long way, but it doesn't get there the same way each time.
 
 **Guardrails are only requests.** "Do not guess", "do not invent anything", "check your proposal against every rule": the model acts on them as it chooses, and nothing confirms it obeyed.
 
-**Warnings slip past.** The Apply changes card appeared because of the tool the chat happened to pick; with another tool it asks in words instead. After the save, Studio reported that the changes "could not be fully applied". The run treated the save as done. A person reading quickly would too.
+**Warnings slip past.** The Apply changes card appeared because of the tool the chat happened to pick; with another tool it asks in words instead. After the save, Studio reported that the changes "could not be fully applied". The Content Editor showed all five fields saved exactly as proposed, with every other field untouched. The warning was wrong, and nothing in the chat says so.
 
 ## Tedious: the price of reliability by hand
 
@@ -491,11 +429,11 @@ A good share of the text in the prompts is guardrails rather than the task itsel
 
 <Figure
   caption={
-    'The same seven prompts, with the guardrails marked: lines a plain chat needs repeated because it has nowhere else to keep them.'
+    'The same six prompts, with the guardrails marked: lines a plain chat needs repeated because it has nowhere else to keep them.'
   }
 >
   <PromptAnatomy
-    label={'The seven stage 1 prompts with the guardrail text marked'}
+    label={'The six stage 1 prompts with the guardrail text marked'}
     initialView={1}
     views={[
       { kind: 'craft', label: 'What makes it work' },
@@ -506,8 +444,13 @@ A good share of the text in the prompts is guardrails rather than the task itsel
         round: '1',
         title: 'Round 1: Get the page',
         prompt:
-          "On the site matthelam-boulderfest, get the page at /climb/casual-entry. Report its item path, then each of these fields with its exact current value: MetaTitle, MetaDescription, OpenGraphTitle, OpenGraphDescription, SchemaOrgJSON. Write EMPTY for a field that exists with no value and NOT RETURNED for a field your tools did not give you. Then read the page's visible text and list every price, time and facility it states. Do not guess and do not change anything.",
+          "On the site matthelam-boulderfest, get the page at /climb/casual-entry. Report its item path, then each of these fields on its content item, by field name, with its exact current value: MetaTitle, MetaDescription, OpenGraphTitle, OpenGraphDescription, SchemaOrgJSON. Write EMPTY for a field that exists with no value and NOT RETURNED for a field your tools did not give you. Then read the page's visible text and list every price, time and facility it states. Do not guess and do not change anything.",
         marks: [
+          {
+            text: 'on its content item, by field name',
+            kind: 'craft',
+            note: 'Where to read them: on the content item, by field name.',
+          },
           {
             text: 'MetaTitle, MetaDescription, OpenGraphTitle, OpenGraphDescription, SchemaOrgJSON',
             kind: 'craft',
@@ -524,13 +467,6 @@ A good share of the text in the prompts is guardrails rather than the task itsel
             note: 'A guardrail, typed into this prompt by hand.',
           },
         ],
-      },
-      {
-        round: '1b',
-        title: 'Round 1b: Supply what the tools could not',
-        prompt:
-          'For reference, the three fields your tools did not return currently hold: MetaDescription EMPTY, OpenGraphTitle "Casual entry", OpenGraphDescription EMPTY. Treat these as the current values from now on.',
-        marks: [],
       },
       {
         round: '2',
@@ -621,10 +557,10 @@ A good share of the text in the prompts is guardrails rather than the task itsel
         round: '6',
         title: 'Round 6: Publish and re-check',
         prompt:
-          'I published the page. Read /climb/casual-entry again and report the exact current value of each of the five fields. Then check each field against the rules from round 3 and score each field out of 10 again, as in round 2. Summarise what changed and why it should help. Do not change anything.',
+          'I published the page. Read the content item for /climb/casual-entry again and report the exact current value of each of the five fields, by field name. Then check each field against the rules from round 3 and score each field out of 10 again, as in round 2. Summarise what changed and why it should help. Do not change anything.',
         marks: [
           {
-            text: 'report the exact current value of each of the five fields',
+            text: 'report the exact current value of each of the five fields, by field name',
             kind: 'craft',
             note: 'An exact output shape.',
           },
@@ -646,7 +582,9 @@ A good share of the text in the prompts is guardrails rather than the task itsel
 
 The person carries the context. The role, the goal, the house rules and the page's facts are all typed by hand.
 
-The person is also the only check. When Round 1's tools didn't return three of the fields, I checked the CMS and typed their values in. From then on, the chat's picture of the page came from what I typed. After that I read every reply, thought of each check and asked for it, approved the save, published in Sitecore, waited for the live page to show the new title, and took the score in a separate window.
+The person is also the only check. I read every reply, thought of each check and asked for it, approved the save, published in Sitecore, waited for the live page to show the new title, and took the score in a separate window.
+
+The recording is scripted: the run sheet is those decisions written down once, and the on-screen panels show where each one lands.
 
 <Figure caption="At stage 1 the person carries everything between the chat and the outside world. The score goes to the person, never back into the chat.">
   <WhoCarries
@@ -669,7 +607,7 @@ The person is also the only check. When Round 1's tools didn't return three of t
     }}
     instrument={{
       name: 'seo-jev-analyzer',
-      lines: ['Separate window, three runs'],
+      lines: ['Separate window'],
     }}
     edges={{
       toOperator: 'proposals',
@@ -678,11 +616,11 @@ The person is also the only check. When Round 1's tools didn't return three of t
       reads: 'reads',
       report: 'score',
     }}
-    note="The chat never sees the score"
+    note="Only the operator sees the score."
   />
 </Figure>
 
-The on-screen panel in the video kept count: 7 prompts sent, 443 words written by hand, 10 operator actions and 8 minutes, for one page. Take the operator away and the process stops. That's the figure the next four stages have to beat.
+The on-screen panel in the video kept count: 6 prompts sent, 429 words written by hand, 11 operator actions and 17 minutes, for one page. Take the operator away and the process stops. That's the figure the next four stages have to beat.
 
 ## Stage 2: Context Engineering
 
