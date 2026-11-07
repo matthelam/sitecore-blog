@@ -68,9 +68,17 @@ else is yours to resolve.
    live, push, and open a PR whose title says the same.
 
 6. **Preview.** Wait for the Vercel status on the PR head to be `success` (the GitHub status on
-   the PR, context "Vercel"). That status is the preview check: previews sit behind Vercel's
-   deployment protection, so fetching one returns a 302 to Vercel's login and its content can't
-   be read from the session. A red preview is fixed and pushed before anything merges.
+   the PR, context "Vercel"), then read the preview itself. Its URL is the `environment_url` of
+   the PR head's GitHub deployment (`gh api repos/lammp/sitecore-blog/deployments?sha=<head>`,
+   then that deployment's `statuses`). Previews sit behind Vercel's deployment protection, so
+   plain `curl` returns a 302 to Vercel's login. Fetch each page the change touches (the post's
+   `/blog/<slug>`, or wherever a site change shows) with
+   `vercel curl <preview-url>/<path> -- -s -o <file> -w '%{http_code}'`, with the CLI signed in
+   as Matt's personal account (`lammp003-1711`, team Matt Lam). Everything after `--` goes to
+   curl, so don't add `--scope`. Check what `references/live-check.md` checks, against the
+   preview: the status code, and text that only the new version has (text already on production
+   proves nothing). Never turn off deployment protection to get round the login. A red preview,
+   or a page missing the change, is fixed and pushed before anything merges.
 
 7. **Merge and confirm live.** Merge the PR (merge commit), then poll the live site until the
    change shows. See `references/live-check.md` for the exact checks and the time limit. Report
