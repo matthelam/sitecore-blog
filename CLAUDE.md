@@ -1,7 +1,7 @@
 # Constitution
 
 Matt Lam's technical blog (matthelam.com): Next.js + Contentlayer + MDX, deployed on Vercel
-from `main`. Matt brings the subject expertise; the agent shapes, writes up, builds and ships.
+(team Matt Lam) from `main` of `lammp/sitecore-blog`. Matt brings the subject expertise; the agent shapes, writes up, builds and ships.
 
 This repository's agent context follows the Legal Framework
 (https://matthelam.com/blog/a-legal-framework-for-agent-context):
