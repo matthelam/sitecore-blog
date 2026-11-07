@@ -11,7 +11,7 @@ const siteMetadata = {
   // RSS guids stay on the host the feed was first published from, so moving the site to
   // matthelam.com doesn't make feed readers show every post again as new.
   feedGuidBase: 'https://blog.matthelam.com',
-  siteRepo: 'https://github.com/matthelam/sitecore-blog',
+  siteRepo: 'https://github.com/lammp/sitecore-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   // Optional explicit logo dimensions used by the Header component
   // Adjust these to scale the logo proportionally (original was 40x40)
