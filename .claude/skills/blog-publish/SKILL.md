@@ -11,6 +11,18 @@ release management, so once he asks for a change it is taken all the way to prod
 broken page, looks identical from GitHub. The job ends with a live URL that has been fetched and
 shown to contain the change.
 
+## Where the blog runs
+
+- GitHub `lammp/sitecore-blog`; Vercel team **Matt Lam** (slug `matthelam`,
+  `team_1ZOwFPO9IgQCiMPVPRooUM58`), project `sitecore-blog`. matthelam.com is registered on
+  that team.
+- For Vercel lookups, use this repo's `vercel-blog` MCP server (scoped to
+  `matthelam/sitecore-blog`). The global `vercel` server and the claude.ai Vercel connector are
+  Matt's work account and can't see the blog. If `vercel-blog` returns a 403 for the team, call
+  its `authorize_team_access` and give Matt the link.
+
+Evidence: `hosting-moved-to-personal-accounts`.
+
 ## What blocks a publish
 
 Stop, raise a **PENDING ACTION** and wait for Matt only when one of these comes up. Everything

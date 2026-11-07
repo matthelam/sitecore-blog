@@ -30,8 +30,10 @@ text below, under each fact's scope.
 ### repo
 - **hook-path-anchored-to-project-dir** [fix·observed] — Hook commands in .claude/settings.json use exec form with ${CLAUDE_PROJECT_DIR}/scripts/memory_hook.py so they resolve from the project root whatever the working directory.
 - **hook-relative-path-fails-in-subfolder** [issue·observed] — Hooks written as 'python scripts/memory_hook.py' fail with exit 2 once the session's working directory is a subfolder, which blocks UserPromptSubmit and PreToolUse.
+- **hosting-moved-to-personal-accounts** [knowledge·observed] — Since 2026-11-07 the blog lives on GitHub lammp/sitecore-blog and Vercel team 'Matt Lam' (slug matthelam, team_1ZOwFPO9IgQCiMPVPRooUM58, Pro); the old matthewlam work team and GitHub matthelam no longer host it.
 - **live-check-needs-allowed-domains** [knowledge·observed] — Live checks from the cloud session need matthelam.com, *.vercel.app and vercel.com in the environment's Allowed domains; without them curl fails with 'CONNECT tunnel failed, response 403'.
 - **pr-fixes-desktop-autofix** [preference·contractual] — Session-opened pull requests are bound, get the desktop app's Auto-fix (not a GitHub Action) and GitHub auto-merge, so they merge once all required checks pass.
+- **vercel-pro-free-domain-unclaimed** [knowledge·observed] — Matt's personal Vercel Pro account (lammp003-1711, upgraded 2026-11-07) has one free first-year domain unclaimed, reserved for a future project; mention it when a new project needs a domain.
 
 ### blog
 - **check-origin-main-for-published-posts** [verification·observed] — The local main checkout can lag origin/main, so check origin/main or the live site before saying a post is unpublished or can't be linked.
