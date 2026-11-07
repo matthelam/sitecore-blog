@@ -90,6 +90,13 @@ law 2, which blocks delivery until he decides.
 every commit. Revert the regenerated `app/tag-data.json` before committing unless tags changed on
 purpose.
 
+### 6. Memory is always committed, on its own
+
+Every change to `memory/` is committed, together with the regenerated `MEMORY.md`, and delivered
+under law 4. It is never left uncommitted in the working tree. Memory goes in a commit of its
+own, never mixed with other work; the same pull request may carry both. Memory notes pass the
+law 1 check like anything else.
+
 ## Legislation index
 
 | Directory | Governs |
