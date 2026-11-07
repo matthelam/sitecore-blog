@@ -86,7 +86,7 @@ The older XM Cloud, Cloud Portal, Content Hub SSO series and the placeholders po
 | Employer | Aceik, https://aceik.com.au |
 | Location | Adelaide, South Australia (author page: "recently moved back to Adelaide"); started his Sitecore career in Brisbane |
 | Site | https://matthelam.com |
-| Real profile links | LinkedIn https://www.linkedin.com/in/matthew-lam-47184416 ; GitHub https://github.com/matthelam ; repo https://github.com/matthelam/sitecore-blog |
+| Real profile links | LinkedIn https://www.linkedin.com/in/matthew-lam-47184416 ; GitHub https://github.com/matthelam ; repo https://github.com/lammp/sitecore-blog |
 | Placeholders, do not use | `https://twitter.com/Twitter` (author file), `https://twitter.com/x` (siteMetadata). **author to supply** a real X or Bluesky profile if one exists |
 | Email in config | `matthewlam@aceik.com.au` is in both files. Not listed as a public profile; Matt to decide if it stays published |
 
